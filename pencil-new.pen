@@ -1,0 +1,5327 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "frame",
+      "id": "YoHzd",
+      "x": -261.37317883229116,
+      "y": -3512.051671853076,
+      "name": "home",
+      "clip": true,
+      "width": 1440,
+      "height": 1024,
+      "fill": "#ffffffff",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1
+      },
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "eCjq6",
+          "x": 272,
+          "y": 68,
+          "name": "總預算案持續追蹤 互動圖表掌握審查進度刪凍情況",
+          "fill": "#000000ff",
+          "content": "總預算案持續追蹤 互動圖表掌握審查進度刪凍情況",
+          "lineHeight": 1.25,
+          "textAlign": "center",
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 64,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "F1yIZ",
+          "x": 180,
+          "y": 278,
+          "name": "Component 18",
+          "width": 1080,
+          "height": 256,
+          "fill": {
+            "type": "color",
+            "color": "#ffffffff",
+            "enabled": false
+          },
+          "cornerRadius": 32,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "#c1bfbfff"
+          },
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0000001a",
+            "offset": {
+              "x": 0,
+              "y": 4
+            },
+            "blur": 7
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "cornerRadius": 26,
+              "id": "CMWCi",
+              "x": 0,
+              "y": 0,
+              "name": "article-intro",
+              "fill": "#f4f6f8ff",
+              "width": 1080,
+              "height": 256,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            },
+            {
+              "type": "text",
+              "id": "A7Jgk",
+              "x": 108,
+              "y": 46,
+              "name": "115年度總預算案仍待立法院審查，引發關注。總預算通過與否影響多項政府施政與補助項目，為讓讀者簡單掌握總預算案審查過程，中央社整理相關資訊、化成多個資訊圖表供讀者閱覽、查詢，輕鬆了解部會預算目前審議情形。",
+              "fill": "#000000ff",
+              "textGrowth": "fixed-width",
+              "width": 865,
+              "content": "115年度總預算案仍待立法院審查，引發關注。總預算通過與否影響多項政府施政與補助項目，為讓讀者簡單掌握總預算案審查過程，中央社整理相關資訊、化成多個資訊圖表供讀者閱覽、查詢，輕鬆了解部會預算目前審議情形。",
+              "lineHeight": 1.4285714285714286,
+              "fontFamily": "Noto Sans TC",
+              "fontSize": 28,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "aZ9yk",
+          "x": 0,
+          "y": 534,
+          "name": "Frame 23",
+          "width": 1440,
+          "height": 456,
+          "fill": {
+            "type": "color",
+            "color": "#ffffffff",
+            "enabled": false
+          },
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "gap": 10,
+          "padding": [
+            50,
+            288
+          ],
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "4EiWe",
+              "name": "行政院會114年8月21日通過「115年度中央政府總預算案暨附屬單位預算及綜計表」，並於9月送入立法院。 立法院藍白黨團認為行政院未依法編列「軍人待遇條例」及「警察人員人事條例」的相關預算，也未撤回總預算案並重新編列上述預算，批評行政院違法亂紀。國民黨團12月呼籲，只要將預算書修改好，立法院會立即將總預算付委審查。 截至115年1月2日，115年度總預算案仍未付委，這是第一次出現跨年度總預算仍未進委員會審查的狀況。",
+              "fill": "#000000ff",
+              "textGrowth": "fixed-width",
+              "width": 859,
+              "content": "行政院會114年8月21日通過「115年度中央政府總預算案暨附屬單位預算及綜計表」，並於9月送入立法院。\n立法院藍白黨團認為行政院未依法編列「軍人待遇條例」及「警察人員人事條例」的相關預算，也未撤回總預算案並重新編列上述預算，批評行政院違法亂紀。國民黨團12月呼籲，只要將預算書修改好，立法院會立即將總預算付委審查。\n截至115年1月2日，115年度總預算案仍未付委，這是第一次出現跨年度總預算仍未進委員會審查的狀況。",
+              "lineHeight": 1.3571428571428572,
+              "fontFamily": "Noto Sans TC",
+              "fontSize": 28,
+              "fontWeight": "normal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "zTpuQ",
+      "x": -261.37317883229116,
+      "y": -4322.051671853076,
+      "name": "home",
+      "clip": true,
+      "width": 1440,
+      "height": 810,
+      "fill": "#ffffffff",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1
+      },
+      "layout": "none",
+      "children": [
+        {
+          "type": "rectangle",
+          "id": "X10Mg",
+          "x": -195,
+          "y": -5,
+          "name": "image 10",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "",
+            "mode": "fill"
+          },
+          "width": 1104,
+          "height": 828,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "8lwwf",
+          "x": 720,
+          "y": -5,
+          "name": "Rectangle 31",
+          "fill": "#315493ff",
+          "width": 720,
+          "height": 815,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "frame",
+          "id": "QBcKJ",
+          "x": 816,
+          "y": 206,
+          "name": "Frame 22",
+          "width": 528,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 50,
+          "children": [
+            {
+              "type": "text",
+              "id": "6LNnV",
+              "name": "立委把關",
+              "fill": "#97b1deff",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "立委把關",
+              "lineHeight": 0.8333333333333334,
+              "fontFamily": "Noto Sans TC",
+              "fontSize": 48,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "UYQMK",
+              "name": "各部會今年去年預算比較",
+              "fill": "#c3d4f0ff",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "各部會今年去年預算比較",
+              "lineHeight": 0.8333333333333334,
+              "fontFamily": "Noto Sans TC",
+              "fontSize": 48,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "Qp7DM",
+              "name": "115 年度預算案分配概況",
+              "fill": "#f5f8fdff",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "115 年度預算案分配概況",
+              "lineHeight": 0.8333333333333334,
+              "fontFamily": "Noto Sans TC",
+              "fontSize": 48,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "PzUkM",
+              "name": "各機關審查結果分析",
+              "fill": "#97b1deff",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "各機關審查結果分析",
+              "lineHeight": 0.8333333333333334,
+              "fontFamily": "Noto Sans TC",
+              "fontSize": 48,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "F260j",
+              "name": "預算計畫搜尋",
+              "fill": "#97b1deff",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "預算計畫搜尋",
+              "lineHeight": 0.8333333333333334,
+              "fontFamily": "Noto Sans TC",
+              "fontSize": 48,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "LmWYV",
+          "x": 383,
+          "y": 55,
+          "name": "nav",
+          "width": 621,
+          "height": 64,
+          "fill": {
+            "type": "color",
+            "color": "#ffffffff",
+            "enabled": false
+          },
+          "cornerRadius": 16,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "cornerRadius": 16,
+              "id": "jXKU0",
+              "x": 0,
+              "y": 0,
+              "name": "bk",
+              "fill": "#101b1fc2",
+              "width": 621,
+              "height": 64,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "effect": [
+                {
+                  "type": "background_blur",
+                  "radius": 17.5
+                },
+                {
+                  "type": "shadow",
+                  "shadowType": "outer",
+                  "color": "#0000001a",
+                  "offset": {
+                    "x": 0,
+                    "y": 4
+                  },
+                  "blur": 14
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "id": "HqlRn",
+              "x": 561.0000000000002,
+              "y": 15,
+              "name": "menu",
+              "children": [
+                {
+                  "type": "path",
+                  "id": "TTrxR",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Vector",
+                  "geometry": "M50.1313 0.97671c13.9-1.3 36.8-1.2 50.8-0.3 29.2 2 49.1 21.3 51.29999 50.7 1.2 16 1.5 49.1-2.8 63.9-4.3 14.8-16.59999 28.99999-34.09998 34.1-14.7 4.3-48.70001 4.00001-64.60001 2.70001-22.8-1.89999-40.7-14.70001-47.2-36.80001-4.3-14.8-3.9-47.2-2.8-63.2 2-28.7 20.6-48.4 49.4-51.1z m1.5 24c-16.4 1.9-25.6 12.4-26.9 28.6-0.9 12-1.3 45.89999 2.2 56.29999 4 11.5 14.1 17.30001 25.90001 18.30001 12.1 1.10001 35.1 1.10001 47.19999 0 16.6-1.5 26.6-11.50001 28.1-28.1 1.5-16.6 1.10001-35.1 0-47.2-1.1-12.1-11.2-26.4-27.5-28-11.9-1.2-37.4-1.2-49.2 0.1l0.2 0z",
+                  "fill": "#fefdf5cc",
+                  "width": 14.63896656036377,
+                  "height": 15.172061920166016,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "path",
+                  "id": "AXxIE",
+                  "x": 18.0833740234375,
+                  "y": 0,
+                  "name": "Vector",
+                  "geometry": "M50.13131 0.97671c13.9-1.3 36.79999-1.2 50.79999-0.3 29.2 2 49.10003 21.3 51.30002 50.7 2.2 29.4 1.49999 49.1-2.80002 63.9-5 17.6-16.6 28.99999-34.10001 34.1-14.7 4.3-48.69997 4.00001-64.59997 2.70001-22.8-1.89999-40.70001-14.70001-47.20001-36.80001-4.3-14.8-3.9-47.2-2.80001-63.2 2-28.7 20.60001-48.4 49.40001-51.1z m1.5 24c-16.4 1.9-25.60001 12.4-26.90001 28.6-0.9 12-1.3 45.89999 2.2 56.29999 3.5 10.4 14.09999 17.30001 25.89999 18.30001 12.1 1.10001 35.10001 1.10001 47.20001 0 16.6-1.5 26.60002-11.50001 28.10002-28.1 1.5-16.6 1.1-35.1 0-47.2-1.1-12.1-11.20002-26.4-27.50001-28-11.9-1.2-37.40001-1.2-49.20001 0.1l0.20001 0z",
+                  "fill": "#fefdf5cc",
+                  "width": 14.63896656036377,
+                  "height": 15.172061920166016,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "path",
+                  "id": "eRERL",
+                  "x": 0,
+                  "y": 18.74195671081543,
+                  "name": "Vector",
+                  "geometry": "M50.1313 0.97671c13.9-1.3 36.8-1.2 50.8-0.3 29.2 2 49.1 21.3 51.29999 50.7 1.2 16 1.5 49.09999-2.8 63.89999-4.3 14.80001-16.59999 29-34.09998 34.10001-14.7 4.3-48.70001 4.00001-64.60001 2.70001-22.8-1.89999-40.7-14.70001-47.2-36.80002-4.3-14.8-3.9-47.19998-2.8-63.19998 2-28.7 20.6-48.40001 49.4-51.10001z m1.5 24c-16.4 1.9-25.6 12.40001-26.9 28.60001-0.9 12-1.3 45.89999 2.2 56.29999 4 11.5 14.1 17.30002 25.90001 18.30002 11.8 1 35.1 1.1 47.19999 0 16.6-1.5 26.6-11.50001 28.1-28.10001 1.5-16.6 1.10001-35.10001 0-47.20001-1.1-12.1-11.2-26.4-27.5-28-11.9-1.2-37.4-1.19999-49.2 0.1l0.2 0z",
+                  "fill": "#fefdf5cc",
+                  "width": 14.63896656036377,
+                  "height": 14.279586791992188,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "path",
+                  "id": "MLtTl",
+                  "x": 18.0833740234375,
+                  "y": 18.74195671081543,
+                  "name": "Vector",
+                  "geometry": "M50.13131 0.97671c13.9-1.3 36.79999-1.2 50.79999-0.3 29.2 2 49.10003 21.3 51.30002 50.7 1.2 16 1.49999 49.09999-2.80002 63.89999-5 17.60001-16.6 29-34.10001 34.10001-14.7 4.3-48.69997 4.00001-64.59997 2.70001-22.8-1.89999-40.70001-14.70001-47.20001-36.80002-4.3-14.8-3.9-47.19998-2.80001-63.19998 2-28.7 20.60001-48.40001 49.40001-51.10001z m1.5 24c-16.4 1.9-25.60001 12.40001-26.90001 28.60001-0.9 12-1.3 45.89999 2.2 56.29999 3.5 10.4 14.09999 17.30002 25.89999 18.30002 11.8 1 35.10001 1.1 47.20001 0 16.6-1.5 26.60002-11.50001 28.10002-28.10001 1.5-16.6 1.1-35.10001 0-47.20001-1.1-12.1-11.20002-26.4-27.50001-28-11.9-1.2-37.40001-1.19999-49.20001 0.1l0.20001 0z",
+                  "fill": "#fefdf5cc",
+                  "width": 14.63896656036377,
+                  "height": 14.279586791992188,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "id": "poHgM",
+              "x": 37.999999999999545,
+              "y": 19.999999999999986,
+              "name": "cnalogo",
+              "children": [
+                {
+                  "type": "group",
+                  "id": "Cieya",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Group",
+                  "children": [
+                    {
+                      "type": "path",
+                      "id": "IOhZ7",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Vector",
+                      "geometry": "M47.2 99.70001c0-32.20001 26.1-58.40001 58.3-58.40001 4.5 0 8.8 0.5 13 1.5l0-0.5 0-42.3-19.7 0c-54.6 0.4-98.8 44.9-98.8 99.70001 0 55 44.5 99.6 99.5 99.59999 0.1 0 0.1 0 0.2 0l18.8 0 0-42.69999c-4.2 1-8.5 1.5-13 1.5-32.2-0.10001-58.3-26.2-58.3-58.40001z",
+                      "fill": "#fefdf5cc",
+                      "width": 13.757847785949707,
+                      "height": 23.138717651367188,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "group",
+                  "id": "sHcRR",
+                  "x": 14.628547668457031,
+                  "y": 0,
+                  "name": "Group",
+                  "children": [
+                    {
+                      "type": "path",
+                      "id": "woksc",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Vector",
+                      "geometry": "M0 0l0 45.3c21.7 8.5 37.10001 29.60001 37.10001 54.40001 0 24.7-15.40001 45.79999-37.10001 54.4l0 45.19999 46.8 0 0-111.59999 71 99.2 0-87.2-70.8-99.70001-47 0z",
+                      "fill": "#fefdf5cc",
+                      "width": 13.6765775680542,
+                      "height": 23.138717651367188,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "group",
+                  "id": "eOSU8",
+                  "x": 29.17542839050293,
+                  "y": 0,
+                  "name": "Group",
+                  "children": [
+                    {
+                      "type": "path",
+                      "id": "3tDut",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Vector",
+                      "geometry": "M0 0l0 199.3 46.80001 0 0-111.6 46.89999 66.3-39.39999 0 0 45.3 101.6 0 0-44.3-108.90002-155-46.99999 0z",
+                      "fill": "#fefdf5cc",
+                      "width": 18.099985122680664,
+                      "height": 23.138717651367188,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "group",
+                  "id": "Ee0CQ",
+                  "x": 6.431873798370361,
+                  "y": 5.746953010559082,
+                  "name": "Group",
+                  "children": [
+                    {
+                      "type": "group",
+                      "id": "xfbaS",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Group",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "nOkMH",
+                          "x": 0,
+                          "y": 0,
+                          "name": "Vector",
+                          "geometry": "M0 50.4c0 27.8 22.6 50.50001 50.4 50.50001 27.79999 0 50.4-22.60001 50.4-50.50001 0-27.8-22.6-50.4-50.4-50.4-27.7 0-50.4 22.6-50.4 50.4z m73.29999 30.50001c-0.3 1.8-1.39999 3.49999-2.39999 4.79999-1.7 2.1-4.5 5.10001-7.3 3.3-1.3-0.7-2.3-1.8-3.5-2.5-1.4-1-3.1-1.5-4.8-1.7-3.8-0.3-7.89999 0.7-11.4-1-2.8-1.2-5.2-4.3-4.8-7.5 0.4-2.8 3.5-4.3 5.8-5.4 3-1.5 6.09999-3.2 9.3-3.69999 0 0 3.6-0.9 4.5-0.5 1.2 0.4 2.7 0.3 3.8 1 1 0.6 1.6 1.49999 2.3 2.29999 0.8 1.2 1.8 2.4 3 3.3 1.4 1.1 3.00001 2.1 4.2 3.40001 0.8 1.3 1.39999 2.7 1.3 4.2z m-11.69999-61.30001c-1.5 1.4-3.8 6.3-5.5 7.3-1.6 1.2-3.4 2.3-5.5 2.6-1.5 0.1-2.7-0.4-3.7-1.5-0.7-0.9-1.3-2.19999-2.4-2.9-0.9-0.6-1.3 0.4-1.6 1.2-0.9 2.8-0.5 6.1-2.4 8.7-0.9 1.2-2.4 2.2-3.6 3.1-0.9 0.7-1.90001 1.19999-2.7 1.9-0.8 0.7-1.3 1.50001-1.1 2.6 0.2 1.1 0.3 2.2 0.7 3.3 0.4 0.8 0.80001 1.6 0.6 2.4-0.2 1.5-1.60001 2.5-1.2 4.1 1 4.6 5.1 7.6 9.4 8.9 1.4 0.4 2.3 0.90001 2.6 2.80001 0.2 1.7-2.8 2.3-4 2.29999-5.4 0.2-9.9-2.3-13.6-6-1.7-1.7-3.5-3.2-5.2-4.9-0.7-0.7-1.40001-1.6-1.7-2.6-0.2-1.1 0.3-2.2 0.6-3.2 0.4-1.3 0.6-2.7 0.3-4.1-0.1-0.6-0.3-1.2-0.5-1.7-0.2-0.5-0.4-1.1-0.7-1.5-0.4-0.4-0.8-0.6-1.4-0.5-0.1 0-0.1 0-0.2 0-0.6 0.1-1.1 0.6-1.7 0.8-0.4 0.2-0.9 0.4-1.4 0.5-1.2 0.3-2.4 0.3-3.6 0.3-1.2 0-2.4-0.3-3.6-0.4-0.1 0-0.2-0.00001-0.3-0.1 3.5-19.9 20.9-35 41.8-35 8.7 0 16.9 2.7 23.6 7.2-2.6 0.4-8.3 1-12 4.4z",
+                          "fill": "#fefdf5cc",
+                          "width": 11.702876091003418,
+                          "height": 11.714486122131348,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "bLVb1",
+              "x": 165,
+              "y": 12,
+              "name": "中央政府總預算觀測站",
+              "fill": "#dadad5ff",
+              "content": "中央政府總預算觀測站",
+              "lineHeight": 1.25,
+              "fontFamily": "Inter",
+              "fontSize": 32,
+              "fontWeight": "500"
+            }
+          ]
+        },
+        {
+          "type": "polygon",
+          "polygonCount": 3,
+          "cornerRadius": 7,
+          "id": "b39tA",
+          "x": 758,
+          "y": 357,
+          "name": "Polygon 7",
+          "rotation": -90.00000250447808,
+          "fill": "#ce696dff",
+          "width": 106.00000762939453,
+          "height": 105.99999237060547,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0000001a",
+            "offset": {
+              "x": 0,
+              "y": 4
+            },
+            "blur": 14
+          }
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ZraTE",
+      "x": -261.37317883229116,
+      "y": -2488.051671853076,
+      "name": "Wireframe - 2",
+      "clip": true,
+      "width": 1440,
+      "height": 1024,
+      "fill": "#ffffffff",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1
+      },
+      "layout": "none",
+      "children": [
+        {
+          "type": "rectangle",
+          "cornerRadius": 26,
+          "id": "xcDzv",
+          "x": 180,
+          "y": 488,
+          "name": "Rectangle 31",
+          "fill": "#f4f6f8ff",
+          "width": 1080,
+          "height": 416,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1,
+            "fill": "#c1bfbfff"
+          },
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#0000001a",
+            "offset": {
+              "x": 0,
+              "y": 4
+            },
+            "blur": 14
+          }
+        },
+        {
+          "type": "group",
+          "id": "ZbAn1",
+          "x": 280,
+          "y": 233,
+          "name": "Group 96",
+          "children": [
+            {
+              "type": "frame",
+              "id": "Smy78",
+              "x": 0,
+              "y": 0,
+              "name": "Frame 24",
+              "width": 421,
+              "height": 140,
+              "fill": "#c63f3fff",
+              "cornerRadius": 26,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#00000040",
+                "offset": {
+                  "x": 0,
+                  "y": 4
+                },
+                "blur": 7
+              },
+              "gap": 10,
+              "padding": [
+                14,
+                38
+              ],
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "f0wQa",
+                  "name": "已刪減 NT$ 1,280 億 ▲ 較去年 +35%",
+                  "fill": "#ffffffff",
+                  "content": "已刪減  NT$ 1,280 億\n▲ 較去年 +35%",
+                  "lineHeight": 1.5,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "yu17i",
+              "x": 460,
+              "y": 0,
+              "name": "Frame 25",
+              "width": 421,
+              "height": 140,
+              "fill": "#97b1deff",
+              "cornerRadius": 26,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "effect": {
+                "type": "shadow",
+                "shadowType": "outer",
+                "color": "#00000040",
+                "offset": {
+                  "x": 0,
+                  "y": 4
+                },
+                "blur": 7
+              },
+              "gap": 10,
+              "padding": [
+                16,
+                59
+              ],
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Mm20q",
+                  "name": "已凍結 NT$ 920 億 ▲ 較去年 +35%",
+                  "fill": "#ffffffff",
+                  "content": "已凍結 NT$ 920 億\n▲ 較去年 +35%",
+                  "lineHeight": 1.5,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "700"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "HhTqw",
+          "x": 51,
+          "y": 30,
+          "name": "Frame 21",
+          "width": 1338,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 41,
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "path",
+              "id": "EoKEs",
+              "name": "Vector 7",
+              "rotation": -180,
+              "geometry": "M0 0l355.5 0",
+              "width": 1338,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            },
+            {
+              "type": "frame",
+              "id": "s5i05",
+              "name": "Frame 20",
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "gap": 31,
+              "padding": [
+                0,
+                115
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "polygon",
+                  "polygonCount": 3,
+                  "cornerRadius": 7,
+                  "id": "g5BIh",
+                  "name": "Polygon 7",
+                  "rotation": -90.00000250447808,
+                  "fill": "#ce696dff",
+                  "width": 66,
+                  "height": 66,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "color": "#0000001a",
+                    "offset": {
+                      "x": 0,
+                      "y": 4
+                    },
+                    "blur": 14
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "Ol9Lo",
+                  "name": "預算審查進度",
+                  "fill": "#000000ff",
+                  "content": "預算審查進度",
+                  "lineHeight": 1,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 40,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "path",
+              "id": "IbHKu",
+              "name": "Vector 8",
+              "rotation": -180,
+              "geometry": "M0 0l355.5 0",
+              "width": 1338,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "id": "g1BCe",
+          "x": 478,
+          "y": 392,
+          "name": "Group 84",
+          "children": [
+            {
+              "type": "frame",
+              "id": "N7YLm",
+              "x": 0,
+              "y": 13,
+              "name": "timeline-marker/done",
+              "width": 23,
+              "height": 23,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "zwdx5",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#000000ff",
+                  "width": 23,
+                  "height": 23,
+                  "stroke": {
+                    "align": "outside",
+                    "thickness": 2,
+                    "fill": "#000000ff"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "5Q1FG",
+              "x": 357,
+              "y": 13,
+              "name": "timeline-marker/Variant4",
+              "width": 23,
+              "height": 23,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "i6LDQ",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#c63f3fff",
+                  "width": 23,
+                  "height": 23,
+                  "stroke": {
+                    "align": "outside",
+                    "thickness": 2,
+                    "fill": "#000000ff"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "0WLD4",
+              "x": 248,
+              "y": 13,
+              "name": "timeline-marker/yet",
+              "width": 23,
+              "height": 23,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "hUO0d",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#ffffffff",
+                  "width": 23,
+                  "height": 23,
+                  "stroke": {
+                    "align": "outside",
+                    "thickness": 2,
+                    "fill": "#000000ff"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "PeNOs",
+              "x": 115,
+              "y": 13,
+              "name": "timeline-marker/progress",
+              "width": 23,
+              "height": 23,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "2OE0O",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#ffffffff",
+                  "width": 23,
+                  "height": 23,
+                  "stroke": {
+                    "align": "outside",
+                    "thickness": 2,
+                    "fill": "#000000ff"
+                  }
+                },
+                {
+                  "type": "path",
+                  "id": "DBJ7d",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 7",
+                  "geometry": "M11.5 23c-6.35127 0-11.5-5.14873-11.5-11.5 0-6.35127 5.14873-11.5 11.5-11.5l0 23z",
+                  "fill": "#000000ff",
+                  "width": 11.5,
+                  "height": 23,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 2,
+                    "fill": "#000000ff"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "vvlGW",
+              "x": 42,
+              "y": 2,
+              "name": " 完成",
+              "fill": "#454545ff",
+              "content": " 完成",
+              "lineHeight": 1.6666666666666667,
+              "fontFamily": "Noto Sans CJK TC",
+              "fontSize": 24,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "9p57i",
+              "x": 157,
+              "y": 2,
+              "name": "進行中",
+              "fill": "#454545ff",
+              "content": "進行中",
+              "lineHeight": 1.6666666666666667,
+              "fontFamily": "Noto Sans CJK TC",
+              "fontSize": 24,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "6VbTu",
+              "x": 290,
+              "y": 2,
+              "name": "排程",
+              "fill": "#454545ff",
+              "content": "排程",
+              "lineHeight": 1.6666666666666667,
+              "fontFamily": "Noto Sans CJK TC",
+              "fontSize": 24,
+              "fontWeight": "500"
+            },
+            {
+              "type": "text",
+              "id": "xxFeV",
+              "x": 399,
+              "y": 0,
+              "name": "逾期",
+              "fill": "#454545ff",
+              "content": "逾期",
+              "lineHeight": 1.6666666666666667,
+              "fontFamily": "Noto Sans CJK TC",
+              "fontSize": 24,
+              "fontWeight": "500"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dHXUt",
+          "x": 426,
+          "y": 529,
+          "name": "Frame 26",
+          "width": 623,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 30,
+          "children": [
+            {
+              "type": "group",
+              "id": "oZjz8",
+              "name": "Group 93",
+              "children": [
+                {
+                  "type": "group",
+                  "id": "koEkG",
+                  "x": 54,
+                  "y": 0,
+                  "name": "Group 92",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LroMc",
+                      "x": 209,
+                      "y": 0,
+                      "name": "法定預算審查完成期限",
+                      "fill": "#000000ff",
+                      "content": "法定預算審查完成期限",
+                      "lineHeight": 1.1111111111111112,
+                      "fontFamily": "Noto Sans CJK TC",
+                      "fontSize": 36,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "text",
+                      "id": "tZpS9",
+                      "x": 0,
+                      "y": 0,
+                      "name": "114/10/07",
+                      "fill": "#000000ff",
+                      "content": "114/10/07",
+                      "lineHeight": 1.1111111111111112,
+                      "fontFamily": "Noto Sans CJK TC",
+                      "fontSize": 36,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "T8UjD",
+                  "x": 0,
+                  "y": 8,
+                  "name": "timeline-marker",
+                  "width": 23,
+                  "height": 23,
+                  "fill": {
+                    "type": "color",
+                    "color": "#ffffffff",
+                    "enabled": false
+                  },
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "j9g61",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Ellipse 6",
+                      "sweepAngle": -360.00001001791264,
+                      "fill": "#ffffffff",
+                      "width": 23,
+                      "height": 23,
+                      "stroke": {
+                        "align": "outside",
+                        "thickness": 2,
+                        "fill": "#000000ff"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "id": "SjmkW",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Ellipse 7",
+                      "geometry": "M11.5 23c-6.35127 0-11.5-5.14873-11.5-11.5 0-6.35127 5.14873-11.5 11.5-11.5l0 23z",
+                      "fill": "#000000ff",
+                      "width": 11.5,
+                      "height": 23,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 2,
+                        "fill": "#000000ff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "id": "cPelC",
+              "name": "Group 94",
+              "children": [
+                {
+                  "type": "group",
+                  "id": "zXYnZ",
+                  "x": 54,
+                  "y": 0,
+                  "name": "Group 92",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "zGj86",
+                      "x": 209,
+                      "y": 0,
+                      "name": "法定預算審查完成期限",
+                      "fill": "#000000ff",
+                      "content": "法定預算審查完成期限",
+                      "lineHeight": 1.1111111111111112,
+                      "fontFamily": "Noto Sans CJK TC",
+                      "fontSize": 36,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "text",
+                      "id": "8ybMn",
+                      "x": 0,
+                      "y": 0,
+                      "name": "114/10/07",
+                      "fill": "#000000ff",
+                      "content": "114/10/07",
+                      "lineHeight": 1.1111111111111112,
+                      "fontFamily": "Noto Sans CJK TC",
+                      "fontSize": 36,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "8lxAi",
+                  "x": 0,
+                  "y": 8,
+                  "name": "timeline-marker",
+                  "width": 23,
+                  "height": 23,
+                  "fill": {
+                    "type": "color",
+                    "color": "#ffffffff",
+                    "enabled": false
+                  },
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "ayORV",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Ellipse 6",
+                      "sweepAngle": -360.00001001791264,
+                      "fill": "#ffffffff",
+                      "width": 23,
+                      "height": 23,
+                      "stroke": {
+                        "align": "outside",
+                        "thickness": 2,
+                        "fill": "#000000ff"
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "id": "3sAIV",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Ellipse 7",
+                      "geometry": "M11.5 23c-6.35127 0-11.5-5.14873-11.5-11.5 0-6.35127 5.14873-11.5 11.5-11.5l0 23z",
+                      "fill": "#000000ff",
+                      "width": 11.5,
+                      "height": 23,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 2,
+                        "fill": "#000000ff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "id": "HJRtl",
+              "name": "Group 90",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Il6gV",
+                  "x": 54,
+                  "y": 0,
+                  "name": "114/10/07",
+                  "fill": "#000000ff",
+                  "content": "114/10/07",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "WPJ39",
+                  "x": 263,
+                  "y": 0,
+                  "name": "法定預算審查完成期限",
+                  "fill": "#000000ff",
+                  "content": "法定預算審查完成期限",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "frame",
+                  "id": "MDC0v",
+                  "x": 0,
+                  "y": 9,
+                  "name": "timeline-marker",
+                  "width": 23,
+                  "height": 23,
+                  "fill": {
+                    "type": "color",
+                    "color": "#ffffffff",
+                    "enabled": false
+                  },
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "b0Fp3",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Ellipse 6",
+                      "sweepAngle": -360.00001001791264,
+                      "fill": "#c63f3fff",
+                      "width": 23,
+                      "height": 23,
+                      "stroke": {
+                        "align": "outside",
+                        "thickness": 2,
+                        "fill": "#000000ff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "id": "2W8lt",
+              "name": "Group 95",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rcnzs",
+                  "x": 54,
+                  "y": 0,
+                  "name": "114/10/07",
+                  "fill": "#000000ff",
+                  "content": "114/10/07",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "0ID1B",
+                  "x": 263,
+                  "y": 0,
+                  "name": "法定預算審查完成期限",
+                  "fill": "#000000ff",
+                  "content": "法定預算審查完成期限",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "frame",
+                  "id": "5lt6R",
+                  "x": 0,
+                  "y": 9,
+                  "name": "timeline-marker",
+                  "width": 23,
+                  "height": 23,
+                  "fill": {
+                    "type": "color",
+                    "color": "#ffffffff",
+                    "enabled": false
+                  },
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "4TZmU",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Ellipse 6",
+                      "sweepAngle": -360.00001001791264,
+                      "fill": "#c63f3fff",
+                      "width": 23,
+                      "height": 23,
+                      "stroke": {
+                        "align": "outside",
+                        "thickness": 2,
+                        "fill": "#000000ff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "group",
+              "id": "aaNB6",
+              "name": "Group 89",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "PJvxU",
+                  "x": 54,
+                  "y": 0,
+                  "name": "114/10/07",
+                  "fill": "#000000ff",
+                  "content": "114/10/07",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "OiT4X",
+                  "x": 263,
+                  "y": 0,
+                  "name": "法定預算審查完成期限",
+                  "fill": "#000000ff",
+                  "content": "法定預算審查完成期限",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "frame",
+                  "id": "mzAkX",
+                  "x": 0,
+                  "y": 8,
+                  "name": "timeline-marker",
+                  "width": 23,
+                  "height": 23,
+                  "fill": {
+                    "type": "color",
+                    "color": "#ffffffff",
+                    "enabled": false
+                  },
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "WlPT3",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Ellipse 6",
+                      "sweepAngle": -360.00001001791264,
+                      "fill": "#000000ff",
+                      "width": 23,
+                      "height": 23,
+                      "stroke": {
+                        "align": "outside",
+                        "thickness": 2,
+                        "fill": "#000000ff"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "n8CUx",
+      "x": -261.37317883229116,
+      "y": 3912.948328146924,
+      "name": "Wireframe - 3",
+      "clip": true,
+      "width": 1440,
+      "height": 1024,
+      "fill": "#ffffffff",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1
+      },
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "6HBHK",
+          "x": 211,
+          "y": 237,
+          "name": "中央政府總預算包含成千上百工作計畫，透過下方互動式圖表，您可以切換不同部會與機關，查看其預算審查的最新進度（通過、凍結、刪減比例）。",
+          "fill": "#000000ff",
+          "textGrowth": "fixed-width",
+          "width": 1080,
+          "content": "中央政府總預算包含成千上百工作計畫，透過下方互動式圖表，您可以切換不同部會與機關，查看其預算審查的最新進度（通過、凍結、刪減比例）。",
+          "lineHeight": 1.4285714285714286,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 28,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "eRT4o",
+          "x": 736,
+          "y": 470,
+          "name": "主管機關1",
+          "fill": "#000000ff",
+          "content": "主管機關1",
+          "lineHeight": 1.4285714285714286,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 28,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "ptspG",
+          "x": 1001,
+          "y": 470,
+          "name": "總預算：7.4億",
+          "fill": "#000000ff",
+          "content": "總預算：7.4億",
+          "lineHeight": 1.4285714285714286,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 28,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "WHm9H",
+          "x": 289,
+          "y": 470,
+          "name": "總預算：7.4億",
+          "fill": "#000000ff",
+          "content": "總預算：7.4億",
+          "lineHeight": 1.4285714285714286,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 28,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "fAbIn",
+          "x": 513,
+          "y": 470,
+          "name": "通過：0億",
+          "fill": "#000000ff",
+          "content": "通過：0億",
+          "lineHeight": 1.4285714285714286,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 28,
+          "fontWeight": "700"
+        },
+        {
+          "type": "path",
+          "id": "bbZ35",
+          "x": 686,
+          "y": 471,
+          "name": "Vector 1",
+          "geometry": "M0 0l0 405",
+          "width": 0,
+          "height": 405,
+          "stroke": {
+            "align": "center",
+            "thickness": 1,
+            "fill": "#000000ff"
+          }
+        },
+        {
+          "type": "text",
+          "id": "FiGvt",
+          "x": 1001,
+          "y": 601,
+          "name": "總預算：7.4億",
+          "fill": "#000000ff",
+          "content": "總預算：7.4億",
+          "lineHeight": 1.4285714285714286,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 28,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "m5lo0",
+          "x": 1001,
+          "y": 746,
+          "name": "總預算：7.4億",
+          "fill": "#000000ff",
+          "content": "總預算：7.4億",
+          "lineHeight": 1.4285714285714286,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 28,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "text",
+          "id": "mnDqv",
+          "x": 736,
+          "y": 601,
+          "name": "主管機關2",
+          "fill": "#000000ff",
+          "content": "主管機關2",
+          "lineHeight": 1.4285714285714286,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 28,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "LJrFR",
+          "x": 736,
+          "y": 740,
+          "name": "主管機關3",
+          "fill": "#000000ff",
+          "content": "主管機關3",
+          "lineHeight": 1.4285714285714286,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 28,
+          "fontWeight": "700"
+        },
+        {
+          "type": "group",
+          "id": "NevbL",
+          "x": 277,
+          "y": 527,
+          "name": "Group 76",
+          "children": [
+            {
+              "type": "ellipse",
+              "id": "9G21K",
+              "x": 0,
+              "y": 0,
+              "name": "Ellipse 3",
+              "sweepAngle": -360.00001001791264,
+              "fill": "#aac8dfff",
+              "width": 341,
+              "height": 341,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            },
+            {
+              "type": "ellipse",
+              "id": "TpN94",
+              "x": 0,
+              "y": 0,
+              "name": "Ellipse 4",
+              "sweepAngle": -270.00000068324533,
+              "fill": "#5591bfff",
+              "width": 341,
+              "height": 341,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            },
+            {
+              "type": "ellipse",
+              "id": "Cs0jv",
+              "x": 0,
+              "y": 0,
+              "name": "Ellipse 5",
+              "sweepAngle": -18.33656319488989,
+              "fill": "#ce696dff",
+              "width": 341,
+              "height": 341,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "id": "iYvQ7",
+          "x": 736,
+          "y": 516,
+          "name": "Group 77",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "SHyYN",
+              "x": 0,
+              "y": 0,
+              "name": "Rectangle 9",
+              "fill": "#ce696dff",
+              "width": 444,
+              "height": 59,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            },
+            {
+              "type": "rectangle",
+              "id": "p12YT",
+              "x": 0,
+              "y": 0,
+              "name": "Rectangle 4",
+              "fill": "#aac8dfff",
+              "width": 369,
+              "height": 59,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            },
+            {
+              "type": "rectangle",
+              "id": "3aHsk",
+              "x": 0,
+              "y": 0,
+              "name": "Rectangle 8",
+              "fill": "#5591bfff",
+              "width": 299.0473937988281,
+              "height": 59,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "id": "zkGK3",
+          "x": 736,
+          "y": 661,
+          "name": "Group 78",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "k1WJy",
+              "x": 0,
+              "y": 0,
+              "name": "Rectangle 5",
+              "fill": "#ce696dff",
+              "width": 286,
+              "height": 59,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            },
+            {
+              "type": "rectangle",
+              "id": "jaeD0",
+              "x": 0,
+              "y": 0,
+              "name": "Rectangle 9",
+              "fill": "#5591bfff",
+              "width": 207,
+              "height": 59,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "id": "LHuxy",
+          "x": 736,
+          "y": 806,
+          "name": "Group 79",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "VEhlB",
+              "x": 0,
+              "y": 0,
+              "name": "Rectangle 6",
+              "fill": "#aac8dfff",
+              "width": 171,
+              "height": 59,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            },
+            {
+              "type": "rectangle",
+              "id": "sh004",
+              "x": 0,
+              "y": 0,
+              "name": "Rectangle 10",
+              "fill": "#5591bfff",
+              "width": 137,
+              "height": 59,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "id": "i4CpK",
+          "x": 518,
+          "y": 924,
+          "name": "Group 80",
+          "children": [
+            {
+              "type": "text",
+              "id": "67GF9",
+              "x": 44,
+              "y": 0,
+              "name": "通過",
+              "fill": "#000000ff",
+              "content": "通過",
+              "lineHeight": 1.4285714285714286,
+              "fontFamily": "Noto Sans CJK TC",
+              "fontSize": 28,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "rectangle",
+              "id": "LMsFF",
+              "x": 0,
+              "y": 6,
+              "name": "Rectangle 11",
+              "fill": "#5591bfff",
+              "width": 28,
+              "height": 28,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "id": "nWXBk",
+          "x": 708,
+          "y": 924,
+          "name": "Group 81",
+          "children": [
+            {
+              "type": "text",
+              "id": "6yDbe",
+              "x": 38,
+              "y": 0,
+              "name": "凍結",
+              "fill": "#000000ff",
+              "content": "凍結",
+              "lineHeight": 1.4285714285714286,
+              "fontFamily": "Noto Sans CJK TC",
+              "fontSize": 28,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "rectangle",
+              "id": "xnh82",
+              "x": 0,
+              "y": 6,
+              "name": "Rectangle 12",
+              "fill": "#aac8dfff",
+              "width": 28,
+              "height": 28,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "id": "lLREx",
+          "x": 887,
+          "y": 924,
+          "name": "Group 82",
+          "children": [
+            {
+              "type": "text",
+              "id": "uEmD6",
+              "x": 38,
+              "y": 0,
+              "name": "刪減",
+              "fill": "#000000ff",
+              "content": "刪減",
+              "lineHeight": 1.4285714285714286,
+              "fontFamily": "Noto Sans CJK TC",
+              "fontSize": 28,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "rectangle",
+              "id": "AM2Qt",
+              "x": 0,
+              "y": 6,
+              "name": "Rectangle 13",
+              "fill": "#ce696dff",
+              "width": 28,
+              "height": 28,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "id": "CS4gO",
+          "x": 654,
+          "y": 546,
+          "name": "Group 75"
+        },
+        {
+          "type": "text",
+          "id": "3YABQ",
+          "x": 674,
+          "y": 587.4599609375,
+          "name": "刪除：10.5億",
+          "fill": "#ffffffff",
+          "content": "刪除：10.5億",
+          "lineHeight": 1.4285714285714286,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 28,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "kjeLf",
+          "x": 264,
+          "y": 380,
+          "name": "search bar",
+          "width": 912,
+          "height": 64,
+          "fill": {
+            "type": "color",
+            "color": "#ffffffff",
+            "enabled": false
+          },
+          "cornerRadius": 16,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "cornerRadius": 90,
+              "id": "vDzN7",
+              "x": 0,
+              "y": 0,
+              "name": "Rectangle 7",
+              "fill": "#ffffffff",
+              "width": 912,
+              "height": 64,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "#000000ff"
+              }
+            },
+            {
+              "type": "text",
+              "id": "KLn4a",
+              "x": 36.93138122558594,
+              "y": 12.190476417541504,
+              "name": "關鍵字，例如國防預算",
+              "fill": "#8b8b8bff",
+              "textGrowth": "fixed-width",
+              "width": 287.24407958984375,
+              "content": "關鍵字，例如國防預算",
+              "lineHeight": 1.4285714285714286,
+              "fontFamily": "Inter",
+              "fontSize": 28,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "7mFIM",
+          "x": 51,
+          "y": 48,
+          "name": "Frame 27",
+          "width": 1338,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 41,
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "path",
+              "id": "Hwwjj",
+              "name": "Vector 7",
+              "rotation": -180,
+              "geometry": "M0 0l355.5 0",
+              "width": 1338,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            },
+            {
+              "type": "frame",
+              "id": "bpN6I",
+              "name": "Frame 20",
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "gap": 31,
+              "padding": [
+                0,
+                115
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "polygon",
+                  "polygonCount": 3,
+                  "cornerRadius": 7,
+                  "id": "Ka3J7",
+                  "name": "Polygon 7",
+                  "rotation": -90.00000250447808,
+                  "fill": "#ce696dff",
+                  "width": 66,
+                  "height": 66,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "color": "#0000001a",
+                    "offset": {
+                      "x": 0,
+                      "y": 4
+                    },
+                    "blur": 14
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "FmOtr",
+                  "name": "部會預算詳細分析",
+                  "fill": "#000000ff",
+                  "content": "部會預算詳細分析",
+                  "lineHeight": 1,
+                  "fontFamily": "Inter",
+                  "fontSize": 40,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "path",
+              "id": "EIClQ",
+              "name": "Vector 8",
+              "rotation": -180,
+              "geometry": "M0 0l355.5 0",
+              "width": 1338,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "riySU",
+      "x": -261.37317883229116,
+      "y": -440.0516718530762,
+      "name": "Wireframe - 4",
+      "clip": true,
+      "width": 1440,
+      "height": 1024,
+      "fill": "#ffffffff",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1
+      },
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "HKUmm",
+          "x": 211,
+          "y": 238,
+          "name": "除了查看機關整體數據，您也可以直接輸入關鍵字（例如：TPASS、無人機、潛艦...），快速搜尋特定的預算項目或工作計畫。",
+          "fill": "#000000ff",
+          "textGrowth": "fixed-width",
+          "width": 1080,
+          "content": "除了查看機關整體數據，您也可以直接輸入關鍵字（例如：TPASS、無人機、潛艦...），快速搜尋特定的預算項目或工作計畫。\n",
+          "lineHeight": 1.6666666666666667,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 24,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "MJiFT",
+          "x": 266,
+          "y": 360,
+          "name": "search bar",
+          "width": 912,
+          "height": 64,
+          "fill": {
+            "type": "color",
+            "color": "#ffffffff",
+            "enabled": false
+          },
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "cornerRadius": 90,
+              "id": "kWyiW",
+              "x": 0,
+              "y": 0,
+              "name": "Rectangle 7",
+              "fill": "#ffffffff",
+              "width": 912,
+              "height": 64,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "#000000ff"
+              }
+            },
+            {
+              "type": "text",
+              "id": "4GIPB",
+              "x": 36.93138122558594,
+              "y": 12.190476417541504,
+              "name": "關鍵字，例如國防預算",
+              "fill": "#8b8b8bff",
+              "textGrowth": "fixed-width",
+              "width": 287.24407958984375,
+              "content": "關鍵字，例如國防預算",
+              "lineHeight": 1.4285714285714286,
+              "fontFamily": "Inter",
+              "fontSize": 28,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "HF96I",
+          "x": 312,
+          "y": 437,
+          "name": "Frame 13",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "gap": 16,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "NTN88",
+              "name": "大家都在關心：",
+              "fill": "#000000ff",
+              "content": "大家都在關心：",
+              "lineHeight": 1.6666666666666667,
+              "fontFamily": "Noto Sans CJK TC",
+              "fontSize": 24,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "EtN3K",
+              "name": "hot_keyword",
+              "width": 92,
+              "height": 49,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 31,
+                  "id": "zXIG2",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Rectangle 15",
+                  "fill": "#f4f6f8ff",
+                  "width": 92,
+                  "height": 49,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "oUtuF",
+                  "x": 12,
+                  "y": 5,
+                  "name": "#光纖",
+                  "fill": "#000000ff",
+                  "content": "#光纖",
+                  "lineHeight": 1.6666666666666667,
+                  "fontFamily": "Inter",
+                  "fontSize": 24,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "VRq4a",
+              "name": "hot_keyword",
+              "width": 92,
+              "height": 49,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 31,
+                  "id": "S9VzI",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Rectangle 15",
+                  "fill": "#f4f6f8ff",
+                  "width": 92,
+                  "height": 49,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "GJvaz",
+                  "x": 12,
+                  "y": 5,
+                  "name": "#光纖",
+                  "fill": "#000000ff",
+                  "content": "#光纖",
+                  "lineHeight": 1.6666666666666667,
+                  "fontFamily": "Inter",
+                  "fontSize": 24,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "e8PFm",
+              "name": "hot_keyword",
+              "width": 92,
+              "height": 49,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 31,
+                  "id": "OEl3l",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Rectangle 15",
+                  "fill": "#f4f6f8ff",
+                  "width": 92,
+                  "height": 49,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "ON6nq",
+                  "x": 12,
+                  "y": 5,
+                  "name": "#光纖",
+                  "fill": "#000000ff",
+                  "content": "#光纖",
+                  "lineHeight": 1.6666666666666667,
+                  "fontFamily": "Inter",
+                  "fontSize": 24,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "X4oq1",
+              "name": "hot_keyword",
+              "width": 92,
+              "height": 49,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 31,
+                  "id": "72dET",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Rectangle 15",
+                  "fill": "#f4f6f8ff",
+                  "width": 92,
+                  "height": 49,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "sNW4c",
+                  "x": 12,
+                  "y": 5,
+                  "name": "#光纖",
+                  "fill": "#000000ff",
+                  "content": "#光纖",
+                  "lineHeight": 1.6666666666666667,
+                  "fontFamily": "Inter",
+                  "fontSize": 24,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "mitEO",
+              "name": "hot_keyword",
+              "width": 92,
+              "height": 49,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 31,
+                  "id": "qRvum",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Rectangle 15",
+                  "fill": "#f4f6f8ff",
+                  "width": 92,
+                  "height": 49,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "ihtPs",
+                  "x": 12,
+                  "y": 5,
+                  "name": "#光纖",
+                  "fill": "#000000ff",
+                  "content": "#光纖",
+                  "lineHeight": 1.6666666666666667,
+                  "fontFamily": "Inter",
+                  "fontSize": 24,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "z63Ao",
+              "name": "hot_keyword",
+              "width": 92,
+              "height": 49,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 31,
+                  "id": "zWxdX",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Rectangle 15",
+                  "fill": "#f4f6f8ff",
+                  "width": 92,
+                  "height": 49,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "7S7VC",
+                  "x": 12,
+                  "y": 5,
+                  "name": "#光纖",
+                  "fill": "#000000ff",
+                  "content": "#光纖",
+                  "lineHeight": 1.6666666666666667,
+                  "fontFamily": "Inter",
+                  "fontSize": 24,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "TMwwy",
+          "x": 679,
+          "y": 926,
+          "name": "Read more",
+          "fill": "#000000ff",
+          "content": "Read more",
+          "lineHeight": 1.6666666666666667,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 24,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "frame",
+          "id": "5gPYF",
+          "x": 268,
+          "y": 517,
+          "name": "Frame 12",
+          "width": 912,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "uVgW2",
+              "name": "project-block",
+              "width": "fill_container",
+              "height": 118,
+              "fill": "#ffffffff",
+              "cornerRadius": 32,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "#000000ff"
+              },
+              "gap": 376,
+              "padding": [
+                28,
+                34
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "4N1CR",
+                  "name": "Frame 1",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "gap": 26,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ed7xM",
+                      "name": "tag_minstry",
+                      "width": 191.8380126953125,
+                      "height": 61,
+                      "fill": {
+                        "type": "color",
+                        "color": "#ffffffff",
+                        "enabled": false
+                      },
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1
+                      },
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 31,
+                          "id": "vP7KX",
+                          "x": 0,
+                          "y": 0,
+                          "name": "Rectangle 21",
+                          "fill": "#5591bfff",
+                          "width": 191.8380126953125,
+                          "height": 61,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "id": "A8WPU",
+                          "x": 24.3271484375,
+                          "y": 11,
+                          "name": "陸軍司令部",
+                          "fill": "#ffffffff",
+                          "content": "陸軍司令部 ",
+                          "lineHeight": 1.4285714285714286,
+                          "fontFamily": "Inter",
+                          "fontSize": 28,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "ZmNbM",
+                      "name": "營建工程",
+                      "fill": "#000000ff",
+                      "textGrowth": "fixed-width",
+                      "width": 131,
+                      "content": "營建工程",
+                      "lineHeight": 1.25,
+                      "fontFamily": "Inter",
+                      "fontSize": 32,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "Wy705",
+                  "name": "25.7 億",
+                  "fill": "#000000ff",
+                  "content": "25.7 億",
+                  "lineHeight": 1.25,
+                  "fontFamily": "Inter",
+                  "fontSize": 32,
+                  "fontWeight": "900"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "89mIA",
+              "name": "project-block",
+              "width": "fill_container",
+              "height": 118,
+              "fill": "#ffffffff",
+              "cornerRadius": 32,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "#000000ff"
+              },
+              "gap": 376,
+              "padding": [
+                28,
+                34
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Zc5nU",
+                  "name": "Frame 1",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "gap": 26,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "iEQFk",
+                      "name": "tag_minstry",
+                      "width": 191.8380126953125,
+                      "height": 61,
+                      "fill": {
+                        "type": "color",
+                        "color": "#ffffffff",
+                        "enabled": false
+                      },
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1
+                      },
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 31,
+                          "id": "uhm08",
+                          "x": 0,
+                          "y": 0,
+                          "name": "Rectangle 21",
+                          "fill": "#315493ff",
+                          "width": 191.8380126953125,
+                          "height": 61,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "id": "A1Zvv",
+                          "x": 24.3271484375,
+                          "y": 11,
+                          "name": "陸軍司令部",
+                          "fill": "#ffffffff",
+                          "content": "陸軍司令部 ",
+                          "lineHeight": 1.4285714285714286,
+                          "fontFamily": "Inter",
+                          "fontSize": 28,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "xFie3",
+                      "name": "營建工程",
+                      "fill": "#000000ff",
+                      "textGrowth": "fixed-width",
+                      "width": 131,
+                      "content": "營建工程",
+                      "lineHeight": 1.25,
+                      "fontFamily": "Inter",
+                      "fontSize": 32,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "bDTA5",
+                  "name": "25.7 億",
+                  "fill": "#000000ff",
+                  "content": "25.7 億",
+                  "lineHeight": 1.25,
+                  "fontFamily": "Inter",
+                  "fontSize": 32,
+                  "fontWeight": "900"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "fR8WI",
+              "name": "project-block",
+              "width": "fill_container",
+              "height": 118,
+              "fill": "#ffffffff",
+              "cornerRadius": 32,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "#000000ff"
+              },
+              "gap": 376,
+              "padding": [
+                28,
+                34
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "eIePm",
+                  "name": "Frame 1",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "gap": 26,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "npx4r",
+                      "name": "tag_minstry",
+                      "width": 191.8380126953125,
+                      "height": 61,
+                      "fill": {
+                        "type": "color",
+                        "color": "#ffffffff",
+                        "enabled": false
+                      },
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1
+                      },
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 31,
+                          "id": "rkMdM",
+                          "x": 0,
+                          "y": 0,
+                          "name": "Rectangle 21",
+                          "fill": "#315493ff",
+                          "width": 191.8380126953125,
+                          "height": 61,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "id": "6rg9z",
+                          "x": 24.3271484375,
+                          "y": 11,
+                          "name": "陸軍司令部",
+                          "fill": "#ffffffff",
+                          "content": "陸軍司令部 ",
+                          "lineHeight": 1.4285714285714286,
+                          "fontFamily": "Inter",
+                          "fontSize": 28,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "iAPHg",
+                      "name": "營建工程",
+                      "fill": "#000000ff",
+                      "textGrowth": "fixed-width",
+                      "width": 131,
+                      "content": "營建工程",
+                      "lineHeight": 1.25,
+                      "fontFamily": "Inter",
+                      "fontSize": 32,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "n2PCi",
+                  "name": "25.7 億",
+                  "fill": "#000000ff",
+                  "content": "25.7 億",
+                  "lineHeight": 1.25,
+                  "fontFamily": "Inter",
+                  "fontSize": 32,
+                  "fontWeight": "900"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bscJ9",
+          "x": 51,
+          "y": 59,
+          "name": "Frame 27",
+          "width": 1338,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 41,
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "path",
+              "id": "AvOOt",
+              "name": "Vector 7",
+              "rotation": -180,
+              "geometry": "M0 0l355.5 0",
+              "width": 1338,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            },
+            {
+              "type": "frame",
+              "id": "SGcxx",
+              "name": "Frame 20",
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "gap": 31,
+              "padding": [
+                0,
+                115
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "polygon",
+                  "polygonCount": 3,
+                  "cornerRadius": 7,
+                  "id": "WRi5x",
+                  "name": "Polygon 7",
+                  "rotation": -90.00000250447808,
+                  "fill": "#ce696dff",
+                  "width": 66,
+                  "height": 66,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "color": "#0000001a",
+                    "offset": {
+                      "x": 0,
+                      "y": 4
+                    },
+                    "blur": 14
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "OYyfT",
+                  "name": "預算計畫搜尋",
+                  "fill": "#000000ff",
+                  "content": "預算計畫搜尋",
+                  "lineHeight": 1,
+                  "fontFamily": "Inter",
+                  "fontSize": 40,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "path",
+              "id": "ylyFO",
+              "name": "Vector 8",
+              "rotation": -180,
+              "geometry": "M0 0l355.5 0",
+              "width": 1338,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "6IlCS",
+      "x": -261.37317883229116,
+      "y": 583.9483281469238,
+      "name": "Wireframe - 12",
+      "clip": true,
+      "width": 1440,
+      "height": 1281,
+      "fill": "#ffffffff",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1
+      },
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "Osywd",
+          "x": 211,
+          "y": 238,
+          "name": "中央政府總預算包含成千上百工作計畫，透過下方互動式圖表，您可以切換不同部會與機關，查看其預算審查的最新進度（通過、凍結、刪減比例）。",
+          "fill": "#000000ff",
+          "textGrowth": "fixed-width",
+          "width": 1080,
+          "content": "中央政府總預算包含成千上百工作計畫，透過下方互動式圖表，您可以切換不同部會與機關，查看其預算審查的最新進度（通過、凍結、刪減比例）。",
+          "lineHeight": 1.6666666666666667,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 24,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "group",
+          "id": "aBaQ4",
+          "x": 388,
+          "y": 365,
+          "name": "Group 97",
+          "children": [
+            {
+              "type": "frame",
+              "id": "QkQ2h",
+              "x": 0,
+              "y": 0,
+              "name": "Frame 28",
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "bklmL",
+                  "name": "部會",
+                  "fill": "#000000ff",
+                  "textGrowth": "fixed-width",
+                  "width": 123.77952575683594,
+                  "content": "部會",
+                  "lineHeight": 1.4285714285714286,
+                  "fontFamily": "Inter",
+                  "fontSize": 28,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "neDGe",
+                  "name": "search bar",
+                  "width": 540,
+                  "height": 64,
+                  "fill": {
+                    "type": "color",
+                    "color": "#ffffffff",
+                    "enabled": false
+                  },
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 90,
+                      "id": "vnZmS",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Rectangle 7",
+                      "fill": "#ffffffff",
+                      "width": 540,
+                      "height": 64,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "#000000ff"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "id": "TJHXU",
+                      "x": 21.867265701293945,
+                      "y": 12.190476417541504,
+                      "name": "關鍵字，例如國防預算",
+                      "fill": "#8b8b8bff",
+                      "textGrowth": "fixed-width",
+                      "width": 170.0787353515625,
+                      "content": "勞動部",
+                      "lineHeight": 1.4285714285714286,
+                      "fontFamily": "Inter",
+                      "fontSize": 28,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "611Kd",
+              "x": 0,
+              "y": 84,
+              "name": "Frame 29",
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "COnlr",
+                  "name": "機關",
+                  "fill": "#000000ff",
+                  "textGrowth": "fixed-width",
+                  "width": 123.77952575683594,
+                  "content": "機關",
+                  "lineHeight": 1.4285714285714286,
+                  "fontFamily": "Inter",
+                  "fontSize": 28,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "4OXLw",
+                  "name": "search bar",
+                  "width": 540,
+                  "height": 64,
+                  "fill": {
+                    "type": "color",
+                    "color": "#ffffffff",
+                    "enabled": false
+                  },
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 90,
+                      "id": "6LqF8",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Rectangle 7",
+                      "fill": "#ffffffff",
+                      "width": 540,
+                      "height": 64,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "#000000ff"
+                      }
+                    },
+                    {
+                      "type": "text",
+                      "id": "6UteA",
+                      "x": 21.867265701293945,
+                      "y": 12.190476417541504,
+                      "name": "關鍵字，例如國防預算",
+                      "fill": "#8b8b8bff",
+                      "content": "勞動部及職業安全衛生研究所",
+                      "lineHeight": 1.4285714285714286,
+                      "fontFamily": "Inter",
+                      "fontSize": 28,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "jnxrW",
+          "x": 621,
+          "y": 582,
+          "name": "勞動部及職業安全衛生研究所",
+          "fill": "#454545ff",
+          "content": "勞動部及職業安全衛生研究所",
+          "lineHeight": 1.25,
+          "fontFamily": "Inter",
+          "fontSize": 32,
+          "fontWeight": "500"
+        },
+        {
+          "type": "text",
+          "id": "wSkiG",
+          "x": 512,
+          "y": 582,
+          "name": "勞動部",
+          "fill": "#454545ff",
+          "textGrowth": "fixed-width",
+          "width": 170.0787353515625,
+          "content": "勞動部",
+          "lineHeight": 1.25,
+          "fontFamily": "Inter",
+          "fontSize": 32,
+          "fontWeight": "500"
+        },
+        {
+          "type": "frame",
+          "id": "po11a",
+          "x": 51,
+          "y": 59,
+          "name": "Frame 27",
+          "width": 1338,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 41,
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "path",
+              "id": "F5N3L",
+              "name": "Vector 7",
+              "rotation": -180,
+              "geometry": "M0 0l355.5 0",
+              "width": 1338,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            },
+            {
+              "type": "frame",
+              "id": "QLfv0",
+              "name": "Frame 20",
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "gap": 31,
+              "padding": [
+                0,
+                115
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "polygon",
+                  "polygonCount": 3,
+                  "cornerRadius": 7,
+                  "id": "9o1cQ",
+                  "name": "Polygon 7",
+                  "rotation": -90.00000250447808,
+                  "fill": "#ce696dff",
+                  "width": 66,
+                  "height": 66,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "color": "#0000001a",
+                    "offset": {
+                      "x": 0,
+                      "y": 4
+                    },
+                    "blur": 14
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "mxIx8",
+                  "name": "各機關審查結果",
+                  "fill": "#000000ff",
+                  "content": "各機關審查結果",
+                  "lineHeight": 1,
+                  "fontFamily": "Inter",
+                  "fontSize": 40,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "path",
+              "id": "60XY5",
+              "name": "Vector 8",
+              "rotation": -180,
+              "geometry": "M0 0l355.5 0",
+              "width": 1338,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "GFW60",
+          "x": 512,
+          "y": 653,
+          "name": "Frame 7",
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "gap": 10,
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "6riRS",
+              "name": "Frame 7",
+              "width": 140,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "vertical",
+              "gap": 9,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "1DeyG",
+                  "name": "0",
+                  "fill": "#0b0b0bff",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "3.1",
+                  "lineHeight": 0.8333333333333334,
+                  "textAlign": "center",
+                  "fontFamily": "Noto Sans",
+                  "fontSize": 48,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "ZZh7f",
+                  "name": "刪減案",
+                  "fill": "#000000ff",
+                  "content": "總預算(億)",
+                  "lineHeight": 1.3333333333333333,
+                  "textAlign": "center",
+                  "fontFamily": "Noto Sans TC",
+                  "fontSize": 30,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "path",
+              "id": "prG9B",
+              "name": "Vector 7",
+              "rotation": -90.00000250447827,
+              "geometry": "M0 0l355.5 0",
+              "width": 91,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            },
+            {
+              "type": "frame",
+              "id": "jG0p1",
+              "name": "Frame 4",
+              "width": 105,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "vertical",
+              "gap": 9,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "riMsW",
+                  "name": "0",
+                  "fill": "#c63f3fff",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "0.0",
+                  "lineHeight": 0.8333333333333334,
+                  "textAlign": "center",
+                  "fontFamily": "Noto Sans",
+                  "fontSize": 48,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "9E2tp",
+                  "name": "刪減案",
+                  "fill": "#000000ff",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "刪減%",
+                  "lineHeight": 1.3333333333333333,
+                  "textAlign": "center",
+                  "fontFamily": "Noto Sans TC",
+                  "fontSize": 30,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "path",
+              "id": "8Ykwn",
+              "name": "Vector 5",
+              "rotation": -90.00000250447827,
+              "geometry": "M0 0l355.5 0",
+              "width": 91,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            },
+            {
+              "type": "frame",
+              "id": "7JVyC",
+              "name": "Frame 5",
+              "width": 105,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "vertical",
+              "gap": 9,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "1QKhu",
+                  "name": "0",
+                  "fill": "#2b6fa5ff",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "0.0",
+                  "lineHeight": 0.8333333333333334,
+                  "textAlign": "center",
+                  "fontFamily": "Noto Sans",
+                  "fontSize": 48,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "ITGwF",
+                  "name": "凍結案",
+                  "fill": "#000000ff",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "凍結%",
+                  "lineHeight": 1.3333333333333333,
+                  "textAlign": "center",
+                  "fontFamily": "Noto Sans TC",
+                  "fontSize": 30,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "path",
+              "id": "TQHmN",
+              "name": "Vector 6",
+              "rotation": -90.00000250447827,
+              "geometry": "M0 0l355.5 0",
+              "width": 91,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            },
+            {
+              "type": "frame",
+              "id": "zOeu5",
+              "name": "Frame 6",
+              "width": 105,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "vertical",
+              "gap": 9,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "q0Yzx",
+                  "name": "0",
+                  "fill": "#959592ff",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "0.0",
+                  "lineHeight": 0.8333333333333334,
+                  "textAlign": "center",
+                  "fontFamily": "Noto Sans",
+                  "fontSize": 48,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "tMq1u",
+                  "name": "主決議",
+                  "fill": "#000000ff",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "通過%",
+                  "lineHeight": 1.3333333333333333,
+                  "textAlign": "center",
+                  "fontFamily": "Noto Sans TC",
+                  "fontSize": 30,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "bl1Uv",
+          "x": 295,
+          "y": 813,
+          "name": "Frame 22",
+          "width": 912,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 12,
+          "children": [
+            {
+              "type": "frame",
+              "id": "aQYr0",
+              "name": "project-block",
+              "width": "fill_container",
+              "height": 118,
+              "fill": "#ffffffff",
+              "cornerRadius": 32,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "#000000ff"
+              },
+              "gap": 376,
+              "padding": [
+                28,
+                34
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "dkuMC",
+                  "name": "Frame 1",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "gap": 26,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "B4vkj",
+                      "name": "tag_minstry",
+                      "enabled": false,
+                      "width": 191.8380126953125,
+                      "height": 61,
+                      "fill": {
+                        "type": "color",
+                        "color": "#ffffffff",
+                        "enabled": false
+                      },
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1
+                      },
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 31,
+                          "id": "RDF2A",
+                          "x": 0,
+                          "y": 0,
+                          "name": "Rectangle 21",
+                          "fill": "#5591bfff",
+                          "width": 191.8380126953125,
+                          "height": 61,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "id": "iQ9PD",
+                          "x": 24.3271484375,
+                          "y": 11,
+                          "name": "陸軍司令部",
+                          "fill": "#ffffffff",
+                          "content": "陸軍司令部 ",
+                          "lineHeight": 1.4285714285714286,
+                          "fontFamily": "Inter",
+                          "fontSize": 28,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "t86Hf",
+                      "name": "營建工程",
+                      "fill": "#000000ff",
+                      "textGrowth": "fixed-width",
+                      "width": 131,
+                      "content": "一般行政",
+                      "lineHeight": 1.25,
+                      "fontFamily": "Inter",
+                      "fontSize": 32,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "9iuyp",
+                  "name": "25.7 億",
+                  "fill": "#c63f3fff",
+                  "content": "25.7 億",
+                  "lineHeight": 1.25,
+                  "fontFamily": "Inter",
+                  "fontSize": 32,
+                  "fontWeight": "900"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "86iUE",
+              "name": "project-block",
+              "width": "fill_container",
+              "height": 118,
+              "fill": "#ffffffff",
+              "cornerRadius": 32,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "#000000ff"
+              },
+              "gap": 376,
+              "padding": [
+                28,
+                34
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "iZ1XI",
+                  "name": "Frame 1",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "gap": 26,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "EBAdC",
+                      "name": "tag_minstry",
+                      "enabled": false,
+                      "width": 191.8380126953125,
+                      "height": 61,
+                      "fill": {
+                        "type": "color",
+                        "color": "#ffffffff",
+                        "enabled": false
+                      },
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1
+                      },
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 31,
+                          "id": "bI31B",
+                          "x": 0,
+                          "y": 0,
+                          "name": "Rectangle 21",
+                          "fill": "#315493ff",
+                          "width": 191.8380126953125,
+                          "height": 61,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "id": "SQBtN",
+                          "x": 24.3271484375,
+                          "y": 11,
+                          "name": "陸軍司令部",
+                          "fill": "#ffffffff",
+                          "content": "陸軍司令部 ",
+                          "lineHeight": 1.4285714285714286,
+                          "fontFamily": "Inter",
+                          "fontSize": 28,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "CkTx8",
+                      "name": "營建工程",
+                      "fill": "#000000ff",
+                      "textGrowth": "fixed-width",
+                      "width": 131,
+                      "content": "研究",
+                      "lineHeight": 1.25,
+                      "fontFamily": "Inter",
+                      "fontSize": 32,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "fhUfo",
+                  "name": "25.7 億",
+                  "fill": "#2b6fa5ff",
+                  "content": "25.7 億",
+                  "lineHeight": 1.25,
+                  "fontFamily": "Inter",
+                  "fontSize": 32,
+                  "fontWeight": "900"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ZYZwE",
+              "name": "project-block",
+              "width": "fill_container",
+              "height": 118,
+              "fill": "#ffffffff",
+              "cornerRadius": 32,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "#000000ff"
+              },
+              "gap": 376,
+              "padding": [
+                28,
+                34
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "8ybbp",
+                  "name": "Frame 1",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "gap": 26,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "nG0Dx",
+                      "name": "tag_minstry",
+                      "enabled": false,
+                      "width": 191.8380126953125,
+                      "height": 61,
+                      "fill": {
+                        "type": "color",
+                        "color": "#ffffffff",
+                        "enabled": false
+                      },
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1
+                      },
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 31,
+                          "id": "qXcuR",
+                          "x": 0,
+                          "y": 0,
+                          "name": "Rectangle 21",
+                          "fill": "#315493ff",
+                          "width": 191.8380126953125,
+                          "height": 61,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1
+                          }
+                        },
+                        {
+                          "type": "text",
+                          "id": "HklxV",
+                          "x": 24.3271484375,
+                          "y": 11,
+                          "name": "陸軍司令部",
+                          "fill": "#ffffffff",
+                          "content": "陸軍司令部 ",
+                          "lineHeight": 1.4285714285714286,
+                          "fontFamily": "Inter",
+                          "fontSize": 28,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "lqeuF",
+                      "name": "營建工程",
+                      "fill": "#000000ff",
+                      "textGrowth": "fixed-width",
+                      "width": 131,
+                      "content": "其他設備",
+                      "lineHeight": 1.25,
+                      "fontFamily": "Inter",
+                      "fontSize": 32,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "KEzYW",
+                  "name": "25.7 億",
+                  "fill": "#8b8b8bff",
+                  "content": "25.7 億",
+                  "lineHeight": 1.25,
+                  "fontFamily": "Inter",
+                  "fontSize": 32,
+                  "fontWeight": "900"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "8MwJk",
+      "x": -261.37317883229116,
+      "y": 1864.9483281469238,
+      "name": "Wireframe - 5",
+      "clip": true,
+      "width": 1440,
+      "height": 1024,
+      "fill": "#ffffffff",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1
+      },
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "ZgwvK",
+          "x": 307,
+          "y": 206,
+          "name": "Frame 14",
+          "width": 46,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 15,
+          "children": [
+            {
+              "type": "frame",
+              "id": "Ir9gl",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "AFmbf",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "lhdOB",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "eLjlC",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "Pyb2W",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "hdHlO",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "LTw93",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "hnDdZ",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "e5O4I",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "2knC2",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "wJYfJ",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "VuYJ1",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "wmVOd",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "Mymvi",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "an5VU",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ntQFc",
+          "x": 307,
+          "y": 606,
+          "name": "Frame 16",
+          "width": 46,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 15,
+          "children": [
+            {
+              "type": "frame",
+              "id": "txBtL",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "mLSKc",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "PuoUB",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "v7s0l",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "fMi1F",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "aitZP",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "jpz7p",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "abnSC",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "x0cLg",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "5hR75",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "QKERx",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "lK6dn",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "4AHyE",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "jkAra",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "mA0OO",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "TNz0H",
+          "x": 861,
+          "y": 178,
+          "name": "Frame 15",
+          "width": 46,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 15,
+          "children": [
+            {
+              "type": "frame",
+              "id": "7Dnp9",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "WLKxF",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "hkdG3",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "muB1Q",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "AiicM",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "sfhrm",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "XFAiY",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "5zrRn",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "vilL6",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "8CTTQ",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "7MpUZ",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "ZfjJd",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "tWFXL",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "EaVuc",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "vORxz",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ndylG",
+          "x": 861,
+          "y": 578,
+          "name": "Frame 17",
+          "width": 46,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 15,
+          "children": [
+            {
+              "type": "frame",
+              "id": "PBRgI",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "Huvlv",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "Z324N",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "76xiU",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "OhrC6",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "bfubZ",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "p1uxi",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "MzTL1",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "fSjnu",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "RpW2s",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "ewYix",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "OGB5o",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "T6cwc",
+              "name": "rank-idx",
+              "width": "fill_container",
+              "height": 46,
+              "fill": {
+                "type": "color",
+                "color": "#ffffffff",
+                "enabled": false
+              },
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "layout": "none",
+              "children": [
+                {
+                  "type": "ellipse",
+                  "id": "f69nJ",
+                  "x": 0,
+                  "y": 0,
+                  "name": "Ellipse 6",
+                  "sweepAngle": -360.00001001791264,
+                  "fill": "#5591bfff",
+                  "width": 46,
+                  "height": 46,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "c6hhJ",
+                  "x": 12,
+                  "y": 3,
+                  "name": "1",
+                  "fill": "#ffffffff",
+                  "content": "1",
+                  "lineHeight": 1.1111111111111112,
+                  "fontFamily": "Noto Sans CJK TC",
+                  "fontSize": 36,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "wG9Qp",
+          "x": 304,
+          "y": 144,
+          "name": "刪減金額最多",
+          "fill": "#454545ff",
+          "content": "刪減金額最多",
+          "lineHeight": 1.25,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 32,
+          "fontWeight": "500"
+        },
+        {
+          "type": "text",
+          "id": "3NcZH",
+          "x": 859,
+          "y": 116,
+          "name": "刪減金額最多",
+          "fill": "#454545ff",
+          "content": "刪減金額最多",
+          "lineHeight": 1.25,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 32,
+          "fontWeight": "500"
+        },
+        {
+          "type": "text",
+          "id": "2HcM4",
+          "x": 304,
+          "y": 537,
+          "name": "凍結金額最多",
+          "fill": "#454545ff",
+          "content": "凍結金額最多",
+          "lineHeight": 1.25,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 32,
+          "fontWeight": "500"
+        },
+        {
+          "type": "text",
+          "id": "Y3p48",
+          "x": 859,
+          "y": 509,
+          "name": "凍結金額最多",
+          "fill": "#454545ff",
+          "content": "凍結金額最多",
+          "lineHeight": 1.25,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 32,
+          "fontWeight": "500"
+        },
+        {
+          "type": "text",
+          "id": "NybWb",
+          "x": 304,
+          "y": 30,
+          "name": "部會機關 Top 5",
+          "fill": "#000000ff",
+          "content": "部會機關 Top 5\n",
+          "lineHeight": 1,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 40,
+          "fontWeight": "700"
+        },
+        {
+          "type": "text",
+          "id": "Ltuxa",
+          "x": 859,
+          "y": 30,
+          "name": "工作計畫 Top 5",
+          "fill": "#000000ff",
+          "content": "工作計畫 Top 5",
+          "lineHeight": 1,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 40,
+          "fontWeight": "700"
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "nC0dP",
+      "x": -261.37317883229116,
+      "y": 2888.948328146924,
+      "name": "Wireframe - 7",
+      "clip": true,
+      "width": 1440,
+      "height": 1024,
+      "fill": "#ffffffff",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1
+      },
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "BbIVf",
+          "x": 180,
+          "y": 215,
+          "name": "另外，我們也整理了今年總預算案編列情形提供讀者參考。115年度總預算案受新版財劃法釋出財源給地方的影響，歲入共編列新台幣2兆8623億元...",
+          "fill": "#000000ff",
+          "textGrowth": "fixed-width",
+          "width": 1080,
+          "content": "另外，我們也整理了今年總預算案編列情形提供讀者參考。115年度總預算案受新版財劃法釋出財源給地方的影響，歲入共編列新台幣2兆8623億元...\n",
+          "lineHeight": 1.6666666666666667,
+          "fontFamily": "Inter",
+          "fontSize": 24,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "rectangle",
+          "cornerRadius": 26,
+          "id": "KkDgq",
+          "x": 180,
+          "y": 303,
+          "name": "Rectangle 1",
+          "fill": "#ffffffff",
+          "width": 1080,
+          "height": 637,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "uRghW",
+          "x": 188,
+          "y": 335,
+          "name": "image 8",
+          "fill": {
+            "type": "image",
+            "enabled": true,
+            "url": "",
+            "mode": "fill"
+          },
+          "width": 1028,
+          "height": 573,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "15NZD",
+          "x": 289,
+          "y": 451,
+          "name": "Rectangle 32",
+          "fill": "#315493ff",
+          "width": 64,
+          "height": 409,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "c5jy5",
+          "x": 384,
+          "y": 439,
+          "name": "Rectangle 33",
+          "fill": "#aac8dfff",
+          "width": 64,
+          "height": 423,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "6LoWE",
+          "x": 573,
+          "y": 493,
+          "name": "Rectangle 35",
+          "fill": "#aac8dfff",
+          "width": 64,
+          "height": 367,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "WSSo0",
+          "x": 667,
+          "y": 556,
+          "name": "Rectangle 36",
+          "fill": "#aac8dfff",
+          "width": 65,
+          "height": 306,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "Y4DjT",
+          "x": 762,
+          "y": 570,
+          "name": "Rectangle 37",
+          "fill": "#aac8dfff",
+          "width": 65,
+          "height": 292,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "dw9Iu",
+          "x": 855,
+          "y": 570,
+          "name": "Rectangle 38",
+          "fill": "#aac8dfff",
+          "width": 65,
+          "height": 292,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "FWQvZ",
+          "x": 947,
+          "y": 593,
+          "name": "Rectangle 39",
+          "fill": "#aac8dfff",
+          "width": 65,
+          "height": 269,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "6CgR9",
+          "x": 1043,
+          "y": 593,
+          "name": "Rectangle 40",
+          "fill": "#aac8dfff",
+          "width": 65,
+          "height": 269,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "7QQfc",
+          "x": 1135,
+          "y": 593,
+          "name": "Rectangle 41",
+          "fill": "#aac8dfff",
+          "width": 65,
+          "height": 269,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "rectangle",
+          "id": "MK4kO",
+          "x": 478,
+          "y": 474,
+          "name": "Rectangle 34",
+          "fill": "#aac8dfff",
+          "width": 64,
+          "height": 388,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "frame",
+          "id": "DcTTR",
+          "x": 51,
+          "y": 35,
+          "name": "Frame 27",
+          "width": 1338,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 41,
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "path",
+              "id": "M3bYo",
+              "name": "Vector 7",
+              "rotation": -180,
+              "geometry": "M0 0l355.5 0",
+              "width": 1338,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            },
+            {
+              "type": "frame",
+              "id": "Eqxpc",
+              "name": "Frame 20",
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "gap": 31,
+              "padding": [
+                0,
+                115
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "polygon",
+                  "polygonCount": 3,
+                  "cornerRadius": 7,
+                  "id": "kGiBU",
+                  "name": "Polygon 7",
+                  "rotation": -90.00000250447808,
+                  "fill": "#ce696dff",
+                  "width": 66,
+                  "height": 66,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "color": "#0000001a",
+                    "offset": {
+                      "x": 0,
+                      "y": 4
+                    },
+                    "blur": 14
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "ptH5e",
+                  "name": "各部會今年去年預算比較",
+                  "fill": "#000000ff",
+                  "content": "各部會今年去年預算比較",
+                  "lineHeight": 1,
+                  "fontFamily": "Inter",
+                  "fontSize": 40,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "path",
+              "id": "fB6rP",
+              "name": "Vector 8",
+              "rotation": -180,
+              "geometry": "M0 0l355.5 0",
+              "width": 1338,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "OhIfg",
+      "x": -261.37317883229116,
+      "y": -1464.0516718530762,
+      "name": "Wireframe - 11",
+      "clip": true,
+      "width": 1440,
+      "height": 1024,
+      "fill": "#ffffffff",
+      "stroke": {
+        "align": "inside",
+        "thickness": 1
+      },
+      "layout": "none",
+      "children": [
+        {
+          "type": "text",
+          "id": "1WcSh",
+          "x": 211,
+          "y": 212,
+          "name": "歲出編列時會依據其業務性質做科目分類，也就是「政事別」。根據「歲出政事別科目歸類原則與範圍」規定...",
+          "fill": "#000000ff",
+          "textGrowth": "fixed-width",
+          "width": 1080,
+          "content": "歲出編列時會依據其業務性質做科目分類，也就是「政事別」。根據「歲出政事別科目歸類原則與範圍」規定...",
+          "lineHeight": 1.6666666666666667,
+          "fontFamily": "Noto Sans CJK TC",
+          "fontSize": 24,
+          "fontWeight": "normal"
+        },
+        {
+          "type": "rectangle",
+          "id": "9NPrr",
+          "x": 180,
+          "y": 312,
+          "name": "Screenshot 2026-02-10 at 1.56.04 PM 1",
+          "fill": [
+            {
+              "type": "image",
+              "enabled": false,
+              "url": "",
+              "mode": "stretch"
+            },
+            {
+              "type": "image",
+              "enabled": true,
+              "url": "",
+              "mode": "stretch"
+            }
+          ],
+          "width": 1080,
+          "height": 477,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          }
+        },
+        {
+          "type": "frame",
+          "id": "EPYUG",
+          "x": 51,
+          "y": 44,
+          "name": "Frame 27",
+          "width": 1338,
+          "stroke": {
+            "align": "inside",
+            "thickness": 1
+          },
+          "layout": "vertical",
+          "gap": 41,
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "path",
+              "id": "0gZPP",
+              "name": "Vector 7",
+              "rotation": -180,
+              "geometry": "M0 0l355.5 0",
+              "width": 1338,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            },
+            {
+              "type": "frame",
+              "id": "GZ87A",
+              "name": "Frame 20",
+              "stroke": {
+                "align": "inside",
+                "thickness": 1
+              },
+              "gap": 31,
+              "padding": [
+                0,
+                115
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "polygon",
+                  "polygonCount": 3,
+                  "cornerRadius": 7,
+                  "id": "LoVr5",
+                  "name": "Polygon 7",
+                  "rotation": -90.00000250447808,
+                  "fill": "#ce696dff",
+                  "width": 66,
+                  "height": 66,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1
+                  },
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "color": "#0000001a",
+                    "offset": {
+                      "x": 0,
+                      "y": 4
+                    },
+                    "blur": 14
+                  }
+                },
+                {
+                  "type": "text",
+                  "id": "7RkjQ",
+                  "name": "115 年度預算案分配概況",
+                  "fill": "#000000ff",
+                  "content": "115 年度預算案分配概況",
+                  "lineHeight": 1,
+                  "fontFamily": "Inter",
+                  "fontSize": 40,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "path",
+              "id": "ltr9D",
+              "name": "Vector 8",
+              "rotation": -180,
+              "geometry": "M0 0l355.5 0",
+              "width": 1338,
+              "height": 0,
+              "stroke": {
+                "align": "center",
+                "thickness": 1,
+                "fill": "#8b8b8bff"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
