@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>中央政府總預算觀測站 – v2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles-v2.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+      <button class="nav-brand" data-scroll-to="home">
+        <span class="brand-mark"></span>
+        <span class="brand-text">中央政府總預算觀測站</span>
+      </button>
+      <nav class="nav-links">
+        <button data-scroll-to="home">首頁</button>
+        <button data-scroll-to="section-progress">預算審查進度</button>
+        <button data-scroll-to="section-allocation">115 年度預算案分配概況</button>
+        <button data-scroll-to="section-agency">各機關審查結果</button>
+        <button data-scroll-to="section-compare">各部會今年去年預算比較</button>
+        <button data-scroll-to="section-search">預算計畫搜尋</button>
+        <button data-scroll-to="section-legislator">立委把關</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-inner">
+        <div class="hero-main">
+          <p class="hero-kicker">115 年度中央政府總預算案</p>
+          <h1 class="hero-title">看懂預算，跟上每一筆被砍與凍結</h1>
+          <p class="hero-lead">
+            從總數到各部會、各計畫，整理立法院審議進度、刪減與凍結金額，讓你一次掌握年度預算案的全貌。
+          </p>
+          <div class="hero-cta-row">
+            <button class="primary-cta" data-scroll-to="section-progress">先看整體審查進度</button>
+            <button class="ghost-cta" data-scroll-to="section-search">直接搜尋預算計畫</button>
+          </div>
+          <div class="hero-summary-grid" aria-label="預算刪減與凍結摘要">
+            <article class="summary-card">
+              <h2>已刪減</h2>
+              <p class="summary-amount" id="summary-cut-amount">NT$ –</p>
+              <p class="summary-meta">
+                較去年 <span id="summary-cut-yoy">–%</span>
+              </p>
+            </article>
+            <article class="summary-card">
+              <h2>已凍結</h2>
+              <p class="summary-amount" id="summary-freeze-amount">NT$ –</p>
+              <p class="summary-meta">
+                較去年 <span id="summary-freeze-yoy">–%</span>
+              </p>
+            </article>
+          </div>
+        </div>
+        <aside class="hero-sidebar" aria-label="首頁快速導覽">
+          <div class="sidebar-header">
+            <span class="sidebar-label">快速導覽</span>
+          </div>
+          <div class="sidebar-wheel">
+            <div class="wheel-arrow"></div>
+            <ul class="wheel-list" id="hero-nav-list">
+              <li data-scroll-to="section-news">相關新聞</li>
+              <li data-scroll-to="section-legislator">立委把關</li>
+              <li data-scroll-to="section-progress">預算審查進度</li>
+              <li data-scroll-to="section-allocation">115 年度預算案分配概況</li>
+              <li data-scroll-to="section-search">預算計畫搜尋</li>
+              <li data-scroll-to="section-agency">各機關審查結果</li>
+              <li data-scroll-to="section-compare">各部會今年去年預算比較</li>
+              <li data-scroll-to="section-ministry-detail">部會預算詳細分析</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="section-news" class="content-section">
+      <div class="section-head">
+        <div class="section-label-row">
+          <div class="section-triangle"></div>
+          <h2>相關新聞</h2>
+        </div>
+      </div>
+      <div class="article-body">
+        <p>外連至中央社專題，整理與本次預算審查相關的背景與延伸閱讀。</p>
+        <a class="inline-link" href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" rel="noreferrer">前往中央社專題</a>
+      </div>
+    </section>
+
+    <section id="section-progress" class="content-section">
+      <div class="section-head">
+        <div class="section-label-row">
+          <div class="section-triangle"></div>
+          <h2>預算審查進度</h2>
+        </div>
+      </div>
+      <div class="article-body">
+        <p>依照總預算案的法定流程與實際進度，整理目前已完成、進行中與尚待審查的階段。</p>
+      </div>
+      <div class="chart-shell">
+        <canvas id="chartStatusB"></canvas>
+      </div>
+      <div class="timeline-shell" id="timeline-shell">
+        <!-- 後續可接上 inform.rtf 中的時間軸資料 -->
+      </div>
+    </section>
+
+    <section id="section-allocation" class="content-section">
+      <div class="section-head">
+        <div class="section-label-row">
+          <div class="section-triangle"></div>
+          <h2>115 年度預算案分配概況</h2>
+        </div>
+      </div>
+      <div class="article-body">
+        <p>從歲出功能別與經費別，整理 115 年度中央政府總預算案的整體配置與主要變動。</p>
+      </div>
+      <div class="chart-shell">
+        <canvas id="chartAllocation"></canvas>
+      </div>
+    </section>
+
+    <section id="section-agency" class="content-section">
+      <div class="section-head">
+        <div class="section-label-row">
+          <div class="section-triangle"></div>
+          <h2>各機關審查結果</h2>
+        </div>
+      </div>
+      <div class="article-body">
+        <p>彙整各機關工作計畫在審查後的通過、刪減與凍結金額，以卡片方式快速瀏覽。</p>
+      </div>
+      <div class="card-grid" id="agency-summary-grid">
+        <!-- 動態填入各機關摘要卡片 -->
+      </div>
+    </section>
+
+    <section id="section-compare" class="content-section">
+      <div class="section-head">
+        <div class="section-label-row">
+          <div class="section-triangle"></div>
+          <h2>各部會今年去年預算比較</h2>
+        </div>
+      </div>
+      <div class="article-body">
+        <p>比較各部會本年度與前一年度的預算規模與成長率，觀察預算配置的結構性變化。</p>
+      </div>
+      <div class="chart-shell">
+        <canvas id="chartMinistryCompare"></canvas>
+      </div>
+    </section>
+
+    <section id="section-ministry-detail" class="content-section">
+      <div class="section-head">
+        <div class="section-label-row">
+          <div class="section-triangle"></div>
+          <h2>部會預算詳細分析</h2>
+        </div>
+      </div>
+      <div class="article-body">
+        <p>選擇部會後，左側顯示今年／去年預算及分配結構，右側以長條圖呈現通過、凍結與刪減比例。</p>
+      </div>
+      <div class="ministry-detail-layout">
+        <section class="ministry-left">
+          <header class="mini-head">
+            <h3>部會總覽</h3>
+            <select id="ministry-select"></select>
+          </header>
+          <div class="chart-shell">
+            <canvas id="chartMinistryPie"></canvas>
+          </div>
+        </section>
+        <section class="ministry-right">
+          <header class="mini-head">
+            <h3>通過・凍結・刪減比例</h3>
+          </header>
+          <div class="chart-shell">
+            <canvas id="chartMinistryBars"></canvas>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section id="section-search" class="content-section">
+      <div class="section-head">
+        <div class="section-label-row">
+          <div class="section-triangle"></div>
+          <h2>預算計畫搜尋</h2>
+        </div>
+      </div>
+      <div class="article-body">
+        <p>從部會、機關與關鍵字快速搜尋特定預算計畫，檢視其原始編列與審查結果。</p>
+      </div>
+      <div class="search-shell">
+        <div class="search-row">
+          <input id="search-input" type="search" placeholder="輸入關鍵字、部會或機關名稱…" />
+          <button id="search-btn">搜尋</button>
+        </div>
+        <div class="search-meta">
+          <span id="search-count-label">尚未搜尋</span>
+        </div>
+        <div class="search-results" id="search-results"></div>
+      </div>
+    </section>
+
+    <section id="section-legislator" class="content-section">
+      <div class="section-head">
+        <div class="section-label-row">
+          <div class="section-triangle"></div>
+          <h2>立委把關</h2>
+        </div>
+      </div>
+      <div class="article-body">
+        <p>整理各立委在預算審查中的提案數、刪減與凍結金額，協助理解誰如何把關預算。</p>
+      </div>
+      <div class="legislator-head">
+        <div class="leg-filter-row">
+          <label>
+            排序
+            <select id="leg-sort-select">
+              <option value="cut-desc">刪減金額最多</option>
+              <option value="freeze-desc">凍結金額最多</option>
+              <option value="proposal-desc">提案案數最多</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="leg-grid" id="legislator-grid">
+        <!-- 動態填入立委卡片 -->
+      </div>
+    </section>
+  </main>
+
+  <button class="float-home" data-scroll-to="home" aria-label="回到首頁">回到首頁</button>
+
+  <div class="loading-overlay" id="loader" aria-hidden="true">
+    <div class="loading-card">
+      <div class="spinner"></div>
+      <p>讀取預算資料中…</p>
+    </div>
+  </div>
+
+  <div class="toast" id="error-toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="./main-v2.js" type="module"></script>
+</body>
+</html>
+
