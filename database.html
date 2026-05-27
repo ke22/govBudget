@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中央政府總預算觀測站 - 完整資料庫</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0" rel="stylesheet" />
+
+    <style>
+        /* --- 基礎設定 --- */
+        :root {
+            --bg-color: #F4F4F4;
+            --primary-color: #0F2A4A; /* CNA Navy */
+            --secondary-color: #04A0A0; /* Reporter Teal */
+            --accent-color: #04A0A0;
+            --danger-color: #111111;
+            --card-bg: #FFFFFF;
+            --border-color: #CCCCCC;
+            --text-light: #555555;
+            --cna-dark: #1a1a1e;
+
+            --font-sans: 'Noto Sans TC', sans-serif;
+            --font-serif: 'Noto Serif TC', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            margin: 0;
+            line-height: 1.6;
+            color: #222;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: #fff;
+            padding: 0;
+            display: block;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: none;
+            box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+        }
+
+.header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .cna-logo-white {
+            height: 30px;
+            width: auto;
+            filter: brightness(0);
+            display: block;
+        }
+
+        header h1 {
+            display: none;
+        }
+
+        header nav {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid rgba(0,0,0,0.18);
+            color: #555;
+            padding: 7px 14px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.2s;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 2px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(4,160,160,0.08);
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .nav-active {
+            background: var(--secondary-color) !important;
+            color: white !important;
+            border-color: var(--secondary-color) !important;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* 大一統篩選面板 */
+        .filter-panel {
+            background: var(--card-bg);
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-label {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: block;
+            font-size: 1.05rem;
+        }
+
+        /* 橫向滑動按鈕列 */
+        .pill-row {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            scrollbar-width: none;
+        }
+
+        .pill-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .pill-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            padding: 8px 18px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+            border-radius: 0px; /* Magazine style */
+        }
+
+        .pill-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .pill-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* 搜尋框 */
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 0;
+            outline: none;
+            transition: 0.3s;
+            background: #fff;
+            font-family: var(--font-sans);
+        }
+
+        .search-box:focus {
+            border-color: var(--secondary-color);
+            background: #FAFAFA;
+        }
+
+        /* 搜尋結果統計條 */
+        .summary-bar {
+            background: #F9F9F9;
+            border: 2px solid var(--primary-color);
+            padding: 15px 25px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            animation: fadeIn 0.4s;
+        }
+
+        .summary-text {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .summary-amount {
+            font-family: var(--font-serif);
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--secondary-color);
+        }
+
+        /* Project Cards */
+        .project-block {
+            background: var(--card-bg);
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            border-left: 6px solid var(--secondary-color);
+            transition: 0.2s;
+            gap: 15px;
+        }
+
+        .project-block:hover {
+            transform: translateX(4px);
+            border-color: var(--primary-color);
+        }
+
+        .pb-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+        }
+
+        .pb-title {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .pb-dept {
+            background: var(--primary-color);
+            color: white;
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            width: fit-content;
+            letter-spacing: 0.05em;
+        }
+
+        .pb-amount {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            color: var(--secondary-color);
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        /* Pagination */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .page-btn {
+            background: white;
+            border: 1px solid var(--border-color);
+            color: var(--primary-color);
+            padding: 8px 14px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 0;
+        }
+
+        .page-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            width: 95%;
+            max-width: 800px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.3s;
+            border: 2px solid var(--primary-color);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2.2rem;
+            cursor: pointer;
+            color: #666;
+            z-index: 10;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: var(--secondary-color);
+        }
+
+        .modal-header-area {
+            padding: 25px 30px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: #fff;
+        }
+
+        .modal-body-area {
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background: #FAFAFA;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-top: 3px solid var(--primary-color);
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-val {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 900;
+        }
+
+        .highlight-text {
+            background-color: #ffeb3b;
+            color: #000;
+            font-weight: bold;
+            padding: 0 3px;
+            border-radius: 3px;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        .site-footer {
+            background-color: #111;
+            color: rgba(255,255,255,0.45);
+            padding: 24px 40px;
+            text-align: center;
+            font-size: 0.8rem;
+            letter-spacing: 0.04em;
+            margin-top: auto;
+        }
+
+        .footer-logo {
+            height: 20px;
+            width: auto;
+            filter: brightness(0) invert(1);
+            opacity: 0.45;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== Search wrapper with clear button ===== */
+        .search-wrapper {
+            position: relative;
+        }
+
+        /* Material Symbols Outlined */
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+            vertical-align: middle;
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            color: #bbb;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            display: none;
+        }
+
+        .search-clear:hover {
+            color: var(--secondary-color);
+        }
+
+        /* ===== Simplified filter labels ===== */
+        .filter-label {
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .filter-label .filter-hint {
+            font-size: 0.8rem;
+            color: #aaa;
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        /* ===== Active filter chips ===== */
+        .active-filters {
+            display: none;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 0 4px;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #eef2f8;
+            color: var(--primary-color);
+            border: 1px solid #c8d5e8;
+            padding: 4px 10px;
+            font-size: 0.83rem;
+            font-weight: 600;
+            border-radius: 2px;
+        }
+
+        .filter-chip button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            padding: 0;
+            line-height: 1;
+            opacity: 0.55;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .filter-chip button:hover { opacity: 1; }
+
+        .clear-all-btn {
+            background: none;
+            border: 1px solid #ccc;
+            color: #888;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            border-radius: 2px;
+            transition: 0.2s;
+        }
+
+        .clear-all-btn:hover {
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        /* ===== Card arrow hint ===== */
+        .pb-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .pb-arrow {
+            font-size: 1.25rem;
+            color: #ccc;
+            transition: color 0.2s, transform 0.2s;
+            line-height: 1;
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .project-block:hover .pb-arrow {
+            color: var(--primary-color);
+            transform: translateX(3px);
+        }
+
+        /* ===== Pagination context ===== */
+        .page-info {
+            font-size: 0.83rem;
+            color: #999;
+            padding: 8px 4px;
+            align-self: center;
+            white-space: nowrap;
+        }
+
+        /* ===== Empty state ===== */
+        .empty-state {
+            text-align: center;
+            padding: 64px 20px;
+            color: #888;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            color: #d0d0d0;
+            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48;
+        }
+
+        .empty-state-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #444;
+            margin: 0 0 8px;
+        }
+
+        .empty-state-hint {
+            font-size: 0.95rem;
+            margin: 0 0 28px;
+        }
+
+        .example-searches {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .example-label {
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .example-btn {
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            font-family: var(--font-sans);
+            color: var(--primary-color);
+            font-weight: 600;
+            transition: 0.2s;
+            border-radius: 2px;
+        }
+
+        .example-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        @media (max-width: 600px) {
+            .project-block {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .pb-right {
+                flex-direction: row;
+                align-items: center;
+            }
+            .summary-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div id="loader" class="loading-overlay">
+        <div class="spinner"></div>
+        <p style="margin-top:15px; font-weight:bold; color:var(--secondary-color);">預算資料載入中...</p>
+    </div>
+
+    <header>
+        <div class="header-inner">
+            <div class="site-title">
+                <img src="CNAlogo應用_20250311.svg" alt="CNA 中央通訊社" class="cna-logo-white">
+            </div>
+            <nav>
+                <a href="index.html" class="nav-btn">年度深度報導</a>
+                <a href="#" class="nav-btn nav-active">完整資料庫</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="filter-panel">
+
+            <div style="margin-bottom: 22px;">
+                <span class="filter-label">關鍵字搜尋 <span class="filter-hint">計畫名稱、部會、工作內容</span></span>
+                <div class="search-wrapper">
+                    <input type="text" id="search-input" class="search-box" placeholder="例：無人機、TPASS、社宅、AI…"
+                        oninput="handleSearch(this.value)">
+                    <button id="search-clear" class="search-clear material-symbols-outlined" onclick="clearSearch()" title="清除">close</button>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <span class="filter-label">主題 <span class="filter-hint">依關鍵字自動更新</span></span>
+                <div class="pill-row" id="theme-pills"></div>
+            </div>
+
+            <div class="filter-group" style="margin-bottom: 0;">
+                <span class="filter-label">部會 <span class="filter-hint">依上方條件自動更新</span></span>
+                <div class="pill-row" id="ministry-pills"></div>
+            </div>
+
+        </div>
+
+        <div id="active-filters" class="active-filters"></div>
+
+        <div id="summary-bar" class="summary-bar" style="display: none;">
+            <div class="summary-text" id="summary-text">篩選結果共 0 筆</div>
+            <div class="summary-amount" id="summary-amount">0元</div>
+        </div>
+
+        <div id="results-container"></div>
+        <div id="pagination-container" class="pagination-container"></div>
+    </main>
+
+    <div id="unifiedModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="closeModal(true)">&times;</span>
+            <div class="modal-header-area">
+                <h2 id="u-title" style="margin:0 0 10px 0; color:var(--primary-color); font-size:1.5rem; font-family:var(--font-serif);"></h2>
+                <span id="u-dept" class="pb-dept"></span>
+            </div>
+            <div class="modal-body-area">
+                <div class="stat-grid">
+                    <div class="stat-box" style="border-top-color: var(--secondary-color);">
+                        <div class="stat-label">115年度編列數</div>
+                        <div id="u-val-this" class="stat-val" style="color:var(--secondary-color);">-</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">審定法定預算數</div>
+                        <div id="u-val-appr" class="stat-val" style="color:var(--danger-color);">-</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">114年度法定數</div>
+                        <div id="u-val-last" class="stat-val" style="color:#555;">-</div>
+                    </div>
+                </div>
+
+                <div
+                    style="background:var(--bg-color); padding:20px; margin-bottom:25px; border:1px solid var(--border-color); border-left:4px solid var(--primary-color);">
+                    <strong style="color:var(--primary-color); font-size:1.1rem;">工作內容：</strong>
+                    <div style="margin-top:10px; line-height: 1.7;"><span id="u-desc" style="color:#333;"></span></div>
+                </div>
+
+                <div id="pie-container"
+                    style="text-align: center; background: #fff; padding: 20px; border: 1px solid var(--border-color);">
+                    <h4 style="margin:0 0 15px 0; color:var(--primary-color);">用途分配比例</h4>
+                    <div style="height:220px; width:100%;"><canvas id="chartDetailPie"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="site-footer">
+        <div class="container">
+            <img src="CNAlogo應用_20250311.svg" alt="CNA 中央通訊社" class="footer-logo">
+            <p>© 2026 中央通訊社 CNA 版權所有 | 新聞與資料視覺化專題</p>
+        </div>
+    </footer>
+
+    <script>
+        // 1. 基礎設定
+        let allDataPageA = [];
+
+        // 篩選狀態 (全交集邏輯)
+        let state = {
+            ministry: '全部',
+            theme: '全部',
+            keyword: ''
+        };
+
+        // 主題擴充詞庫
+        const themeKeywords = {
+            '居住正義': ['社宅', '租金補貼', '租補', '住宅', '青安', '房貸'],
+            '育兒少子化': ['少子女化', '托育', '幼兒', '保母', '育兒'],
+            '國防安全': ['潛艦', '無人機', '國防', '軍購', '武器', '戰機', '飛彈'],
+            '能源綠能': ['電網', '綠能', '再生能源', '光電', '風電', '台電'],
+            '媒體宣傳': ['媒體', '宣傳', '行銷', '推廣', '大內宣']
+        };
+
+        const themeIconMap = {
+            '居住正義': 'apartment',
+            '育兒少子化': 'child_care',
+            '國防安全': 'shield',
+            '能源綠能': 'bolt',
+            '媒體宣傳': 'campaign'
+        };
+
+        let currentResults = [];
+        let currentPage = 1;
+        const ITEMS_PER_PAGE = 10;
+        let chartPieA = null;
+
+        // 工具函式
+        function formatCurrency(num) {
+            let val = parseFloat(num);
+            if (isNaN(val) || val === 0) return "0";
+            
+            // 本地資料原本單位為"千元"，所以要轉成元
+            val = val * 1000;
+            
+            let absVal = Math.abs(val);
+            let sign = val < 0 ? "-" : "";
+            if (absVal >= 1000000000000) return sign + (absVal / 1000000000000).toFixed(1).replace(/\.0$/, '') + "兆";
+            if (absVal >= 100000000) return sign + (absVal / 100000000).toFixed(1).replace(/\.0$/, '') + "億";
+            if (absVal >= 10000) return sign + (absVal / 10000).toFixed(1).replace(/\.0$/, '') + "萬";
+            return sign + absVal.toLocaleString() + "元";
+        }
+
+        function highlightContent(text, keyword) {
+            if (!text) return '';
+            let result = String(text);
+            if (keyword && keyword.trim()) {
+                const safeKeyword = keyword.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`(${safeKeyword})`, 'gi');
+                result = result.replace(regex, '<span class="highlight-text">$1</span>');
+            }
+            return result.replace(/\n/g, '<br>');
+        }
+
+        const tooltipCurrencyCallback = { callbacks: { label: function (c) { return (c.label ? c.label + ': ' : '') + c.raw + '%'; } } };
+
+        // 2. 初始化載入
+        async function initPage() {
+            try {
+                // Fetch compiled local JSON
+                const res = await fetch('data/budget.json');
+                const jsonData = await res.json();
+
+                allDataPageA = jsonData;
+
+                document.getElementById('loader').style.display = 'none';
+                checkUrlParams();
+                applyFilters(); // 初次渲染就會自動生成全部部會按鈕
+            } catch (error) {
+                console.error("載入失敗:", error);
+                document.getElementById('loader').innerHTML = '<p style="color:var(--secondary-color); font-weight:bold;">資料讀取失敗</p>';
+            }
+        }
+
+        function checkUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchKeyword = urlParams.get('search');
+            if (searchKeyword) {
+                document.getElementById('search-input').value = searchKeyword;
+                document.getElementById('search-clear').style.display = 'block';
+                state.keyword = searchKeyword;
+            }
+        }
+
+        // 3. UI 互動與【動態按鈕】生成邏輯
+        function selectTheme(themeName) {
+            state.theme = themeName;
+            document.querySelectorAll('#theme-pills .pill-btn').forEach(b => {
+                b.classList.remove('active');
+                if (b.innerText === themeName) b.classList.add('active');
+            });
+            applyFilters();
+        }
+
+        let _searchTimer;
+        function handleSearch(val) {
+            document.getElementById('search-clear').style.display = val ? 'block' : 'none';
+            clearTimeout(_searchTimer);
+            _searchTimer = setTimeout(() => {
+                state.keyword = val.trim();
+                applyFilters();
+            }, 180);
+        }
+
+        function clearSearch() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-clear').style.display = 'none';
+            state.keyword = '';
+            applyFilters();
+        }
+
+        function clearAllFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-clear').style.display = 'none';
+            state.keyword = '';
+            state.theme = '全部';
+            state.ministry = '全部';
+            applyFilters();
+        }
+
+        function quickSearch(keyword) {
+            document.getElementById('search-input').value = keyword;
+            document.getElementById('search-clear').style.display = 'block';
+            state.keyword = keyword;
+            applyFilters();
+        }
+
+        function renderActiveFilters() {
+            const container = document.getElementById('active-filters');
+            const chips = [];
+            const closeIcon = '<span class="material-symbols-outlined" style="font-size:13px">close</span>';
+            if (state.keyword) {
+                chips.push(`<span class="filter-chip">關鍵字：${state.keyword} <button onclick="clearSearch()" title="移除">${closeIcon}</button></span>`);
+            }
+            if (state.theme !== '全部') {
+                chips.push(`<span class="filter-chip">主題：${state.theme} <button onclick="selectTheme('全部')" title="移除">${closeIcon}</button></span>`);
+            }
+            if (state.ministry !== '全部') {
+                chips.push(`<span class="filter-chip">部會：${state.ministry} <button onclick="selectMinistry('全部')" title="移除">${closeIcon}</button></span>`);
+            }
+            if (chips.length > 0) {
+                container.innerHTML = chips.join('') + `<button class="clear-all-btn" onclick="clearAllFilters()">清除全部</button>`;
+                container.style.display = 'flex';
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
+        function selectMinistry(ministryName) {
+            state.ministry = ministryName;
+            applyFilters();
+        }
+
+        // 渲染動態的【部會】按鈕
+        function renderMinistryPills(availableMinistries) {
+            const container = document.getElementById('ministry-pills');
+            container.innerHTML = '';
+            const btnAll = document.createElement('button');
+            btnAll.className = 'pill-btn' + (state.ministry === '全部' ? ' active' : '');
+            btnAll.innerText = '全部';
+            btnAll.onclick = () => selectMinistry('全部');
+            container.appendChild(btnAll);
+
+            availableMinistries.forEach(m => {
+                const btn = document.createElement('button');
+                btn.className = 'pill-btn' + (state.ministry === m ? ' active' : '');
+                btn.innerText = m;
+                btn.onclick = () => selectMinistry(m);
+                container.appendChild(btn);
+            });
+        }
+
+        // 渲染動態的【主題】按鈕
+        function renderThemePills(availableThemes) {
+            const container = document.getElementById('theme-pills');
+            container.innerHTML = '';
+            const btnAll = document.createElement('button');
+            btnAll.className = 'pill-btn' + (state.theme === '全部' ? ' active' : '');
+            btnAll.innerHTML = '<span class="material-symbols-outlined" style="font-size:13px;margin-right:3px;vertical-align:middle">apps</span>全部';
+            btnAll.onclick = () => selectTheme('全部');
+            container.appendChild(btnAll);
+
+            availableThemes.forEach(t => {
+                const btn = document.createElement('button');
+                btn.className = 'pill-btn' + (state.theme === t ? ' active' : '');
+                const icon = themeIconMap[t] || 'label';
+                btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:13px;margin-right:3px;vertical-align:middle">${icon}</span>${t}`;
+                btn.onclick = () => selectTheme(t);
+                container.appendChild(btn);
+            });
+        }
+
+        // 終極過濾引擎 (全連動交集)
+        function applyFilters() {
+            currentPage = 1;
+
+            // 基礎過濾：排除 0 元與統刪項目
+            let validData = allDataPageA.filter(p => {
+                const amt = p['115年編列'] || 0;
+                if (amt === 0 || String(p['計畫編號']).includes('000000') || String(p['計畫名稱']).includes('統刪')) return false;
+                return true;
+            });
+
+            // 輔助函式：判斷是否符合主題
+            const matchThemeCheck = (p, themeName) => {
+                if (themeName === '全部') return true;
+                const keywords = themeKeywords[themeName] || [];
+                const textToSearch = (p['計畫名稱'] + (p['工作內容'] || '')).toLowerCase();
+                return keywords.some(k => textToSearch.includes(k.toLowerCase()));
+            };
+
+            // 輔助函式：判斷是否符合關鍵字
+            const matchKeywordCheck = (p, kw) => {
+                if (!kw) return true;
+                const searchTerms = kw.toLowerCase().split(/\s+/).filter(k=>k);
+                const rawText = (p['計畫名稱'] + (p['工作內容']||'') + (p['主管機關']||'')).toLowerCase();
+                return searchTerms.every(term => rawText.includes(term));
+            };
+
+            // 輔助函式：判斷是否符合部會
+            const matchMinistryCheck = (p, min) => {
+                if (min === '全部') return true;
+                return p['所屬部會'] === min;
+            };
+
+            // ==========================================
+            // 計算「當前可用的主題按鈕」
+            let dataForThemes = validData.filter(p => matchKeywordCheck(p, state.keyword) && matchMinistryCheck(p, state.ministry));
+            let availableThemes = Object.keys(themeKeywords).filter(theme => {
+                return dataForThemes.some(p => matchThemeCheck(p, theme));
+            });
+
+            // 計算「當前可用的部會按鈕」
+            let dataForMinistries = validData.filter(p => matchKeywordCheck(p, state.keyword) && matchThemeCheck(p, state.theme));
+            let availableMinistries = [...new Set(dataForMinistries.map(p => p['所屬部會']))].filter(m => m).sort();
+
+            // 防呆防呆
+            if (state.theme !== '全部' && !availableThemes.includes(state.theme)) {
+                state.theme = '全部';
+                dataForMinistries = validData.filter(p => matchKeywordCheck(p, state.keyword) && matchThemeCheck(p, state.theme));
+                availableMinistries = [...new Set(dataForMinistries.map(p => p['所屬部會']))].filter(m => m).sort();
+            }
+            if (state.ministry !== '全部' && !availableMinistries.includes(state.ministry)) {
+                state.ministry = '全部';
+            }
+
+            renderThemePills(availableThemes);
+            renderMinistryPills(availableMinistries);
+            // ==========================================
+
+            currentResults = validData.filter(p =>
+                matchKeywordCheck(p, state.keyword) &&
+                matchThemeCheck(p, state.theme) &&
+                matchMinistryCheck(p, state.ministry)
+            );
+
+            const summaryBar = document.getElementById('summary-bar');
+
+            renderActiveFilters();
+
+            if (state.ministry === '全部' && state.theme === '全部' && state.keyword === '') {
+                summaryBar.style.display = 'none';
+                document.getElementById('results-container').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon"><span class="material-symbols-outlined">bar_chart</span></div>
+                        <p class="empty-state-title">選擇篩選條件開始查詢</p>
+                        <p class="empty-state-hint">可輸入關鍵字，或點選上方主題 / 部會進行篩選</p>
+                        <div class="example-searches">
+                            <span class="example-label">熱門搜尋：</span>
+                            <button class="example-btn" onclick="quickSearch('無人機')">無人機</button>
+                            <button class="example-btn" onclick="quickSearch('TPASS')">TPASS</button>
+                            <button class="example-btn" onclick="quickSearch('社宅')">社宅</button>
+                            <button class="example-btn" onclick="quickSearch('AI')">AI</button>
+                            <button class="example-btn" onclick="quickSearch('育兒')">育兒</button>
+                        </div>
+                    </div>`;
+                document.getElementById('pagination-container').innerHTML = '';
+                return;
+            }
+
+            if (currentResults.length > 0) {
+                // amt is in thousands (千元) -> convert to total numeric for summary
+                const totalAmt = currentResults.reduce((sum, p) => sum + (p['115年編列'] || 0), 0);
+                document.getElementById('summary-text').innerText = `符合條件共 ${currentResults.length} 筆計畫`;
+                document.getElementById('summary-amount').innerText = formatCurrency(totalAmt);
+                summaryBar.style.display = 'flex';
+            } else {
+                summaryBar.style.display = 'none';
+            }
+
+            renderResults();
+        }
+
+        // 4. 渲染列表與分頁
+        function renderResults() {
+            const container = document.getElementById('results-container');
+            if (currentResults.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#999; padding:40px 0;">查無符合條件的計畫，請嘗試放寬篩選條件。</p>';
+                document.getElementById('pagination-container').innerHTML = '';
+                return;
+            }
+
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            let html = '';
+            currentResults.slice(start, start + ITEMS_PER_PAGE).forEach(row => {
+                const displayTitle = highlightContent(row['計畫名稱'], state.keyword);
+                html += `<div class="project-block" onclick="openUnifiedDetail('${row['計畫編號']}')">
+                    <div class="pb-info"><h3 class="pb-title">${displayTitle}</h3><span class="pb-dept">${row['主管機關']}</span></div>
+                    <div class="pb-right">
+                        <div class="pb-amount">${formatCurrency(row['115年編列'])}</div>
+                        <span class="pb-arrow material-symbols-outlined">chevron_right</span>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+            renderPaginationControls();
+        }
+
+        function renderPaginationControls() {
+            const pagination = document.getElementById('pagination-container');
+            const totalPages = Math.ceil(currentResults.length / ITEMS_PER_PAGE);
+            if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + 4);
+            if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
+
+            let html = `<span class="page-info">第 ${currentPage} / ${totalPages} 頁</span>`;
+            html += `<button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>&lt;</button>`;
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+            html += `<button class="page-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>&gt;</button>`;
+            pagination.innerHTML = html;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderResults();
+            document.getElementById('summary-bar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // 5. 三欄式 Modal 邏輯
+        function closeModal(force = false) {
+            if (force || event.target.id === 'unifiedModal' || event.target.className === 'close-btn') {
+                document.getElementById('unifiedModal').style.display = 'none';
+            }
+        }
+
+        function openUnifiedDetail(id) {
+            const planData = allDataPageA.find(r => r['計畫編號'] === id);
+            if (!planData) return;
+
+            document.getElementById('u-title').innerHTML = highlightContent(planData['計畫名稱'], state.keyword);
+            document.getElementById('u-dept').innerText = planData['主管機關'];
+
+            // 三欄數據處理
+            const valThis = planData['115年編列'];
+            document.getElementById('u-val-this').innerText = (valThis && valThis !== 0) ? formatCurrency(valThis) : "無資料";
+
+            const valAppr = planData['審定數'];
+            document.getElementById('u-val-appr').innerText = (valAppr && valAppr !== 0) ? formatCurrency(valAppr) : "尚未審定";
+
+            const valLast = planData['114年金額'];
+            document.getElementById('u-val-last').innerText = (valLast && valLast !== 0) ? formatCurrency(valLast) : "無資料";
+
+            // 工作內容
+            const desc = planData['工作內容'];
+            document.getElementById('u-desc').innerHTML = (desc && desc.trim() !== "") ? highlightContent(desc, state.keyword) : "目前無資料";
+
+            // 圓餅圖處理 (使用 local json 中已被解析過的 Object)
+            let pieLabels = [], pieData = [];
+            const rawPie = planData['用途比例'];
+
+            if (rawPie && typeof rawPie === 'object') {
+                pieLabels = Object.keys(rawPie);
+                pieData = Object.values(rawPie);
+            }
+
+            const pieContainer = document.getElementById('pie-container');
+            if (chartPieA) chartPieA.destroy();
+
+            if (pieData.length > 0) {
+                pieContainer.style.display = 'block';
+                chartPieA = new Chart(document.getElementById('chartDetailPie').getContext('2d'), {
+                    type: 'pie', data: { 
+                        labels: pieLabels, 
+                        datasets: [{ 
+                            data: pieData, 
+                            backgroundColor: ['#0F2A4A', '#04A0A0', '#333333', '#888888', '#CCCCCC', '#2ECC71'] 
+                        }] 
+                    },
+                    options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' }, tooltip: tooltipCurrencyCallback } }
+                });
+            } else {
+                pieContainer.style.display = 'none';
+            }
+
+            document.getElementById('unifiedModal').style.display = 'flex';
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') document.getElementById('unifiedModal').style.display = 'none';
+        });
+
+        window.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+
+</html>

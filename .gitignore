@@ -1,0 +1,7 @@
+.spectra/
+openspec/.vector-search.db*
+.DS_Store
+.agent/
+.antigravitycli/
+.claude/
+.gemini/
