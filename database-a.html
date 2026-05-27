@@ -451,6 +451,38 @@
             margin: 0 auto 10px;
         }
 
+        /* ===== Layout switcher ===== */
+        .layout-switcher {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 0 14px;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+        .ls-label {
+            font-size: 0.72rem;
+            color: #aaa;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-right: 4px;
+        }
+        .ls-btn {
+            font-size: 0.78rem;
+            padding: 4px 11px;
+            border: 1px solid #ddd;
+            color: #666;
+            text-decoration: none;
+            border-radius: 2px;
+            transition: border-color 0.15s, color 0.15s;
+            font-family: var(--font-sans);
+            font-weight: 500;
+        }
+        .ls-btn:hover { border-color: var(--secondary-color); color: var(--secondary-color); }
+        .ls-btn.ls-active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -734,6 +766,14 @@
         </aside>
 
         <div class="results-col">
+            <div class="layout-switcher">
+                <span class="ls-label">版面</span>
+                <a href="database.html" class="ls-btn">預設</a>
+                <a href="database-a.html" class="ls-btn ls-active">A｜側邊欄</a>
+                <a href="database-b.html" class="ls-btn">B｜篩選列</a>
+                <a href="database-c.html" class="ls-btn">C｜表格</a>
+            </div>
+
             <div id="active-filters" class="active-filters"></div>
 
             <div id="summary-bar" class="summary-bar" style="display: none;">
