@@ -7,6 +7,7 @@
     <title>中央政府總預算觀測站 - 完整資料庫</title>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5/papaparse.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0" rel="stylesheet" />
 
@@ -916,17 +917,59 @@
         const tooltipCurrencyCallback = { callbacks: { label: function (c) { return (c.label ? c.label + ': ' : '') + c.raw + '%'; } } };
 
         // 2. 初始化載入
+        const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/11OXVLqRUfySckHFAWJLEciSxqA-XmTqAUS62j59Syzs/export?format=csv&gid=0';
+
         async function initPage() {
             try {
-                // Fetch compiled local JSON
-                const res = await fetch('data/budget.json');
-                const jsonData = await res.json();
+                const res = await fetch(SHEET_CSV);
+                const text = await res.text();
+                const parsed = Papa.parse(text, { skipEmptyLines: true });
+                const rows = parsed.data;
 
-                allDataPageA = jsonData;
+                const ministryMap = {};
+                for (const row of rows.slice(3)) {
+                    const code = row[0];
+                    if (code && code.length === 10 && code.slice(4) === '000000') {
+                        ministryMap[code.slice(0, 4)] = row[1];
+                    }
+                }
+
+                allDataPageA = rows.slice(3)
+                    .filter(row => row[0] && row[2])
+                    .map(row => {
+                        const total = parseFloat(row[3]) || 0;
+                        const exp = {
+                            '人事費':   parseFloat(row[4])  || 0,
+                            '業務費':   parseFloat(row[17]) || 0,
+                            '設備及投資': parseFloat(row[49]) || 0,
+                            '獎補助費': parseFloat(row[59]) || 0,
+                            '債務費':   parseFloat(row[76]) || 0,
+                        };
+                        const pieRatio = {};
+                        if (total > 0) {
+                            for (const [k, v] of Object.entries(exp)) {
+                                const pct = Math.round(v / total * 1000) / 10;
+                                if (pct > 0) pieRatio[k] = pct;
+                            }
+                        }
+                        const ministry = ministryMap[row[0].slice(0, 4)] || '';
+                        return {
+                            '計畫編號': row[0],
+                            '計畫名稱': row[1],
+                            '政事別':   row[2],
+                            '115年編列': total,
+                            '審定數':   null,
+                            '114年金額': null,
+                            '主管機關': ministry,
+                            '所屬部會': ministry,
+                            '工作內容': '',
+                            '用途比例': pieRatio,
+                        };
+                    });
 
                 document.getElementById('loader').style.display = 'none';
                 checkUrlParams();
-                applyFilters(); // 初次渲染就會自動生成全部部會按鈕
+                applyFilters();
             } catch (error) {
                 console.error("載入失敗:", error);
                 document.getElementById('loader').innerHTML = '<p style="color:var(--secondary-color); font-weight:bold;">資料讀取失敗</p>';
@@ -1058,7 +1101,7 @@
             // 基礎過濾：排除 0 元與統刪項目
             let validData = allDataPageA.filter(p => {
                 const amt = p['115年編列'] || 0;
-                if (amt === 0 || String(p['計畫編號']).includes('000000') || String(p['計畫名稱']).includes('統刪')) return false;
+                if (amt === 0 || String(p['計畫名稱']).includes('統刪')) return false;
                 return true;
             });
 
