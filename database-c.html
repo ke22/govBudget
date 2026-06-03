@@ -128,6 +128,28 @@
             margin-bottom: 20px;
         }
 
+        .database-intro {
+            margin: 8px 0 28px;
+            border-left: 4px solid var(--secondary-color);
+            padding: 4px 0 4px 18px;
+        }
+
+        .database-intro h1 {
+            margin: 0 0 12px;
+            color: var(--primary-color);
+            font-family: var(--font-serif);
+            font-size: clamp(1.8rem, 4vw, 2.7rem);
+            line-height: 1.35;
+            font-weight: 900;
+        }
+
+        .database-intro p {
+            margin: 0;
+            color: #444;
+            font-size: 1.05rem;
+            line-height: 1.9;
+        }
+
         .filter-label {
             font-weight: 700;
             color: var(--primary-color);
@@ -172,6 +194,31 @@
             background: var(--primary-color);
             color: white;
             border-color: var(--primary-color);
+        }
+
+        .ministry-select {
+            width: 100%;
+            max-width: 420px;
+            padding: 12px 44px 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 0;
+            background: #fff;
+            color: var(--primary-color);
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            outline: none;
+            appearance: none;
+            background-image: linear-gradient(45deg, transparent 50%, var(--primary-color) 50%), linear-gradient(135deg, var(--primary-color) 50%, transparent 50%);
+            background-position: calc(100% - 22px) 50%, calc(100% - 15px) 50%;
+            background-size: 7px 7px, 7px 7px;
+            background-repeat: no-repeat;
+        }
+
+        .ministry-select:focus {
+            border-color: var(--secondary-color);
+            background-color: #FAFAFA;
         }
 
         /* 搜尋框 */
@@ -271,6 +318,33 @@
         .plan-badge { display: inline-block; font-size: 0.67rem; padding: 2px 7px; border-radius: 2px; font-weight: 700; margin-top: 5px; margin-right: 4px; letter-spacing: 0.02em; }
         .badge-718 { background: #fff3e0; color: #b55a00; }
         .badge-emerging { background: #e8f4e8; color: #2e7d32; }
+        .budget-note-list { display: grid; gap: 4px; margin-top: 8px; }
+        .budget-note {
+            display: block;
+            width: fit-content;
+            max-width: 100%;
+            padding: 5px 9px;
+            background: #f8fbfb;
+            border-left: 3px solid var(--secondary-color);
+            color: #444;
+            font-family: var(--font-sans);
+            font-size: 0.78rem;
+            font-weight: 600;
+            line-height: 1.45;
+        }
+        .table-doc-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+            color: var(--secondary-color);
+            font-family: var(--font-sans);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .table-doc-link:hover { text-decoration: underline; }
+        .table-doc-link .material-symbols-outlined { font-size: 15px; }
         .doc-link { display: inline-flex; align-items: center; gap: 5px; font-size: 0.82rem; color: var(--secondary-color); text-decoration: none; margin-top: 14px; padding: 7px 14px; border: 1px solid var(--secondary-color); border-radius: 3px; }
         .doc-link:hover { background: var(--secondary-color); color: #fff; }
         .doc-link .material-symbols-outlined { font-size: 16px; }
@@ -728,6 +802,11 @@
     </header>
 
     <main>
+        <section class="database-intro">
+            <h1>預算增加還減少？納稅錢政府怎麼用？總預算資料庫查詢一目瞭然</h1>
+            <p>總預算作為政府一整年施政的財務計畫，涵蓋範圍廣、金額動輒2、3兆。為了讓讀者能清楚了解政府如何使用預算，中央社整理各單位的預算書，呈現各工作計畫的預算金額、增減幅度與分配，帶讀者輕鬆了解。</p>
+        </section>
+
         <div class="filter-panel">
 
             <div style="margin-bottom: 22px;">
@@ -774,6 +853,7 @@
                     <div class="stat-box" style="border-top-color: var(--secondary-color);">
                         <div class="stat-label">115年度編列數</div>
                         <div id="u-val-this" class="stat-val" style="color:var(--secondary-color);">-</div>
+                        <div id="u-budget-notes" style="display:none;"></div>
                     </div>
                     <div class="stat-box">
                         <div class="stat-label">審定法定預算數</div>
@@ -864,6 +944,14 @@
             return sign + absVal.toLocaleString() + "元";
         }
 
+        function buildBudgetNoteHtml(keywordText) {
+            const kw = keywordText || '';
+            let noteHtml = '';
+            if (kw.includes('718億先行動支')) noteHtml += '<span class="budget-note">718億先行動支：本計畫含部分718億先行動支方案預算</span>';
+            if (kw.includes('新興計畫')) noteHtml += '<span class="budget-note">新興計畫：本計畫含部分新興計畫預算</span>';
+            return noteHtml ? `<div class="budget-note-list">${noteHtml}</div>` : '';
+        }
+
         function highlightContent(text, keyword) {
             if (!text) return '';
             let result = String(text);
@@ -878,7 +966,8 @@
         const tooltipCurrencyCallback = { callbacks: { label: function (c) { return (c.label ? c.label + ': ' : '') + c.raw + '%'; } } };
 
         // 2. 初始化載入
-        const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/11OXVLqRUfySckHFAWJLEciSxqA-XmTqAUS62j59Syzs/export?format=csv&gid=612819456';
+        const SHEET_ID = '11OXVLqRUfySckHFAWJLEciSxqA-XmTqAUS62j59Syzs';
+        const SHEET_GID = '612819456';
 
         function parseUsageRatio(raw, total) {
             if (!raw || !total) return {};
@@ -893,12 +982,42 @@
             return result;
         }
 
+        function loadSheetRows() {
+            return new Promise((resolve, reject) => {
+                const callbackName = `__sheetCallback_${Date.now()}`;
+                const script = document.createElement('script');
+                const tqx = encodeURIComponent(`out:json;responseHandler:${callbackName}`);
+                const src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=${tqx}&gid=${SHEET_GID}`;
+                const cleanup = () => {
+                    delete window[callbackName];
+                    script.remove();
+                };
+
+                window[callbackName] = (payload) => {
+                    cleanup();
+                    if (payload.status !== 'ok') {
+                        reject(new Error(payload.errors?.[0]?.detailed_message || 'Google Sheet response failed'));
+                        return;
+                    }
+
+                    const rows = payload.table.rows.map(row =>
+                        row.c.map(cell => cell?.v ?? '')
+                    );
+                    resolve(rows);
+                };
+
+                script.onerror = () => {
+                    cleanup();
+                    reject(new Error('Google Sheet script load failed'));
+                };
+                script.src = src;
+                document.head.appendChild(script);
+            });
+        }
+
         async function initPage() {
             try {
-                const res = await fetch(SHEET_CSV);
-                const text = await res.text();
-                const parsed = Papa.parse(text, { skipEmptyLines: true });
-                const rows = parsed.data.slice(1); // skip header row
+                const rows = await loadSheetRows();
 
                 allDataPageA = rows.map(row => {
                     const total = parseFloat(row[4]) || 0;
@@ -1010,19 +1129,20 @@
         function renderMinistryPills(availableMinistries) {
             const container = document.getElementById('ministry-pills');
             container.innerHTML = '';
-            const btnAll = document.createElement('button');
-            btnAll.className = 'pill-btn' + (state.ministry === '全部' ? ' active' : '');
-            btnAll.innerText = '全部';
-            btnAll.onclick = () => selectMinistry('全部');
-            container.appendChild(btnAll);
+            const select = document.createElement('select');
+            select.className = 'ministry-select';
+            select.setAttribute('aria-label', '選擇部會');
+            select.onchange = () => selectMinistry(select.value);
 
-            availableMinistries.forEach(m => {
-                const btn = document.createElement('button');
-                btn.className = 'pill-btn' + (state.ministry === m ? ' active' : '');
-                btn.innerText = m;
-                btn.onclick = () => selectMinistry(m);
-                container.appendChild(btn);
+            ['全部', ...availableMinistries].forEach(m => {
+                const option = document.createElement('option');
+                option.value = m;
+                option.textContent = m;
+                option.selected = state.ministry === m;
+                select.appendChild(option);
             });
+
+            container.appendChild(select);
         }
 
         // 渲染動態的【主題】按鈕
@@ -1167,14 +1287,18 @@
                 let badgeHtml = '';
                 if (kw.includes('718')) badgeHtml += '<span class="plan-badge badge-718">718億先行動支</span>';
                 if (kw.includes('新興計畫')) badgeHtml += '<span class="plan-badge badge-emerging">新興計畫</span>';
-                const tags = kw.split('、').map(k => k.trim()).filter(k => k && k !== '718億先行動支' && k !== '新興計畫');
+                const tags = kw.split(/[、,，]/).map(k => k.trim()).filter(k => k && k !== '718億先行動支' && k !== '新興計畫');
                 const tagHtml = tags.length > 0
                     ? '<div class="kw-tags">' + tags.map(k => `<span class="kw-tag">${k}</span>`).join('') + '</div>'
+                    : '';
+                const docLink = row['預算書連結'] || '';
+                const docLinkHtml = docLink
+                    ? `<a class="table-doc-link" href="${docLink}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span class="material-symbols-outlined">open_in_new</span>完整預算書</a>`
                     : '';
 
                 rows += `<tr onclick="openUnifiedDetail('${row['計畫編號']}')">
                     <td class="col-num">${start + i + 1}</td>
-                    <td class="col-title">${displayTitle}${badgeHtml ? '<div style="margin-top:4px;">' + badgeHtml + '</div>' : ''}${tagHtml}</td>
+                    <td class="col-title">${displayTitle}${badgeHtml ? '<div style="margin-top:4px;">' + badgeHtml + '</div>' : ''}${tagHtml}${docLinkHtml}</td>
                     <td class="col-dept"><span class="pb-dept">${row['主管機關']}</span></td>
                     <td class="col-amount">${formatCurrency(amt115)}</td>
                     <td class="col-yoy">${yoyHtml}</td>
@@ -1237,6 +1361,17 @@
             const valThis = planData['115年編列'];
             document.getElementById('u-val-this').innerText = (valThis && valThis !== 0) ? formatCurrency(valThis) : "無資料";
 
+            const kw = planData['關鍵字'] || '';
+            const noteHtml = buildBudgetNoteHtml(kw);
+            const noteEl = document.getElementById('u-budget-notes');
+            if (noteHtml) {
+                noteEl.innerHTML = noteHtml;
+                noteEl.style.display = 'block';
+            } else {
+                noteEl.innerHTML = '';
+                noteEl.style.display = 'none';
+            }
+
             const valAppr = planData['審定數'];
             document.getElementById('u-val-appr').innerText = (valAppr && valAppr !== 0) ? formatCurrency(valAppr) : "尚未審定";
 
@@ -1276,13 +1411,12 @@
             }
 
             // 關鍵字 tags + badges
-            const kw = planData['關鍵字'] || '';
             const kwEl = document.getElementById('u-keywords');
             if (kw) {
                 let badgesHtml = '';
                 if (kw.includes('718')) badgesHtml += '<span class="plan-badge badge-718">含718億先行動支方案預算</span> ';
                 if (kw.includes('新興計畫')) badgesHtml += '<span class="plan-badge badge-emerging">含新興計畫預算</span>';
-                const tags = kw.split('、').map(k => k.trim()).filter(k => k && k !== '718億先行動支' && k !== '新興計畫');
+                const tags = kw.split(/[、,，]/).map(k => k.trim()).filter(k => k && k !== '718億先行動支' && k !== '新興計畫');
                 const tagList = tags.map(k => `<span class="kw-tag">${k}</span>`).join('');
                 kwEl.innerHTML = (badgesHtml ? '<div style="margin-bottom:6px;">' + badgesHtml + '</div>' : '') +
                     (tagList ? '<div class="kw-tags">' + tagList + '</div>' : '');

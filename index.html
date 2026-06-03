@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>115年總預算儀表板</title>
+    <title>115年總預算審議回顧</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -156,6 +156,14 @@
             line-height: 1.45;
             color: #0d0d0d;
             letter-spacing: -0.01em;
+        }
+
+        .hero-kicker {
+            margin: -8px 0 18px;
+            color: var(--cna-red-dark);
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.7;
         }
 
         .article-meta {
@@ -321,29 +329,78 @@
         }
 
         /* ===== Review Duration Chart ===== */
-        .review-chart { margin: 32px 0 8px; }
-        .rc-row { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
-        .rc-label { width: 48px; font-size: 0.78rem; color: #777; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
-        .rc-track { flex: 1; background: #f0f0f0; border-radius: 2px; height: 20px; overflow: hidden; }
-        .rc-bar { height: 100%; border-radius: 2px; width: 0; transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1); background: var(--cna-dark); }
-        .rc-bar.rc-pending {
-            background: repeating-linear-gradient(90deg,
-                var(--cna-red) 0, var(--cna-red) 10px,
-                rgba(4,160,160,0.22) 10px, rgba(4,160,160,0.22) 14px);
+        .review-chart-wrapper {
+            position: relative;
+            height: var(--review-chart-height, 1120px);
+            margin: 28px 0 8px;
         }
-        .rc-days { width: 44px; font-size: 0.75rem; color: #aaa; flex-shrink: 0; font-variant-numeric: tabular-nums; }
-        .rc-row.rc-highlight .rc-label { color: var(--cna-red); font-weight: 700; font-size: 0.82rem; }
-        .rc-row.rc-highlight .rc-days { color: var(--cna-red); font-weight: 700; }
-        .rc-row.rc-highlight .rc-bar:not(.rc-pending) { background: var(--cna-red); }
-        .rc-axis { display: flex; padding-left: 58px; margin-top: 10px; border-top: 1px solid #e8e8e8; padding-top: 6px; }
-        .rc-axis-tick { flex: 1; font-size: 0.68rem; color: #bbb; text-align: center; }
-        .rc-axis-tick:first-child { text-align: left; }
-        .rc-axis-tick:last-child { text-align: right; }
-        .rc-legend { display: flex; gap: 20px; margin-top: 14px; font-size: 0.74rem; color: #888; padding-left: 58px; }
-        .rc-legend-dot { display: inline-block; width: 12px; height: 12px; border-radius: 1px; vertical-align: middle; margin-right: 5px; }
 
-        /* ===== Comparison Table (kept for reference) ===== */
-        .comparison-table { display: none; }
+        .review-chart-figure {
+            margin: 28px 0 8px;
+        }
+
+        .review-chart-caption {
+            margin: 0 0 12px;
+            color: var(--cna-dark);
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+
+        .review-chart-legend {
+            display: flex;
+            justify-content: flex-end;
+            gap: 18px;
+            margin: 0 0 16px;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        .review-chart-legend span {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .review-chart-legend i {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            border-radius: 2px;
+        }
+
+        /* ===== Comparison Table ===== */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: #fff;
+            font-size: 0.9rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e8e8e8;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: #f7f7f7;
+            border-top: 3px solid var(--cna-red);
+            border-bottom: 2px solid #111;
+            color: #111;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .comparison-table td:nth-child(4) {
+            font-weight: 700;
+            color: var(--cna-red-dark);
+        }
 
         /* ===== Footer CTA ===== */
         .footer-cta {
@@ -540,6 +597,7 @@
             /* Hero */
             .hero { padding: 28px 20px 22px; }
             .hero h1 { font-size: 1.55rem; line-height: 1.5; }
+            .hero-kicker { font-size: 0.92rem; margin-bottom: 14px; }
             .hero-label { font-size: 0.68rem; padding: 4px 9px; margin-bottom: 14px; }
             .hero-lead { font-size: 1rem; line-height: 1.85; padding-left: 12px; }
             .article-meta { flex-direction: column; align-items: flex-start; gap: 4px; }
@@ -560,10 +618,14 @@
             .stat-val { font-size: 1.55rem; }
             .stat-card { padding: 16px 14px; }
 
-            .rc-label { width: 40px; font-size: 0.72rem; }
-            .rc-days { width: 38px; font-size: 0.7rem; }
-            .rc-axis { padding-left: 50px; }
-            .rc-legend { padding-left: 50px; font-size: 0.7rem; }
+            .review-chart-wrapper { height: var(--review-chart-height-mobile, 980px); }
+            .review-chart-legend {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 10px 14px;
+                font-size: 0.82rem;
+                margin-bottom: 18px;
+            }
 
             /* Timeline */
             .timeline-container { padding-left: 20px; }
@@ -591,6 +653,9 @@
             }
             .footer-cta .db-variants span { display: none; }
             .footer-cta .btn--variant { text-align: center; padding: 10px 18px; }
+            .comparison-table { font-size: 0.78rem; }
+            .comparison-table th,
+            .comparison-table td { padding: 8px 7px; }
 
             /* Site footer */
             .site-footer { padding: 20px; }
@@ -617,7 +682,7 @@
         <div class="chapter-nav-inner">
             <a href="#timeline-section" class="chapter-link active">審查歷程</a>
             <a href="#impact" class="chapter-link">影響評估</a>
-            <a href="#budget-overview" class="chapter-link">預算概覽</a>
+            <a href="#advance-plan" class="chapter-link">先行動支</a>
             <a href="#database-cta" class="chapter-link">查詢資料庫</a>
         </div>
     </nav>
@@ -626,6 +691,7 @@
         <!-- Hero Section -->
         <section class="hero">
             <span class="hero-label">深度報導</span>
+            <p class="hero-kicker">新年度已過逾110天才付委　115年總預算審議為何卡關？</p>
             <h1>115年總預算審議回顧<br>卡關逾200天才付委、718億先行動支有何隱憂</h1>
 
             <div class="article-meta">
@@ -639,7 +705,7 @@
             <div class="photo-caption">立法院院會進行115年度中央政府總預算案付委審查。（專題用照片001）</div>
 
             <p class="hero-lead">
-                115年度總預算審查在115年4月21日付委。距離114年9月30日行政院函請立法院審議已過203天。這是近年總預算審查最晚進行的一次，也對政府施政產生嚴重影響。
+                115年度總預算審查在115年4月21日付委。距離114年9月30日行政院函請立法院審議已過203天。這是近年總預算預算審查最晚進行的一次，也對政府施政產生影響，2992億新興計畫無法動支，TPASS、生育給付等補助無法順利發放。
             </p>
         </section>
 
@@ -651,8 +717,8 @@
             <p>中央政府總預算是政府施政用錢的依據，在「預算法」中有規定審議時程，原則上須在預算執行年度開始前一個月完成審議。如果來不及在時限內完成，依預算法第54條，政府可依上年度標準繼續執行既有業務，不過新增計畫與部分預備金，原則上須待預算通過才能動用。</p>
             <p>立法院分別在114年1月7日三讀「警察人員人事條例」增加警校退休金，又在同年6月10日三讀「軍人待遇條例」增加軍人薪資及加給。行政院則以兩項修法違反憲法權力分立跟責任政治為由，在8月22日提出釋憲。</p>
             <p>9月底，行政院將115年度中央政府總預算案送進立法院，但藍白黨團認為，「軍人待遇條例」及「警察人員人事條例」已經三讀，行政院卻沒有依法編列，批評行政院違法亂紀。</p>
-            <p>行政院多次解釋，暫緩編列志願役加薪以及提高警察人員所得替代率預算，主要是考量不同公務員的公平性、衡平性，且有違憲疑慮，因此聲請釋憲，若釋憲結果未違憲，將追溯補齊。</p>
-            <p>行政、立法陷入僵局，結果形成憲政史上第一次出現跨年度總預算仍未進委員會審查的狀況。直到115年4月15日黨團協商朝野才達成共識，4月21日總預算案才正式付委審查。</p>
+            <p>行政院則多次解釋，暫緩編列志願役加薪以及提高警察人員所得替代率預算，主要是考量不同公務員的公平性、衡平性，且有違憲疑慮，因此聲請釋憲，若釋憲結果未違憲，將追溯補齊。</p>
+            <p>行政、立法陷入僵局，結果形成憲政史上第一次出現跨年度總預算仍未進委員會審查的狀況。直到115年4月15日黨團協商朝野達成共識，邀請卓榮泰到立院報告總預算案後即交審查，行政院應在半年內，提出有關軍警待遇的修正案，4月21日總預算案付委審查。</p>
 
             <blockquote class="pull-quote">
                 <p>形成憲政史上第一次出現跨年度總預算仍未進委員會審查的狀況。</p>
@@ -665,10 +731,57 @@
 
         <div class="section-divider"></div>
 
-        <!-- Photo 2 -->
-        <section class="section-container section-photo" style="padding-top: 0; padding-bottom: 0;">
-            <img src="./專題用照片002.jpg" alt="預算案卷宗" class="editorial-photo">
-            <div class="photo-caption">115年度中央政府總預算案卷宗堆積如山，因審查延宕影響多項新興計畫動支。（專題用照片002）</div>
+        <!-- Historical Comparison -->
+        <section class="section-container">
+            <p>回顧歷年審查歷程，在預算執行年度開始前就完成審查的例子並不常見。蔡英文執政8年間只有1次（113年度），更早的馬英九執政時期也僅有2次（101年度及105年度），大部分都是到隔年2月前才完成審議。</p>
+            <p>其中96年度總預算更是一路拖到6月才三讀，當年陳水扁總統順利連任，不過立法院朝小野大，國民黨提出「中選會組織法」修正案，朝野遲遲沒有共識，連帶影響總預算案的審議，最終直到民國97年6月15日才三讀，也創下首次立法院預算會期沒有審完預算的紀錄。</p>
+            <img src="./專題用照片002.jpg" alt="96年度總預算審查衝突" class="editorial-photo">
+            <div class="photo-caption">96年度總預算創下立法院首度在預算會期內沒有審完預算的紀錄，一直到民國97年才6月15日才三讀。圖為民國97年5月11日，民進黨立委為通過總預算案，聚眾占領主席台，將立法院長王金平團團包圍。台下藍綠立委互相舉牌叫囂，相互指控。</div>
+            <figure class="review-chart-figure">
+                <figcaption class="review-chart-caption">歷年中央政府總預算案審議時程，橫軸自9月起至隔年7月。</figcaption>
+                <div class="review-chart-legend" aria-hidden="true">
+                    <span><i style="background:#2E6F4E"></i>民進黨</span>
+                    <span><i style="background:#1F5F8F"></i>國民黨</span>
+                    <span><i style="background:#04A0A0"></i>審議中</span>
+                </div>
+                <div class="review-chart-wrapper">
+                    <canvas id="reviewChart"></canvas>
+                </div>
+                <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>年度</th>
+                        <th>付委日期</th>
+                        <th>三讀日期</th>
+                        <th>審查天數</th>
+                        <th>執政黨</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>96年度</td><td>2006/10/3</td><td>2007/6/15</td><td>256</td><td>民進黨</td></tr>
+                    <tr><td>97年度</td><td>2007/10/2</td><td>2007/12/20</td><td>80</td><td>民進黨</td></tr>
+                    <tr><td>98年度</td><td>2008/9/30</td><td>2009/1/15</td><td>108</td><td>國民黨</td></tr>
+                    <tr><td>99年度</td><td>2009/10/7</td><td>2010/1/12</td><td>98</td><td>國民黨</td></tr>
+                    <tr><td>100年度</td><td>2010/10/13</td><td>2011/1/12</td><td>92</td><td>國民黨</td></tr>
+                    <tr><td>101年度</td><td>2011/9/27</td><td>2011/12/13</td><td>78</td><td>國民黨</td></tr>
+                    <tr><td>102年度</td><td>2012/10/16</td><td>2013/1/15</td><td>92</td><td>國民黨</td></tr>
+                    <tr><td>103年度</td><td>2013/10/18</td><td>2014/1/14</td><td>89</td><td>國民黨</td></tr>
+                    <tr><td>104年度</td><td>2014/9/30</td><td>2015/1/23</td><td>116</td><td>國民黨</td></tr>
+                    <tr><td>105年度</td><td>2015/9/22</td><td>2015/12/18</td><td>88</td><td>國民黨</td></tr>
+                    <tr><td>106年度</td><td>2016/10/3</td><td>2017/1/19</td><td>109</td><td>民進黨</td></tr>
+                    <tr><td>107年度</td><td>2017/10/13</td><td>2018/1/30</td><td>110</td><td>民進黨</td></tr>
+                    <tr><td>108年度</td><td>2018/10/30</td><td>2019/1/10</td><td>73</td><td>民進黨</td></tr>
+                    <tr><td>109年度</td><td>2019/9/24</td><td>2020/1/20</td><td>119</td><td>民進黨</td></tr>
+                    <tr><td>110年度</td><td>2020/9/29</td><td>2021/1/29</td><td>123</td><td>民進黨</td></tr>
+                    <tr><td>111年度</td><td>2021/10/22</td><td>2022/1/28</td><td>99</td><td>民進黨</td></tr>
+                    <tr><td>112年度</td><td>2022/10/4</td><td>2023/1/19</td><td>108</td><td>民進黨</td></tr>
+                    <tr><td>113年度</td><td>2023/10/3</td><td>2023/12/19</td><td>78</td><td>民進黨</td></tr>
+                    <tr><td>114年度</td><td>2024/11/8</td><td>2025/1/21</td><td>75</td><td>民進黨</td></tr>
+                    <tr><td>115年度</td><td>2026/4/21</td><td></td><td></td><td>民進黨</td></tr>
+                </tbody>
+                </table>
+            </figure>
+            <p>至於預算全數退回重編的狀況也十分少見，過去僅發生過3次，且3次都是因為內閣改組。第一次同樣發生在陳水扁執政時，民國89年時任行政院長唐飛在報告總預算案期間請辭，接任行政院長張俊雄尊重立院協商決議而撤回總預算案，並於2週後再度函請立院審議。</p>
         </section>
 
         <div class="section-divider"></div>
@@ -676,8 +789,8 @@
         <!-- Impact Section -->
         <section class="section-container" id="impact">
             <h2>晚審影響新興預算無法動支</h2>
-            <p>受預算法規定，在總預算未審議前，新興計畫及設備原則上不能動用。行政院在今年1月公布，總預算未按時完成審議，影響金額約2992億。</p>
-            <p>根據行政院資料，這些受影響的預算可分為以下幾個類別：</p>
+            <p>前述提到，受預算法規定，在總預算未審議前，新興計畫及設備原則上不能動用。行政院在今年1月公布，總預算未按時完成審議，影響金額約2992億。</p>
+            <p>根據行政院資料，當中約1017億屬於新興計畫，包括TPASS通勤月票、生育給付補助、AI新十大建設、各地治水預算等等項目；另外，1805億則是經常性經費或延續性計畫較去年增加的金額，剩下約170億則是各單位第一預備金、第二預備金及災害準備金。</p>
 
             <div class="stat-grid">
                 <div class="stat-card stat-featured">
@@ -703,82 +816,45 @@
 
         <div class="section-divider"></div>
 
-        <!-- Historical Comparison -->
-        <section class="section-container">
-            <h2>歷年總預算審查進度比較</h2>
-            <p>回顧歷年預算審查歷程，其實能在預算執行年度開始前就審完的例子極少。蔡英文執政8年間只有1次（113年度），而馬英九執政時也僅有2次（101年度及105年度）。大部分都是到隔年2月前才完成審議。</p>
-            <div class="review-chart" id="review-chart">
-                <!-- max = 123 days (110年度); each bar width = days/123*100% -->
-                <div class="rc-row"><div class="rc-label">106年</div><div class="rc-track"><div class="rc-bar" data-w="88.6%"></div></div><div class="rc-days">109天</div></div>
-                <div class="rc-row"><div class="rc-label">107年</div><div class="rc-track"><div class="rc-bar" data-w="89.4%"></div></div><div class="rc-days">110天</div></div>
-                <div class="rc-row"><div class="rc-label">108年</div><div class="rc-track"><div class="rc-bar" data-w="59.3%"></div></div><div class="rc-days">73天</div></div>
-                <div class="rc-row"><div class="rc-label">109年</div><div class="rc-track"><div class="rc-bar" data-w="96.7%"></div></div><div class="rc-days">119天</div></div>
-                <div class="rc-row"><div class="rc-label">110年</div><div class="rc-track"><div class="rc-bar" data-w="100%"></div></div><div class="rc-days">123天</div></div>
-                <div class="rc-row"><div class="rc-label">111年</div><div class="rc-track"><div class="rc-bar" data-w="80.5%"></div></div><div class="rc-days">99天</div></div>
-                <div class="rc-row"><div class="rc-label">112年</div><div class="rc-track"><div class="rc-bar" data-w="87.8%"></div></div><div class="rc-days">108天</div></div>
-                <div class="rc-row"><div class="rc-label">113年</div><div class="rc-track"><div class="rc-bar" data-w="63.4%"></div></div><div class="rc-days">78天</div></div>
-                <div class="rc-row"><div class="rc-label">114年</div><div class="rc-track"><div class="rc-bar" data-w="61%"></div></div><div class="rc-days">75天</div></div>
-                <div class="rc-row rc-highlight"><div class="rc-label">115年</div><div class="rc-track"><div class="rc-bar rc-pending" id="rc-bar-115" data-w="0%"></div></div><div class="rc-days" id="rc-days-115">審議中</div></div>
-                <div class="rc-axis">
-                    <span class="rc-axis-tick">0天</span>
-                    <span class="rc-axis-tick">40天</span>
-                    <span class="rc-axis-tick">80天</span>
-                    <span class="rc-axis-tick">123天</span>
+        <!-- Advance Funding -->
+        <section class="section-container" id="advance-plan">
+            <h2>在野提718億新興計畫方案</h2>
+            <p>國民黨立法院黨團1月16日提出718億新興計畫先行動支案並逕付二讀，共涵蓋38項計畫。國民黨立委羅智強指出，動支案主要是針對地方民生急迫的一些新增計畫，或者是新興計畫裡面的一些支出專案。該案於3月6日通過。</p>
+            <p>根據提案內容，718億先行動支方案多聚焦在對民眾的補助項目，例如TPASS、生育給付差額補助；以及民生所需之項目，像是與水利相關的「因應氣候變遷遷縣市管河川及排水整體改善計畫」和學校校舍整修改建的計畫項目。而被排除在先行動支方案的項目，則多是AI建設、無人機等工作計畫。</p>
+
+            <div class="stat-grid">
+                <div class="stat-card stat-featured">
+                    <div class="stat-val">718億</div>
+                    <div class="stat-label">本計畫含部分718億先行動支方案預算</div>
                 </div>
-                <div class="rc-legend">
-                    <span><span class="rc-legend-dot" style="background:var(--cna-dark);"></span>已完成審議</span>
-                    <span><span class="rc-legend-dot" style="background:repeating-linear-gradient(90deg,var(--cna-red) 0,var(--cna-red) 5px,rgba(4,160,160,0.2) 5px,rgba(4,160,160,0.2) 7px);"></span>審議中</span>
+                <div class="stat-card">
+                    <div class="stat-val">新興計畫</div>
+                    <div class="stat-label">本計畫含部分新興計畫預算</div>
                 </div>
+            
             </div>
+
+            <p>除了排擠掉部分施政項目外，立院通過先行動支方案後預算能不能使用也是爭執焦點。審計部審計長陳瑞敏說明，預算法裡規定，如果有還沒完成審議、但經立法院先行同意動支的，是可以執行的。依據預算法第54條規定，總預算如未按時完成審議，新興資本支出及新增計畫可以依預算法第88條，或經立法院同意後後辦理。</p>
+            <p>但是行政院回應，立法院此公決案史無前例，且「暫時同意動支」不符合憲法與預算法的規定。立法院未來審議整本中央政府總預算案時，依然可以刪除或凍結任何一筆新興計畫預算，造成預算執行的不確定性，立院應儘速審議整體總預算案。</p>
         </section>
 
         <div class="section-divider"></div>
 
-        <!-- Budget Overview -->
-        <section class="section-container" id="budget-overview">
-            <h2>所以今年總預算怎麼編</h2>
-            <p>115年度總預算案受新版財劃法釋出財源給地方的影響，歲入共編列新台幣2兆8623億元，較114年度大幅減少3025億元。</p>
-            <p>歲出編列則為3兆350億元，較114年度預算增加1100億，是近10年總預算案歲出編列第2高的金額。</p>
-
-            <div class="stat-grid">
-                <div class="stat-card" style="border-top-color: #333;">
-                    <div class="stat-val">2.86兆</div>
-                    <div class="stat-label">歲入編列</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-val" style="color: var(--cna-red);">3.03兆</div>
-                    <div class="stat-label">歲出編列</div>
-                </div>
-            </div>
-
-            <p>歲出為各項工作計畫的支出，但不包含償還債務；歲入則是為支應各工作計畫所籌措的財源，不包含舉債和前一年度歲計賸餘。</p>
-            <p>115年度歲出占比前四大的政事別如下：</p>
-
-            <div class="stat-grid">
-                <div class="stat-card">
-                    <div class="stat-val" style="font-size: 1.7rem;">8318億</div>
-                    <div class="stat-label">社會福利</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-val" style="font-size: 1.7rem;">5566億</div>
-                    <div class="stat-label">教育科學文化</div>
-                </div>
-                <div class="stat-card" style="border-top-color: #333;">
-                    <div class="stat-val" style="font-size: 1.7rem; color: #333;">5488億</div>
-                    <div class="stat-label">國防</div>
-                </div>
-                <div class="stat-card" style="border-top-color: #aaa;">
-                    <div class="stat-val" style="font-size: 1.7rem; color: #666;">4275億</div>
-                    <div class="stat-label">經濟發展</div>
-                </div>
-            </div>
+        <!-- Conclusion -->
+        <section class="section-container">
+            <h2>結語</h2>
+            <p>隨著總預算付委，行政院也函請機關新興計畫預算執行作業，TPASS 2.0、生育給付等補助項目目前都已開始進行。</p>
+            <p>115年度總預算正在審議，在朝野協商及之後院會表決程序中又會出現哪些新議題，也請持續鎖定中央社網站相關報導。</p>
         </section>
 
         <!-- Footer CTA -->
         <section class="footer-cta" id="database-cta">
-            <h2>探索完整資料庫</h2>
-            <p>進一步查詢各機關、政事別的詳細預算編列情況。</p>
-            <a href="database-c.html" class="btn btn--primary">進入115年預算資料庫</a>
+            <h2>延伸閱讀與查詢</h2>
+            <p>想了解115年總預算概況，或進一步查詢各機關、政事別的詳細預算編列情況。</p>
+            <a href="database-c.html" class="btn btn--primary">想了解115年總預算概況，點這邊</a>
+            <div class="db-variants">
+                <a href="database-c.html" class="btn--variant">前往總預算案接頁</a>
+            </div>
         </section>
     </div>
 
@@ -809,66 +885,269 @@
         sections.forEach(section => observer.observe(section));
 
         // Timeline data
-        fetch('data/timeline.json')
-            .then(res => res.json())
-            .then(data => {
-                const target = document.getElementById('timeline-render-target');
-                if (data && data.length > 0) {
-                    let html = '';
-                    data.forEach(item => {
-                        const dateObj = new Date(item.date);
-                        const formattedDate = `${dateObj.getFullYear()}/${dateObj.getMonth() + 1}/${dateObj.getDate()}`;
-                        html += `
-                            <div class="timeline-item">
-                                <div class="timeline-date">${formattedDate}</div>
-                                <div class="timeline-event">${item.event}</div>
-                            </div>
-                        `;
-                    });
-                    target.innerHTML = html;
+        const timelineData = [
+            { date: '2026/4/21', event: '付委審查' },
+            { date: '2026/1/1', event: '115年會計年度開始，115年度總預算案仍未付委' },
+            { date: '2025/12/16', event: '總統公布預算法定期限' },
+            { date: '2025/12/1', event: '法定預算審查完成期限' },
+            { date: '2025/10/7', event: '立法院復議，總預算案另定期處理' },
+            { date: '2025/09/30', event: '行政院函請立法院審議115年度總預算案' },
+            { date: '2025/06/10', event: '立法院三讀「軍人待遇條例」' },
+            { date: '2025/01/07', event: '立法院三讀「警察人員人事條例」' },
+        ];
 
-                    // Scroll-fade each timeline item with staggered delay
-                    const items = target.querySelectorAll('.timeline-item');
-                    const io = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                entry.target.classList.add('visible');
-                                io.unobserve(entry.target);
-                            }
-                        });
-                    }, { rootMargin: '0px 0px -60px 0px' });
+        (function renderTimeline(data) {
+            const target = document.getElementById('timeline-render-target');
+            if (!target || !data.length) return;
 
-                    items.forEach((item, i) => {
-                        item.style.transitionDelay = (i * 0.07) + 's';
-                        io.observe(item);
-                    });
-                }
-            })
-            .catch(err => console.error("Failed to load timeline data", err));
+            target.innerHTML = data.map(item => `
+                <div class="timeline-item">
+                    <div class="timeline-date">${item.date}</div>
+                    <div class="timeline-event">${item.event}</div>
+                </div>
+            `).join('');
 
-    // Animated bar chart for review duration
+            const items = target.querySelectorAll('.timeline-item');
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        io.unobserve(entry.target);
+                    }
+                });
+            }, { rootMargin: '0px 0px -60px 0px' });
+
+            items.forEach((item, i) => {
+                item.style.transitionDelay = (i * 0.07) + 's';
+                io.observe(item);
+            });
+        })(timelineData);
+
+    // Gantt chart for historical budget review timeline
     (function() {
-        const chart = document.getElementById('review-chart');
-        if (!chart) return;
+        const canvas = document.getElementById('reviewChart');
+        if (!canvas) return;
 
-        // Calculate days since 115年 submission (2026/4/21)
-        const submission115 = new Date('2026-04-21');
+        // month offset: 0=Sep, 1=Oct, 2=Nov, 3=Dec, 4=Jan, 5=Feb, 6=Mar, 7=Apr, 8=May, 9=Jun, 10=Jul
+        function monthOffset(month, day) {
+            const daysInMonth = [31,28,31,30,31,30,31,31,30,31,30,31];
+            const off = month >= 9 ? month - 9 : month + 3;
+            return off + (day - 1) / daysInMonth[month];
+        }
+
+        // Dynamic end for 115年 (today)
         const today = new Date();
-        const days115 = Math.max(0, Math.floor((today - submission115) / 86400000));
-        const bar115 = document.getElementById('rc-bar-115');
-        const days115El = document.getElementById('rc-days-115');
-        if (bar115) bar115.dataset.w = Math.min(days115 / 123 * 100, 100).toFixed(1) + '%';
-        if (days115El) days115El.textContent = '付委' + days115 + '天';
+        const end115 = monthOffset(today.getMonth(), today.getDate());
 
+        const rows = [
+            { label: '96年', start: 1.065, end: 9.467, party: 'dpp' },
+            { label: '97年', start: 1.032, end: 3.613, party: 'dpp' },
+            { label: '98年', start: 0.967, end: 4.452, party: 'kmt' },
+            { label: '99年', start: 1.194, end: 4.355, party: 'kmt' },
+            { label: '100年', start: 1.387, end: 4.355, party: 'kmt' },
+            { label: '101年', start: 0.867, end: 3.387, party: 'kmt' },
+            { label: '102年', start: 1.484, end: 4.452, party: 'kmt' },
+            { label: '103年', start: 1.548, end: 4.419, party: 'kmt' },
+            { label: '104年', start: 0.967, end: 4.710, party: 'kmt' },
+            { label: '105年', start: 0.700, end: 3.548, party: 'kmt' },
+            { label: '106年', start: 1.065, end: 4.581, party: 'dpp' },
+            { label: '107年', start: 1.387, end: 4.935, party: 'dpp' },
+            { label: '108年', start: 1.935, end: 4.290, party: 'dpp' },
+            { label: '109年', start: 0.767, end: 4.613, party: 'dpp' },
+            { label: '110年', start: 0.933, end: 4.903, party: 'dpp' },
+            { label: '111年', start: 1.677, end: 4.871, party: 'dpp' },
+            { label: '112年', start: 1.097, end: 4.581, party: 'dpp' },
+            { label: '113年', start: 1.065, end: 3.581, party: 'dpp' },
+            { label: '114年', start: 2.233, end: 4.645, party: 'dpp' },
+            { label: '115年', start: 7.667, end: end115, party: 'dpp', pending: true },
+        ];
+
+        function isReviewChartMobile() {
+            return window.matchMedia('(max-width: 760px)').matches;
+        }
+
+        const ganttPlugin = {
+            id: 'ganttLines',
+            beforeDatasetsDraw(chart) {
+                const { ctx, chartArea, scales: { x } } = chart;
+                const jan = x.getPixelForValue(4);
+                ctx.save();
+                ctx.fillStyle = 'rgba(4, 160, 160, 0.07)';
+                ctx.fillRect(jan, chartArea.top, chartArea.right - jan, chartArea.bottom - chartArea.top);
+                ctx.restore();
+            },
+            afterDatasetsDraw(chart) {
+                const { ctx, chartArea, scales: { x } } = chart;
+                const isMobile = isReviewChartMobile();
+                ctx.save();
+
+                function drawLineLabel({ text, xLine, xText, yText, color, align }) {
+                    const fontSize = isMobile ? 11 : 12;
+                    const paddingX = 7;
+                    const paddingY = 4;
+                    const labelHeight = fontSize + paddingY * 2;
+                    ctx.font = `${fontSize}px "Noto Sans TC", sans-serif`;
+                    const labelWidth = ctx.measureText(text).width + paddingX * 2;
+                    const labelLeft = align === 'right' ? xText - labelWidth : align === 'center' ? xText - labelWidth / 2 : xText;
+                    const labelTop = yText;
+                    const connectorStartX = align === 'right' ? labelLeft + labelWidth : labelLeft;
+                    const connectorStartY = labelTop + labelHeight;
+
+                    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+                    ctx.fillRect(labelLeft, labelTop, labelWidth, labelHeight);
+
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([]);
+                    ctx.beginPath();
+                    ctx.moveTo(connectorStartX, connectorStartY);
+                    ctx.lineTo(xLine, chartArea.top);
+                    ctx.stroke();
+
+                    ctx.fillStyle = color;
+                    ctx.textAlign = align;
+                    ctx.textBaseline = 'top';
+                    ctx.fillText(text, xText, labelTop + paddingY);
+                }
+
+                // 12/16 red dashed line (Dec 16 = offset 3 + 15/31)
+                const dec16 = x.getPixelForValue(3 + 15/31);
+                ctx.strokeStyle = 'rgba(2,120,120,0.78)';
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([5, 3]);
+                ctx.beginPath(); ctx.moveTo(dec16, chartArea.top); ctx.lineTo(dec16, chartArea.bottom); ctx.stroke();
+                drawLineLabel({
+                    text: '12/16 法定期限',
+                    xLine: dec16,
+                    xText: isMobile ? dec16 - 7 : dec16 - 8,
+                    yText: chartArea.top - 38,
+                    color: 'rgba(2,120,120,0.9)',
+                    align: 'right',
+                });
+
+                // 1/1 grey dashed line
+                const jan1 = x.getPixelForValue(4);
+                ctx.strokeStyle = 'rgba(15,42,74,0.26)';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([4, 3]);
+                ctx.beginPath(); ctx.moveTo(jan1, chartArea.top); ctx.lineTo(jan1, chartArea.bottom); ctx.stroke();
+                drawLineLabel({
+                    text: '1月起預算執行年度',
+                    xLine: jan1,
+                    xText: isMobile ? jan1 + 7 : jan1 + 8,
+                    yText: chartArea.top - 38,
+                    color: 'rgba(15,42,74,0.72)',
+                    align: 'left',
+                });
+
+                ctx.setLineDash([]);
+                ctx.restore();
+            }
+        };
+
+        const monthLabels = ['9月','10月','11月','12月','1月','2月','3月','4月','5月','6月','7月'];
+
+        function buildChart() {
+            const isMobile = isReviewChartMobile();
+            new Chart(canvas, {
+                type: 'bar',
+                plugins: [ganttPlugin],
+                data: {
+                    labels: rows.map(r => r.label),
+                    datasets: [
+                        {
+                            label: '民進黨',
+                            data: rows.map(r => r.party === 'dpp' && !r.pending ? [r.start, r.end] : [null, null]),
+                            backgroundColor: '#2E6F4E',
+                            borderRadius: 3,
+                            borderSkipped: false,
+                            barPercentage: 0.98,
+                            categoryPercentage: 0.98,
+                            maxBarThickness: isMobile ? 44 : 56,
+                        },
+                        {
+                            label: '國民黨',
+                            data: rows.map(r => r.party === 'kmt' ? [r.start, r.end] : [null, null]),
+                            backgroundColor: '#1F5F8F',
+                            borderRadius: 3,
+                            borderSkipped: false,
+                            barPercentage: 0.98,
+                            categoryPercentage: 0.98,
+                            maxBarThickness: isMobile ? 44 : 56,
+                        },
+                        {
+                            label: '審議中',
+                            data: rows.map(r => r.pending ? [r.start, r.end] : [null, null]),
+                            backgroundColor: '#04A0A0',
+                            borderRadius: 3,
+                            borderSkipped: false,
+                            barPercentage: 0.98,
+                            categoryPercentage: 0.98,
+                            maxBarThickness: isMobile ? 44 : 56,
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 54,
+                            left: isMobile ? 2 : 0,
+                            right: isMobile ? 4 : 0,
+                        },
+                    },
+                    animation: {
+                        duration: 900,
+                        delay: ctx => ctx.dataIndex * 40,
+                    },
+                    scales: {
+                        x: {
+                            min: 0,
+                            max: 10,
+                            ticks: {
+                                stepSize: 1,
+                                callback: v => monthLabels[v] ?? '',
+                                font: { size: isMobile ? 12 : 14, weight: '700' },
+                                color: '#0F2A4A',
+                            },
+                            grid: { color: 'rgba(15,42,74,0.08)' },
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { font: { size: isMobile ? 12 : 14, weight: '700' }, color: '#0F2A4A' },
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false,
+                        },
+                        tooltip: {
+                            titleFont: { size: isMobile ? 12 : 14, weight: '700' },
+                            bodyFont: { size: isMobile ? 12 : 14 },
+                            callbacks: {
+                                label: ctx => {
+                                    const [s, e] = ctx.raw;
+                                    if (s == null) return null;
+                                    const days = Math.round((e - s) * 30.44);
+                                    return `${ctx.dataset.label}：約 ${days} 天`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        const wrapper = canvas.closest('.review-chart-wrapper') || canvas.parentElement;
         const io = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
-                chart.querySelectorAll('.rc-bar').forEach((bar, i) => {
-                    setTimeout(() => { bar.style.width = bar.dataset.w; }, i * 60);
-                });
-                io.unobserve(chart);
+                buildChart();
+                io.unobserve(wrapper);
             }
-        }, { threshold: 0.15 });
-        io.observe(chart);
+        }, { threshold: 0.1 });
+        io.observe(wrapper);
     })();
     </script>
 

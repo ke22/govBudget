@@ -150,6 +150,28 @@
             margin-bottom: 20px;
         }
 
+        .database-intro {
+            margin: 0 0 28px;
+            border-left: 4px solid var(--secondary-color);
+            padding: 4px 0 4px 18px;
+        }
+
+        .database-intro h1 {
+            margin: 0 0 12px;
+            color: var(--primary-color);
+            font-family: var(--font-serif);
+            font-size: clamp(1.8rem, 4vw, 2.7rem);
+            line-height: 1.35;
+            font-weight: 900;
+        }
+
+        .database-intro p {
+            margin: 0;
+            color: #444;
+            font-size: 1.05rem;
+            line-height: 1.9;
+        }
+
         .filter-label {
             font-weight: 700;
             color: var(--primary-color);
@@ -194,6 +216,31 @@
             background: var(--primary-color);
             color: white;
             border-color: var(--primary-color);
+        }
+
+        .ministry-select {
+            width: 100%;
+            max-width: 420px;
+            padding: 12px 44px 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 0;
+            background: #fff;
+            color: var(--primary-color);
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            outline: none;
+            appearance: none;
+            background-image: linear-gradient(45deg, transparent 50%, var(--primary-color) 50%), linear-gradient(135deg, var(--primary-color) 50%, transparent 50%);
+            background-position: calc(100% - 22px) 50%, calc(100% - 15px) 50%;
+            background-size: 7px 7px, 7px 7px;
+            background-repeat: no-repeat;
+        }
+
+        .ministry-select:focus {
+            border-color: var(--secondary-color);
+            background-color: #FAFAFA;
         }
 
         /* 搜尋框 */
@@ -767,6 +814,11 @@
         </aside>
 
         <div class="results-col">
+            <section class="database-intro">
+                <h1>預算增加還減少？納稅錢政府怎麼用？總預算資料庫查詢一目瞭然</h1>
+                <p>總預算作為政府一整年施政的財務計畫，涵蓋範圍廣、金額動輒2、3兆。為了讓讀者能清楚了解政府如何使用預算，中央社整理各單位的預算書，呈現各工作計畫的預算金額、增減幅度與分配，帶讀者輕鬆了解。</p>
+            </section>
+
             <div class="layout-switcher">
                 <span class="ls-label">版面</span>
                 <a href="database.html" class="ls-btn">預設</a>
@@ -896,7 +948,8 @@
         const tooltipCurrencyCallback = { callbacks: { label: function (c) { return (c.label ? c.label + ': ' : '') + c.raw + '%'; } } };
 
         // 2. 初始化載入
-        const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/11OXVLqRUfySckHFAWJLEciSxqA-XmTqAUS62j59Syzs/export?format=csv&gid=612819456';
+        const SHEET_ID = '11OXVLqRUfySckHFAWJLEciSxqA-XmTqAUS62j59Syzs';
+        const SHEET_GID = '612819456';
 
         function parseUsageRatio(raw, total) {
             if (!raw || !total) return {};
@@ -911,12 +964,42 @@
             return result;
         }
 
+        function loadSheetRows() {
+            return new Promise((resolve, reject) => {
+                const callbackName = `__sheetCallback_${Date.now()}`;
+                const script = document.createElement('script');
+                const tqx = encodeURIComponent(`out:json;responseHandler:${callbackName}`);
+                const src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=${tqx}&gid=${SHEET_GID}`;
+                const cleanup = () => {
+                    delete window[callbackName];
+                    script.remove();
+                };
+
+                window[callbackName] = (payload) => {
+                    cleanup();
+                    if (payload.status !== 'ok') {
+                        reject(new Error(payload.errors?.[0]?.detailed_message || 'Google Sheet response failed'));
+                        return;
+                    }
+
+                    const rows = payload.table.rows.map(row =>
+                        row.c.map(cell => cell?.v ?? '')
+                    );
+                    resolve(rows);
+                };
+
+                script.onerror = () => {
+                    cleanup();
+                    reject(new Error('Google Sheet script load failed'));
+                };
+                script.src = src;
+                document.head.appendChild(script);
+            });
+        }
+
         async function initPage() {
             try {
-                const res = await fetch(SHEET_CSV);
-                const text = await res.text();
-                const parsed = Papa.parse(text, { skipEmptyLines: true });
-                const rows = parsed.data.slice(1);
+                const rows = await loadSheetRows();
 
                 allDataPageA = rows.map(row => {
                     const total = parseFloat(row[4]) || 0;
@@ -1028,19 +1111,20 @@
         function renderMinistryPills(availableMinistries) {
             const container = document.getElementById('ministry-pills');
             container.innerHTML = '';
-            const btnAll = document.createElement('button');
-            btnAll.className = 'pill-btn' + (state.ministry === '全部' ? ' active' : '');
-            btnAll.innerText = '全部';
-            btnAll.onclick = () => selectMinistry('全部');
-            container.appendChild(btnAll);
+            const select = document.createElement('select');
+            select.className = 'ministry-select';
+            select.setAttribute('aria-label', '選擇部會');
+            select.onchange = () => selectMinistry(select.value);
 
-            availableMinistries.forEach(m => {
-                const btn = document.createElement('button');
-                btn.className = 'pill-btn' + (state.ministry === m ? ' active' : '');
-                btn.innerText = m;
-                btn.onclick = () => selectMinistry(m);
-                container.appendChild(btn);
+            ['全部', ...availableMinistries].forEach(m => {
+                const option = document.createElement('option');
+                option.value = m;
+                option.textContent = m;
+                option.selected = state.ministry === m;
+                select.appendChild(option);
             });
+
+            container.appendChild(select);
         }
 
         // 渲染動態的【主題】按鈕
