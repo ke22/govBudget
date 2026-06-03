@@ -266,6 +266,15 @@
         .yoy-down { color: var(--secondary-color); }
         .yoy-new  { color: #888; }
 
+        .kw-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 5px; }
+        .kw-tag { font-size: 0.66rem; padding: 2px 6px; background: #f0f4f8; color: #666; border-radius: 2px; letter-spacing: 0.02em; }
+        .plan-badge { display: inline-block; font-size: 0.67rem; padding: 2px 7px; border-radius: 2px; font-weight: 700; margin-top: 5px; margin-right: 4px; letter-spacing: 0.02em; }
+        .badge-718 { background: #fff3e0; color: #b55a00; }
+        .badge-emerging { background: #e8f4e8; color: #2e7d32; }
+        .doc-link { display: inline-flex; align-items: center; gap: 5px; font-size: 0.82rem; color: var(--secondary-color); text-decoration: none; margin-top: 14px; padding: 7px 14px; border: 1px solid var(--secondary-color); border-radius: 3px; }
+        .doc-link:hover { background: var(--secondary-color); color: #fff; }
+        .doc-link .material-symbols-outlined { font-size: 16px; }
+
         /* keep pb-dept for dept tag */
         .pb-dept {
             background: var(--primary-color);
@@ -795,6 +804,14 @@
                     <h4 style="margin:0 0 15px 0; color:var(--primary-color);">用途分配比例</h4>
                     <div style="height:220px; width:100%;"><canvas id="chartDetailPie"></canvas></div>
                 </div>
+
+                <div id="u-keywords" style="display:none; margin-top:16px;"></div>
+
+                <div style="margin-top:16px; text-align:right;">
+                    <a id="u-doc-link" href="#" target="_blank" rel="noopener" class="doc-link" style="display:none;">
+                        <span class="material-symbols-outlined">description</span>查看完整預算書
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -869,55 +886,45 @@
         const tooltipCurrencyCallback = { callbacks: { label: function (c) { return (c.label ? c.label + ': ' : '') + c.raw + '%'; } } };
 
         // 2. 初始化載入
-        const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/11OXVLqRUfySckHFAWJLEciSxqA-XmTqAUS62j59Syzs/export?format=csv&gid=0';
+        const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/11OXVLqRUfySckHFAWJLEciSxqA-XmTqAUS62j59Syzs/export?format=csv&gid=612819456';
+
+        function parseUsageRatio(raw, total) {
+            if (!raw || !total) return {};
+            const result = {};
+            raw.split('|').forEach(part => {
+                const idx = part.indexOf(':');
+                if (idx === -1) return;
+                const key = part.slice(0, idx).trim();
+                const val = parseFloat(part.slice(idx + 1)) || 0;
+                if (key && val > 0) result[key] = Math.round(val / total * 1000) / 10;
+            });
+            return result;
+        }
 
         async function initPage() {
             try {
                 const res = await fetch(SHEET_CSV);
                 const text = await res.text();
                 const parsed = Papa.parse(text, { skipEmptyLines: true });
-                const rows = parsed.data;
+                const rows = parsed.data.slice(1); // skip header row
 
-                const ministryMap = {};
-                for (const row of rows.slice(3)) {
-                    const code = row[0];
-                    if (code && code.length === 10 && code.slice(4) === '000000') {
-                        ministryMap[code.slice(0, 4)] = row[1];
-                    }
-                }
-
-                allDataPageA = rows.slice(3)
-                    .filter(row => row[0] && row[2])
-                    .map(row => {
-                        const total = parseFloat(row[3]) || 0;
-                        const exp = {
-                            '人事費':   parseFloat(row[4])  || 0,
-                            '業務費':   parseFloat(row[17]) || 0,
-                            '設備及投資': parseFloat(row[49]) || 0,
-                            '獎補助費': parseFloat(row[59]) || 0,
-                            '債務費':   parseFloat(row[76]) || 0,
-                        };
-                        const pieRatio = {};
-                        if (total > 0) {
-                            for (const [k, v] of Object.entries(exp)) {
-                                const pct = Math.round(v / total * 1000) / 10;
-                                if (pct > 0) pieRatio[k] = pct;
-                            }
-                        }
-                        const ministry = ministryMap[row[0].slice(0, 4)] || '';
-                        return {
-                            '計畫編號': row[0],
-                            '計畫名稱': row[1],
-                            '政事別':   row[2],
-                            '115年編列': total,
-                            '審定數':   null,
-                            '114年金額': null,
-                            '主管機關': ministry,
-                            '所屬部會': ministry,
-                            '工作內容': '',
-                            '用途比例': pieRatio,
-                        };
-                    });
+                allDataPageA = rows.map(row => {
+                    const total = parseFloat(row[4]) || 0;
+                    return {
+                        '計畫名稱':   row[0] || '',
+                        '主管機關':   row[1] || '',
+                        '所屬部會':   row[2] || '',
+                        '政事別':     row[3] || '',
+                        '115年編列':  total,
+                        '114年金額':  parseFloat(row[5]) || 0,
+                        '工作內容':   row[6] || '',
+                        '分支計畫':   row[7] || '',
+                        '用途比例':   parseUsageRatio(row[8], total),
+                        '計畫編號':   row[9] || '',
+                        '關鍵字':     row[10] || '',
+                        '預算書連結': row[11] || '',
+                    };
+                });
 
                 document.getElementById('loader').style.display = 'none';
                 checkUrlParams();
@@ -1069,7 +1076,7 @@
             const matchKeywordCheck = (p, kw) => {
                 if (!kw) return true;
                 const searchTerms = kw.toLowerCase().split(/\s+/).filter(k=>k);
-                const rawText = (p['計畫名稱'] + (p['工作內容']||'') + (p['主管機關']||'')).toLowerCase();
+                const rawText = (p['計畫名稱'] + (p['工作內容']||'') + (p['主管機關']||'') + (p['分支計畫']||'') + (p['關鍵字']||'')).toLowerCase();
                 return searchTerms.every(term => rawText.includes(term));
             };
 
@@ -1171,9 +1178,19 @@
                     const cls = pct >= 0 ? 'yoy-up' : 'yoy-down';
                     yoyHtml = `<span class="${cls}">${sign}${pct.toFixed(1)}%</span>`;
                 }
+
+                const kw = row['關鍵字'] || '';
+                let badgeHtml = '';
+                if (kw.includes('718')) badgeHtml += '<span class="plan-badge badge-718">718億先行動支</span>';
+                if (kw.includes('新興計畫')) badgeHtml += '<span class="plan-badge badge-emerging">新興計畫</span>';
+                const tags = kw.split('、').map(k => k.trim()).filter(k => k && k !== '718億先行動支' && k !== '新興計畫');
+                const tagHtml = tags.length > 0
+                    ? '<div class="kw-tags">' + tags.map(k => `<span class="kw-tag">${k}</span>`).join('') + '</div>'
+                    : '';
+
                 rows += `<tr onclick="openUnifiedDetail('${row['計畫編號']}')">
                     <td class="col-num">${start + i + 1}</td>
-                    <td class="col-title">${displayTitle}</td>
+                    <td class="col-title">${displayTitle}${badgeHtml ? '<div style="margin-top:4px;">' + badgeHtml + '</div>' : ''}${tagHtml}</td>
                     <td class="col-dept"><span class="pb-dept">${row['主管機關']}</span></td>
                     <td class="col-amount">${formatCurrency(amt115)}</td>
                     <td class="col-yoy">${yoyHtml}</td>
@@ -1272,6 +1289,32 @@
                 });
             } else {
                 pieContainer.style.display = 'none';
+            }
+
+            // 關鍵字 tags + badges
+            const kw = planData['關鍵字'] || '';
+            const kwEl = document.getElementById('u-keywords');
+            if (kw) {
+                let badgesHtml = '';
+                if (kw.includes('718')) badgesHtml += '<span class="plan-badge badge-718">含718億先行動支方案預算</span> ';
+                if (kw.includes('新興計畫')) badgesHtml += '<span class="plan-badge badge-emerging">含新興計畫預算</span>';
+                const tags = kw.split('、').map(k => k.trim()).filter(k => k && k !== '718億先行動支' && k !== '新興計畫');
+                const tagList = tags.map(k => `<span class="kw-tag">${k}</span>`).join('');
+                kwEl.innerHTML = (badgesHtml ? '<div style="margin-bottom:6px;">' + badgesHtml + '</div>' : '') +
+                    (tagList ? '<div class="kw-tags">' + tagList + '</div>' : '');
+                kwEl.style.display = 'block';
+            } else {
+                kwEl.style.display = 'none';
+            }
+
+            // 預算書連結
+            const docLink = planData['預算書連結'];
+            const docLinkEl = document.getElementById('u-doc-link');
+            if (docLink) {
+                docLinkEl.href = docLink;
+                docLinkEl.style.display = 'inline-flex';
+            } else {
+                docLinkEl.style.display = 'none';
             }
 
             document.getElementById('unifiedModal').style.display = 'flex';

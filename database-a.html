@@ -896,55 +896,45 @@
         const tooltipCurrencyCallback = { callbacks: { label: function (c) { return (c.label ? c.label + ': ' : '') + c.raw + '%'; } } };
 
         // 2. 初始化載入
-        const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/11OXVLqRUfySckHFAWJLEciSxqA-XmTqAUS62j59Syzs/export?format=csv&gid=0';
+        const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/11OXVLqRUfySckHFAWJLEciSxqA-XmTqAUS62j59Syzs/export?format=csv&gid=612819456';
+
+        function parseUsageRatio(raw, total) {
+            if (!raw || !total) return {};
+            const result = {};
+            raw.split('|').forEach(part => {
+                const idx = part.indexOf(':');
+                if (idx === -1) return;
+                const key = part.slice(0, idx).trim();
+                const val = parseFloat(part.slice(idx + 1)) || 0;
+                if (key && val > 0) result[key] = Math.round(val / total * 1000) / 10;
+            });
+            return result;
+        }
 
         async function initPage() {
             try {
                 const res = await fetch(SHEET_CSV);
                 const text = await res.text();
                 const parsed = Papa.parse(text, { skipEmptyLines: true });
-                const rows = parsed.data;
+                const rows = parsed.data.slice(1);
 
-                const ministryMap = {};
-                for (const row of rows.slice(3)) {
-                    const code = row[0];
-                    if (code && code.length === 10 && code.slice(4) === '000000') {
-                        ministryMap[code.slice(0, 4)] = row[1];
-                    }
-                }
-
-                allDataPageA = rows.slice(3)
-                    .filter(row => row[0] && row[2])
-                    .map(row => {
-                        const total = parseFloat(row[3]) || 0;
-                        const exp = {
-                            '人事費':   parseFloat(row[4])  || 0,
-                            '業務費':   parseFloat(row[17]) || 0,
-                            '設備及投資': parseFloat(row[49]) || 0,
-                            '獎補助費': parseFloat(row[59]) || 0,
-                            '債務費':   parseFloat(row[76]) || 0,
-                        };
-                        const pieRatio = {};
-                        if (total > 0) {
-                            for (const [k, v] of Object.entries(exp)) {
-                                const pct = Math.round(v / total * 1000) / 10;
-                                if (pct > 0) pieRatio[k] = pct;
-                            }
-                        }
-                        const ministry = ministryMap[row[0].slice(0, 4)] || '';
-                        return {
-                            '計畫編號': row[0],
-                            '計畫名稱': row[1],
-                            '政事別':   row[2],
-                            '115年編列': total,
-                            '審定數':   null,
-                            '114年金額': null,
-                            '主管機關': ministry,
-                            '所屬部會': ministry,
-                            '工作內容': '',
-                            '用途比例': pieRatio,
-                        };
-                    });
+                allDataPageA = rows.map(row => {
+                    const total = parseFloat(row[4]) || 0;
+                    return {
+                        '計畫名稱':   row[0] || '',
+                        '主管機關':   row[1] || '',
+                        '所屬部會':   row[2] || '',
+                        '政事別':     row[3] || '',
+                        '115年編列':  total,
+                        '114年金額':  parseFloat(row[5]) || 0,
+                        '工作內容':   row[6] || '',
+                        '分支計畫':   row[7] || '',
+                        '用途比例':   parseUsageRatio(row[8], total),
+                        '計畫編號':   row[9] || '',
+                        '關鍵字':     row[10] || '',
+                        '預算書連結': row[11] || '',
+                    };
+                });
 
                 document.getElementById('loader').style.display = 'none';
                 checkUrlParams();
@@ -1096,7 +1086,7 @@
             const matchKeywordCheck = (p, kw) => {
                 if (!kw) return true;
                 const searchTerms = kw.toLowerCase().split(/\s+/).filter(k=>k);
-                const rawText = (p['計畫名稱'] + (p['工作內容']||'') + (p['主管機關']||'')).toLowerCase();
+                const rawText = (p['計畫名稱'] + (p['工作內容']||'') + (p['主管機關']||'') + (p['分支計畫']||'') + (p['關鍵字']||'')).toLowerCase();
                 return searchTerms.every(term => rawText.includes(term));
             };
 
