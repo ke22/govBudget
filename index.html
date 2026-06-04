@@ -15,6 +15,9 @@
     <meta name="twitter:title" content="115年總預算審議回顧">
     <meta name="twitter:description" content="整理115年度總預算審議時程、晚審原因、718億先行動支與新興計畫影響。">
     <meta name="twitter:image" content="https://www.cna.com.tw/project/budget/og-image.jpg">
+    <link rel="icon" type="image/svg+xml" href="cna-favicon-light.svg" media="(prefers-color-scheme: light)">
+    <link rel="icon" type="image/svg+xml" href="cna-favicon-dark.svg" media="(prefers-color-scheme: dark)">
+    <link rel="apple-touch-icon" href="cna-favicon-light.svg">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;700;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -77,7 +80,7 @@
             display: block;
         }
 
-        header nav {
+        .header-actions {
             display: flex;
             align-items: center;
             gap: 20px;
@@ -772,10 +775,10 @@
             <div class="site-title">
                 <img src="CNAlogo應用_20250311.svg" alt="CNA 中央通訊社" class="cna-logo-white">
             </div>
-            <nav>
+            <div class="header-actions">
                 <span class="nav-label">深度報導</span>
                 <a href="database-c.html" class="btn btn--primary">查詢預算資料庫</a>
-            </nav>
+            </div>
         </div>
     </header>
 
@@ -784,7 +787,7 @@
         <div class="chapter-nav-inner">
             <a href="#timeline-section" class="chapter-link active">審查歷程</a>
             <a href="#impact" class="chapter-link">影響評估</a>
-            <a href="#advance-plan" class="chapter-link">先行動支</a>
+            <a href="#advance-plan" class="chapter-link">新興計畫</a>
             <a href="#database-cta" class="chapter-link">查詢資料庫</a>
         </div>
     </nav>
