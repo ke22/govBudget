@@ -269,26 +269,26 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 1.45em;
-            height: 1.45em;
-            margin: 0 0.12em;
+            width: 1.12em;
+            height: 1.12em;
+            margin: 0 0.08em;
             border: 1px solid rgba(4, 160, 160, 0.42);
             background: #fff;
             color: var(--cna-red-dark);
             padding: 0;
             cursor: pointer;
             text-decoration: none;
-            vertical-align: 0.1em;
+            vertical-align: 0.08em;
             border-radius: 50%;
         }
 
         .glossary-term::before {
             content: '';
-            width: 0.42em;
-            height: 0.42em;
-            border-right: 2px solid currentColor;
-            border-bottom: 2px solid currentColor;
-            transform: translateY(-0.12em) rotate(45deg);
+            width: 0.34em;
+            height: 0.34em;
+            border-right: 1.5px solid currentColor;
+            border-bottom: 1.5px solid currentColor;
+            transform: translateY(-0.1em) rotate(45deg);
         }
 
         .glossary-term:hover,
@@ -1042,7 +1042,7 @@
         const glossarySeen = new Set();
 
         function initGlossary() {
-            const articleTextBlocks = document.querySelectorAll('.hero-lead, .section-container > p, .timeline-event');
+            const articleTextBlocks = document.querySelectorAll('.section-container > p, .timeline-event');
 
             document.querySelectorAll('.glossary-term').forEach(term => {
                 if (term.dataset.term && term.getAttribute('aria-label')) {
