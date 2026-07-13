@@ -1981,6 +1981,216 @@
             }
         }
 
+        /* =======================================================
+           📱 手機版捲動敘事重構（第二、三章）
+           圖表釘在上方帶狀區、文字卡在下方，兩者不重疊、可同時閱讀。
+           作法：帶狀區為不透明白底且 z-index 高於卡片，因此卡片捲到
+           上方時會被帶狀區「蓋住」，只在下方閱讀區顯示 → 保證不重疊。
+           圖表以「重排」而非 transform: scale() 縮小，確保清晰可讀。
+           ======================================================= */
+        @media (max-width: 968px) {
+
+            /* ---------- 第二章：甘特圖釘在上方 60dvh ---------- */
+            .gantt-fixed-stage-rebuilt {
+                height: 60vh;
+                height: 60dvh;
+                align-items: flex-start;
+                background: var(--bg-deep);
+                /* 白底在白頁上，引言階段等同隱形；圖表出現後才顯示分隔線 */
+                z-index: 5;
+                padding-top: 6px;
+            }
+
+            #chapter-2-rebuilt.rebuilt-step-2 .gantt-fixed-stage-rebuilt {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+            }
+
+            .gantt-backdrop-box-rebuilt {
+                height: 60vh;
+                height: 60dvh;
+                padding: 6px;
+            }
+
+            .history-images-container {
+                height: 60vh;
+                height: 60dvh;
+            }
+
+            /* 甘特圖外殼：填滿帶狀區、以重排塞進手機寬度（不縮放） */
+            #chapter-2-rebuilt .gantt-chart-container-rebuilt {
+                height: 100% !important;
+                max-width: 100% !important;
+                padding: 8px 6px 6px 4px !important;
+            }
+
+            /* 統一縮小的繪圖框：左留 40px 給年份、右留 8px、下留 36px 給月份軸。
+               紅線(35.3%)、深灰執行區(40%)為框內百分比，只要各元件框一致即精準對齊。 */
+            #chapter-2-rebuilt .gantt-rows-container-rebuilt,
+            #chapter-2-rebuilt .gantt-grid-rebuilt,
+            #chapter-2-rebuilt .gantt-red-deadline-stage {
+                left: 40px !important;
+                right: 8px !important;
+                top: 8px !important;
+                bottom: 36px !important;
+            }
+
+            #chapter-2-rebuilt .gantt-y-axis-rebuilt {
+                left: 3px !important;
+                width: 34px !important;
+                top: 8px !important;
+                bottom: 36px !important;
+            }
+
+            #chapter-2-rebuilt .gantt-x-axis-rebuilt {
+                left: 40px !important;
+                right: 8px !important;
+                bottom: 12px !important;
+                height: 20px !important;
+            }
+
+            #chapter-2-rebuilt .gantt-year-rebuilt {
+                font-size: 0.6rem;
+                margin-right: 4px;
+                white-space: nowrap;
+                display: block;
+            }
+
+            #chapter-2-rebuilt .gantt-grid-label-rebuilt {
+                font-size: 0.58rem;
+            }
+
+            #chapter-2-rebuilt .gantt-row-rebuilt {
+                height: 13px;
+            }
+
+            /* 文字卡：壓到下方閱讀區。保留 100dvh 高度維持捲動節奏與步驟對應，
+               靠 align-items:flex-end 讓卡片在視窗下緣，捲到帶狀區時被蓋住。 */
+            #chapter-2-rebuilt .gantt-card-rebuilt {
+                align-items: flex-end;
+                justify-content: center;
+                padding: 0 16px 5vh 16px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s, visibility 0.3s;
+            }
+
+            /* 第二章第二步驟起顯示卡片 */
+            #chapter-2-rebuilt.rebuilt-step-2 .gantt-card-rebuilt,
+            #chapter-2-rebuilt.rebuilt-step-3 .gantt-card-rebuilt,
+            #chapter-2-rebuilt.rebuilt-step-4 .gantt-card-rebuilt,
+            #chapter-2-rebuilt.rebuilt-step-5 .gantt-card-rebuilt,
+            #chapter-2-rebuilt.rebuilt-step-6 .gantt-card-rebuilt,
+            #chapter-2-rebuilt.rebuilt-step-7 .gantt-card-rebuilt,
+            #chapter-2-rebuilt.rebuilt-step-8 .gantt-card-rebuilt,
+            #chapter-2-rebuilt.rebuilt-step-9 .gantt-card-rebuilt {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* ---------- 第二章步驟 7–9：歷史照片改為滿版全螢幕 ----------
+               照片步驟不需要甘特圖帶狀區，讓舞台撐滿整個螢幕，
+               照片以 object-fit: cover 滿版鋪滿，字幕疊在底部（深色漸層增加可讀性）。 */
+            #chapter-2-rebuilt.rebuilt-step-7 .gantt-fixed-stage-rebuilt,
+            #chapter-2-rebuilt.rebuilt-step-8 .gantt-fixed-stage-rebuilt,
+            #chapter-2-rebuilt.rebuilt-step-9 .gantt-fixed-stage-rebuilt {
+                height: 100vh !important;
+                height: 100dvh !important;
+                padding-top: 0;
+            }
+
+            #backdrop-images-rebuilt,
+            #backdrop-images-rebuilt .history-images-container {
+                height: 100vh !important;
+                height: 100dvh !important;
+                padding: 0 !important;
+                background: #1a1a1a !important;
+            }
+
+            .history-img-frame,
+            .history-img-frame-single {
+                width: 100vw !important;
+                max-width: 100vw !important;
+                height: 100vh !important;
+                height: 100dvh !important;
+                max-height: none !important;
+                left: 0 !important;
+                top: 0 !important;
+                transform: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                background: #1a1a1a !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-end !important;
+                overflow: hidden !important;
+            }
+
+            .history-img-frame img,
+            .history-img-frame-single img {
+                position: absolute !important;
+                inset: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                object-fit: contain !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+            }
+
+            .history-img-frame .img-caption,
+            .history-img-frame-single .img-caption {
+                position: relative !important;
+                z-index: 2 !important;
+                color: #fff !important;
+                font-size: 0.9rem !important;
+                line-height: 1.6 !important;
+                text-align: left !important;
+                padding: 48px 18px calc(28px + env(safe-area-inset-bottom)) 18px !important;
+                background: linear-gradient(to top, rgba(26, 26, 26, 0.9) 0%, rgba(26, 26, 26, 0.6) 55%, rgba(26, 26, 26, 0) 100%) !important;
+            }
+
+            /* ---------- 第三章：堆疊長條圖釘在上方 55dvh ---------- */
+            .gantt-sticky-box-rebuilt {
+                height: 55vh !important;
+                height: 55dvh !important;
+                align-items: flex-start !important;
+                background: var(--bg-deep) !important;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+                z-index: 5 !important;
+                padding-top: 10px;
+            }
+
+            .gantt-container-rebuilt {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 16px 14px !important;
+            }
+
+            /* 取消桌機版把卡片往右上拉的偏移，改置中並落在下方閱讀區 */
+            .story-timeline-rebuilt {
+                margin-top: 0 !important;
+                align-items: center !important;
+            }
+
+            .story-timeline-rebuilt .gantt-card-rebuilt {
+                justify-content: center !important;
+                align-items: flex-end !important;
+                padding-right: 0 !important;
+                padding: 0 16px 5vh 16px !important;
+            }
+
+            /* ---------- 共用：手機版文字卡改為完全不透明 ---------- */
+            .story-card {
+                background: #ffffff;
+                backdrop-filter: none;
+                max-width: 100%;
+            }
+        }
+
         /* 文末 CTA 補充 CNA 連結 */
         .cna-link-btn {
             display: inline-flex;
@@ -3173,10 +3383,16 @@
                 const containerTop = ch3Container.getBoundingClientRect().top;
                 const cards = ch3Section.querySelectorAll('.gantt-card-rebuilt');
 
+                // 桌機：卡片頂端越過圖表頂端下方 100px 即算數。
+                // 手機：圖表釘在上方帶狀區，卡片要「進入下方閱讀區」才算數，
+                //       否則步驟會在卡片還被帶狀區蓋住時就先觸發（動畫早於文字）。
+                const isMobile = window.matchMedia('(max-width: 968px)').matches;
+                const triggerOffset = isMobile ? window.innerHeight * 0.6 : 100;
+
                 let currentStep = 1;
                 cards.forEach((card, idx) => {
                     const cardTop = card.getBoundingClientRect().top;
-                    if (cardTop <= containerTop + 100) { currentStep = idx + 1; }
+                    if (cardTop <= containerTop + triggerOffset) { currentStep = idx + 1; }
                 });
 
                 const barTotal = document.getElementById('ch3-bar-total-grey');
