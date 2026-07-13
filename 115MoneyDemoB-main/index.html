@@ -2076,17 +2076,30 @@
             }
 
             /* 第二章第二步驟起顯示卡片 */
-            #chapter-2-rebuilt.rebuilt-step-2 .gantt-card-rebuilt,
-            #chapter-2-rebuilt.rebuilt-step-3 .gantt-card-rebuilt,
-            #chapter-2-rebuilt.rebuilt-step-4 .gantt-card-rebuilt,
-            #chapter-2-rebuilt.rebuilt-step-5 .gantt-card-rebuilt,
-            #chapter-2-rebuilt.rebuilt-step-6 .gantt-card-rebuilt,
-            #chapter-2-rebuilt.rebuilt-step-7 .gantt-card-rebuilt,
-            #chapter-2-rebuilt.rebuilt-step-8 .gantt-card-rebuilt,
-            #chapter-2-rebuilt.rebuilt-step-9 .gantt-card-rebuilt {
-                opacity: 1;
-                visibility: visible;
-            }
+            /* 只顯示當前步驟的卡片，隱藏其他 */
+            #chapter-2-rebuilt.rebuilt-step-2 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-2 [data-rebuilt-step="2"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-3 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-3 [data-rebuilt-step="3"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-4 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-4 [data-rebuilt-step="4"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-5 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-5 [data-rebuilt-step="5"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-6 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-6 [data-rebuilt-step="6"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-7 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-7 [data-rebuilt-step="7"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-8 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-8 [data-rebuilt-step="8"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-9 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-9 [data-rebuilt-step="9"] { opacity: 1; visibility: visible; }
 
             /* ---------- 第二章步驟 7–9：歷史照片改為滿版全螢幕 ----------
                照片步驟不需要甘特圖帶狀區，讓舞台撐滿整個螢幕，
@@ -2125,31 +2138,35 @@
                 background: #1a1a1a !important;
                 display: flex !important;
                 flex-direction: column !important;
-                justify-content: flex-end !important;
-                overflow: hidden !important;
+                justify-content: center !important;
+                align-items: stretch !important;
+                overflow-y: auto !important;
             }
 
             .history-img-frame img,
             .history-img-frame-single img {
-                position: absolute !important;
-                inset: 0 !important;
+                position: relative !important;
                 width: 100% !important;
-                height: 100% !important;
+                height: auto !important;
+                max-height: 60vh !important;
                 object-fit: contain !important;
                 margin: 0 !important;
                 border-radius: 0 !important;
+                flex-shrink: 0;
             }
 
             .history-img-frame .img-caption,
             .history-img-frame-single .img-caption {
                 position: relative !important;
                 z-index: 2 !important;
+                width: 100% !important;
                 color: #fff !important;
                 font-size: 0.9rem !important;
                 line-height: 1.6 !important;
                 text-align: left !important;
-                padding: 48px 18px calc(28px + env(safe-area-inset-bottom)) 18px !important;
-                background: linear-gradient(to top, rgba(26, 26, 26, 0.9) 0%, rgba(26, 26, 26, 0.6) 55%, rgba(26, 26, 26, 0) 100%) !important;
+                padding: 24px 16px calc(24px + env(safe-area-inset-bottom)) 16px !important;
+                background: transparent !important;
+                flex-shrink: 0;
             }
 
             /* ---------- 第三章：堆疊長條圖釘在上方 55dvh ---------- */
