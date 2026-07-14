@@ -5,30 +5,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>總預算卡關 203 天 — 115年度中央政府總預算審議回顧</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap"
+    <link rel="icon" type="image/svg+xml" href="cna-favicon-adaptive.svg">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap"
         rel="stylesheet">
     <style>
         /* --- 核心視覺規範 (CNA 數位敘事風格) --- */
         /* --- 核心視覺規範 (CNA 數位敘事風格) --- */
         :root {
-            --bg-deep: #FFFFFF;
-            /* 改為純白底色 */
-            --bg-card: rgba(245, 247, 250, 0.9);
-            /* 改為極淺灰藍半透明卡片 */
-            --text-main: #1a1a1a;
-            /* 改為主要文字深灰色 */
-            --text-muted: #64748b;
-            /* 改為次要文字中灰色 */
-            --primary: #008080;
-            /* 改為主要藍綠色 (Teal) */
-            --accent: #00a896;
-            /* 改為點綴藍綠色 (Light Teal) */
+            /* 全站改為新聞剪貼風格（牛皮紙 + 墨黑 + 朱印紅），沿用既有變數名稱以保留版面與既有選取器 */
+            /* 頁面底色改為深色，如同 hero 的深色拼貼桌面；story-card、圖表卡片等仍維持淺牛皮紙色，
+               形成「深色桌面上散落淺色剪報」的視覺語彙，與 hero 一致 */
+            --bg-deep: #12191A;
+            /* 原為牛皮紙淺色，改為與 hero 一致的深色桌面 */
+            --bg-card: #d5cdcd;
+            /* 原為極淺灰藍半透明，改為不透明牛皮紙卡片色 */
+            --text-main: #1B1712;
+            /* 原為深灰，改為新聞剪貼風格墨黑色 */
+            --text-muted: #6B6156;
+            /* 原為中灰，改為暖褐灰 */
+            --primary: #A5271E;
+            /* 原為藍綠色 (Teal)，改為朱印紅 */
+            --accent: #A8823C;
+            /* 原為點綴藍綠色，改為公文銅印黃銅色 */
             --danger: #E74C3C;
             /* 警示紅維持，以利表現卡關與法定時限 */
-            --border: rgba(0, 128, 128, 0.15);
-            /* 改為藍綠色調的淡邊框 */
-            --bg-chart: #f8fafc;
-            /* 改為淺色圖表底色 */
+            --border: rgba(165, 39, 30, 0.15);
+            /* 原為藍綠色調淡邊框，改為朱印紅淡邊框 */
+            --bg-chart: #1E2624;
+            /* 原為淺牛皮紙圖表底色 #FBF6EA，改為深色圖表面板（略淺於 --bg-deep #12191A，
+               維持面板與頁面背景仍有輕微區隔），圖表改為在深色底上使用亮色線條與文字 */
+
+            /* 新聞剪貼風格 token —— 僅供 hero 與 story-card 使用，不影響甘特圖或其他既有元件 */
+            --np-ink: #1B1712;
+            --np-paper: #FFFFFF;
+            --np-paper-panel: #d5cdcd;
+            --np-seal-red: #A5271E;
+            --np-seal-red-dark: #7E1D16;
+            --np-muted: #6B6156;
+            --np-hairline: rgba(27, 23, 18, 0.16);
+
+            /* 深色桌面上的文字 token —— 供直接位於 --bg-deep 深色底上的文字使用（非淺色卡片內文，那些仍用 --text-main/--np-ink） */
+            --np-text-ondark: #EDE6D3;
+            --np-muted-ondark: #A79C8C;
+            /* 深色底上使用的高亮朱印紅／銅印黃，供圖表數值標籤等需要在深色底上維持可讀對比的強調文字使用 */
+            --np-seal-red-bright: #E2564A;
+            --np-gold-bright: #D4A857;
+
+            /* 字體 token —— 標題用襯線體，內文用無襯線體 */
+            --font-display: 'Noto Serif TC', 'Songti TC', 'PMingLiU', serif;
+            --font-body: 'Noto Sans TC', sans-serif;
+
+            /* 圖表分類色票 —— 第三章疊加長條圖與第二章甘特圖的分類色。
+               圖表面板改為深色底後，原本針對淺牛皮紙底校準的暗色調（#6E7268/#3F7D5C/#3B5A80，
+               以及別名至 --danger/--accent 的暗紅/銅黃）在深色底上對比不足，改為獨立定義的
+               高亮版本，並重新以 HSL 色相距離驗證：5 色兩兩相距 21°–176°（neutral 為低飽和度
+               灰階，與最近的 new 僅差 21° 但因飽和度差距大仍可辨識），對 --bg-deep 對比皆
+               ≥4.6:1。不再別名 --danger/--accent（那兩個 token 仍維持原深色值，供頁面其他
+               淺色卡片內文使用，避免被本次圖表調整牽動） */
+            --chart-cat-neutral: #9CA69C;
+            --chart-cat-impact: #E2564A;
+            --chart-cat-new: #6FAE85;
+            --chart-cat-extend: #7CA2D6;
+            --chart-cat-reserve: #D4A857;
+
+            /* 固定頂部導覽列高度，供釘住的甘特圖舞台預留頂部間距，避免圖表標題被 nav 蓋住 */
+            --site-header-h: 57px;
         }
 
         * {
@@ -38,15 +80,54 @@
         }
 
         body {
-            font-family: 'Noto Sans TC', sans-serif;
+            font-family: var(--font-body);
             background-color: var(--bg-deep);
-            color: var(--text-main);
+            /* 網點層（印刷網點紋理）疊在漸層暗角層之上：每個 100vh 視窗高度重複一次漸層，
+               讓每個章節進場時桌面邊緣自然變暗，避免整頁一次性漸層在長頁面中段變成純平色 */
+            background-image:
+                radial-gradient(circle, rgba(237, 230, 211, 0.08) 1px, transparent 1.2px),
+                radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.05) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.35) 0%, transparent 65%);
+            background-size: 4px 4px, 100% 100vh, 100% 100vh;
+            background-repeat: repeat, repeat-y, repeat-y;
+            color: var(--np-text-ondark);
+            /* 原為 var(--text-main) 深墨色，頁面底色改深後預設文字改為淺色；淺色卡片內文另有各自明確設色，不受影響 */
             line-height: 1.75;
+            letter-spacing: 0.03em;
             width: 100%;
             /* 🎯 確保主體寬度鎖死 */
             overflow-x: hidden;
             /* 🎯 剛性切除任何橫向溢出 */
             position: relative;
+        }
+
+        /* 手機版網點紋理調整：小螢幕多為高 DPI 面板，過細的 1px 網點在近距離觀看下
+           容易產生視覺雜訊／摩爾紋，故放大網點間距並降低不透明度，維持質感但更乾淨 */
+        @media (max-width: 640px) {
+            body {
+                background-image:
+                    radial-gradient(circle, rgba(237, 230, 211, 0.06) 1px, transparent 1.3px),
+                    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.04) 0%, transparent 55%),
+                    radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.3) 0%, transparent 65%);
+                background-size: 6px 6px, 100% 100vh, 100% 100vh;
+            }
+        }
+
+        /* 新聞剪貼風格：標題層級改用襯線字體，內文維持無襯線 */
+        h1,
+        h2 {
+            font-family: var(--font-display);
+        }
+
+        /* 新聞剪貼風格：章節標題下方加上朱印色膠帶短條，呼應 hero 印章的視覺語彙 */
+        h2::after {
+            content: '';
+            display: block;
+            width: 52px;
+            height: 6px;
+            background: var(--primary);
+            opacity: 0.85;
+            margin: 16px auto 0;
         }
 
         /* --- Hero 序章區塊 --- */
@@ -63,19 +144,125 @@
             text-align: center;
             padding: 20px;
             position: relative;
-            background: linear-gradient(180deg, rgba(245, 247, 250, 0.5) 0%, var(--bg-deep) 90%);
+            /* 新聞剪貼風格：實際拼貼圖檔（hero-collage.jpg）+ 底部撕紙邊。
+               原為淺牛皮紙色備援底/信封邊色，改為深黑色，與全站深色化後的其餘區塊一致 */
+            background-color: var(--bg-deep);
+            background-image: url('hero-collage.jpg');
+            background-size: 100% auto;
+            background-repeat: no-repeat;
+            background-position: center center;
+            clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 8px), 96% 100%, 90% calc(100% - 3px), 84% 100%, 78% calc(100% - 6px), 72% 100%, 66% calc(100% - 2px), 60% 100%, 54% calc(100% - 7px), 48% 100%, 42% calc(100% - 3px), 36% 100%, 30% calc(100% - 6px), 24% 100%, 18% calc(100% - 2px), 12% 100%, 7% calc(100% - 6px), 3% 100%, 0% calc(100% - 8px));
+        }
+
+        /* 可視隱藏但仍可被螢幕閱讀器與搜尋引擎讀取（標題文字已烘焙進拼貼圖檔中，畫面上不重複顯示） */
+        .hero-sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .hero-dek-panel {
+            position: absolute;
+            left: 50%;
+            bottom: 160px;
+            transform: translateX(-50%);
+            z-index: 2;
+            width: 90%;
+            max-width: 640px;
+            /* 左右內距統一為 40px，與 .story-card／.chapter-intro 手機版一致的內容留白節奏 */
+            padding: 18px 40px;
+            background: rgba(241, 234, 214, 0.92);
+            box-shadow: 0 10px 24px rgba(27, 23, 18, 0.2);
+        }
+
+        @media (max-width: 640px) {
+            /* 手機版改用直式構圖的專屬拼貼圖（標題置於上段，下方留深色網點區給
+               dek-panel／stamp 疊加），比例貼近手機螢幕，改回 cover 避免大片留白信封邊 */
+            .hero-section {
+                background-image: url('hero-collage-mobile.jpg');
+                background-size: cover;
+                background-position: center top;
+            }
+
+            .hero-dek-panel {
+                bottom: 190px;
+                padding: 14px 40px;
+            }
+        }
+
+        .hero-stamp-wrap {
+            /* 桌機版：釘在拼貼圖右上角，避開中段的報頭標題與底部的 dek-panel */
+            position: absolute;
+            top: 110px;
+            right: 6%;
+            z-index: 3;
+        }
+
+        .hero-stamp {
+            position: relative;
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+            border: 3px solid var(--np-seal-red);
+            background: var(--np-paper-panel);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--np-seal-red);
+            transform: rotate(-9deg);
+            box-shadow: 0 10px 24px rgba(27, 23, 18, 0.25);
+        }
+
+        .hero-stamp::before {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border: 1px solid var(--np-seal-red);
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        .hero-stamp .num {
+            font-size: 2.2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .hero-stamp .label {
+            font-size: 0.68rem;
+            letter-spacing: 0.15em;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 640px) {
+            .hero-stamp-wrap {
+                /* 手機版拼貼圖標題置於上段，改回底部的深色網點區與 dek-panel 疊加 */
+                top: auto;
+                bottom: 420px;
+                right: 4%;
+                transform: scale(0.8);
+            }
         }
 
         .hero-title {
             font-size: clamp(2rem, 4vw, 3.5rem);
             margin-bottom: 30px;
             font-weight: 900;
+            color: var(--np-ink);
+            /* 新聞剪貼風格：主標改為墨黑色 */
         }
 
         .hero-title span {
             font-size: clamp(1.5rem, 3vw, 2.2rem);
-            color: var(--primary);
-            /* 原為 var(--accent) 金黃，改為主色藍綠色提升閱讀清晰度 */
+            color: var(--np-ink);
+            /* 原為 var(--primary) 藍綠色，改為新聞剪貼風格墨黑色 */
             display: block;
             margin-top: 15px;
             font-weight: 700;
@@ -83,7 +270,8 @@
 
         .hero-meta {
             font-size: 1rem;
-            color: var(--text-muted);
+            color: var(--np-muted);
+            /* 原為 var(--text-muted) */
             margin-top: 40px;
         }
 
@@ -96,7 +284,8 @@
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            color: var(--text-muted);
+            color: var(--np-muted-ondark);
+            /* 原為 var(--np-muted)，該 token 是給淺色卡片內文用的，直接放在 hero 深色拼貼圖上對比不足 */
             font-size: 0.9rem;
             animation: bounce 2s infinite;
         }
@@ -105,18 +294,34 @@
             content: '';
             width: 2px;
             height: 40px;
-            background: linear-gradient(to bottom, var(--primary), transparent);
-            /* 漸層線條改為藍綠色出發 */
+            background: linear-gradient(to bottom, var(--np-muted-ondark), transparent);
+            /* 原為 var(--primary) 藍綠色，改為新聞剪貼風格暖灰色 */
         }
 
         .chapter-intro p {
-            font-size: 1.35rem !important;
+            /* 統一為 1.1rem，與 .story-card p / .timeline-block-node p 一致 */
+            font-size: 1.1rem !important;
             line-height: 2 !important;
             text-align: center !important;
             font-weight: 500 !important;
-            color: var(--text-main) !important;
+            color: var(--np-text-ondark) !important;
+            /* 原為 var(--text-main)，此段文字直接位於深色頁面底上 */
             max-width: 750px;
             margin: 0 auto;
+        }
+
+        /* 手機版：左右留白加大避免文字貼邊，字級縮小維持長段落易讀性
+           （.chapter-intro 為行內樣式 padding:20px，用 !important 覆蓋） */
+        @media (max-width: 640px) {
+            .chapter-intro {
+                padding-left: 40px !important;
+                padding-right: 40px !important;
+            }
+
+            .chapter-intro p {
+                font-size: 1.1rem !important;
+                line-height: 1.8 !important;
+            }
         }
 
         @keyframes bounce {
@@ -182,30 +387,33 @@
         }
 
         .story-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
+            background-color: var(--np-paper-panel);
+            /* 原為 var(--bg-card) 藍綠半透明，改為新聞剪貼風格牛皮紙卡片。
+               左側朱印紅邊框已移除 */
+            background-image: url('paper-texture.png');
+            background-repeat: repeat;
+            background-blend-mode: multiply;
             padding: 40px;
-            border-radius: 16px;
             max-width: 520px;
             width: 100%;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-            /* 改為適合白底的輕微陰影 */
+            box-shadow: 0 10px 22px rgba(27, 23, 18, 0.18);
             transition: transform 0.4s, border-color 0.4s;
             pointer-events: auto;
+            transform: rotate(-0.4deg);
+            clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 8px), 96% 100%, 90% calc(100% - 3px), 84% 100%, 78% calc(100% - 6px), 72% 100%, 66% calc(100% - 2px), 60% 100%, 54% calc(100% - 7px), 48% 100%, 42% calc(100% - 3px), 36% 100%, 30% calc(100% - 6px), 24% 100%, 18% calc(100% - 2px), 12% 100%, 7% calc(100% - 6px), 3% 100%, 0% calc(100% - 8px));
         }
 
         .step-scene.is-active .story-card {
-            border-color: var(--primary);
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(0, 128, 128, 0.1);
-            /* 激活時的陰影改為淡淡的藍綠色調 */
+            transform: translateY(-5px) rotate(-0.4deg);
+            box-shadow: 0 25px 50px rgba(27, 23, 18, 0.14);
+            /* 原為藍綠色調陰影，改為新聞剪貼風格暖褐色調 */
         }
 
         .story-card h2 {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--np-ink);
+            /* 原為 var(--primary) 藍綠色 */
             margin-bottom: 20px;
             display: flex;
             align-items: center;
@@ -215,8 +423,8 @@
         .story-card p {
             font-size: 1.1rem;
             margin-bottom: 16px;
-            color: var(--text-main);
-            /* 原為 #E2E8F0 明亮色，改為主要深灰字 */
+            color: var(--np-ink);
+            /* 原為 var(--text-main)，改為新聞剪貼風格墨黑色 */
             line-height: 1.8;
         }
 
@@ -269,8 +477,8 @@
             top: 0;
             bottom: 0;
             width: 4px;
-            background: rgba(0, 128, 128, 0.15);
-            /* 淡淡的藍綠色主軸 */
+            /* 原為 0.15 透明度極淡藍綠色，幾乎看不見，改為實色朱印紅，作為明顯的時間軸主軸 */
+            background: var(--np-seal-red);
             transform: translateX(-50%);
             z-index: 1;
             border-radius: 2px;
@@ -290,14 +498,57 @@
         }
 
         .timeline-block-node {
-            background: #f0fdfa;
-            /* 明亮微藍綠色底 */
-            border: 2px solid var(--primary);
+            /* 原為明亮微藍綠色底 #f0fdfa，殘留自舊版樣式，改為純白底 */
+            background: #ffffff;
+            /* 邊框已移除，狀態改由右上角印章（::after）標示 */
             padding: 10px 24px;
             border-radius: 8px;
             text-align: center;
             max-width: 320px;
-            box-shadow: 0 4px 12px rgba(0, 128, 128, 0.05);
+            box-shadow: 0 4px 12px rgba(165, 39, 30, 0.05);
+            /* 供狀態印章（::after）定位 */
+            position: relative;
+        }
+
+        /* 狀態印章：danger/warning/success 節點卡片樣式統一與基本款相同，
+           改用右上角小圓章（呼應 hero「203天」印章的視覺語彙）標示狀態，
+           而非改變卡片本身的邊框／底色 */
+        .timeline-block-node.node-danger::after,
+        .timeline-block-node.node-warning::after,
+        .timeline-block-node.node-success::after {
+            position: absolute;
+            top: -14px;
+            right: -14px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.68rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            background: #ffffff;
+            transform: rotate(-10deg);
+            box-shadow: 0 4px 10px rgba(27, 23, 18, 0.2);
+        }
+
+        .timeline-block-node.node-danger::after {
+            content: '逾期';
+            border: 2px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .timeline-block-node.node-warning::after {
+            content: '警示';
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .timeline-block-node.node-success::after {
+            content: '付委';
+            border: 2px solid #2ea85c;
+            color: #2ea85c;
         }
 
         .timeline-block-node .node-date {
@@ -310,40 +561,17 @@
         }
 
         .timeline-block-node p {
-            font-size: 0.95rem;
+            /* 統一為 1.1rem，與 .story-card p / .chapter-intro p 一致 */
+            font-size: 1.1rem;
             color: var(--text-main);
             margin: 0;
             font-weight: 500;
             line-height: 1.4;
         }
 
-        /* 節點特殊狀態變色 */
-        .timeline-block-node.node-danger {
-            border-color: var(--danger);
-            background: #fff5f5;
-        }
-
-        .timeline-block-node.node-danger .node-date {
-            color: var(--danger);
-        }
-
-        .timeline-block-node.node-warning {
-            border-color: var(--accent);
-            background: #fffbeb;
-        }
-
-        .timeline-block-node.node-warning .node-date {
-            color: var(--accent);
-        }
-
-        .timeline-block-node.node-success {
-            border-color: #2ea85c;
-            background: #f0fdf4;
-        }
-
-        .timeline-block-node.node-success .node-date {
-            color: #2ea85c;
-        }
+        /* node-danger / node-warning / node-success 卡片本身不再與基本款有任何樣式差異
+           （邊框、底色、日期文字色皆沿用 .timeline-block-node 預設），狀態改由上方新增的
+           右上角印章（::after）標示，見基本規則區塊 */
 
         /* 項目 B：故事卡片 Block (電腦版左右交錯) */
         .timeline-row.item-card {
@@ -374,8 +602,8 @@
         }
 
         .timeline-row.item-card:hover .story-card {
-            border-color: var(--primary);
-            box-shadow: 0 15px 35px rgba(0, 128, 128, 0.08);
+            box-shadow: 0 15px 35px rgba(27, 23, 18, 0.12);
+            /* 原為藍綠色調陰影，改為新聞剪貼風格暖褐色調 */
         }
 
         /* =======================================================
@@ -417,7 +645,7 @@
             .timeline-row.item-card .story-card {
                 width: 92%;
                 max-width: 480px;
-                padding: 24px 20px;
+                padding: 24px 28px;
                 /* 微調手機版卡片內距 */
             }
         }
@@ -465,7 +693,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 40px;
+            /* 頂部多留 --site-header-h，避免置中內容（圖表標題）被固定導覽列蓋住 */
+            padding: calc(40px + var(--site-header-h)) 40px 40px 40px;
             opacity: 0;
             visibility: hidden;
             transform: scale(0.98);
@@ -514,11 +743,13 @@
             transition: border 0.5s ease, background-color 0.5s ease, box-shadow 0.5s ease !important;
         }
 
-        /* 🔓 階梯 2：浮現框線、底色與陰影 */
+        /* 🔓 階梯 2：浮現框線、底色與陰影（原為新聞剪貼風格牛皮紙 + 淡網點紋理，圖表全面改為深色底後
+           邊框/網點改用淺色，陰影改用向下的黑色深度陰影） */
         .rebuilt-step-2 {
-            border: 1px solid rgba(0, 0, 0, 0.08) !important;
-            background: #f8fafc !important;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.04), 0 10px 30px rgba(0, 0, 0, 0.02) !important;
+            /* 統一為與其餘圖表面板相同的邊框／陰影數值 */
+            border: 1px solid rgba(237, 230, 211, 0.1) !important;
+            background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.3px) 0 0/6px 6px, var(--bg-chart) !important;
+            box-shadow: inset 0 1px 0 rgba(237, 230, 211, 0.05), 0 15px 40px rgba(0, 0, 0, 0.35) !important;
         }
 
         /* 2. 🎛️ 甘特圖大外殼：頂部 padding 縮小，高度稍微微調 */
@@ -540,10 +771,11 @@
         }
 
         .rebuilt-step-2 .gantt-chart-container-rebuilt {
-            border: 1px solid rgba(0, 0, 0, 0.05) !important;
-            background: rgba(248, 250, 252, 0.6) !important;
-            /* 💡 修正：更淡更優雅的底色，融入大白底 */
-            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.02) !important;
+            /* 圖表全面改為深色底：面板改用 --bg-chart 深色調 + 淺色網點，邊框/陰影同步反轉。
+               邊框/陰影數值與第三章 .gantt-container-rebuilt 統一，確保兩張圖表視覺一致 */
+            border: 1px solid rgba(237, 230, 211, 0.1) !important;
+            background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.3px) 0 0/6px 6px, var(--bg-chart) !important;
+            box-shadow: inset 0 1px 0 rgba(237, 230, 211, 0.05), 0 15px 40px rgba(0, 0, 0, 0.35) !important;
         }
 
         /* 💡 Y軸 (年份) */
@@ -575,7 +807,8 @@
 
         .gantt-year-rebuilt {
             font-size: 0.8rem;
-            color: var(--text-main);
+            /* 原為 var(--text-main) 深墨色，圖表面板改深色底後改用深底文字色 */
+            color: var(--np-text-ondark);
             font-weight: bold;
             margin-right: 8px;
         }
@@ -583,7 +816,8 @@
         .tick-line-y {
             width: 6px;
             height: 1px;
-            background: rgba(0, 0, 0, 0.2);
+            /* 原為黑色刻度線（校準給淺色面板），面板改深色底後改用淺色刻度線 */
+            background: rgba(237, 230, 211, 0.25);
         }
 
         /* 💡 X軸 (月份) */
@@ -614,20 +848,23 @@
         .tick-line {
             width: 1px;
             height: 6px;
-            background: rgba(0, 0, 0, 0.2);
+            /* 原為黑色刻度線，面板改深色底後改用淺色刻度線 */
+            background: rgba(237, 230, 211, 0.25);
             margin-bottom: 4px;
         }
 
         .tick-line-major {
             width: 2px;
             height: 10px;
-            background: rgba(0, 0, 0, 0.6);
+            /* 原為深黑色主刻度線，面板改深色底後改用較亮的淺色 */
+            background: rgba(237, 230, 211, 0.6);
             margin-bottom: 4px;
         }
 
         .gantt-grid-label-rebuilt {
             font-size: 0.8rem;
-            color: var(--text-muted);
+            /* 原為 var(--text-muted) 暖褐灰，圖表面板改深色底後改用深底次要文字色 */
+            color: var(--np-muted-ondark);
             font-weight: bold;
         }
 
@@ -665,14 +902,16 @@
             position: absolute;
             top: 0;
             bottom: 0;
-            border-left: 1px dashed rgba(0, 0, 0, 0.06);
+            /* 原為黑色格線，面板改深色底後改用淺色格線 */
+            border-left: 1px dashed rgba(237, 230, 211, 0.08);
         }
 
         .grid-line-major {
             position: absolute;
             top: 0;
             bottom: 0;
-            border-left: 2px dashed rgba(0, 0, 0, 0.12);
+            /* 原為黑色主格線，面板改深色底後改用較亮的淺色 */
+            border-left: 2px dashed rgba(237, 230, 211, 0.15);
         }
 
         /* 💡 標題與執政黨圖例 */
@@ -749,8 +988,9 @@
             top: 0 !important;
             bottom: 0 !important;
             height: 100% !important;
-            /* 💡 修正：將透明度稍微提高到 0.07，讓深灰色底在白底畫面上更清晰可見 */
-            background-color: rgba(0, 0, 0, 0.07) !important;
+            /* 原為黑色半透明疊加（在淺色面板上加深區塊），面板改深色底後改用淺色疊加來加亮區塊；
+               0.06 在深色面板上幾乎看不見，提高到 0.16 維持可辨識的區塊感 */
+            background-color: rgba(237, 230, 211, 0.16) !important;
 
             /* 層級設定：確保它在舞台內部的最底層（z-index: 1），這樣才不會遮擋到紅線（z-index: 10） */
             z-index: 1 !important;
@@ -810,12 +1050,17 @@
             /* 解鎖生長！ */
         }
 
+        /* 原為鮮豔 SaaS 儀表板色（#2ea85c 綠／#3a86ff 藍），與新聞剪貼風格衝突，
+           改用已建立的 --chart-cat-* 做舊色票（見第三章圖表色票），維持色相區隔 */
         .party-dpp {
-            background: #2ea85c;
+            /* 統一為漸層風格，與第四章 .bar-rect.rect-primary 一致的做法 */
+            background: linear-gradient(to right, #386448, var(--chart-cat-new));
+            box-shadow: 0 0 10px rgba(111, 174, 133, 0.2);
         }
 
         .party-kmt {
-            background: #3a86ff;
+            background: linear-gradient(to right, #3B5A80, var(--chart-cat-extend));
+            box-shadow: 0 0 10px rgba(124, 162, 214, 0.2);
         }
 
         .gantt-bar-115-rebuilt {
@@ -844,7 +1089,7 @@
         .rebuilt-step-5 #g-row-101-r .gantt-bar-rebuilt,
         .rebuilt-step-5 #g-row-105-r .gantt-bar-rebuilt,
         .rebuilt-step-5 #g-row-113-r .gantt-bar-rebuilt {
-            box-shadow: 0 0 15px rgba(0, 128, 128, 0.4) !important;
+            box-shadow: 0 0 15px rgba(165, 39, 30, 0.4) !important;
             outline: 1.5px solid var(--primary) !important;
         }
 
@@ -1048,11 +1293,14 @@
         .gantt-container-rebuilt {
             width: 80% !important;
             max-width: 1100px !important;
-            background: #ffffff !important;
-            padding: 40px !important;
+            /* 圖表面板全面改為深色底 + 淺色網點，呼應第二章甘特圖同步的深色化調整 */
+            background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.3px) 0 0/6px 6px, var(--bg-chart) !important;
+            /* 頂部多留 --site-header-h，避免圖表標題被固定導覽列蓋住 */
+            padding: calc(40px + var(--site-header-h)) 40px 40px 40px !important;
             border-radius: 12px !important;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04) !important;
-            border: 1px solid rgba(0, 0, 0, 0.06) !important;
+            /* 與第二章甘特圖面板統一：加上頂部淺色內描邊，與外部深色投影一致 */
+            box-shadow: inset 0 1px 0 rgba(237, 230, 211, 0.05), 0 15px 40px rgba(0, 0, 0, 0.35) !important;
+            border: 1px solid rgba(237, 230, 211, 0.1) !important;
             pointer-events: auto !important;
         }
 
@@ -1082,9 +1330,10 @@
             position: relative !important;
             width: 100% !important;
             height: 48px !important;
-            background-color: #f1f5f9;
+            /* 原為 #f1f5f9 SaaS 殘留淺藍灰色（未隨面板深色化調整），改為深色凹槽疊加 */
+            background-color: rgba(0, 0, 0, 0.2);
             border-radius: 8px !important;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04) !important;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
         }
 
         .ch3-single-bar-layer {
@@ -1109,24 +1358,34 @@
             display: none !important;
         }
 
+        /* 原為現代 SaaS 風配色 (#64748b/#ef4444/#0d9488/#2563eb/#ea580c)，
+           改為新聞剪貼風格的做舊文件色，維持 5 種色相區隔以確保圖表可辨識度；
+           色值集中定義於 :root 的 --chart-cat-* token */
+        /* 統一為漸層風格，與第四章 .bar-rect.rect-primary 一致的做法：
+           每色沿用自身 --chart-cat-* 色相，深淺兩端做出漸層與柔光 */
         .ch3-color-grey {
-            background-color: #64748b !important;
+            background: linear-gradient(to right, #545D54, var(--chart-cat-neutral)) !important;
+            box-shadow: 0 0 10px rgba(156, 166, 156, 0.2);
         }
 
         .ch3-color-red {
-            background-color: #ef4444 !important;
+            background: linear-gradient(to right, #8E2017, var(--chart-cat-impact)) !important;
+            box-shadow: 0 0 10px rgba(226, 86, 74, 0.2);
         }
 
         .ch3-color-teal {
-            background-color: #0d9488 !important;
+            background: linear-gradient(to right, #386448, var(--chart-cat-new)) !important;
+            box-shadow: 0 0 10px rgba(111, 174, 133, 0.2);
         }
 
         .ch3-color-blue {
-            background-color: #2563eb !important;
+            background: linear-gradient(to right, #3B5A80, var(--chart-cat-extend)) !important;
+            box-shadow: 0 0 10px rgba(124, 162, 214, 0.2);
         }
 
         .ch3-color-orange {
-            background-color: #ea580c !important;
+            background: linear-gradient(to right, #836122, var(--chart-cat-reserve)) !important;
+            box-shadow: 0 0 10px rgba(212, 168, 87, 0.2);
         }
 
         .ch3-single-bar-layer.dimmed-background {
@@ -1153,7 +1412,8 @@
 
         .ch3-legend-item {
             font-size: 0.88rem;
-            color: #475569;
+            /* 原為 #475569 SaaS 殘留灰藍色，圖表面板改深色底後改用深底次要文字色 */
+            color: var(--np-muted-ondark);
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -1181,12 +1441,15 @@
         }
 
         .ch3-conclusion-text {
-            font-size: 1.4rem;
-            line-height: 2.3;
-            color: var(--text-main);
+            /* 與 .chapter-intro p 統一樣式（字級、行高、對齊、寬度節奏一致） */
+            font-size: 1.35rem;
+            line-height: 2;
+            color: var(--np-text-ondark);
+            /* 原為 var(--text-main)，此段落所在容器直接使用 --bg-deep 深色底 */
             font-weight: 500;
             text-align: justify;
-            text-justify: inter-ideograph;
+            max-width: 750px;
+            margin: 0 auto;
         }
 
         #ch3-bar-new-teal,
@@ -1200,32 +1463,35 @@
         .ranking-container {
             width: 100%;
             max-width: 640px;
-            background: rgba(245, 247, 250, 0.85);
-            /* 原為深色，改為淺灰藍底色 */
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            /* 改為淺深色邊框 */
+            /* 原為淺灰藍半透明底 + system-ui 字體（SaaS 殘留樣式），
+               改為與甘特圖/長條圖統一的深色面板：同款網點紋理、邊框、陰影、字體 token */
+            background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.3px) 0 0/6px 6px, var(--bg-chart);
+            border: 1px solid rgba(237, 230, 211, 0.1);
             border-radius: 12px;
             padding: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            /* 改為淡淡的輕陰影 */
-            color: var(--text-main);
-            /* 改為深灰色字 */
-            font-family: system-ui, -apple-system, sans-serif;
+            box-shadow: inset 0 1px 0 rgba(237, 230, 211, 0.05), 0 15px 40px rgba(0, 0, 0, 0.35);
+            color: var(--np-text-ondark);
+            font-family: var(--font-body);
             pointer-events: auto !important;
+        }
+
+        .ranking-header {
+            /* 與 .dash-header 統一置中，同為圖表標題角色 */
+            text-align: center;
         }
 
         .ranking-header h3 {
             margin: 0 0 6px 0;
             font-size: 1.25rem;
-            color: #b8860b;
-            /* 金色標題在白底下較難閱讀，微調為深暗金/琥珀色 */
+            /* 原為 #b8860b（校準給白底），面板改深色底後改用高亮朱印紅，與圖表標題一致 */
+            color: var(--np-seal-red-bright);
         }
 
         .ranking-subtitle {
             margin: 0 0 20px 0;
             font-size: 0.85rem;
-            color: var(--text-muted);
-            /* 改為變數中灰色 */
+            /* 原為 var(--text-muted) 深底色變數，面板改深色底後改用深底次要文字色 */
+            color: var(--np-muted-ondark);
         }
 
         /* 📊 排行榜表格主體 */
@@ -1243,49 +1509,46 @@
         }
 
         .ranking-table::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.02);
-            /* 改為極淡深色軌道 */
+            /* 原為黑色極淡軌道（校準給白底），面板改深色底後改用淺色極淡軌道 */
+            background: rgba(237, 230, 211, 0.06);
             border-radius: 3px;
         }
 
         .ranking-table::-webkit-scrollbar-thumb {
-            background: rgba(0, 128, 128, 0.25);
+            background: rgba(165, 39, 30, 0.25);
             /* 改為主要藍綠色透明度 */
             border-radius: 3px;
             transition: background 0.3s;
         }
 
         .ranking-table::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 128, 128, 0.6);
+            background: rgba(165, 39, 30, 0.6);
             /* 懸停時加深藍綠色 */
         }
 
         .ranking-row {
             display: flex;
             align-items: center;
-            background: rgba(0, 0, 0, 0.02);
-            /* 原為微白透明，改為微黑透明 */
+            /* 原為微黑透明（校準給白底），面板改深色底後改用微白透明 */
+            background: rgba(255, 255, 255, 0.03);
             padding: 10px 14px;
             border-radius: 8px;
-            border-left: 3px solid #ccc;
-            /* 改為淺灰邊框 */
+            /* 左側邊框已移除，名次僅由獎牌圓圈與暈染底色區分 */
             transition: transform 0.2s;
         }
 
+        /* 前三名維持金/銀/銅獎牌色（通用排行榜慣例，非 SaaS 殘留色，予以保留），
+           僅將淡色暈染的透明度從 0.08 提高到 0.14，深色底上才看得清楚（同 execution-zone 修正邏輯） */
         .ranking-row.top-1 {
-            border-left-color: #ffd700;
-            background: rgba(255, 215, 0, 0.08);
-            /* 微微加深金色背景權重 */
+            background: rgba(255, 215, 0, 0.14);
         }
 
         .ranking-row.top-2 {
-            border-left-color: #c0c0c0;
-            background: rgba(192, 192, 192, 0.08);
+            background: rgba(192, 192, 192, 0.14);
         }
 
         .ranking-row.top-3 {
-            border-left-color: #cd7f32;
-            background: rgba(205, 127, 50, 0.08);
+            background: rgba(205, 127, 50, 0.14);
         }
 
         .rank-badge {
@@ -1297,8 +1560,9 @@
             border-radius: 50%;
             font-weight: bold;
             font-size: 0.85rem;
-            background: #e2e8f0;
-            /* 原為深黑，改為淺灰色圓圈底 */
+            /* 原為 #e2e8f0 淺灰圓圈（SaaS 殘留色），面板改深色底後改用淺色半透明圓圈 + 淺底文字色 */
+            background: rgba(237, 230, 211, 0.12);
+            color: var(--np-text-ondark);
             margin-right: 14px;
             flex-shrink: 0;
         }
@@ -1335,9 +1599,10 @@
         }
 
         .dept-tag {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            /* 改為中灰色變數 */
+            /* 原為 0.75rem，與 .cat-item 統一為 0.8rem（同為欄位標籤角色） */
+            font-size: 0.8rem;
+            /* 原為 var(--text-muted) 淺底色變數，面板改深色底後改用深底次要文字色 */
+            color: var(--np-muted-ondark);
             margin-top: 2px;
         }
 
@@ -1350,35 +1615,35 @@
         .amount-value {
             font-size: 1rem;
             font-weight: bold;
-            color: #00838f;
-            /* 原為純藍，改為高質感深藍綠色 (Deep Cyan) */
+            /* 原為 #00838f 深藍綠色（SaaS 殘留色），面板改深色底後改用高亮銅印黃，
+               與圖表數值標籤（--np-gold-bright）一致 */
+            color: var(--np-gold-bright);
             font-family: 'Courier New', Courier, monospace;
-        }
-
-        .top-1 .amount-value {
-            color: #b8860b;
-            /* 前三名超連結/數值顏色調整，確保亮色背景閱讀舒適 */
         }
 
         .amount-bar {
             height: 4px;
-            background: #00a896;
-            /* 數值長條圖改為點綴藍綠色 */
+            /* 統一為漸層風格，與第四章 .bar-rect.rect-primary 一致的做法 */
+            background: linear-gradient(to right, #836122, var(--np-gold-bright));
+            box-shadow: 0 0 10px rgba(212, 168, 87, 0.2);
             border-radius: 2px;
             margin-top: 4px;
             margin-left: auto;
         }
 
         .top-1 .amount-bar {
-            background: #ffd700;
+            background: linear-gradient(to right, #8C7600, #ffd700);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.25);
         }
 
         .top-2 .amount-bar {
-            background: #c0c0c0;
+            background: linear-gradient(to right, #6A6A6A, #c0c0c0);
+            box-shadow: 0 0 10px rgba(192, 192, 192, 0.2);
         }
 
         .top-3 .amount-bar {
-            background: #cd7f32;
+            background: linear-gradient(to right, #71461C, #cd7f32);
+            box-shadow: 0 0 10px rgba(205, 127, 50, 0.2);
         }
 
         /* =========================================================
@@ -1388,9 +1653,10 @@
             width: 100%;
             max-width: 650px;
             padding: 25px 15px;
-            font-family: system-ui, -apple-system, sans-serif;
-            color: var(--text-main);
-            /* 改為深灰色字 */
+            /* 原為 system-ui 系統字體堆疊，改為全站統一的 --font-body token */
+            font-family: var(--font-body);
+            color: var(--np-text-ondark);
+            /* 原為 var(--text-main)，此區塊直接位於 #chapter-4 的 --bg-deep 深色底上 */
             position: relative;
             border: none !important;
             box-shadow: none !important;
@@ -1404,15 +1670,17 @@
         .dash-header h3 {
             margin: 0;
             font-size: 1.25rem;
-            color: var(--primary);
-            /* 原為 var(--accent)，改為主要藍綠色增加安定感 */
+            /* 原為 var(--primary) 暗朱印紅，此區塊直接位於深色底上，改用高亮朱印紅維持對比 */
+            color: var(--np-seal-red-bright);
             font-weight: 900;
         }
 
         .dash-header p {
             margin: 5px 0 0;
-            font-size: 0.9rem;
-            color: var(--text-muted);
+            /* 原為 0.9rem，與 .ranking-subtitle 統一為 0.85rem（同為圖表副標角色） */
+            font-size: 0.85rem;
+            color: var(--np-muted-ondark);
+            /* 原為 var(--text-muted)，此區塊直接位於深色底上 */
         }
 
         /* 背景網格尺線層 */
@@ -1468,11 +1736,12 @@
             text-align: center;
             font-size: 0.75rem;
             font-weight: bold;
-            color: var(--text-muted);
+            color: var(--np-muted-ondark);
+            /* 原為 var(--text-muted)，此區塊直接位於深色底上 */
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            /* 改為淺深色分界線 */
+            border-bottom: 1px solid rgba(237, 230, 211, 0.15);
+            /* 原為深色分界線，深色底上改為淺色淡分界線 */
             position: relative;
             z-index: 5;
         }
@@ -1494,12 +1763,13 @@
             font-weight: bold;
             line-height: 1.3;
             text-align: center;
-            color: var(--text-main);
+            color: var(--np-text-ondark);
+            /* 原為 var(--text-main)，此區塊直接位於深色底上 */
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0, 0, 0, 0.02);
-            /* 原為微白透明，改為微黑透明 */
+            background: rgba(255, 255, 255, 0.04);
+            /* 原為微黑透明，深色底上改為微白透明以呈現微浮起效果 */
             border-radius: 4px;
             padding: 4px 2px;
             min-height: 38px;
@@ -1537,14 +1807,15 @@
         }
 
         .pyramid-align-row .rect-primary {
-            /* 右側長条圖改為由主藍綠色向亮藍綠色漸層 */
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            box-shadow: 0 0 10px rgba(0, 128, 128, 0.15);
-            /* 藍綠色調淡發光 */
+            /* 原為紅／銅黃漸層，與左側 rect-danger 太過相近，且與 dash-header 說明文字
+               「右側為被納入經費（藍條）」不符，改為深藍到亮藍漸層（沿用 --chart-cat-extend 的藍色系） */
+            background: linear-gradient(to right, #3B5A80, var(--chart-cat-extend));
+            box-shadow: 0 0 10px rgba(124, 162, 214, 0.2);
         }
 
         .pyramid-align-row .val-num {
-            font-size: 0.85rem;
+            /* 原為 0.85rem，與 .amount-value 統一為 1rem（同為金額數值角色） */
+            font-size: 1rem;
             font-weight: bold;
             font-family: 'Courier New', monospace;
             white-space: nowrap;
@@ -1552,14 +1823,14 @@
         }
 
         .pyramid-align-row .left-bar-box .val-num {
-            color: #c62828;
-            /* 排除組數值改用較深的警示紅，在白底上可讀性更高 */
+            color: var(--np-seal-red-bright);
+            /* 原為深警示紅（校準給白底），此區塊直接位於深色底上，改用高亮朱印紅維持對比 */
             padding-right: 6px;
         }
 
         .pyramid-align-row .right-bar-box .val-num {
-            color: #006064;
-            /* 納入組數值改用深海藍綠色 (Dark Teal)，加強文字對比度 */
+            color: var(--np-gold-bright);
+            /* 原為深海藍綠色（校準給白底），此區塊直接位於深色底上，改用高亮銅印黃維持對比，並呼應 rect-primary 長條圖的漸層終點色 */
             padding-left: 6px;
         }
 
@@ -1571,8 +1842,8 @@
             gap: 15px;
             margin-top: 20px;
             padding-top: 10px;
-            border-top: 1px dashed rgba(0, 0, 0, 0.15);
-            /* 改為淺深色虛線 */
+            border-top: 1px dashed rgba(237, 230, 211, 0.2);
+            /* 原為深色虛線，深色底上改為淺色淡虛線 */
             position: relative;
             z-index: 5;
         }
@@ -1586,7 +1857,8 @@
         .axis-wrapper span {
             position: absolute;
             font-size: 0.75rem;
-            color: var(--text-muted);
+            color: var(--np-muted-ondark);
+            /* 原為 var(--text-muted)，此區塊直接位於深色底上 */
             font-family: 'Courier New', monospace;
             white-space: nowrap;
             transform: translateX(-50%);
@@ -1595,8 +1867,8 @@
         .linear-ticks-right span:nth-child(1) {
             left: 0%;
             transform: none;
-            color: var(--primary);
-            /* 原為var(--accent)金黃，改為主藍綠色 */
+            /* 原為 var(--primary) 暗朱印紅，此區塊直接位於深色底上，改用高亮朱印紅維持對比 */
+            color: var(--np-seal-red-bright);
             font-weight: bold;
         }
 
@@ -1622,7 +1894,8 @@
             justify-content: space-between;
             width: 100%;
             font-size: 0.75rem;
-            color: var(--text-muted);
+            color: var(--np-muted-ondark);
+            /* 原為 var(--text-muted)，此區塊直接位於深色底上 */
             font-family: 'Courier New', monospace;
             position: relative;
             padding-right: 0px;
@@ -1648,8 +1921,8 @@
         .linear-ticks-left span:nth-child(5) {
             left: 100%;
             transform: translateX(-100%);
-            color: var(--primary);
-            /* 原為var(--accent)金黃，改為主藍綠色 */
+            /* 原為 var(--primary) 暗朱印紅，此區塊直接位於深色底上，改用高亮朱印紅維持對比 */
+            color: var(--np-seal-red-bright);
             font-weight: bold;
         }
 
@@ -1670,7 +1943,7 @@
             text-align: center;
             padding: 80px 20px 120px 20px;
             /* 背景改為由極淡的藍綠色朝純白底色向上漸層 */
-            background: linear-gradient(0deg, rgba(0, 128, 128, 0.05) 0%, var(--bg-deep) 100%);
+            background: linear-gradient(0deg, rgba(165, 39, 30, 0.05) 0%, var(--bg-deep) 100%);
         }
 
         /* 進入資料庫按鈕，套用亮眼藍綠配色 */
@@ -1688,7 +1961,7 @@
             font-size: 1.2rem;
             font-weight: 900;
             text-decoration: none;
-            box-shadow: 0 10px 30px rgba(0, 128, 128, 0.2);
+            box-shadow: 0 10px 30px rgba(165, 39, 30, 0.2);
             /* 調整為淺藍綠色外陰影 */
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -1697,7 +1970,7 @@
             background-color: #006064 !important;
             /* 懸停時轉為高質感深藍綠色 */
             transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 128, 128, 0.35);
+            box-shadow: 0 15px 35px rgba(165, 39, 30, 0.35);
         }
 
         /* 手機版適配 */
@@ -1722,8 +1995,12 @@
 
             .story-card {
                 max-width: 100%;
-                background: rgba(255, 255, 255, 0.95);
-                /* 原為黑底，改為明亮白底半透明 */
+                background-color: var(--np-paper-panel);
+                background-image: url('paper-texture.png');
+                background-repeat: repeat;
+                background-blend-mode: multiply;
+                backdrop-filter: none;
+                /* 原為半透明白底，改為新聞剪貼風格不透明牛皮紙色，維持手機版可讀性 */
             }
 
             #chapter-1 .local-sticky-stage {
@@ -1816,76 +2093,74 @@
         /* =======================================================
            側邊導覽列
            ======================================================= */
+        /* 改為常駐顯示的目錄式導覽（橫線 + 文字），取代原本的圓點 + hover 提示框樣式 */
         .side-nav {
             position: fixed;
-            left: 20px;
+            left: 40px;
             top: 50%;
             transform: translateY(-50%);
             z-index: 200;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 0;
+            align-items: flex-start;
+            gap: 12px;
         }
 
         .side-nav-line {
-            width: 1px;
-            flex: 1;
-            background: rgba(0, 128, 128, 0.2);
-            min-height: 20px;
+            display: none;
         }
 
         .side-nav-item {
             position: relative;
             display: flex;
             align-items: center;
-            justify-content: center;
-            width: 20px;
-            height: 20px;
-            padding: 6px 0;
+            gap: 10px;
+            width: auto;
+            height: auto;
+            padding: 0;
             cursor: pointer;
             text-decoration: none;
         }
 
         .side-nav-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: rgba(0, 128, 128, 0.3);
+            width: 14px;
+            height: 2px;
+            border-radius: 1px;
+            background: var(--np-muted-ondark);
             flex-shrink: 0;
             transition: all 0.3s ease;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.7));
         }
 
         .side-nav-label {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%) translateX(-4px);
-            font-size: 0.72rem;
+            position: static;
+            transform: none;
+            font-size: 0.75rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--np-muted-ondark);
             letter-spacing: 0.04em;
             white-space: nowrap;
-            background: rgba(255, 255, 255, 0.96);
-            padding: 4px 8px;
-            border-radius: 4px;
-            border: 1px solid rgba(0, 128, 128, 0.2);
-            box-shadow: 0 2px 8px rgba(0, 128, 128, 0.1);
+            background: none;
+            padding: 0;
+            border: none;
+            box-shadow: none;
             pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s ease, transform 0.2s ease;
+            opacity: 1;
+            transition: color 0.2s ease;
+            /* 導覽列會疊在 hero 拼貼圖等繁忙背景之上，加深色描邊確保任何底色下都可辨識 */
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85), 0 0 8px rgba(0, 0, 0, 0.6);
         }
 
         .side-nav-item:hover .side-nav-dot,
         .side-nav-item.active .side-nav-dot {
-            background: var(--primary);
-            transform: scale(1.5);
-            box-shadow: 0 0 8px rgba(0, 128, 128, 0.4);
+            width: 20px;
+            background: var(--np-seal-red-bright);
+            box-shadow: 0 0 8px rgba(226, 86, 74, 0.4);
         }
 
-        .side-nav-item:hover .side-nav-label {
-            opacity: 1;
-            transform: translateY(-50%) translateX(0);
+        .side-nav-item:hover .side-nav-label,
+        .side-nav-item.active .side-nav-label {
+            color: var(--np-text-ondark);
         }
 
         /* Header 樣式 */
@@ -1895,87 +2170,98 @@
             left: 0;
             right: 0;
             z-index: 300;
-            padding: 12px 24px;
+            /* 與 database.html 的 header 統一高度 */
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.92);
+            /* 原為白底半透明，全站改深色底後改用暖灰半透明，維持毛玻璃感但不再與深色頁面衝突 */
+            background: rgba(58, 54, 48, 0.88);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0, 128, 128, 0.1);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+            border-bottom: 1px solid rgba(237, 230, 211, 0.12);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
         }
 
-        .site-header-logo {
-            font-size: 0.85rem;
+        /* 與 database.html 的 header 樣式統一：h1 品牌標題 + nav-btn 導覽藥丸按鈕 */
+        .site-header h1 {
+            margin: 0;
+            font-size: 1.4rem;
+            line-height: 1.2;
             font-weight: 900;
-            color: var(--primary);
-            text-decoration: none;
-            letter-spacing: 0.02em;
+            color: var(--np-seal-red-bright);
         }
 
-        .site-header-actions {
+        .site-header nav {
             display: flex;
+            gap: 10px;
             align-items: center;
-            gap: 12px;
         }
 
-        .header-link {
-            font-size: 0.8rem;
+        .nav-logo {
+            height: 24px;
+            width: 24px;
+            padding: 4px;
+            box-sizing: content-box;
+            background: var(--np-paper-panel);
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid rgba(165, 39, 30, 0.35);
+            color: var(--np-muted-ondark);
+            padding: 6px 14px;
+            cursor: pointer;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            transition: 0.2s;
             font-weight: 700;
-            color: var(--text-muted);
             text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 128, 128, 0.2);
-            transition: all 0.2s ease;
             white-space: nowrap;
         }
 
-        .header-link:hover {
-            color: var(--primary);
-            border-color: var(--primary);
-            background: rgba(0, 128, 128, 0.05);
+        .nav-btn:hover {
+            color: var(--np-seal-red-bright);
+            border-color: var(--np-seal-red-bright);
+            background: rgba(226, 86, 74, 0.1);
         }
 
-        .header-db-btn {
-            font-size: 0.8rem;
-            font-weight: 900;
-            color: #fff;
-            text-decoration: none;
-            padding: 7px 16px;
-            border-radius: 20px;
-            background: var(--primary);
-            transition: all 0.2s ease;
-            white-space: nowrap;
+        .nav-active {
+            background: var(--np-seal-red) !important;
+            border-color: var(--np-seal-red) !important;
+            color: #fff !important;
         }
 
-        .header-db-btn:hover {
-            background: #006064;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 128, 128, 0.3);
+        .nav-active:hover {
+            background: var(--np-seal-red-dark) !important;
         }
 
         /* 讓 hero 有空間不被 header 遮住 */
         body {
-            padding-top: 52px;
+            padding-top: 57px;
         }
 
         /* RWD: 手機版側邊導覽隱藏 */
         @media (max-width: 968px) {
+            :root {
+                /* 手機版導覽列較矮（字級與 padding 都縮小），釘住舞台的頂部間距同步縮小 */
+                --site-header-h: 44px;
+            }
             .side-nav {
                 display: none;
             }
             .site-header {
                 padding: 10px 16px;
             }
-            .site-header-logo {
-                font-size: 0.78rem;
+            .site-header h1 {
+                font-size: 0.95rem;
             }
-            .header-link {
+            .site-header nav a:not(.nav-active) {
                 display: none;
             }
-            .header-db-btn {
+            .nav-btn {
                 font-size: 0.75rem;
                 padding: 6px 12px;
             }
@@ -1990,15 +2276,17 @@
            ======================================================= */
         @media (max-width: 968px) {
 
-            /* ---------- 第二章：甘特圖釘在上方 60dvh ---------- */
+            /* ---------- 第二章：甘特圖釘在螢幕正中央（滿版高度） ----------
+               卡片已疊在圖表之上（見下方 .gantt-card-rebuilt），故圖表帶狀區
+               不再需要侷限於上方 60dvh，改回滿版 100dvh、垂直置中，與桌機版
+               置中手法一致 */
             .gantt-fixed-stage-rebuilt {
-                height: 60vh;
-                height: 60dvh;
-                align-items: flex-start;
+                height: 100vh;
+                height: 100dvh;
+                align-items: center;
                 background: var(--bg-deep);
                 /* 白底在白頁上，引言階段等同隱形；圖表出現後才顯示分隔線 */
                 z-index: 5;
-                padding-top: 6px;
             }
 
             #chapter-2-rebuilt.rebuilt-step-2 .gantt-fixed-stage-rebuilt {
@@ -2007,72 +2295,106 @@
             }
 
             .gantt-backdrop-box-rebuilt {
-                height: 60vh;
-                height: 60dvh;
-                padding: 6px;
+                height: 100vh;
+                height: 100dvh;
+                /* 頂部多留 --site-header-h，避免圖表標題被固定導覽列蓋住 */
+                padding: calc(6px + var(--site-header-h)) 6px 6px 6px;
             }
 
             .history-images-container {
-                height: 60vh;
-                height: 60dvh;
+                /* 原為固定 60dvh，與父層（backdrop-images-rebuilt）加上導覽列避讓 padding 後的
+                   實際內容區高度不一致，導致溢出、照片置中基準點跟著偏移；改為填滿父層內容區
+                   （與 .gantt-chart-container-rebuilt 手機版寫法一致），確保照片維持垂直置中 */
+                height: 100%;
             }
 
-            /* 甘特圖外殼：填滿帶狀區、以重排塞進手機寬度（不縮放） */
+            /* 甘特圖外殼：以重排塞進手機寬度（不縮放）。
+               容器內所有子元素（軸線、長條、標題區）皆為 position:absolute 或 display:none，
+               不貢獻高度，故不可用 height:auto（會整個塌陷），改用 calc() 扣除外距量，
+               確保「填滿父層內容區減去外距」而非疊加溢出 */
             #chapter-2-rebuilt .gantt-chart-container-rebuilt {
-                height: 100% !important;
+                width: calc(100% - 16px) !important;
+                height: calc(100% - 20px) !important;
                 max-width: 100% !important;
-                padding: 8px 6px 6px 4px !important;
+                /* 內距加大，讓圖表本體顯得更小、更透氣 */
+                padding: 18px 14px 14px 10px !important;
+                /* 外距讓白底面板與深色帶狀區邊緣脫開，形成「卡片浮在深色底上」的框裱感，
+                   而不只是同一塊白底貼齊整個帶狀區 */
+                margin: 10px 8px !important;
             }
 
-            /* 統一縮小的繪圖框：左留 40px 給年份、右留 8px、下留 36px 給月份軸。
+            /* 統一縮小的繪圖框：留白加大，使繪圖本體（軸線/長條）縮小、四周留更多呼吸空間。
                紅線(35.3%)、深灰執行區(40%)為框內百分比，只要各元件框一致即精準對齊。 */
             #chapter-2-rebuilt .gantt-rows-container-rebuilt,
             #chapter-2-rebuilt .gantt-grid-rebuilt,
             #chapter-2-rebuilt .gantt-red-deadline-stage {
-                left: 40px !important;
-                right: 8px !important;
-                top: 8px !important;
-                bottom: 36px !important;
+                left: 46px !important;
+                right: 14px !important;
+                top: 16px !important;
+                bottom: 44px !important;
             }
 
             #chapter-2-rebuilt .gantt-y-axis-rebuilt {
                 left: 3px !important;
-                width: 34px !important;
-                top: 8px !important;
-                bottom: 36px !important;
+                width: 40px !important;
+                top: 16px !important;
+                bottom: 44px !important;
             }
 
             #chapter-2-rebuilt .gantt-x-axis-rebuilt {
-                left: 40px !important;
-                right: 8px !important;
-                bottom: 12px !important;
-                height: 20px !important;
+                left: 46px !important;
+                right: 14px !important;
+                bottom: 18px !important;
+                height: 18px !important;
             }
 
             #chapter-2-rebuilt .gantt-year-rebuilt {
-                font-size: 0.6rem;
+                font-size: 0.65rem;
                 margin-right: 4px;
                 white-space: nowrap;
                 display: block;
             }
 
             #chapter-2-rebuilt .gantt-grid-label-rebuilt {
-                font-size: 0.58rem;
+                font-size: 0.62rem;
             }
 
             #chapter-2-rebuilt .gantt-row-rebuilt {
-                height: 13px;
+                height: 10px;
             }
 
-            /* 文字卡：壓到下方閱讀區。保留 100dvh 高度維持捲動節奏與步驟對應，
-               靠 align-items:flex-end 讓卡片在視窗下緣，捲到帶狀區時被蓋住。 */
+            /* 標題與圖例文字同步縮小，與縮小後的繪圖框比例一致 */
+            #chapter-2-rebuilt .gantt-title-area-rebuilt h3 {
+                font-size: 0.95rem !important;
+            }
+
+            #chapter-2-rebuilt .legend-item {
+                font-size: 0.7rem;
+            }
+
+            #chapter-2-rebuilt .legend-color {
+                width: 11px;
+                height: 8px;
+            }
+
+            /* 文字卡：改為疊在圖表帶狀區「之上」，而非壓到下方閱讀區。
+               保留 100dvh 高度維持捲動節奏與步驟對應；align-items:center 讓卡片
+               置中於視窗（與釘住的圖表帶狀區同一垂直範圍），z-index 拉高到超過
+               .gantt-fixed-stage-rebuilt（手機版 z-index:5），使卡片疊層在圖表之上。 */
             #chapter-2-rebuilt .gantt-card-rebuilt {
-                align-items: flex-end;
+                align-items: center;
                 justify-content: center;
-                padding: 0 16px 5vh 16px;
+                padding: 0 16px;
                 opacity: 0;
                 visibility: hidden;
                 transition: opacity 0.3s, visibility 0.3s;
+            }
+
+            /* .gantt-scroll-content-rebuilt 本身有 z-index:2 的堆疊上下文（見基底規則），
+               單靠子層卡片的 z-index 無法突破父層上限，故在此將父層堆疊層級拉高到
+               超過 .gantt-fixed-stage-rebuilt（手機版 z-index:5），卡片才能真正疊在圖表之上 */
+            #chapter-2-rebuilt .gantt-scroll-content-rebuilt {
+                z-index: 7 !important;
             }
 
             /* 第二章第二步驟起顯示卡片 */
@@ -2101,48 +2423,87 @@
             #chapter-2-rebuilt.rebuilt-step-9 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
             #chapter-2-rebuilt.rebuilt-step-9 [data-rebuilt-step="9"] { opacity: 1; visibility: visible; }
 
-            /* 大結局照片（budget003.jpg）：手機版放大至接近滿版寬度 */
-            #chapter-2-rebuilt .history-img-frame:nth-child(3) {
+            /* 三張歷史照片（budget96001/96002/003.jpg）手機版統一放大至接近滿版寬度，
+               原僅第三張（大結局照片）放大，現三張尺寸一致 */
+            #chapter-2-rebuilt .history-img-frame {
                 width: 92vw !important;
                 max-width: 92vw !important;
             }
 
-            /* ---------- 第三章：堆疊長條圖釘在上方 55dvh ---------- */
+            /* ---------- 第三章：堆疊長條圖釘在螢幕正中央（滿版高度） ----------
+               卡片已疊在圖表之上（見 .story-timeline-rebuilt），故改回滿版
+               100dvh、垂直置中，與第二章、桌機版置中手法一致 */
             .gantt-sticky-box-rebuilt {
-                height: 55vh !important;
-                height: 55dvh !important;
-                align-items: flex-start !important;
+                height: 100vh !important;
+                height: 100dvh !important;
+                align-items: center !important;
                 background: var(--bg-deep) !important;
                 border-bottom: 1px solid rgba(0, 0, 0, 0.10);
                 box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
                 z-index: 5 !important;
-                padding-top: 10px;
             }
 
             .gantt-container-rebuilt {
-                width: 100% !important;
+                /* 扣除外距寬度，避免與 margin 疊加溢出（同第二章甘特圖容器寫法） */
+                width: calc(100% - 16px) !important;
                 max-width: 100% !important;
-                padding: 16px 14px !important;
+                /* 頂部多留 --site-header-h，避免圖表標題被固定導覽列蓋住 */
+                padding: calc(16px + var(--site-header-h)) 14px 16px 14px !important;
+                /* 外距讓白底面板與深色帶狀區邊緣脫開，與第二章甘特圖一致的框裱感 */
+                margin: 10px 8px !important;
             }
 
-            /* 取消桌機版把卡片往右上拉的偏移，改置中並落在下方閱讀區 */
+            /* 取消桌機版把卡片往右上拉的偏移，改置中；z-index 拉高到超過
+               .gantt-sticky-box-rebuilt（手機版 z-index:5），使卡片疊在圖表之上，
+               與第二章卡片疊圖手法一致 */
             .story-timeline-rebuilt {
                 margin-top: 0 !important;
                 align-items: center !important;
+                z-index: 7 !important;
             }
 
             .story-timeline-rebuilt .gantt-card-rebuilt {
                 justify-content: center !important;
-                align-items: flex-end !important;
+                align-items: center !important;
                 padding-right: 0 !important;
-                padding: 0 16px 5vh 16px !important;
+                padding: 0 16px !important;
             }
 
-            /* ---------- 共用：手機版文字卡改為完全不透明 ---------- */
+            /* ---------- 共用：手機版文字卡改為完全不透明（新聞剪貼風格牛皮紙色） ---------- */
             .story-card {
-                background: #ffffff;
+                background-color: var(--np-paper-panel);
+                background-image: url('paper-texture.png');
+                background-repeat: repeat;
+                background-blend-mode: multiply;
                 backdrop-filter: none;
                 max-width: 100%;
+            }
+        }
+
+        /* 手機版：第三章結語、第四章內文及結尾 CTA 段落字級縮小、側距加大，
+           與 .chapter-intro 手機版（1.1rem / 40px 側距）保持一致的閱讀節奏 */
+        @media (max-width: 640px) {
+            .ch3-conclusion-text {
+                font-size: 1.1rem !important;
+                line-height: 1.8 !important;
+            }
+
+            .ch3-conclusion-footer-rebuilt {
+                padding-left: 40px !important;
+                padding-right: 40px !important;
+            }
+
+            #chapter-4 > div > div > p,
+            #chapter-3-rebuilt > p {
+                font-size: 1.1rem !important;
+                line-height: 1.8 !important;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .footer-cta p {
+                font-size: 1.1rem !important;
+                line-height: 1.8 !important;
             }
         }
 
@@ -2151,21 +2512,23 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: var(--text-muted);
+            color: var(--np-muted-ondark);
+            /* 原為 var(--text-muted)，此按鈕直接位於 #chapter-4 深色底上 */
             text-decoration: none;
             font-size: 0.95rem;
             font-weight: 600;
             padding: 10px 24px;
             border-radius: 50px;
-            border: 1px solid rgba(0, 128, 128, 0.25);
+            border: 1px solid rgba(165, 39, 30, 0.25);
             margin-top: 20px;
             transition: all 0.3s ease;
         }
 
         .cna-link-btn:hover {
-            color: var(--primary);
-            border-color: var(--primary);
-            background: rgba(0, 128, 128, 0.05);
+            /* 原為 var(--primary) 暗朱印紅，此按鈕直接位於 #chapter-4 深色底上，改用高亮朱印紅維持對比 */
+            color: var(--np-seal-red-bright);
+            border-color: var(--np-seal-red-bright);
+            background: rgba(226, 86, 74, 0.08);
         }
 
         /* --- 尊重使用者的「減少動態」系統偏好 --- */
@@ -2181,6 +2544,45 @@
                 scroll-behavior: auto !important;
             }
         }
+
+        /* --- 全站字級調整（無障礙）：以 html 根字級縮放，全頁 rem 單位同步等比放大 --- */
+        html {
+            transition: font-size 0.2s ease;
+        }
+
+        html.font-scale-1 {
+            font-size: 112.5%;
+        }
+
+        html.font-scale-2 {
+            font-size: 125%;
+        }
+
+        .font-size-toggle-btn {
+            position: fixed;
+            bottom: 32px;
+            right: 32px;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 50%;
+            background: #DFD394;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .font-size-toggle-btn:hover {
+            background: #E1D287;
+        }
+
+        .font-size-toggle-btn svg {
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -2188,11 +2590,13 @@
 
     <!-- 固定 Header -->
     <header class="site-header">
-        <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="site-header-logo">中央社 115年度總預算</a>
-        <div class="site-header-actions">
-            <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="header-link">總預算案報導專頁 ↗</a>
-            <a href="database.html" class="header-db-btn">計畫資料庫</a>
-        </div>
+        <h1>中央政府總預算觀測站</h1>
+        <nav>
+            <img src="cna-favicon-light.svg" alt="中央社" class="nav-logo">
+            <a href="index.html" class="nav-btn nav-active">年度深度報導</a>
+            <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="nav-btn">總預算案專頁 ↗</a>
+            <a href="database.html" class="nav-btn">完整資料庫</a>
+        </nav>
     </header>
 
     <!-- 側邊導覽列 -->
@@ -2219,25 +2623,66 @@
     </nav>
 
     <section class="hero-section">
-        <h1 class="hero-title">
-            115年總預算審議回顧<br>
+        <h1 class="hero-title hero-sr-only">
+            115年總預算審議回顧
             <span>卡關逾200天才付委、718億先行動支有何隱憂</span>
         </h1>
-        <p
-            style="font-size: 1.15rem; max-width: 750px; margin: 0 auto 20px auto; color: var(--text-muted); text-align: justify; line-height: 1.8;">
-            115年度總預算審查在115年4月21日付委。距離114年9月30日行政院函請立法院審議已過203天。這是近年總預算預算審查最晚進行的一次，也對政府施政產生影響，2992億新興計畫無法動支，TPASS、生育給付等補助無法順利發放。
-        </p>
+        <div class="hero-dek-panel">
+            <p
+                style="font-size: 1.1rem; margin: 0; color: var(--np-ink); text-align: justify; line-height: 1.8;">
+                115年度總預算審查在115年4月21日付委。距離114年9月30日行政院函請立法院審議已過203天。這是近年總預算預算審查最晚進行的一次，也對政府施政產生影響，2992億新興計畫無法動支，TPASS、生育給付等補助無法順利發放。
+            </p>
+        </div>
+        <div class="hero-stamp-wrap">
+            <div class="hero-stamp">
+                <span class="num" id="hero-stamp-num" data-start="2025-09-30" data-end="2026-04-21">203</span>
+                <span class="label">天　逾　期</span>
+            </div>
+        </div>
         <div class="scroll-indicator">向下捲動探索</div>
     </section>
+
+    <script>
+        // 印章逾期天數：由函請審議日、付委日兩個真實日期即時算出（非寫死數字），
+        // 並在首屏載入時做數字滾動動畫；尊重「減少動態」偏好時直接顯示結果。
+        (function () {
+            const el = document.getElementById('hero-stamp-num');
+            if (!el) return;
+
+            const start = new Date(el.dataset.start + 'T00:00:00');
+            const end = new Date(el.dataset.end + 'T00:00:00');
+            const days = Math.round((end - start) / 86400000);
+
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) {
+                el.textContent = days;
+                return;
+            }
+
+            const duration = 1400;
+            let startTime = null;
+
+            function tick(now) {
+                if (startTime === null) startTime = now;
+                const progress = Math.min((now - startTime) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.round(eased * days);
+                if (progress < 1) {
+                    requestAnimationFrame(tick);
+                }
+            }
+            requestAnimationFrame(tick);
+        })();
+    </script>
 
     <section class="chapter-section" id="chapter-1">
         <div class="chapter-intro"
             style="max-width: 800px; margin: 0 auto; padding: 100px 20px 60px 20px; text-align: center; position: relative; z-index: 3;">
-            <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 30px;">
+            <h2 style="font-size: 2.5rem; color: var(--np-seal-red-bright); margin-bottom: 30px;">
                 為什麼今年這麼晚才審
             </h2>
             <p
-                style="font-size: 1.35rem; line-height: 2; font-weight: 500; color: var(--text-main); max-width: 750px; margin: 0 auto;">
+                style="font-size: 1.35rem; line-height: 2; font-weight: 500; color: var(--np-text-ondark); max-width: 750px; margin: 0 auto;">
                 <span style="display: block; text-align: justify; width: 100%;">
                     中央政府總預算是政府施政用錢的依據，在「預算法」中有規定審議時程，原則上須在預算執行年度開始前一個月完成審議。如果來不及在時限內完成，依預算法第54條，政府可依上年度標準繼續執行既有業務，不過新增計畫與部分預備金，原則上須待預算通過才能動用。
                 </span>
@@ -2351,7 +2796,7 @@
                 <div class="gantt-chart-container-rebuilt">
 
                     <div class="gantt-title-area-rebuilt">
-                        <h3 style="color: var(--primary); font-weight:900; margin: 0; font-size: 1.25rem;">中央政府總預算審議時程
+                        <h3 style="color: var(--np-seal-red-bright); font-weight:900; margin: 0; font-size: 1.25rem;">中央政府總預算審議時程
                         </h3>
                     </div>
 
@@ -2588,7 +3033,7 @@
         <div class="gantt-scroll-content-rebuilt">
             <div class="chapter-intro"
                 style="max-width: 800px; margin: 0 auto; padding: 100px 20px 40px 20px; text-align: center; position: relative; z-index: 3;">
-                <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 30px;">
+                <h2 style="font-size: 2.5rem; color: var(--np-seal-red-bright); margin-bottom: 30px;">
                     不是只有今年晚，但今年最極端
                 </h2>
             </div>
@@ -2643,11 +3088,11 @@
     <section id="chapter-3-rebuilt" class="scroll-story-rebuilt">
         <div class="chapter-intro"
             style="max-width: 800px; margin: 0 auto; padding: 100px 20px 40px 20px; text-align: center; position: relative; z-index: 3;">
-            <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 30px;">
+            <h2 style="font-size: 2.5rem; color: var(--np-seal-red-bright); margin-bottom: 30px;">
                 晚審影響新興預算無法動支
             </h2>
             <p
-                style="font-size: 1.35rem; line-height: 2; font-weight: 500; color: var(--text-main); max-width: 750px; margin: 0 auto;">
+                style="font-size: 1.35rem; line-height: 2; font-weight: 500; color: var(--np-text-ondark); max-width: 750px; margin: 0 auto;">
                 <span style="display: block; text-align: justify; width: 100%;">
                     前述提到，受預算法規定，在總預算未審議前，新興計畫及設備原則上不能動用。
                 </span>
@@ -2657,14 +3102,14 @@
         <div class="gantt-sticky-box-rebuilt" id="ch3-sticky-box-wrapper">
             <div class="gantt-container-rebuilt">
                 <h3
-                    style="font-size: 1.15rem; color: #1e293b; margin-bottom: 25px; font-weight: bold; border-left: 5px solid #2563eb; padding-left: 12px;">
+                    style="font-size: 1.15rem; color: var(--np-seal-red-bright); margin-bottom: 25px; font-weight: bold; border-left: 5px solid var(--chart-cat-extend); padding-left: 12px;">
                     115年度總預算歲出與未審議影響規模
                 </h3>
 
                 <div class="ch3-bar-stage">
                     <div class="ch3-bar-row">
                         <div class="ch3-bar-label" id="ch3-label-final"
-                            style="font-size: 0.95rem; font-weight: bold; color: #475569; margin-bottom: 8px;">115年總歲出
+                            style="font-size: 0.95rem; font-weight: bold; color: var(--np-text-ondark); margin-bottom: 8px;">115年總歲出
                         </div>
                         <div class="ch3-multi-track-wrapper">
                             <div class="ch3-single-bar-layer ch3-color-grey" id="ch3-bar-total-grey"><span></span></div>
@@ -2679,10 +3124,10 @@
                 </div>
 
                 <div class="ch3-legend-container" id="ch3-main-legend">
-                    <div class="ch3-legend-item"><span class="dot" style="background-color: #0d9488;"></span> 新興計畫</div>
-                    <div class="ch3-legend-item"><span class="dot" style="background-color: #2563eb;"></span> 延續計畫增額
+                    <div class="ch3-legend-item"><span class="dot" style="background-color: var(--chart-cat-new);"></span> 新興計畫</div>
+                    <div class="ch3-legend-item"><span class="dot" style="background-color: var(--chart-cat-extend);"></span> 延續計畫增額
                     </div>
-                    <div class="ch3-legend-item"><span class="dot" style="background-color: #ea580c;"></span> 預備金/災害準備金
+                    <div class="ch3-legend-item"><span class="dot" style="background-color: var(--chart-cat-reserve);"></span> 預備金/災害準備金
                     </div>
                 </div>
             </div>
@@ -2726,7 +3171,7 @@
     <section class="chapter-section" id="chapter-4" style="background-color: var(--bg-deep); padding-bottom: 100px;">
         <div class="chapter-intro"
             style="max-width: 800px; margin: 0 auto; padding: 100px 20px 40px 20px; text-align: center;">
-            <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 30px;">
+            <h2 style="font-size: 2.5rem; color: var(--np-seal-red-bright); margin-bottom: 30px;">
                 在野提718億新興計畫方案
             </h2>
         </div>
@@ -2736,7 +3181,7 @@
 
             <div style="display: flex; flex-direction: column; gap: 30px;">
                 <p
-                    style="font-size: 1.2rem; color: var(--text-main); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
+                    style="font-size: 1.35rem; color: var(--np-text-ondark); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
                     國民黨立法院黨團1月16日提出718億新興計畫先行動支案並逕付二讀，共涵蓋38項計畫。國民黨立委羅智強指出，動支案主要是針對地方民生急迫的一些新增計畫，或者是新興計畫裡面的一些支出專案。該案於3月6日通過。
                 </p>
                 <div class="dynamic-chart-box"
@@ -2844,7 +3289,7 @@
 
             <div style="display: flex; flex-direction: column; gap: 30px;">
                 <p
-                    style="font-size: 1.2rem; color: var(--text-main); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
+                    style="font-size: 1.35rem; color: var(--np-text-ondark); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
                     根據提案內容，718億先行動支方案多聚焦在對民眾的補助項目，或民生所需之項目。
                 </p>
                 <div class="dynamic-chart-box"
@@ -2972,7 +3417,7 @@
 
             <div style="display: flex; flex-direction: column; gap: 30px;">
                 <p
-                    style="font-size: 1.2rem; color: var(--text-main); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
+                    style="font-size: 1.35rem; color: var(--np-text-ondark); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
                     而被排除在先行動支方案的項目，則多是AI建設、無人機等工作計畫。
                 </p>
                 <div class="dynamic-chart-box"
@@ -3099,17 +3544,17 @@
             </div>
             <div class="chapter-intro"
                 style="max-width: 800px; margin: 0 auto; padding: 100px 20px 40px 20px; text-align: center;">
-                <h2 style="font-size: 2.5rem; color: var(--primary); margin-bottom: 30px;">
+                <h2 style="font-size: 2.5rem; color: var(--np-seal-red-bright); margin-bottom: 30px;">
                     718億預算能否先動支仍有疑慮
                 </h2>
             </div>
             <p
-                style="font-size: 1.2rem; color: var(--text-main); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
+                style="font-size: 1.35rem; color: var(--np-text-ondark); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
                 除了排擠掉部分施政項目外，立院通過先行動支方案後預算能不能使用也是爭執焦點。審計部審計長陳瑞敏說明，預算法裡規定，如果有還沒完成審議、但經立法院先行同意動支的，是可以執行的。依據預算法第54條規定，總預算如未按時完成審議，新興資本支出及新增計畫可以依預算法第88條，或經立法院同意後辦理。
             </p>
 
             <p
-                style="font-size: 1.2rem; color: var(--text-main); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
+                style="font-size: 1.35rem; color: var(--np-text-ondark); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
                 但是行政院回應，立法院此公決案史無前例，且「暫時同意動支」不符合憲法與預算法的規定。立法院未來審議整本中央政府總預算案時，依然可以刪除或凍結任何一筆新興計畫預算，造成預算執行的不確定性，立院應儘速審議整體總預算案。
             </p>
 
@@ -3118,16 +3563,6 @@
 
     <section class="footer-cta">
         <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-            <p
-                style="font-size: 1.35rem; color: var(--text-main); margin: 0 auto 20px auto; max-width: 750px; line-height: 2; font-weight: 500; text-align: justify;">
-                隨著總預算付委，行政院也函請機關新興計畫預算執行作業，TPASS 2.0、生育給付等補助項目目前都已開始進行。
-            </p>
-
-            <p
-                style="font-size: 1.35rem; color: var(--text-main); margin: 0 auto 40px auto; max-width: 750px; line-height: 2; font-weight: 500; text-align: justify;">
-                115年度總預算正在審議，在朝野協商及之後院會表決程序中又會出現哪些新議題，也請持續鎖定中央社網站相關報導。
-            </p>
-
             <a href="database.html" class="cta-btn">
                 進入完整計畫預算資料庫 <span style="font-size: 1.5rem;">→</span>
             </a>
@@ -3136,8 +3571,24 @@
             <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="cna-link-btn">
                 前往中央社 115年度總預算案專頁 ↗
             </a>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 30px; margin-top: 40px;">
+                <p
+                    style="font-size: 1rem; color: var(--np-text-ondark); line-height: 1.8; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
+                    隨著總預算付委，行政院也函請機關新興計畫預算執行作業，TPASS 2.0、生育給付等補助項目目前都已開始進行。
+                </p>
+
+                <p
+                    style="font-size: 1rem; color: var(--np-text-ondark); line-height: 1.8; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
+                    115年度總預算正在審議，在朝野協商及之後院會表決程序中又會出現哪些新議題，也請持續鎖定中央社網站相關報導。
+                </p>
+            </div>
         </div>
     </section>
+
+    <footer style="background: var(--bg-deep); color: var(--np-muted-ondark); text-align: center; padding: 24px 20px; font-size: 0.85rem;">
+        copyright © 2026 中央通訊社版權所有
+    </footer>
 
     <script>
         // 修正：讓 JS 同時抓取第一章的舊卡片與第二章的新視差卡片
@@ -3251,55 +3702,64 @@
                 ganttBox.classList.remove('box-visible-rebuilt-now');
                 imagesBox.classList.remove('box-visible-rebuilt-now');
 
-                // 保持 Bar 寬度控制（略）
+                // 方塊長出時機：改以「卡片是否已實際進入視窗」（.is-active，來自下方 IntersectionObserver）
+                // 為準，而非只看區塊捲動百分比——避免百分比門檻到了，但讀者實際還沒捲到卡片 3，
+                // 方塊就提早長出的時間差問題。scrollPercent >= 40 僅作保底（避免 IntersectionObserver
+                // 尚未觸發時方塊卡在 0 寬）。
                 const allBars = document.querySelectorAll('#chapter-2-rebuilt .gantt-bar-rebuilt');
-                allBars.forEach(bar => { bar.style.setProperty('width', '0', 'important'); });
+                const activeCard = document.querySelector('#chapter-2-rebuilt .gantt-card-rebuilt.is-active');
+                const activeStepNum = activeCard ? parseInt(activeCard.getAttribute('data-rebuilt-step'), 10) : 0;
+                const barsShouldGrow = activeStepNum >= 3 || scrollPercent >= 40;
+                allBars.forEach(bar => { bar.style.setProperty('width', barsShouldGrow ? 'var(--w)' : '0', 'important'); });
 
                 // 5. 🎬 精密九段式跑道分流 (0% - 100%)
-                if (scrollPercent < 12) {
+                // 卡片 2 原本 12% 就出現，讀者反應「太早出現」（引言階段還沒讀完），
+                // 將引言窗口從 12% 延後到 20%，卡片 2-6 依序順延，卡片 9 的窗口同步微增
+                if (scrollPercent < 20) {
                     // 卡片 1 (引言)
                 }
-                else if (scrollPercent >= 12 && scrollPercent < 24) {
+                else if (scrollPercent >= 20 && scrollPercent < 30) {
                     // 卡片 2 (網格)
                     ganttBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-2');
                 }
-                else if (scrollPercent >= 24 && scrollPercent < 36) {
-                    // 卡片 3 (Bar 長出)
+                else if (scrollPercent >= 30 && scrollPercent < 40) {
+                    // 卡片 3 (Bar 長出——文字明確提到「方塊的顏色代表執政黨」，此時應已看到方塊；
+                    // 長出時機交由上方 barsShouldGrow 依卡片實際可視狀態控制)
                     ganttBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-2', 'rebuilt-step-3');
-                    allBars.forEach(bar => { bar.style.setProperty('width', 'var(--w)', 'important'); });
                 }
-                else if (scrollPercent >= 36 && scrollPercent < 48) {
+                else if (scrollPercent >= 40 && scrollPercent < 50) {
                     // 卡片 4 (紅線與深灰區)
                     ganttBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-2', 'rebuilt-step-3', 'rebuilt-step-4');
-                    allBars.forEach(bar => { bar.style.setProperty('width', 'var(--w)', 'important'); });
                 }
-                else if (scrollPercent >= 48 && scrollPercent < 60) {
+                else if (scrollPercent >= 50 && scrollPercent < 60) {
                     // 卡片 5 (蔡馬高亮)
                     ganttBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-2', 'rebuilt-step-3', 'rebuilt-step-4', 'rebuilt-step-5');
-                    allBars.forEach(bar => { bar.style.setProperty('width', 'var(--w)', 'important'); });
                 }
-                else if (scrollPercent >= 60 && scrollPercent < 72) {
+                else if (scrollPercent >= 60 && scrollPercent < 70) {
                     // 卡片 6 (96年高亮)
                     ganttBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-2', 'rebuilt-step-3', 'rebuilt-step-4', 'rebuilt-step-6');
-                    allBars.forEach(bar => { bar.style.setProperty('width', 'var(--w)', 'important'); });
                 }
-                else if (scrollPercent >= 72 && scrollPercent < 82) {
+                else if (scrollPercent >= 70 && scrollPercent < 77) {
                     // 📸 進入卡片 7 跑道：甘特圖退場，第一張歷史檔案照片在中央浮現
+                    // （卡片 7 無文字內容，僅為照片，故縮短區間，把時間讓給卡片 9 的長文字）
                     imagesBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-7');
                 }
-                else if (scrollPercent >= 82 && scrollPercent < 92) {
+                else if (scrollPercent >= 77 && scrollPercent < 84) {
                     // 卡片 8 階段：中央展示兩張相框輪播
+                    // （同上，卡片 8 也無文字內容，縮短區間）
                     imagesBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-8');
                 }
-                else if (scrollPercent >= 92 && scrollPercent <= 100) {
+                else if (scrollPercent >= 84 && scrollPercent <= 100) {
                     // 卡片 9 (結局大結局文字)
+                    // 原本只有 92-100（8 個百分點，九個步驟中最短），但這段文字是全章最長的一段，
+                    // 導致「消失太快」。改為 84-100（16 個百分點），從卡片 7、8（皆無文字）各借 3 點。
                     ganttBox.classList.remove('box-visible-rebuilt-now');
                     imagesBox.classList.add('box-visible-rebuilt-now'); // 點亮歷史照片大盒子 (不讓它閃退消失！)
                     chapter2.classList.add('rebuilt-step-9'); // 點亮靠左的結局大照片
@@ -3311,7 +3771,11 @@
                     }
                 }
                 else {
-                    // 完全滑開這一章，關燈，交還父容器控制 (略)
+                    // 完全滑開這一章，關燈，交還父容器控制。
+                    // 💡 修正：scrollPercent > 100 時（卡片 9 讀完，但 rect.bottom 要再多滾一整個
+                    // 視窗高度才會 < 0）必須連舞台本身（stage-active-rebuilt-now）一起關閉，
+                    // 否則手機版舞台自帶的不透明深色底會在這段空窗期一路蓋住剛捲入畫面的第三章標題。
+                    stage.classList.remove('stage-active-rebuilt-now');
                     ganttBox.classList.remove('box-visible-rebuilt-now');
                     imagesBox.classList.remove('box-visible-rebuilt-now');
                     chapter2.classList.remove('rebuilt-step-2', 'rebuilt-step-3', 'rebuilt-step-4', 'rebuilt-step-5', 'rebuilt-step-6', 'rebuilt-step-7', 'rebuilt-step-8', 'rebuilt-step-9');
@@ -3470,6 +3934,33 @@
                         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                 });
+            });
+        })();
+    </script>
+
+    <button class="font-size-toggle-btn" id="font-size-toggle-btn" type="button" aria-label="調整文字大小">
+        <svg width="29" height="16" viewBox="0 0 29 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M10.7051 0V3.22559H10.3887C10.2012 2.48145 9.99316 1.94824 9.76465 1.62598C9.53613 1.29785 9.22266 1.03711 8.82422 0.84375C8.60156 0.738281 8.21191 0.685547 7.65527 0.685547H6.76758V9.87891C6.76758 10.4883 6.7998 10.8691 6.86426 11.0215C6.93457 11.1738 7.06641 11.3086 7.25977 11.4258C7.45898 11.5371 7.72852 11.5928 8.06836 11.5928H8.46387V11.918H2.22363V11.5928H2.61914C2.96484 11.5928 3.24316 11.5312 3.4541 11.4082C3.60645 11.3262 3.72656 11.1855 3.81445 10.9863C3.87891 10.8457 3.91113 10.4766 3.91113 9.87891V0.685547H3.0498C2.24707 0.685547 1.66406 0.855469 1.30078 1.19531C0.791016 1.66992 0.46875 2.34668 0.333984 3.22559H0V0H10.7051ZM14.6855 3.4541C15.4004 3.4541 16.0654 3.63867 16.6807 4.00781C17.2959 4.37695 17.7617 4.90137 18.0781 5.58105C18.4004 6.26074 18.5615 7.00488 18.5615 7.81348C18.5615 8.97949 18.2656 9.95508 17.6738 10.7402C16.959 11.6895 15.9717 12.1641 14.7119 12.1641C13.4756 12.1641 12.5234 11.7305 11.8555 10.8633C11.1875 9.99609 10.8535 8.99121 10.8535 7.84863C10.8535 6.6709 11.1934 5.64551 11.873 4.77246C12.5586 3.89355 13.4961 3.4541 14.6855 3.4541ZM14.7207 4.07812C14.4219 4.07812 14.1641 4.19238 13.9473 4.4209C13.7363 4.64355 13.5957 5.08887 13.5254 5.75684C13.4609 6.41895 13.4287 7.3418 13.4287 8.52539C13.4287 9.15234 13.4697 9.73828 13.5518 10.2832C13.6162 10.6992 13.7539 11.0156 13.9648 11.2324C14.1758 11.4492 14.416 11.5576 14.6855 11.5576C14.9492 11.5576 15.1689 11.4844 15.3447 11.3379C15.5732 11.1387 15.7256 10.8604 15.8018 10.5029C15.9189 9.94629 15.9775 8.82129 15.9775 7.12793C15.9775 6.13184 15.9219 5.44922 15.8105 5.08008C15.6992 4.70508 15.5352 4.43262 15.3184 4.2627C15.166 4.13965 14.9668 4.07812 14.7207 4.07812ZM23.4912 11.083V14.1416C23.4912 14.5635 23.5234 14.8506 23.5879 15.0029C23.6582 15.1553 23.7637 15.2666 23.9043 15.3369C24.0449 15.4072 24.3203 15.4424 24.7305 15.4424V15.7676H20.0459V15.4424C20.4092 15.4307 20.6787 15.3281 20.8545 15.1348C20.9717 15 21.0303 14.6514 21.0303 14.0889V5.41406C21.0303 4.83398 20.9629 4.46484 20.8281 4.30664C20.6934 4.14258 20.4326 4.04883 20.0459 4.02539V3.7002H23.4912V4.78125C23.7783 4.35938 24.0713 4.05469 24.3701 3.86719C24.7979 3.5918 25.2637 3.4541 25.7676 3.4541C26.3711 3.4541 26.9189 3.64453 27.4111 4.02539C27.9092 4.40625 28.2871 4.93359 28.5449 5.60742C28.8027 6.27539 28.9316 6.99609 28.9316 7.76953C28.9316 8.60156 28.7969 9.36328 28.5273 10.0547C28.2637 10.7402 27.877 11.2646 27.3672 11.6279C26.8633 11.9854 26.3008 12.1641 25.6797 12.1641C25.2285 12.1641 24.8066 12.0645 24.4141 11.8652C24.1211 11.7129 23.8135 11.4521 23.4912 11.083ZM23.4912 10.1953C23.9951 10.9102 24.5342 11.2676 25.1084 11.2676C25.4248 11.2676 25.6855 11.1006 25.8906 10.7666C26.1953 10.2744 26.3477 9.33691 26.3477 7.9541C26.3477 6.53613 26.1807 5.56641 25.8467 5.04492C25.624 4.69922 25.3252 4.52637 24.9502 4.52637C24.3584 4.52637 23.8721 4.9541 23.4912 5.80957V10.1953Z"
+                fill="#272B34" />
+        </svg>
+    </button>
+
+    <script>
+        (function () {
+            var htmlEl = document.documentElement;
+            var toggleBtn = document.getElementById('font-size-toggle-btn');
+            var scaleClasses = ['', 'font-scale-1', 'font-scale-2'];
+            var currentScale = 0;
+
+            toggleBtn.addEventListener('click', function () {
+                if (scaleClasses[currentScale]) {
+                    htmlEl.classList.remove(scaleClasses[currentScale]);
+                }
+                currentScale = (currentScale + 1) % scaleClasses.length;
+                if (scaleClasses[currentScale]) {
+                    htmlEl.classList.add(scaleClasses[currentScale]);
+                }
             });
         })();
     </script>
