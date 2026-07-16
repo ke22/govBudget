@@ -2777,7 +2777,7 @@
         </div>
         <div class="hero-stamp-wrap">
             <div class="hero-stamp">
-                <span class="num" id="hero-stamp-num" data-start="2025-09-30" data-end="2026-04-21">203</span>
+                <span class="num" id="hero-stamp-num" data-start="2025-09-30">203</span>
                 <span class="label">天　逾　期</span>
             </div>
         </div>
@@ -2785,14 +2785,14 @@
     </section>
 
     <script>
-        // 印章逾期天數：由函請審議日、付委日兩個真實日期即時算出（非寫死數字），
+        // 印章逾期天數：距離函請審議日至今仍未解決，每次載入都以「今天」即時算出，隨真實日期每日增加。
         // 並在首屏載入時做數字滾動動畫；尊重「減少動態」偏好時直接顯示結果。
         (function () {
             const el = document.getElementById('hero-stamp-num');
             if (!el) return;
 
             const start = new Date(el.dataset.start + 'T00:00:00');
-            const end = new Date(el.dataset.end + 'T00:00:00');
+            const end = new Date();
             const days = Math.round((end - start) / 86400000);
 
             const prefersReducedMotion = typeof window.matchMedia === 'function'
