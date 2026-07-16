@@ -2286,7 +2286,34 @@
             padding-top: 57px;
         }
 
-        /* RWD: 手機版側邊導覽隱藏 */
+        /* 漢堡選單按鈕：僅手機版顯示，桌機版維持原本橫向導覽列 */
+        .nav-toggle {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: transparent;
+            border: 1px solid rgba(165, 39, 30, 0.35);
+            border-radius: 8px;
+            color: var(--np-muted-ondark);
+            font-size: 1.3rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .nav-toggle:hover {
+            color: var(--np-seal-red-bright);
+            border-color: var(--np-seal-red-bright);
+        }
+
+        .nav-toggle:focus-visible {
+            outline: 2px solid var(--np-seal-red-bright);
+            outline-offset: 2px;
+        }
+
+        /* RWD: 手機版導覽列收合為漢堡選單 */
         @media (max-width: 968px) {
             :root {
                 /* 手機版導覽列較矮（字級與 padding 都縮小），釘住舞台的頂部間距同步縮小 */
@@ -2301,8 +2328,25 @@
             .site-header h1 {
                 font-size: 0.95rem;
             }
-            .site-header nav a:not(.nav-active) {
+            .nav-toggle {
+                display: flex;
+            }
+            .site-header nav {
                 display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+                padding: 12px 16px 16px;
+                background: rgba(58, 54, 48, 0.97);
+                border-bottom: 1px solid rgba(237, 230, 211, 0.12);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            }
+            .site-header nav.nav-open {
+                display: flex;
             }
             .nav-btn {
                 font-size: 0.75rem;
@@ -2626,6 +2670,36 @@
         .font-size-toggle-btn svg {
             pointer-events: none;
         }
+
+        .back-to-hero-btn {
+            position: fixed;
+            bottom: 92px;
+            right: 32px;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 50%;
+            background: #DFD394;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+            font-size: 1.3rem;
+            line-height: 1;
+            color: #272B34;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .back-to-hero-btn:hover {
+            background: #E1D287;
+        }
+
+        .back-to-hero-btn:focus-visible {
+            outline: 2px solid var(--np-seal-red-bright);
+            outline-offset: 2px;
+        }
     </style>
     <script type="application/ld+json">
     {
@@ -2658,7 +2732,8 @@
     <!-- 固定 Header -->
     <header class="site-header">
         <h1>中央政府總預算觀測站</h1>
-        <nav>
+        <button class="nav-toggle" id="nav-toggle" type="button" aria-label="開啟導覽選單" aria-expanded="false" aria-controls="site-nav">☰</button>
+        <nav id="site-nav">
             <img src="cna-favicon-light.svg" alt="中央社" class="nav-logo">
             <a href="index.html" class="nav-btn nav-active" aria-current="page">年度深度報導</a>
             <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="nav-btn">總預算案專頁 ↗</a>
@@ -4007,6 +4082,8 @@
         })();
     </script>
 
+    <button class="back-to-hero-btn" id="back-to-hero-btn" type="button" aria-label="回到最上方">↑</button>
+
     <button class="font-size-toggle-btn" id="font-size-toggle-btn" type="button" aria-label="調整文字大小">
         <svg width="29" height="16" viewBox="0 0 29 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -4030,6 +4107,31 @@
                 if (scaleClasses[currentScale]) {
                     htmlEl.classList.add(scaleClasses[currentScale]);
                 }
+            });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var backToHeroBtn = document.getElementById('back-to-hero-btn');
+
+            backToHeroBtn.addEventListener('click', function () {
+                // 頁面內含大量捲動連動的動畫／釘選區塊，smooth 捲動會逐格觸發整段內容的計算而明顯卡頓，改用瞬間跳轉
+                window.scrollTo({ top: 0, behavior: 'auto' });
+            });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var navToggle = document.getElementById('nav-toggle');
+            var siteNav = document.getElementById('site-nav');
+            if (!navToggle || !siteNav) return;
+
+            navToggle.addEventListener('click', function () {
+                var isOpen = siteNav.classList.toggle('nav-open');
+                navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                navToggle.textContent = isOpen ? '✕' : '☰';
             });
         })();
     </script>
