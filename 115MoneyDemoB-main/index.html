@@ -5,6 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>總預算卡關 203 天 — 115年度中央政府總預算審議回顧</title>
+    <link rel="preload" as="image" href="hero-collage.jpg" fetchpriority="high" media="(min-width: 641px)">
+    <link rel="preload" as="image" href="hero-collage-mobile.jpg" fetchpriority="high" media="(max-width: 640px)">
+    <!-- Published at https://ke22.github.io/govBudget/ (GitHub Pages) -->
+    <meta name="description" content="115年度中央政府總預算審議創下憲政史上最長延宕紀錄，卡關203天。中央社深度回顧朝野協商過程、歷年預算延宕比較，以及對新興政策計畫的影響。">
+    <meta property="og:title" content="總預算卡關 203 天 — 115年度中央政府總預算審議回顧">
+    <meta property="og:description" content="115年度中央政府總預算審議創下憲政史上最長延宕紀錄，卡關203天。中央社深度回顧朝野協商過程、歷年預算延宕比較，以及對新興政策計畫的影響。">
+    <meta property="og:image" content="https://ke22.github.io/govBudget/hero-collage.jpg">
+    <meta property="og:url" content="https://ke22.github.io/govBudget/index.html">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="總預算卡關 203 天 — 115年度中央政府總預算審議回顧">
+    <meta name="twitter:description" content="115年度中央政府總預算審議創下憲政史上最長延宕紀錄，卡關203天。中央社深度回顧朝野協商過程、歷年預算延宕比較，以及對新興政策計畫的影響。">
+    <meta name="twitter:image" content="https://ke22.github.io/govBudget/hero-collage.jpg">
+    <link rel="canonical" href="https://ke22.github.io/govBudget/index.html">
     <link rel="icon" type="image/svg+xml" href="cna-favicon-adaptive.svg">
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap"
@@ -133,6 +147,7 @@
         /* --- Hero 序章區塊 --- */
         .hero-section {
             height: 100vh;
+            height: 100dvh;
             width: 100%;
             /* 🎯 強制鎖定寬度為純 100% */
             overflow: hidden;
@@ -732,6 +747,7 @@
             width: 100%;
             max-width: 920px;
             height: 78vh;
+            height: 78dvh;
             display: flex;
             flex-direction: column;
             padding: 80px 30px 60px 80px;
@@ -758,6 +774,7 @@
             width: 100%;
             max-width: 960px;
             height: 85vh;
+            height: 85dvh;
             /* 💡 修正：撐高圖表實體高度 */
             display: flex;
             flex-direction: column;
@@ -1936,6 +1953,7 @@
         /* 🛠️ 修正六：優化底部 CTA 結語大容器，高質感大間距阻絕貼底 */
         .footer-cta {
             min-height: 60vh;
+            min-height: 60dvh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -2163,6 +2181,26 @@
             color: var(--np-text-ondark);
         }
 
+        /* 略過導覽連結：預設視覺隱藏，鍵盤 Tab 聚焦時才顯示 */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 16px;
+            z-index: 1000;
+            background: var(--np-paper);
+            color: var(--np-ink);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: top 0.2s ease;
+        }
+
+        .skip-link:focus {
+            top: 16px;
+        }
+
         /* Header 樣式 */
         .site-header {
             position: fixed;
@@ -2212,7 +2250,7 @@
             background: transparent;
             border: 1px solid rgba(165, 39, 30, 0.35);
             color: var(--np-muted-ondark);
-            padding: 6px 14px;
+            padding: 13px 14px;
             cursor: pointer;
             border-radius: 20px;
             font-size: 0.85rem;
@@ -2226,6 +2264,11 @@
             color: var(--np-seal-red-bright);
             border-color: var(--np-seal-red-bright);
             background: rgba(226, 86, 74, 0.1);
+        }
+
+        .nav-btn:focus-visible {
+            outline: 2px solid var(--np-seal-red-bright);
+            outline-offset: 2px;
         }
 
         .nav-active {
@@ -2263,7 +2306,7 @@
             }
             .nav-btn {
                 font-size: 0.75rem;
-                padding: 6px 12px;
+                padding: 14px 12px;
             }
         }
 
@@ -2584,16 +2627,40 @@
             pointer-events: none;
         }
     </style>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        "headline": "總預算卡關 203 天 — 115年度中央政府總預算審議回顧",
+        "description": "115年度中央政府總預算審議創下憲政史上最長延宕紀錄，卡關203天。中央社深度回顧朝野協商過程、歷年預算延宕比較，以及對新興政策計畫的影響。",
+        "image": ["https://ke22.github.io/govBudget/hero-collage.jpg"],
+        "url": "https://ke22.github.io/govBudget/index.html",
+        "publisher": {
+            "@type": "Organization",
+            "name": "中央社",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://ke22.github.io/govBudget/cna-favicon-adaptive.svg"
+            }
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://ke22.github.io/govBudget/index.html"
+        }
+    }
+    </script>
 </head>
 
 <body>
+
+    <a href="#main" class="skip-link">略過導覽，直接跳至主要內容</a>
 
     <!-- 固定 Header -->
     <header class="site-header">
         <h1>中央政府總預算觀測站</h1>
         <nav>
             <img src="cna-favicon-light.svg" alt="中央社" class="nav-logo">
-            <a href="index.html" class="nav-btn nav-active">年度深度報導</a>
+            <a href="index.html" class="nav-btn nav-active" aria-current="page">年度深度報導</a>
             <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="nav-btn">總預算案專頁 ↗</a>
             <a href="database.html" class="nav-btn">完整資料庫</a>
         </nav>
@@ -2622,7 +2689,7 @@
         </a>
     </nav>
 
-    <section class="hero-section">
+    <section class="hero-section" id="main">
         <h1 class="hero-title hero-sr-only">
             115年總預算審議回顧
             <span>卡關逾200天才付委、718億先行動支有何隱憂</span>
@@ -2653,7 +2720,8 @@
             const end = new Date(el.dataset.end + 'T00:00:00');
             const days = Math.round((end - start) / 86400000);
 
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const prefersReducedMotion = typeof window.matchMedia === 'function'
+                && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             if (prefersReducedMotion) {
                 el.textContent = days;
                 return;
@@ -3015,15 +3083,15 @@
             <div class="gantt-backdrop-box-rebuilt" id="backdrop-images-rebuilt">
                 <div class="history-images-container">
                     <div class="history-img-frame">
-                        <img src="budget96001.jpg" alt="陳水扁時期預算案審議">
+                        <img src="budget96001.jpg" alt="陳水扁時期預算案審議" loading="lazy">
                         <div class="img-caption">民國96年5月11日，民進黨立委為通過總預算案，聚眾佔據議場主席台，將立法院長王金平團團包圍。</div>
                     </div>
                     <div class="history-img-frame">
-                        <img src="budget96002.jpg" alt="朝小野大政治攻防">
+                        <img src="budget96002.jpg" alt="朝小野大政治攻防" loading="lazy">
                         <div class="img-caption">民國96年5月11日，立法院處理「中央選舉委員會組織法早案」及總預算案，藍、綠立委舉標語互相指控。</div>
                     </div>
                     <div class="history-img-frame">
-                        <img src="budget003.jpg" alt="大結局照片：內閣改組與預算退回">
+                        <img src="budget003.jpg" alt="大結局照片：內閣改組與預算退回" loading="lazy">
                         <div class="img-caption">過去三次總預算退回重編都是因為行政院長請辭，分別發生在民國89年唐飛請辭、99年劉兆玄請辭及107年林全請辭。</div>
                     </div>
                 </div>
@@ -3805,7 +3873,8 @@
                 // 桌機：卡片頂端越過圖表頂端下方 100px 即算數。
                 // 手機：圖表釘在上方帶狀區，卡片要「進入下方閱讀區」才算數，
                 //       否則步驟會在卡片還被帶狀區蓋住時就先觸發（動畫早於文字）。
-                const isMobile = window.matchMedia('(max-width: 968px)').matches;
+                const isMobile = typeof window.matchMedia === 'function'
+                    && window.matchMedia('(max-width: 968px)').matches;
                 const triggerOffset = isMobile ? window.innerHeight * 0.6 : 100;
 
                 let currentStep = 1;
