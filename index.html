@@ -162,10 +162,13 @@
             /* 新聞剪貼風格：實際拼貼圖檔（hero-collage.jpg）+ 底部撕紙邊。
                原為淺牛皮紙色備援底/信封邊色，改為深黑色，與全站深色化後的其餘區塊一致 */
             background-color: var(--bg-deep);
-            background-image: url('hero-collage.jpg');
-            background-size: 100% auto;
-            background-repeat: no-repeat;
-            background-position: center center;
+            /* 疊加一層淺色網點呼應全站的印刷網點紋理，再蓋拼貼圖 */
+            background-image:
+                radial-gradient(circle, rgba(237, 230, 211, 0.06) 1px, transparent 1.2px),
+                url('hero-collage.jpg');
+            background-size: 4px 4px, 100% auto;
+            background-repeat: repeat, no-repeat;
+            background-position: 0 0, center center;
             clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 8px), 96% 100%, 90% calc(100% - 3px), 84% 100%, 78% calc(100% - 6px), 72% 100%, 66% calc(100% - 2px), 60% 100%, 54% calc(100% - 7px), 48% 100%, 42% calc(100% - 3px), 36% 100%, 30% calc(100% - 6px), 24% 100%, 18% calc(100% - 2px), 12% 100%, 7% calc(100% - 6px), 3% 100%, 0% calc(100% - 8px));
         }
 
@@ -192,7 +195,11 @@
             max-width: 640px;
             /* 左右內距統一為 40px，與 .story-card／.chapter-intro 手機版一致的內容留白節奏 */
             padding: 18px 40px;
-            background: rgba(241, 234, 214, 0.92);
+            background-color: rgba(241, 234, 214, 0.92);
+            /* 淺底面板改用深色調網點，維持與全站網點紋理一致但在亮色底上仍清晰可見 */
+            background-image: radial-gradient(circle, rgba(27, 23, 18, 0.05) 1px, transparent 1.2px);
+            background-size: 4px 4px;
+            background-repeat: repeat;
             box-shadow: 0 10px 24px rgba(27, 23, 18, 0.2);
         }
 
@@ -200,9 +207,12 @@
             /* 手機版改用直式構圖的專屬拼貼圖（標題置於上段，下方留深色網點區給
                dek-panel／stamp 疊加），比例貼近手機螢幕，改回 cover 避免大片留白信封邊 */
             .hero-section {
-                background-image: url('hero-collage-mobile.jpg');
-                background-size: cover;
-                background-position: center top;
+                background-image:
+                    radial-gradient(circle, rgba(237, 230, 211, 0.06) 1px, transparent 1.2px),
+                    url('hero-collage-mobile.jpg');
+                background-size: 4px 4px, cover;
+                background-repeat: repeat, no-repeat;
+                background-position: 0 0, center top;
             }
 
             .hero-dek-panel {
@@ -492,10 +502,22 @@
             top: 0;
             bottom: 0;
             width: 4px;
-            /* 原為 0.15 透明度極淡藍綠色，幾乎看不見，改為實色朱印紅，作為明顯的時間軸主軸 */
-            background: var(--np-seal-red);
+            /* 原為實色朱印紅底，改為淡化軌道色，由內層 .center-main-line-fill
+               隨捲動進度由上往下「畫出」，作為時間軸讀取進度的視覺回饋 */
+            background: rgba(165, 39, 30, 0.15);
             transform: translateX(-50%);
             z-index: 1;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .center-main-line-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: var(--np-seal-red);
             border-radius: 2px;
         }
 
@@ -2214,7 +2236,11 @@
             justify-content: space-between;
             align-items: center;
             /* 原為白底半透明，全站改深色底後改用暖灰半透明，維持毛玻璃感但不再與深色頁面衝突 */
-            background: rgba(58, 54, 48, 0.88);
+            background-color: rgba(58, 54, 48, 0.88);
+            /* 疊加淺色網點，呼應全站印刷網點紋理 */
+            background-image: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.2px);
+            background-size: 4px 4px;
+            background-repeat: repeat;
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(237, 230, 211, 0.12);
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
@@ -2632,45 +2658,6 @@
             }
         }
 
-        /* --- 全站字級調整（無障礙）：以 html 根字級縮放，全頁 rem 單位同步等比放大 --- */
-        html {
-            transition: font-size 0.2s ease;
-        }
-
-        html.font-scale-1 {
-            font-size: 112.5%;
-        }
-
-        html.font-scale-2 {
-            font-size: 125%;
-        }
-
-        .font-size-toggle-btn {
-            position: fixed;
-            bottom: 32px;
-            right: 32px;
-            z-index: 50;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 48px;
-            height: 48px;
-            border: none;
-            border-radius: 50%;
-            background: #DFD394;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .font-size-toggle-btn:hover {
-            background: #E1D287;
-        }
-
-        .font-size-toggle-btn svg {
-            pointer-events: none;
-        }
-
         .back-to-hero-btn {
             position: fixed;
             bottom: 92px;
@@ -2832,8 +2819,10 @@
             </p>
         </div>
 
-        <div class="center-timeline-container">
-            <div class="center-main-line"></div>
+        <div class="center-timeline-container" id="center-timeline-container">
+            <div class="center-main-line">
+                <div class="center-main-line-fill" id="center-main-line-fill"></div>
+            </div>
 
             <div class="timeline-row item-node">
                 <div class="timeline-block-node">
@@ -3729,7 +3718,7 @@
         </div>
     </section>
 
-    <footer style="background: var(--bg-deep); color: var(--np-muted-ondark); text-align: center; padding: 24px 20px; font-size: 0.85rem;">
+    <footer style="background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.2px) 0 0/4px 4px, var(--bg-deep); color: var(--np-muted-ondark); text-align: center; padding: 24px 20px; font-size: 0.85rem;">
         copyright © 2026 中央通訊社版權所有
     </footer>
 
@@ -4026,6 +4015,19 @@
             }
         }
 
+        // 第一章時間軸主線：隨捲動進度由上往下畫出，0% 對應主線頂端進入視窗，
+        // 100% 對應主線底端捲出視窗頂部（讀者讀完整段時間軸）
+        function updateTimelineMainLineFill() {
+            const container = document.getElementById('center-timeline-container');
+            const fill = document.getElementById('center-main-line-fill');
+            if (!container || !fill) return;
+            const rect = container.getBoundingClientRect();
+            const total = rect.height - window.innerHeight * 0.5;
+            const scrolled = window.innerHeight * 0.5 - rect.top;
+            const percent = total > 0 ? Math.min(100, Math.max(0, (scrolled / total) * 100)) : 0;
+            fill.style.height = percent + '%';
+        }
+
         // =======================================================
         // rAF + passive：合併第二、三章的滾動運算，每幀最多計算一次，避免 layout thrash
         // =======================================================
@@ -4034,6 +4036,7 @@
             scrollRafPending = false;
             updateChapter2Stage();
             updateChapter3Bars();
+            updateTimelineMainLineFill();
         }
         window.addEventListener('scroll', () => {
             if (!scrollRafPending) {
@@ -4083,33 +4086,6 @@
     </script>
 
     <button class="back-to-hero-btn" id="back-to-hero-btn" type="button" aria-label="回到最上方">↑</button>
-
-    <button class="font-size-toggle-btn" id="font-size-toggle-btn" type="button" aria-label="調整文字大小">
-        <svg width="29" height="16" viewBox="0 0 29 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M10.7051 0V3.22559H10.3887C10.2012 2.48145 9.99316 1.94824 9.76465 1.62598C9.53613 1.29785 9.22266 1.03711 8.82422 0.84375C8.60156 0.738281 8.21191 0.685547 7.65527 0.685547H6.76758V9.87891C6.76758 10.4883 6.7998 10.8691 6.86426 11.0215C6.93457 11.1738 7.06641 11.3086 7.25977 11.4258C7.45898 11.5371 7.72852 11.5928 8.06836 11.5928H8.46387V11.918H2.22363V11.5928H2.61914C2.96484 11.5928 3.24316 11.5312 3.4541 11.4082C3.60645 11.3262 3.72656 11.1855 3.81445 10.9863C3.87891 10.8457 3.91113 10.4766 3.91113 9.87891V0.685547H3.0498C2.24707 0.685547 1.66406 0.855469 1.30078 1.19531C0.791016 1.66992 0.46875 2.34668 0.333984 3.22559H0V0H10.7051ZM14.6855 3.4541C15.4004 3.4541 16.0654 3.63867 16.6807 4.00781C17.2959 4.37695 17.7617 4.90137 18.0781 5.58105C18.4004 6.26074 18.5615 7.00488 18.5615 7.81348C18.5615 8.97949 18.2656 9.95508 17.6738 10.7402C16.959 11.6895 15.9717 12.1641 14.7119 12.1641C13.4756 12.1641 12.5234 11.7305 11.8555 10.8633C11.1875 9.99609 10.8535 8.99121 10.8535 7.84863C10.8535 6.6709 11.1934 5.64551 11.873 4.77246C12.5586 3.89355 13.4961 3.4541 14.6855 3.4541ZM14.7207 4.07812C14.4219 4.07812 14.1641 4.19238 13.9473 4.4209C13.7363 4.64355 13.5957 5.08887 13.5254 5.75684C13.4609 6.41895 13.4287 7.3418 13.4287 8.52539C13.4287 9.15234 13.4697 9.73828 13.5518 10.2832C13.6162 10.6992 13.7539 11.0156 13.9648 11.2324C14.1758 11.4492 14.416 11.5576 14.6855 11.5576C14.9492 11.5576 15.1689 11.4844 15.3447 11.3379C15.5732 11.1387 15.7256 10.8604 15.8018 10.5029C15.9189 9.94629 15.9775 8.82129 15.9775 7.12793C15.9775 6.13184 15.9219 5.44922 15.8105 5.08008C15.6992 4.70508 15.5352 4.43262 15.3184 4.2627C15.166 4.13965 14.9668 4.07812 14.7207 4.07812ZM23.4912 11.083V14.1416C23.4912 14.5635 23.5234 14.8506 23.5879 15.0029C23.6582 15.1553 23.7637 15.2666 23.9043 15.3369C24.0449 15.4072 24.3203 15.4424 24.7305 15.4424V15.7676H20.0459V15.4424C20.4092 15.4307 20.6787 15.3281 20.8545 15.1348C20.9717 15 21.0303 14.6514 21.0303 14.0889V5.41406C21.0303 4.83398 20.9629 4.46484 20.8281 4.30664C20.6934 4.14258 20.4326 4.04883 20.0459 4.02539V3.7002H23.4912V4.78125C23.7783 4.35938 24.0713 4.05469 24.3701 3.86719C24.7979 3.5918 25.2637 3.4541 25.7676 3.4541C26.3711 3.4541 26.9189 3.64453 27.4111 4.02539C27.9092 4.40625 28.2871 4.93359 28.5449 5.60742C28.8027 6.27539 28.9316 6.99609 28.9316 7.76953C28.9316 8.60156 28.7969 9.36328 28.5273 10.0547C28.2637 10.7402 27.877 11.2646 27.3672 11.6279C26.8633 11.9854 26.3008 12.1641 25.6797 12.1641C25.2285 12.1641 24.8066 12.0645 24.4141 11.8652C24.1211 11.7129 23.8135 11.4521 23.4912 11.083ZM23.4912 10.1953C23.9951 10.9102 24.5342 11.2676 25.1084 11.2676C25.4248 11.2676 25.6855 11.1006 25.8906 10.7666C26.1953 10.2744 26.3477 9.33691 26.3477 7.9541C26.3477 6.53613 26.1807 5.56641 25.8467 5.04492C25.624 4.69922 25.3252 4.52637 24.9502 4.52637C24.3584 4.52637 23.8721 4.9541 23.4912 5.80957V10.1953Z"
-                fill="#272B34" />
-        </svg>
-    </button>
-
-    <script>
-        (function () {
-            var htmlEl = document.documentElement;
-            var toggleBtn = document.getElementById('font-size-toggle-btn');
-            var scaleClasses = ['', 'font-scale-1', 'font-scale-2'];
-            var currentScale = 0;
-
-            toggleBtn.addEventListener('click', function () {
-                if (scaleClasses[currentScale]) {
-                    htmlEl.classList.remove(scaleClasses[currentScale]);
-                }
-                currentScale = (currentScale + 1) % scaleClasses.length;
-                if (scaleClasses[currentScale]) {
-                    htmlEl.classList.add(scaleClasses[currentScale]);
-                }
-            });
-        })();
-    </script>
 
     <script>
         (function () {
