@@ -169,6 +169,33 @@
             background: var(--np-seal-red-dark) !important;
         }
 
+        /* 漢堡選單按鈕：僅手機版顯示，桌機版維持原本橫向導覽列 */
+        .nav-toggle {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: transparent;
+            border: 1px solid rgba(165, 39, 30, 0.35);
+            border-radius: 8px;
+            color: var(--np-muted-ondark);
+            font-size: 1.3rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .nav-toggle:hover {
+            color: var(--np-seal-red-bright);
+            border-color: var(--np-seal-red-bright);
+        }
+
+        .nav-toggle:focus-visible {
+            outline: 2px solid var(--np-seal-red-bright);
+            outline-offset: 2px;
+        }
+
         main {
             padding: 20px;
             max-width: 1000px;
@@ -569,18 +596,31 @@
         }
 
         @media (max-width: 600px) {
-            header {
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-
             header h1 {
                 font-size: 1.15rem;
             }
 
+            .nav-toggle {
+                display: flex;
+            }
+
             header nav {
-                width: 100%;
-                flex-wrap: wrap;
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+                padding: 12px 20px 16px;
+                background: rgba(58, 54, 48, 0.97);
+                border-bottom: 1px solid rgba(237, 230, 211, 0.12);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            }
+
+            header nav.nav-open {
+                display: flex;
             }
 
             .project-block {
@@ -647,11 +687,12 @@
 
     <header>
         <h1>中央政府總預算觀測站</h1>
-        <nav>
+        <button class="nav-toggle" id="nav-toggle" type="button" aria-label="開啟導覽選單" aria-expanded="false" aria-controls="site-nav">☰</button>
+        <nav id="site-nav">
             <img src="cna-favicon-light.svg" alt="中央社" class="nav-logo">
             <a href="index.html" class="nav-btn">年度深度報導</a>
             <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="nav-btn">總預算案專頁 ↗</a>
-            <a href="#" class="nav-btn nav-active" aria-current="page">完整資料庫</a>
+            <a href="index.html" class="nav-btn nav-active" aria-current="page">完整資料庫</a>
         </nav>
     </header>
 
@@ -1129,6 +1170,20 @@
             clearTimeout(pillRowResizeTimer);
             pillRowResizeTimer = setTimeout(updatePillRowFades, 150);
         });
+    </script>
+
+    <script>
+        (function () {
+            var navToggle = document.getElementById('nav-toggle');
+            var siteNav = document.getElementById('site-nav');
+            if (!navToggle || !siteNav) return;
+
+            navToggle.addEventListener('click', function () {
+                var isOpen = siteNav.classList.toggle('nav-open');
+                navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                navToggle.textContent = isOpen ? '✕' : '☰';
+            });
+        })();
     </script>
 </body>
 
