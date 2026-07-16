@@ -5,27 +5,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>中央政府總預算觀測站 - 完整資料庫</title>
-
+    <!-- Published at https://ke22.github.io/govBudget/ (GitHub Pages) -->
+    <meta name="description" content="中央政府總預算完整資料庫：依主題、部會篩選並檢索115年度中央政府總預算所有計畫，掌握預算金額、審議進度與內容細節。">
+    <meta property="og:title" content="中央政府總預算觀測站 - 完整資料庫">
+    <meta property="og:description" content="中央政府總預算完整資料庫：依主題、部會篩選並檢索115年度中央政府總預算所有計畫，掌握預算金額、審議進度與內容細節。">
+    <meta property="og:image" content="https://ke22.github.io/govBudget/hero-collage.jpg">
+    <meta property="og:url" content="https://ke22.github.io/govBudget/database.html">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="中央政府總預算觀測站 - 完整資料庫">
+    <meta name="twitter:description" content="中央政府總預算完整資料庫：依主題、部會篩選並檢索115年度中央政府總預算所有計畫，掌握預算金額、審議進度與內容細節。">
+    <meta name="twitter:image" content="https://ke22.github.io/govBudget/hero-collage.jpg">
+    <link rel="canonical" href="https://ke22.github.io/govBudget/database.html">
+    <link rel="icon" type="image/svg+xml" href="cna-favicon-adaptive.svg">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5/papaparse.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0" rel="stylesheet" />
 
     <style>
-        /* --- 基礎設定 --- */
+        /* --- 基礎設定：新聞剪貼風格（牛皮紙 + 墨黑 + 朱印紅），與 index.html 共用同一套 token --- */
         :root {
-            --bg-color: #F4F4F4;
-            --primary-color: #0F2A4A; /* CNA Navy */
-            --secondary-color: #04A0A0; /* Reporter Teal */
-            --accent-color: #04A0A0;
-            --danger-color: #111111;
-            --card-bg: #FFFFFF;
-            --border-color: #CCCCCC;
-            --text-light: #555555;
-            --cna-dark: #1a1a1e;
+            --bg-color: #12191A;
+            --primary-color: #A5271E;
+            --secondary-color: #A5271E;
+            --accent-color: #A8823C;
+            --danger-color: #E74C3C;
+            --card-bg: #d5cdcd;
+            --border-color: rgba(27, 23, 18, 0.16);
+            --text-light: #6B6156;
 
-            --font-sans: 'Noto Sans TC', sans-serif;
-            --font-serif: 'Noto Serif TC', serif;
+            --np-ink: #1B1712;
+            --np-paper: #FFFFFF;
+            --np-paper-panel: #d5cdcd;
+            --np-seal-red: #A5271E;
+            --np-seal-red-dark: #7E1D16;
+            --np-seal-red-bright: #E2564A;
+            --np-gold-bright: #D4A857;
+            --np-muted: #6B6156;
+            --np-hairline: rgba(27, 23, 18, 0.16);
+            --np-text-ondark: #EDE6D3;
+            --np-muted-ondark: #A79C8C;
+
+            --font-display: 'Noto Serif TC', 'Songti TC', 'PMingLiU', serif;
+            --font-body: 'Noto Sans TC', sans-serif;
         }
 
         * {
@@ -33,47 +56,66 @@
         }
 
         body {
-            font-family: var(--font-sans);
+            font-family: var(--font-body);
             background-color: var(--bg-color);
+            background-image:
+                radial-gradient(circle, rgba(237, 230, 211, 0.08) 1px, transparent 1.2px),
+                radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.05) 0%, transparent 55%);
+            background-size: 4px 4px, 100% 100vh;
+            background-repeat: repeat, repeat-y;
             margin: 0;
             line-height: 1.6;
-            color: #222;
+            letter-spacing: 0.02em;
+            color: var(--np-text-ondark);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
-        /* Header */
-        header {
-            background-color: #fff;
-            padding: 0;
-            display: block;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: none;
-            box-shadow: 0 1px 0 rgba(0,0,0,0.08);
+        h1, h2, h3 {
+            font-family: var(--font-display);
         }
 
-.header-inner {
+        /* 略過導覽連結：預設視覺隱藏，鍵盤 Tab 聚焦時才顯示 */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 16px;
+            z-index: 1000;
+            background: var(--np-paper);
+            color: var(--np-ink);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: top 0.2s ease;
+        }
+
+        .skip-link:focus {
+            top: 16px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(58, 54, 48, 0.88);
+            backdrop-filter: blur(12px);
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 60px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .cna-logo-white {
-            height: 30px;
-            width: auto;
-            filter: brightness(0);
-            display: block;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(237, 230, 211, 0.12);
         }
 
         header h1 {
-            display: none;
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--np-seal-red-bright);
         }
 
         header nav {
@@ -82,29 +124,49 @@
             align-items: center;
         }
 
+        .nav-logo {
+            height: 24px;
+            width: 24px;
+            padding: 4px;
+            box-sizing: content-box;
+            background: var(--np-paper-panel);
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
         .nav-btn {
             background: transparent;
-            border: 1px solid rgba(0,0,0,0.18);
-            color: #555;
-            padding: 7px 14px;
+            border: 1px solid rgba(165, 39, 30, 0.35);
+            color: var(--np-muted-ondark);
+            padding: 13px 14px;
             cursor: pointer;
+            border-radius: 20px;
             font-size: 0.85rem;
             transition: 0.2s;
-            font-weight: 600;
+            font-weight: 700;
             text-decoration: none;
-            border-radius: 2px;
+            white-space: nowrap;
         }
 
         .nav-btn:hover {
-            background: rgba(4,160,160,0.08);
-            color: var(--secondary-color);
-            border-color: var(--secondary-color);
+            color: var(--np-seal-red-bright);
+            border-color: var(--np-seal-red-bright);
+            background: rgba(226, 86, 74, 0.1);
+        }
+
+        .nav-btn:focus-visible {
+            outline: 2px solid var(--np-seal-red-bright);
+            outline-offset: 2px;
         }
 
         .nav-active {
-            background: var(--secondary-color) !important;
-            color: white !important;
-            border-color: var(--secondary-color) !important;
+            background: var(--np-seal-red) !important;
+            border-color: var(--np-seal-red) !important;
+            color: #fff !important;
+        }
+
+        .nav-active:hover {
+            background: var(--np-seal-red-dark) !important;
         }
 
         main {
@@ -115,44 +177,51 @@
             width: 100%;
         }
 
-        /* 大一統篩選面板 */
-        .filter-panel {
-            background: var(--card-bg);
-            padding: 25px;
-            border: 1px solid var(--border-color);
+        .db-intro {
             margin-bottom: 25px;
-            border-top: 4px solid var(--secondary-color);
+        }
+
+        .db-intro h1 {
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            color: var(--np-seal-red-bright);
+            margin-bottom: 14px;
+            line-height: 1.4;
+        }
+
+        .db-intro p {
+            font-size: 1.05rem;
+            color: var(--np-text-ondark);
+            line-height: 1.8;
+            max-width: 720px;
+        }
+
+        /* 大一統篩選面板 */
+        /* 撕紙邊：與 index.html .story-card 共用的鋸齒 clip-path，用於卡片類元素 */
+        .filter-panel,
+        .project-block,
+        .modal-content {
+            clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 8px), 96% 100%, 90% calc(100% - 3px), 84% 100%, 78% calc(100% - 6px), 72% 100%, 66% calc(100% - 2px), 60% 100%, 54% calc(100% - 7px), 48% 100%, 42% calc(100% - 3px), 36% 100%, 30% calc(100% - 6px), 24% 100%, 18% calc(100% - 2px), 12% 100%, 7% calc(100% - 6px), 3% 100%, 0% calc(100% - 8px));
+            background-image: url('paper-texture.png');
+            background-repeat: repeat;
+            background-blend-mode: multiply;
+        }
+
+        .filter-panel {
+            background-color: var(--np-paper-panel);
+            padding: 25px;
+            padding-bottom: 33px;
+            box-shadow: 0 10px 22px rgba(27, 23, 18, 0.25);
+            margin-bottom: 25px;
+            transform: rotate(-0.3deg);
         }
 
         .filter-group {
             margin-bottom: 20px;
         }
 
-        .database-intro {
-            margin: 8px 0 28px;
-            border-left: 4px solid var(--secondary-color);
-            padding: 4px 0 4px 18px;
-        }
-
-        .database-intro h1 {
-            margin: 0 0 12px;
-            color: var(--primary-color);
-            font-family: var(--font-serif);
-            font-size: clamp(1.8rem, 4vw, 2.7rem);
-            line-height: 1.35;
-            font-weight: 900;
-        }
-
-        .database-intro p {
-            margin: 0;
-            color: #444;
-            font-size: 1.05rem;
-            line-height: 1.9;
-        }
-
         .filter-label {
-            font-weight: 700;
-            color: var(--primary-color);
+            font-weight: 900;
+            color: var(--np-ink);
             margin-bottom: 10px;
             display: block;
             font-size: 1.05rem;
@@ -165,60 +234,58 @@
             overflow-x: auto;
             padding-bottom: 5px;
             scrollbar-width: none;
+            /* 隱藏捲軸後使用者無從得知還有更多選項可橫向捲動，改用內陰影（vignette）
+               在有內容被裁切的一側提示可繼續滑動——漸層遮罩（mask-image）在牛皮紙淺色
+               背景下對比太低幾乎看不出來，改用陰影則不受底色影響，任何配色下都清楚可見。
+               左右兩側是否顯示由下方 JS 依 scrollLeft 動態切換 */
+            transition: box-shadow 0.2s ease;
         }
 
         .pill-row::-webkit-scrollbar {
             display: none;
         }
 
+        .pill-row.fade-right {
+            box-shadow: inset -24px 0 12px -12px rgba(27, 23, 18, 0.35);
+        }
+
+        .pill-row.fade-left {
+            box-shadow: inset 24px 0 12px -12px rgba(27, 23, 18, 0.35);
+        }
+
+        .pill-row.fade-left.fade-right {
+            box-shadow: inset -24px 0 12px -12px rgba(27, 23, 18, 0.35), inset 24px 0 12px -12px rgba(27, 23, 18, 0.35);
+        }
+
         .pill-btn {
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            color: var(--text-light);
-            padding: 8px 18px;
+            background: var(--np-paper);
+            border: 1px solid var(--np-hairline);
+            color: var(--np-muted);
+            padding: 12px 18px;
+            border-radius: 50px;
             font-size: 0.95rem;
             font-weight: bold;
             cursor: pointer;
             transition: 0.2s;
             white-space: nowrap;
             flex-shrink: 0;
-            border-radius: 0px; /* Magazine style */
         }
 
         .pill-btn:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
+            border-color: var(--np-seal-red);
+            color: var(--np-seal-red);
+        }
+
+        .pill-btn:focus-visible {
+            outline: 2px solid var(--np-seal-red);
+            outline-offset: 2px;
         }
 
         .pill-btn.active {
-            background: var(--primary-color);
+            background: var(--np-seal-red);
             color: white;
-            border-color: var(--primary-color);
-        }
-
-        .ministry-select {
-            width: 100%;
-            max-width: 420px;
-            padding: 12px 44px 12px 16px;
-            border: 2px solid var(--border-color);
-            border-radius: 0;
-            background: #fff;
-            color: var(--primary-color);
-            font-family: var(--font-sans);
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            outline: none;
-            appearance: none;
-            background-image: linear-gradient(45deg, transparent 50%, var(--primary-color) 50%), linear-gradient(135deg, var(--primary-color) 50%, transparent 50%);
-            background-position: calc(100% - 22px) 50%, calc(100% - 15px) 50%;
-            background-size: 7px 7px, 7px 7px;
-            background-repeat: no-repeat;
-        }
-
-        .ministry-select:focus {
-            border-color: var(--secondary-color);
-            background-color: #FAFAFA;
+            border-color: var(--np-seal-red);
+            box-shadow: 0 4px 8px rgba(165, 39, 30, 0.25);
         }
 
         /* 搜尋框 */
@@ -226,23 +293,29 @@
             width: 100%;
             padding: 15px 20px;
             font-size: 1.1rem;
-            border: 2px solid var(--border-color);
-            border-radius: 0;
+            font-family: var(--font-body);
+            border: 2px solid var(--np-seal-red);
+            border-radius: 50px;
             outline: none;
             transition: 0.3s;
-            background: #fff;
-            font-family: var(--font-sans);
+            background: var(--np-paper);
+            color: var(--np-ink);
+            box-shadow: 0 4px 10px rgba(27, 23, 18, 0.08);
+        }
+
+        .search-box::placeholder {
+            color: var(--np-muted);
         }
 
         .search-box:focus {
-            border-color: var(--secondary-color);
-            background: #FAFAFA;
+            box-shadow: 0 0 0 4px rgba(165, 39, 30, 0.15);
         }
 
         /* 搜尋結果統計條 */
         .summary-bar {
-            background: #F9F9F9;
-            border: 2px solid var(--primary-color);
+            background: linear-gradient(135deg, var(--np-paper), var(--np-paper-panel));
+            border: 2px solid var(--np-seal-red);
+            border-radius: 12px;
             padding: 15px 25px;
             margin-bottom: 20px;
             display: flex;
@@ -256,34 +329,40 @@
         .summary-text {
             font-size: 1.1rem;
             font-weight: bold;
-            color: var(--primary-color);
+            color: var(--np-ink);
         }
 
         .summary-amount {
-            font-family: var(--font-serif);
             font-size: 1.6rem;
             font-weight: 900;
-            color: var(--secondary-color);
+            color: var(--danger-color);
         }
 
         /* Project Cards */
         .project-block {
-            background: var(--card-bg);
+            background-color: var(--np-paper-panel);
             padding: 20px;
-            margin-bottom: 15px;
+            padding-bottom: 27px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 14px rgba(27, 23, 18, 0.18);
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            border: 1px solid var(--border-color);
-            border-left: 6px solid var(--secondary-color);
-            transition: 0.2s;
+            border-left: 6px solid var(--np-gold-bright);
+            transition: transform 0.2s, box-shadow 0.2s;
             gap: 15px;
+            transform: rotate(-0.25deg);
+        }
+
+        .project-block:nth-child(even) {
+            transform: rotate(0.25deg);
         }
 
         .project-block:hover {
-            transform: translateX(4px);
-            border-color: var(--primary-color);
+            transform: translateY(-2px) rotate(0deg);
+            box-shadow: 0 12px 24px rgba(27, 23, 18, 0.24);
+            border-left-color: var(--np-seal-red);
         }
 
         .pb-info {
@@ -294,27 +373,25 @@
         }
 
         .pb-title {
-            font-family: var(--font-serif);
-            font-size: 1.25rem;
-            font-weight: 700;
+            font-size: 1.15rem;
+            font-weight: bold;
             margin: 0;
-            color: var(--primary-color);
+            color: var(--np-ink);
         }
 
         .pb-dept {
-            background: var(--primary-color);
-            color: white;
+            background: rgba(27, 23, 18, 0.06);
+            color: var(--np-seal-red);
             padding: 3px 10px;
+            border-radius: 20px;
             font-size: 0.8rem;
             font-weight: bold;
             width: fit-content;
-            letter-spacing: 0.05em;
         }
 
         .pb-amount {
-            font-family: var(--font-serif);
             font-size: 1.4rem;
-            color: var(--secondary-color);
+            color: var(--np-seal-red);
             font-weight: 900;
             white-space: nowrap;
         }
@@ -326,23 +403,27 @@
             gap: 8px;
             margin-top: 25px;
             flex-wrap: wrap;
-            margin-bottom: 40px;
         }
 
         .page-btn {
-            background: white;
-            border: 1px solid var(--border-color);
-            color: var(--primary-color);
-            padding: 8px 14px;
+            background: var(--np-paper-panel);
+            border: 1px solid var(--np-hairline);
+            color: var(--np-ink);
+            padding: 14px 14px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            border-radius: 0;
+        }
+
+        .page-btn:focus-visible {
+            outline: 2px solid var(--np-seal-red);
+            outline-offset: 2px;
         }
 
         .page-btn.active {
-            background: var(--primary-color);
+            background: var(--np-seal-red);
             color: white;
-            border-color: var(--primary-color);
+            border-color: var(--np-seal-red);
         }
 
         /* Modal Styles */
@@ -361,7 +442,7 @@
         }
 
         .modal-content {
-            background: var(--card-bg);
+            background-color: var(--np-paper-panel);
             width: 95%;
             max-width: 800px;
             max-height: 90vh;
@@ -370,7 +451,6 @@
             position: relative;
             overflow: hidden;
             animation: fadeIn 0.3s;
-            border: 2px solid var(--primary-color);
         }
 
         .close-btn {
@@ -379,19 +459,28 @@
             right: 20px;
             font-size: 2.2rem;
             cursor: pointer;
-            color: #666;
+            color: var(--np-muted);
             z-index: 10;
             line-height: 1;
+            min-width: 44px;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            padding: 0;
+            font-family: inherit;
         }
 
         .close-btn:hover {
-            color: var(--secondary-color);
+            color: var(--danger-color);
         }
 
         .modal-header-area {
             padding: 25px 30px;
-            border-bottom: 1px solid var(--border-color);
-            background-color: #fff;
+            border-bottom: 1px solid var(--np-hairline);
+            background-color: var(--np-paper);
         }
 
         .modal-body-area {
@@ -407,29 +496,28 @@
         }
 
         .stat-box {
-            background: #FAFAFA;
+            background: var(--np-paper);
             padding: 15px;
-            border: 1px solid var(--border-color);
-            border-top: 3px solid var(--primary-color);
+            border-radius: 12px;
+            border: 1px solid var(--np-hairline);
             text-align: center;
         }
 
         .stat-label {
             font-size: 0.85rem;
-            color: var(--text-light);
+            color: var(--np-muted);
             font-weight: bold;
             margin-bottom: 5px;
         }
 
         .stat-val {
-            font-family: var(--font-serif);
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             font-weight: 900;
         }
 
         .highlight-text {
-            background-color: #ffeb3b;
-            color: #000;
+            background-color: rgba(212, 168, 87, 0.55);
+            color: var(--np-ink);
             font-weight: bold;
             padding: 0 3px;
             border-radius: 3px;
@@ -441,7 +529,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--bg-color);
             z-index: 2000;
             display: flex;
             flex-direction: column;
@@ -450,355 +538,152 @@
         }
 
         .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--secondary-color);
+            border: 6px solid rgba(237, 230, 211, 0.15);
+            border-top: 6px solid var(--np-seal-red-bright);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             animation: spin 1s linear infinite;
         }
-        
-        .site-footer {
-            background-color: #111;
-            color: rgba(255,255,255,0.45);
-            padding: 24px 40px;
-            text-align: center;
-            font-size: 0.8rem;
-            letter-spacing: 0.04em;
-            margin-top: auto;
-        }
-
-        .footer-logo {
-            height: 20px;
-            width: auto;
-            filter: brightness(0) invert(1);
-            opacity: 0.45;
-            display: block;
-            margin: 0 auto 10px;
-        }
-
-        /* ===== Layout switcher ===== */
-        .layout-switcher {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 12px 0 14px;
-            margin-bottom: 18px;
-            border-bottom: 1px solid var(--border-color);
-            flex-wrap: wrap;
-        }
-        .ls-label {
-            font-size: 0.72rem;
-            color: #aaa;
-            font-weight: 600;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            margin-right: 4px;
-        }
-        .ls-btn {
-            font-size: 0.78rem;
-            padding: 4px 11px;
-            border: 1px solid #ddd;
-            color: #666;
-            text-decoration: none;
-            border-radius: 2px;
-            transition: border-color 0.15s, color 0.15s;
-            font-family: var(--font-sans);
-            font-weight: 500;
-        }
-        .ls-btn:hover { border-color: var(--secondary-color); color: var(--secondary-color); }
-        .ls-btn.ls-active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+            0% {
+                transform: rotate(0deg);
+            }
 
-        /* ===== Search wrapper with clear button ===== */
-        .search-wrapper {
-            position: relative;
-        }
-
-        /* Material Symbols Outlined */
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined';
-            font-weight: normal;
-            font-style: normal;
-            line-height: 1;
-            letter-spacing: normal;
-            text-transform: none;
-            display: inline-block;
-            white-space: nowrap;
-            direction: ltr;
-            -webkit-font-feature-settings: 'liga';
-            font-feature-settings: 'liga';
-            -webkit-font-smoothing: antialiased;
-            vertical-align: middle;
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
-        }
-
-        .search-clear {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            font-size: 1.1rem;
-            color: #bbb;
-            cursor: pointer;
-            line-height: 1;
-            padding: 0;
-            display: none;
-        }
-
-        .search-clear:hover {
-            color: var(--secondary-color);
-        }
-
-        /* ===== Simplified filter labels ===== */
-        .filter-label {
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-
-        .filter-label .filter-hint {
-            font-size: 0.8rem;
-            color: #aaa;
-            font-weight: 400;
-            text-transform: none;
-            letter-spacing: 0;
-        }
-
-        /* ===== Active filter chips ===== */
-        .active-filters {
-            display: none;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 0 4px;
-        }
-
-        .filter-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #eef2f8;
-            color: var(--primary-color);
-            border: 1px solid #c8d5e8;
-            padding: 4px 10px;
-            font-size: 0.83rem;
-            font-weight: 600;
-            border-radius: 2px;
-        }
-
-        .filter-chip button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: var(--primary-color);
-            padding: 0;
-            line-height: 1;
-            opacity: 0.55;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .filter-chip button:hover { opacity: 1; }
-
-        .clear-all-btn {
-            background: none;
-            border: 1px solid #ccc;
-            color: #888;
-            padding: 4px 10px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            font-family: var(--font-sans);
-            border-radius: 2px;
-            transition: 0.2s;
-        }
-
-        .clear-all-btn:hover {
-            border-color: var(--secondary-color);
-            color: var(--secondary-color);
-        }
-
-        /* ===== Card arrow hint ===== */
-        .pb-right {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-
-        .pb-arrow {
-            font-size: 1.25rem;
-            color: #ccc;
-            transition: color 0.2s, transform 0.2s;
-            line-height: 1;
-            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 24;
-        }
-
-        .project-block:hover .pb-arrow {
-            color: var(--primary-color);
-            transform: translateX(3px);
-        }
-
-        /* ===== Pagination context ===== */
-        .page-info {
-            font-size: 0.83rem;
-            color: #999;
-            padding: 8px 4px;
-            align-self: center;
-            white-space: nowrap;
-        }
-
-        /* ===== Empty state ===== */
-        .empty-state {
-            text-align: center;
-            padding: 64px 20px;
-            color: #888;
-        }
-
-        .empty-state-icon {
-            font-size: 3rem;
-            margin-bottom: 16px;
-            color: #d0d0d0;
-            font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 48;
-        }
-
-        .empty-state-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: #444;
-            margin: 0 0 8px;
-        }
-
-        .empty-state-hint {
-            font-size: 0.95rem;
-            margin: 0 0 28px;
-        }
-
-        .example-searches {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .example-label {
-            font-size: 0.85rem;
-            color: #aaa;
-        }
-
-        .example-btn {
-            background: white;
-            border: 1px solid var(--border-color);
-            padding: 6px 14px;
-            cursor: pointer;
-            font-size: 0.88rem;
-            font-family: var(--font-sans);
-            color: var(--primary-color);
-            font-weight: 600;
-            transition: 0.2s;
-            border-radius: 2px;
-        }
-
-        .example-btn:hover {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         @media (max-width: 600px) {
+            header {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            header h1 {
+                font-size: 1.15rem;
+            }
+
+            header nav {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+
             .project-block {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            .pb-right {
-                flex-direction: row;
-                align-items: center;
+
+            .pb-amount {
+                align-self: flex-start;
             }
+
             .summary-bar {
                 flex-direction: column;
                 align-items: flex-start;
             }
         }
 
+        /* --- 尊重使用者的「減少動態」系統偏好 --- */
+        /* 縮短/停用非必要的過場動畫，但每個元素的最終呈現狀態完全不變 */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
     </style>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "中央政府總預算觀測站 - 完整資料庫",
+        "description": "中央政府總預算完整資料庫：依主題、部會篩選並檢索115年度中央政府總預算所有計畫，掌握預算金額、審議進度與內容細節。",
+        "url": "https://ke22.github.io/govBudget/database.html",
+        "publisher": {
+            "@type": "Organization",
+            "name": "中央社",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://ke22.github.io/govBudget/cna-favicon-adaptive.svg"
+            }
+        },
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "中央政府總預算觀測站",
+            "url": "https://ke22.github.io/govBudget/index.html"
+        }
+    }
+    </script>
 </head>
 
 <body>
 
+    <a href="#main" class="skip-link">略過導覽，直接跳至主要內容</a>
+
     <div id="loader" class="loading-overlay">
         <div class="spinner"></div>
-        <p style="margin-top:15px; font-weight:bold; color:var(--secondary-color);">預算資料載入中...</p>
+        <p style="margin-top:15px; font-weight:bold; color:var(--np-seal-red-bright);">預算資料載入中...</p>
     </div>
 
     <header>
-        <div class="header-inner">
-            <div class="site-title">
-                <img src="CNAlogo應用_20250311.svg" alt="CNA 中央通訊社" class="cna-logo-white">
-            </div>
-            <nav>
-                <a href="index.html" class="nav-btn">年度深度報導</a>
-                <a href="#" class="nav-btn nav-active">完整資料庫</a>
-            </nav>
-        </div>
+        <h1>中央政府總預算觀測站</h1>
+        <nav>
+            <img src="cna-favicon-light.svg" alt="中央社" class="nav-logo">
+            <a href="index.html" class="nav-btn">年度深度報導</a>
+            <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="nav-btn">總預算案專頁 ↗</a>
+            <a href="#" class="nav-btn nav-active" aria-current="page">完整資料庫</a>
+        </nav>
     </header>
 
-    <main>
-        <section class="database-intro">
+    <main id="main">
+        <div class="db-intro">
             <h1>預算增加還減少？納稅錢政府怎麼用？總預算資料庫查詢一目瞭然</h1>
             <p>總預算作為政府一整年施政的財務計畫，涵蓋範圍廣、金額動輒2、3兆。為了讓讀者能清楚了解政府如何使用預算，中央社整理各單位的預算書，呈現各工作計畫的預算金額、增減幅度與分配，帶讀者輕鬆了解。</p>
-        </section>
-
-        <div class="layout-switcher">
-            <span class="ls-label">版面</span>
-            <a href="database.html" class="ls-btn ls-active">預設</a>
-            <a href="database-a.html" class="ls-btn">A｜側邊欄</a>
-            <a href="database-b.html" class="ls-btn">B｜篩選列</a>
-            <a href="database-c.html" class="ls-btn">C｜表格</a>
         </div>
 
         <div class="filter-panel">
 
-            <div style="margin-bottom: 22px;">
-                <span class="filter-label">關鍵字搜尋 <span class="filter-hint">計畫名稱、部會、工作內容</span></span>
-                <div class="search-wrapper">
-                    <input type="text" id="search-input" class="search-box" placeholder="例：無人機、TPASS、社宅、AI…"
-                        oninput="handleSearch(this.value)">
-                    <button id="search-clear" class="search-clear material-symbols-outlined" onclick="clearSearch()" title="清除">close</button>
-                </div>
+            <div style="margin-bottom: 25px;">
+                <span class="filter-label" style="color: var(--secondary-color);">🔍 第一步：輸入關鍵字 (自動連動下方選項)</span>
+                <input type="text" id="search-input" class="search-box" placeholder="請輸入特定關鍵字 (如: 無人機、TPASS)..."
+                    oninput="handleSearch(this.value)">
             </div>
 
             <div class="filter-group">
-                <span class="filter-label">主題 <span class="filter-hint">依關鍵字自動更新</span></span>
-                <div class="pill-row" id="theme-pills"></div>
+                <span class="filter-label">🏷️ 第二步：按主題篩選 <span
+                        style="font-size:0.85rem; color:var(--np-muted); font-weight:normal;">(僅顯示符合的主題)</span></span>
+                <div class="pill-row" id="theme-pills">
+                </div>
             </div>
 
             <div class="filter-group" style="margin-bottom: 0;">
-                <span class="filter-label">部會 <span class="filter-hint">依上方條件自動更新</span></span>
-                <div class="pill-row" id="ministry-pills"></div>
+                <span class="filter-label">🏛️ 第三步：按相關部會篩選 <span
+                        style="font-size:0.85rem; color:var(--np-muted); font-weight:normal;">(僅顯示有符合計畫的部會)</span></span>
+                <div class="pill-row" id="ministry-pills">
+                </div>
             </div>
 
         </div>
-
-        <div id="active-filters" class="active-filters"></div>
 
         <div id="summary-bar" class="summary-bar" style="display: none;">
             <div class="summary-text" id="summary-text">篩選結果共 0 筆</div>
@@ -811,14 +696,14 @@
 
     <div id="unifiedModal" class="modal-overlay" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <span class="close-btn" onclick="closeModal(true)">&times;</span>
+            <button type="button" class="close-btn" aria-label="關閉" onclick="closeModal(true)">&times;</button>
             <div class="modal-header-area">
-                <h2 id="u-title" style="margin:0 0 10px 0; color:var(--primary-color); font-size:1.5rem; font-family:var(--font-serif);"></h2>
+                <h2 id="u-title" style="margin:0 0 10px 0; color:var(--primary-color); font-size:1.5rem;"></h2>
                 <span id="u-dept" class="pb-dept"></span>
             </div>
             <div class="modal-body-area">
                 <div class="stat-grid">
-                    <div class="stat-box" style="border-top-color: var(--secondary-color);">
+                    <div class="stat-box">
                         <div class="stat-label">115年度編列數</div>
                         <div id="u-val-this" class="stat-val" style="color:var(--secondary-color);">-</div>
                     </div>
@@ -828,34 +713,35 @@
                     </div>
                     <div class="stat-box">
                         <div class="stat-label">114年度法定數</div>
-                        <div id="u-val-last" class="stat-val" style="color:#555;">-</div>
+                        <div id="u-val-last" class="stat-val" style="color:var(--np-muted);">-</div>
                     </div>
                 </div>
 
                 <div
-                    style="background:var(--bg-color); padding:20px; margin-bottom:25px; border:1px solid var(--border-color); border-left:4px solid var(--primary-color);">
-                    <strong style="color:var(--primary-color); font-size:1.1rem;">工作內容：</strong>
-                    <div style="margin-top:10px; line-height: 1.7;"><span id="u-desc" style="color:#333;"></span></div>
+                    style="background:var(--np-paper); padding:20px; border-radius:12px; margin-bottom:25px; border:1px solid var(--border-color);">
+                    <strong style="color:var(--secondary-color); font-size:1.1rem;">工作內容：</strong>
+                    <div style="margin-top:10px; line-height: 1.7;"><span id="u-desc" style="color:var(--np-ink);"></span></div>
                 </div>
 
                 <div id="pie-container"
-                    style="text-align: center; background: #fff; padding: 20px; border: 1px solid var(--border-color);">
-                    <h4 style="margin:0 0 15px 0; color:var(--primary-color);">用途分配比例</h4>
+                    style="text-align: center; background: var(--np-paper); padding: 20px; border: 1px solid var(--border-color); border-radius: 12px;">
+                    <h4 style="margin:0 0 15px 0; color:var(--secondary-color);">用途分配比例</h4>
                     <div style="height:220px; width:100%;"><canvas id="chartDetailPie"></canvas></div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <footer class="site-footer">
-        <div class="container">
-            <img src="CNAlogo應用_20250311.svg" alt="CNA 中央通訊社" class="footer-logo">
-            <p>© 2026 中央通訊社 CNA 版權所有 | 新聞與資料視覺化專題</p>
-        </div>
+
+    <footer style="background: var(--bg-color); color: var(--np-muted-ondark); text-align: center; padding: 24px 20px; font-size: 0.85rem;">
+        copyright © 2026 中央通訊社版權所有
     </footer>
 
     <script>
         // 1. 基礎設定
+        const FILE_ID = '11OXVLqRUfySckHFAWJLEciSxqA-XmTqAUS62j59Syzs';
+        const sourcePageA = `https://docs.google.com/spreadsheets/d/${FILE_ID}/gviz/tq?tqx=out:json&tq&gid=612819456&_=${new Date().getTime()}`;
+        const sourceThemes = `https://docs.google.com/spreadsheets/d/${FILE_ID}/gviz/tq?tqx=out:json&tq&gid=2136127994&_=${new Date().getTime()}`;
+
         let allDataPageA = [];
 
         // 篩選狀態 (全交集邏輯)
@@ -865,22 +751,8 @@
             keyword: ''
         };
 
-        // 主題擴充詞庫
-        const themeKeywords = {
-            '居住正義': ['社宅', '租金補貼', '租補', '住宅', '青安', '房貸'],
-            '育兒少子化': ['少子女化', '托育', '幼兒', '保母', '育兒'],
-            '國防安全': ['潛艦', '無人機', '國防', '軍購', '武器', '戰機', '飛彈'],
-            '能源綠能': ['電網', '綠能', '再生能源', '光電', '風電', '台電'],
-            '媒體宣傳': ['媒體', '宣傳', '行銷', '推廣', '大內宣']
-        };
-
-        const themeIconMap = {
-            '居住正義': 'apartment',
-            '育兒少子化': 'child_care',
-            '國防安全': 'shield',
-            '能源綠能': 'bolt',
-            '媒體宣傳': 'campaign'
-        };
+        // 主題擴充詞庫（動態從試算表載入，此為預設 fallback）
+        let themeKeywords = {};
 
         let currentResults = [];
         let currentPage = 1;
@@ -888,13 +760,18 @@
         let chartPieA = null;
 
         // 工具函式
+        function parseMoney(str) {
+            if (!str) return 0;
+            let val = parseFloat(String(str).replace(/,/g, '').replace(/[^0-9.-]/g, ''));
+            if (isNaN(val)) return 0;
+            if (String(str).includes('億')) return val * 100000000;
+            if (String(str).includes('萬')) return val * 10000;
+            return val * 1000;
+        }
+
         function formatCurrency(num) {
             let val = parseFloat(num);
             if (isNaN(val) || val === 0) return "0";
-            
-            // 本地資料原本單位為"千元"，所以要轉成元
-            val = val * 1000;
-            
             let absVal = Math.abs(val);
             let sign = val < 0 ? "-" : "";
             if (absVal >= 1000000000000) return sign + (absVal / 1000000000000).toFixed(1).replace(/\.0$/, '') + "兆";
@@ -914,78 +791,39 @@
             return result.replace(/\n/g, '<br>');
         }
 
-        const tooltipCurrencyCallback = { callbacks: { label: function (c) { return (c.label ? c.label + ': ' : '') + c.raw + '%'; } } };
+        const tooltipCurrencyCallback = { callbacks: { label: function (c) { return (c.dataset.label ? c.dataset.label + ': ' : '') + formatCurrency(c.raw); } } };
 
         // 2. 初始化載入
-        const SHEET_ID = '11OXVLqRUfySckHFAWJLEciSxqA-XmTqAUS62j59Syzs';
-        const SHEET_GID = '612819456';
-
-        function parseUsageRatio(raw, total) {
-            if (!raw || !total) return {};
-            const result = {};
-            raw.split('|').forEach(part => {
-                const idx = part.indexOf(':');
-                if (idx === -1) return;
-                const key = part.slice(0, idx).trim();
-                const val = parseFloat(part.slice(idx + 1)) || 0;
-                if (key && val > 0) result[key] = Math.round(val / total * 1000) / 10;
-            });
-            return result;
-        }
-
-        function loadSheetRows() {
-            return new Promise((resolve, reject) => {
-                const callbackName = `__sheetCallback_${Date.now()}`;
-                const script = document.createElement('script');
-                const tqx = encodeURIComponent(`out:json;responseHandler:${callbackName}`);
-                const src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=${tqx}&gid=${SHEET_GID}`;
-                const cleanup = () => {
-                    delete window[callbackName];
-                    script.remove();
-                };
-
-                window[callbackName] = (payload) => {
-                    cleanup();
-                    if (payload.status !== 'ok') {
-                        reject(new Error(payload.errors?.[0]?.detailed_message || 'Google Sheet response failed'));
-                        return;
-                    }
-
-                    const rows = payload.table.rows.map(row =>
-                        row.c.map(cell => cell?.v ?? '')
-                    );
-                    resolve(rows);
-                };
-
-                script.onerror = () => {
-                    cleanup();
-                    reject(new Error('Google Sheet script load failed'));
-                };
-                script.src = src;
-                document.head.appendChild(script);
-            });
-        }
-
         async function initPage() {
             try {
-                const rows = await loadSheetRows();
+                // 先載入主題定義
+                try {
+                    const themeRes = await fetch(sourceThemes);
+                    const themeText = await themeRes.text();
+                    const themeJson = JSON.parse(themeText.substring(47, themeText.length - 2));
+                    themeKeywords = {}; // 清空預設
+                    themeJson.table.rows.forEach(row => {
+                        if (!row.c || !row.c[0] || !row.c[1]) return;
+                        const label = row.c[0].v;
+                        const kwStr = row.c[1].v || '';
+                        if (label && label !== '主題標籤') {
+                            themeKeywords[label] = kwStr.split(',').map(k => k.trim()).filter(k => k);
+                        }
+                    });
+                } catch (themeErr) {
+                    console.warn('主題資料載入失敗，使用預設值', themeErr);
+                }
 
-                allDataPageA = rows.map(row => {
-                    const total = parseFloat(row[4]) || 0;
-                    return {
-                        '計畫名稱':   row[0] || '',
-                        '主管機關':   row[1] || '',
-                        '所屬部會':   row[2] || '',
-                        '政事別':     row[3] || '',
-                        '115年編列':  total,
-                        '114年金額':  parseFloat(row[5]) || 0,
-                        '工作內容':   row[6] || '',
-                        '分支計畫':   row[7] || '',
-                        '用途比例':   parseUsageRatio(row[8], total),
-                        '計畫編號':   row[9] || '',
-                        '關鍵字':     row[10] || '',
-                        '預算書連結': row[11] || '',
-                    };
+                // 再載入主資料
+                const res = await fetch(sourcePageA);
+                const text = await res.text();
+                const jsonData = JSON.parse(text.substring(47, text.length - 2));
+                const cols = jsonData.table.cols.map(c => c.label).filter(l => l !== '');
+
+                allDataPageA = jsonData.table.rows.map(row => {
+                    let obj = {};
+                    row.c.forEach((cell, i) => { if (cols[i]) obj[cols[i]] = cell ? (cell.v !== null ? String(cell.v) : '') : ''; });
+                    return obj;
                 });
 
                 document.getElementById('loader').style.display = 'none';
@@ -993,7 +831,7 @@
                 applyFilters();
             } catch (error) {
                 console.error("載入失敗:", error);
-                document.getElementById('loader').innerHTML = '<p style="color:var(--secondary-color); font-weight:bold;">資料讀取失敗</p>';
+                document.getElementById('loader').innerHTML = '<p style="color:red; font-weight:bold;">資料讀取失敗</p>';
             }
         }
 
@@ -1002,7 +840,6 @@
             const searchKeyword = urlParams.get('search');
             if (searchKeyword) {
                 document.getElementById('search-input').value = searchKeyword;
-                document.getElementById('search-clear').style.display = 'block';
                 state.keyword = searchKeyword;
             }
         }
@@ -1017,58 +854,9 @@
             applyFilters();
         }
 
-        let _searchTimer;
         function handleSearch(val) {
-            document.getElementById('search-clear').style.display = val ? 'block' : 'none';
-            clearTimeout(_searchTimer);
-            _searchTimer = setTimeout(() => {
-                state.keyword = val.trim();
-                applyFilters();
-            }, 180);
-        }
-
-        function clearSearch() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('search-clear').style.display = 'none';
-            state.keyword = '';
+            state.keyword = val.trim();
             applyFilters();
-        }
-
-        function clearAllFilters() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('search-clear').style.display = 'none';
-            state.keyword = '';
-            state.theme = '全部';
-            state.ministry = '全部';
-            applyFilters();
-        }
-
-        function quickSearch(keyword) {
-            document.getElementById('search-input').value = keyword;
-            document.getElementById('search-clear').style.display = 'block';
-            state.keyword = keyword;
-            applyFilters();
-        }
-
-        function renderActiveFilters() {
-            const container = document.getElementById('active-filters');
-            const chips = [];
-            const closeIcon = '<span class="material-symbols-outlined" style="font-size:13px">close</span>';
-            if (state.keyword) {
-                chips.push(`<span class="filter-chip">關鍵字：${state.keyword} <button onclick="clearSearch()" title="移除">${closeIcon}</button></span>`);
-            }
-            if (state.theme !== '全部') {
-                chips.push(`<span class="filter-chip">主題：${state.theme} <button onclick="selectTheme('全部')" title="移除">${closeIcon}</button></span>`);
-            }
-            if (state.ministry !== '全部') {
-                chips.push(`<span class="filter-chip">部會：${state.ministry} <button onclick="selectMinistry('全部')" title="移除">${closeIcon}</button></span>`);
-            }
-            if (chips.length > 0) {
-                container.innerHTML = chips.join('') + `<button class="clear-all-btn" onclick="clearAllFilters()">清除全部</button>`;
-                container.style.display = 'flex';
-            } else {
-                container.style.display = 'none';
-            }
         }
 
         function selectMinistry(ministryName) {
@@ -1080,50 +868,52 @@
         function renderMinistryPills(availableMinistries) {
             const container = document.getElementById('ministry-pills');
             container.innerHTML = '';
-            const select = document.createElement('select');
-            select.className = 'ministry-select';
-            select.setAttribute('aria-label', '選擇部會');
-            select.onchange = () => selectMinistry(select.value);
+            const btnAll = document.createElement('button');
+            btnAll.className = 'pill-btn' + (state.ministry === '全部' ? ' active' : '');
+            btnAll.setAttribute('aria-pressed', state.ministry === '全部' ? 'true' : 'false');
+            btnAll.innerText = '全部';
+            btnAll.onclick = () => selectMinistry('全部');
+            container.appendChild(btnAll);
 
-            ['全部', ...availableMinistries].forEach(m => {
-                const option = document.createElement('option');
-                option.value = m;
-                option.textContent = m;
-                option.selected = state.ministry === m;
-                select.appendChild(option);
+            availableMinistries.forEach(m => {
+                const btn = document.createElement('button');
+                btn.className = 'pill-btn' + (state.ministry === m ? ' active' : '');
+                btn.setAttribute('aria-pressed', state.ministry === m ? 'true' : 'false');
+                btn.innerText = m;
+                btn.onclick = () => selectMinistry(m);
+                container.appendChild(btn);
             });
-
-            container.appendChild(select);
         }
 
-        // 渲染動態的【主題】按鈕
+        // 🌟 新增：渲染動態的【主題】按鈕
         function renderThemePills(availableThemes) {
             const container = document.getElementById('theme-pills');
             container.innerHTML = '';
             const btnAll = document.createElement('button');
             btnAll.className = 'pill-btn' + (state.theme === '全部' ? ' active' : '');
-            btnAll.innerHTML = '<span class="material-symbols-outlined" style="font-size:13px;margin-right:3px;vertical-align:middle">apps</span>全部';
+            btnAll.setAttribute('aria-pressed', state.theme === '全部' ? 'true' : 'false');
+            btnAll.innerText = '全部';
             btnAll.onclick = () => selectTheme('全部');
             container.appendChild(btnAll);
 
             availableThemes.forEach(t => {
                 const btn = document.createElement('button');
                 btn.className = 'pill-btn' + (state.theme === t ? ' active' : '');
-                const icon = themeIconMap[t] || 'label';
-                btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:13px;margin-right:3px;vertical-align:middle">${icon}</span>${t}`;
+                btn.setAttribute('aria-pressed', state.theme === t ? 'true' : 'false');
+                btn.innerText = t;
                 btn.onclick = () => selectTheme(t);
                 container.appendChild(btn);
             });
         }
 
-        // 終極過濾引擎 (全連動交集)
+        // 🌟 終極過濾引擎 (全連動交集)
         function applyFilters() {
             currentPage = 1;
 
             // 基礎過濾：排除 0 元與統刪項目
             let validData = allDataPageA.filter(p => {
-                const amt = p['115年編列'] || 0;
-                if (amt === 0 || String(p['計畫名稱']).includes('統刪')) return false;
+                const amt = parseMoney(p['預算金額']);
+                if (amt === 0 || String(p['計畫編號']).includes('000000') || String(p['計畫名稱']).includes('統刪')) return false;
                 return true;
             });
 
@@ -1131,7 +921,7 @@
             const matchThemeCheck = (p, themeName) => {
                 if (themeName === '全部') return true;
                 const keywords = themeKeywords[themeName] || [];
-                const textToSearch = (p['計畫名稱'] + (p['工作內容'] || '')).toLowerCase();
+                const textToSearch = (p['計畫名稱'] + (p['工作內容'] || '') + (p['關鍵字'] || '')).toLowerCase();
                 return keywords.some(k => textToSearch.includes(k.toLowerCase()));
             };
 
@@ -1139,7 +929,8 @@
             const matchKeywordCheck = (p, kw) => {
                 if (!kw) return true;
                 const searchTerms = kw.toLowerCase().split(/\s+/).filter(k=>k);
-                const rawText = (p['計畫名稱'] + (p['工作內容']||'') + (p['主管機關']||'') + (p['分支計畫']||'') + (p['關鍵字']||'')).toLowerCase();
+                // 🔽 加上了 p['關鍵字']，把試算表裡用逗號分隔的字串一起串進來比對
+                const rawText = (p['計畫名稱'] + (p['工作內容']||'') + (p['主管機關']||'') + (p['關鍵字']||'')).toLowerCase();
                 return searchTerms.every(term => rawText.includes(term));
             };
 
@@ -1150,19 +941,20 @@
             };
 
             // ==========================================
-            // 計算「當前可用的主題按鈕」
+            // 計算「當前可用的主題按鈕」 (不受自己按鈕狀態影響)
             let dataForThemes = validData.filter(p => matchKeywordCheck(p, state.keyword) && matchMinistryCheck(p, state.ministry));
             let availableThemes = Object.keys(themeKeywords).filter(theme => {
                 return dataForThemes.some(p => matchThemeCheck(p, theme));
             });
 
-            // 計算「當前可用的部會按鈕」
+            // 計算「當前可用的部會按鈕」 (不受自己按鈕狀態影響)
             let dataForMinistries = validData.filter(p => matchKeywordCheck(p, state.keyword) && matchThemeCheck(p, state.theme));
             let availableMinistries = [...new Set(dataForMinistries.map(p => p['所屬部會']))].filter(m => m).sort();
 
-            // 防呆防呆
+            // 防呆防呆：如果目前選的主題或部會已經被關鍵字過濾掉了，強制退回「全部」
             if (state.theme !== '全部' && !availableThemes.includes(state.theme)) {
                 state.theme = '全部';
+                // 主題退回全部後，要重新計算可用的部會
                 dataForMinistries = validData.filter(p => matchKeywordCheck(p, state.keyword) && matchThemeCheck(p, state.theme));
                 availableMinistries = [...new Set(dataForMinistries.map(p => p['所屬部會']))].filter(m => m).sort();
             }
@@ -1170,43 +962,32 @@
                 state.ministry = '全部';
             }
 
+            // 重新繪製畫面上的按鈕
             renderThemePills(availableThemes);
             renderMinistryPills(availableMinistries);
+            updatePillRowFades();
             // ==========================================
 
+            // 最終計算結果
             currentResults = validData.filter(p =>
                 matchKeywordCheck(p, state.keyword) &&
                 matchThemeCheck(p, state.theme) &&
                 matchMinistryCheck(p, state.ministry)
             );
 
+            // 更新畫面與統計條
             const summaryBar = document.getElementById('summary-bar');
 
-            renderActiveFilters();
-
+            // 如果三個條件都沒動，提示畫面
             if (state.ministry === '全部' && state.theme === '全部' && state.keyword === '') {
                 summaryBar.style.display = 'none';
-                document.getElementById('results-container').innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon"><span class="material-symbols-outlined">bar_chart</span></div>
-                        <p class="empty-state-title">選擇篩選條件開始查詢</p>
-                        <p class="empty-state-hint">可輸入關鍵字，或點選上方主題 / 部會進行篩選</p>
-                        <div class="example-searches">
-                            <span class="example-label">熱門搜尋：</span>
-                            <button class="example-btn" onclick="quickSearch('無人機')">無人機</button>
-                            <button class="example-btn" onclick="quickSearch('TPASS')">TPASS</button>
-                            <button class="example-btn" onclick="quickSearch('社宅')">社宅</button>
-                            <button class="example-btn" onclick="quickSearch('AI')">AI</button>
-                            <button class="example-btn" onclick="quickSearch('育兒')">育兒</button>
-                        </div>
-                    </div>`;
+                document.getElementById('results-container').innerHTML = '<p style="text-align:center; color:#999; padding:40px 0;">請選擇上方部會、主題，或輸入關鍵字開始檢索。</p>';
                 document.getElementById('pagination-container').innerHTML = '';
                 return;
             }
 
             if (currentResults.length > 0) {
-                // amt is in thousands (千元) -> convert to total numeric for summary
-                const totalAmt = currentResults.reduce((sum, p) => sum + (p['115年編列'] || 0), 0);
+                const totalAmt = currentResults.reduce((sum, p) => sum + parseMoney(p['預算金額']), 0);
                 document.getElementById('summary-text').innerText = `符合條件共 ${currentResults.length} 筆計畫`;
                 document.getElementById('summary-amount').innerText = formatCurrency(totalAmt);
                 summaryBar.style.display = 'flex';
@@ -1216,7 +997,6 @@
 
             renderResults();
         }
-
         // 4. 渲染列表與分頁
         function renderResults() {
             const container = document.getElementById('results-container');
@@ -1232,10 +1012,7 @@
                 const displayTitle = highlightContent(row['計畫名稱'], state.keyword);
                 html += `<div class="project-block" onclick="openUnifiedDetail('${row['計畫編號']}')">
                     <div class="pb-info"><h3 class="pb-title">${displayTitle}</h3><span class="pb-dept">${row['主管機關']}</span></div>
-                    <div class="pb-right">
-                        <div class="pb-amount">${formatCurrency(row['115年編列'])}</div>
-                        <span class="pb-arrow material-symbols-outlined">chevron_right</span>
-                    </div>
+                    <div class="pb-amount">${formatCurrency(parseMoney(row['預算金額']))}</div>
                 </div>`;
             });
             container.innerHTML = html;
@@ -1247,16 +1024,14 @@
             const totalPages = Math.ceil(currentResults.length / ITEMS_PER_PAGE);
             if (totalPages <= 1) { pagination.innerHTML = ''; return; }
 
-            let startPage = Math.max(1, currentPage - 2);
-            let endPage = Math.min(totalPages, startPage + 4);
+            let html = `<button class="page-btn" aria-label="上一頁" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>&lt;</button>`;
+            let startPage = Math.max(1, currentPage - 2); let endPage = Math.min(totalPages, startPage + 4);
             if (endPage - startPage < 4) startPage = Math.max(1, endPage - 4);
 
-            let html = `<span class="page-info">第 ${currentPage} / ${totalPages} 頁</span>`;
-            html += `<button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>&lt;</button>`;
             for (let i = startPage; i <= endPage; i++) {
-                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" ${i === currentPage ? 'aria-current="page"' : ''} onclick="changePage(${i})">${i}</button>`;
             }
-            html += `<button class="page-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>&gt;</button>`;
+            html += `<button class="page-btn" aria-label="下一頁" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>&gt;</button>`;
             pagination.innerHTML = html;
         }
 
@@ -1273,6 +1048,13 @@
             }
         }
 
+        // 鍵盤使用者：Modal 開啟時按 Escape 可關閉，不受目前焦點位置影響
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('unifiedModal').style.display === 'flex') {
+                closeModal(true);
+            }
+        });
+
         function openUnifiedDetail(id) {
             const planData = allDataPageA.find(r => r['計畫編號'] === id);
             if (!planData) return;
@@ -1281,26 +1063,31 @@
             document.getElementById('u-dept').innerText = planData['主管機關'];
 
             // 三欄數據處理
-            const valThis = planData['115年編列'];
-            document.getElementById('u-val-this').innerText = (valThis && valThis !== 0) ? formatCurrency(valThis) : "無資料";
+            const valThis = planData['預算金額'];
+            document.getElementById('u-val-this').innerText = (valThis && parseMoney(valThis) !== 0) ? formatCurrency(parseMoney(valThis)) : "無資料";
 
-            const valAppr = planData['審定數'];
-            document.getElementById('u-val-appr').innerText = (valAppr && valAppr !== 0) ? formatCurrency(valAppr) : "尚未審定";
+            const valAppr = planData['審定數'] || planData['法定預算數'];
+            document.getElementById('u-val-appr').innerText = (valAppr && parseMoney(valAppr) !== 0) ? formatCurrency(parseMoney(valAppr)) : "尚未審定";
 
-            const valLast = planData['114年金額'];
-            document.getElementById('u-val-last').innerText = (valLast && valLast !== 0) ? formatCurrency(valLast) : "無資料";
+            const valLast = planData['114年預算金額'];
+            document.getElementById('u-val-last').innerText = (valLast && parseMoney(valLast) !== 0) ? formatCurrency(parseMoney(valLast)) : "無資料";
 
             // 工作內容
             const desc = planData['工作內容'];
             document.getElementById('u-desc').innerHTML = (desc && desc.trim() !== "") ? highlightContent(desc, state.keyword) : "目前無資料";
 
-            // 圓餅圖處理 (使用 local json 中已被解析過的 Object)
+            // 圓餅圖處理
             let pieLabels = [], pieData = [];
             const rawPie = planData['用途比例'];
 
-            if (rawPie && typeof rawPie === 'object') {
-                pieLabels = Object.keys(rawPie);
-                pieData = Object.values(rawPie);
+            if (rawPie && rawPie.includes(':')) {
+                rawPie.split('|').forEach(item => {
+                    let parts = item.split(':');
+                    if (parts.length === 2) {
+                        pieLabels.push(parts[0].trim());
+                        pieData.push(parseMoney(parts[1].trim()));
+                    }
+                });
             }
 
             const pieContainer = document.getElementById('pie-container');
@@ -1309,13 +1096,7 @@
             if (pieData.length > 0) {
                 pieContainer.style.display = 'block';
                 chartPieA = new Chart(document.getElementById('chartDetailPie').getContext('2d'), {
-                    type: 'pie', data: { 
-                        labels: pieLabels, 
-                        datasets: [{ 
-                            data: pieData, 
-                            backgroundColor: ['#0F2A4A', '#04A0A0', '#333333', '#888888', '#CCCCCC', '#2ECC71'] 
-                        }] 
-                    },
+                    type: 'pie', data: { labels: pieLabels, datasets: [{ data: pieData, backgroundColor: ['#E74C3C', '#F0C808', '#086788', '#2ECC71', '#9B59B6', '#3498DB'] }] },
                     options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' }, tooltip: tooltipCurrencyCallback } }
                 });
             } else {
@@ -1325,11 +1106,29 @@
             document.getElementById('unifiedModal').style.display = 'flex';
         }
 
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') document.getElementById('unifiedModal').style.display = 'none';
-        });
-
         window.addEventListener('DOMContentLoaded', initPage);
+
+        // 橫向捲動按鈕列：捲軸已隱藏，改用漸層遮罩提示還有更多選項可捲動，
+        // 依實際 scrollLeft 動態切換左右遮罩，而非固定顯示。
+        // 按鈕列表會在每次篩選變動時重新渲染（見 applyFilters 內 updatePillRowFades() 呼叫），
+        // 故除了捲動/resize 事件，重新渲染後也需要重新計算一次。
+        const pillRowScrollBound = new WeakSet();
+        function updatePillRowFades() {
+            document.querySelectorAll('.pill-row').forEach(row => {
+                const maxScroll = row.scrollWidth - row.clientWidth;
+                row.classList.toggle('fade-left', row.scrollLeft > 4);
+                row.classList.toggle('fade-right', row.scrollLeft < maxScroll - 4);
+                if (!pillRowScrollBound.has(row)) {
+                    pillRowScrollBound.add(row);
+                    row.addEventListener('scroll', updatePillRowFades, { passive: true });
+                }
+            });
+        }
+        let pillRowResizeTimer = null;
+        window.addEventListener('resize', () => {
+            clearTimeout(pillRowResizeTimer);
+            pillRowResizeTimer = setTimeout(updatePillRowFades, 150);
+        });
     </script>
 </body>
 
