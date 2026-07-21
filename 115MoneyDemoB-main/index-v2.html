@@ -913,9 +913,11 @@
             transition: border 0.5s ease, background-color 0.5s ease, box-shadow 0.5s ease !important;
         }
 
+        .rebuilt-step-1 .gantt-chart-container-rebuilt,
         .rebuilt-step-2 .gantt-chart-container-rebuilt {
             /* 圖表全面改為深色底：面板改用 --bg-chart 深色調 + 淺色網點，邊框/陰影同步反轉。
-               邊框/陰影數值與第三章 .gantt-container-rebuilt 統一，確保兩張圖表視覺一致 */
+               邊框/陰影數值與第三章 .gantt-container-rebuilt 統一，確保兩張圖表視覺一致。
+               卡片 1 也套用此規則，讓灰色空框比軸線更早登場（座標軸仍只在卡片 2 才點亮） */
             border: 1px solid rgba(237, 230, 211, 0.1) !important;
             background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.3px) 0 0/6px 6px, var(--bg-chart) !important;
             box-shadow: inset 0 1px 0 rgba(237, 230, 211, 0.05), 0 15px 40px rgba(0, 0, 0, 0.35) !important;
@@ -1025,6 +1027,7 @@
             z-index: 3;
         }
 
+        .rebuilt-step-1 .gantt-grid-rebuilt,
         .rebuilt-step-2 .gantt-grid-rebuilt {
             opacity: 1;
         }
@@ -1525,6 +1528,13 @@
             box-shadow: 0 0 10px rgba(156, 166, 156, 0.2);
         }
 
+        /* 灰色總歲出底層是圖表的基準面，不是與其他色塊平行的類別色塊，
+           進場節奏刻意比其他 Bar 慢、且加上延遲的光暈強化，讓它先「站穩」，
+           其他色塊才接著長出來，而不是所有 Bar 用同一套節奏一起長出 */
+        #ch3-bar-total-grey {
+            transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease, visibility 0.5s, box-shadow 0.6s ease 0.4s !important;
+        }
+
         .ch3-color-red {
             background: linear-gradient(to right, #8E2017, var(--chart-cat-impact)) !important;
             box-shadow: 0 0 10px rgba(226, 86, 74, 0.2);
@@ -1557,6 +1567,20 @@
 
         #ch3-sticky-box-wrapper {
             transform: translateY(calc(-1 * var(--ch3-exit-offset))) !important;
+        }
+
+        /* 第三章開場文字：等第二章退場動畫真正完成（history-exit-complete）才淡入，
+           而不是等整個第二章區塊捲出畫面這種更粗略、更晚的訊號。
+           無 JS／減少動態時預設就可見，不依賴這個捲動驅動的狀態 */
+        .js #chapter-3-rebuilt .chapter-intro {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .js #chapter-3-rebuilt .chapter-intro.chapter3-intro-revealed {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         #chapter-3-rebuilt.ch3-step-1 #ch3-bar-total-grey,
@@ -2913,6 +2937,11 @@
             #ch3-sticky-box-wrapper {
                 transform: none !important;
             }
+
+            .js #chapter-3-rebuilt .chapter-intro {
+                opacity: 1 !important;
+                transform: none !important;
+            }
         }
 
         .back-to-hero-btn {
@@ -3096,6 +3125,15 @@
             box-sizing: border-box;
             align-items: flex-start !important;
             padding: calc(var(--chart-stage-content-clearance) + 16px) 0 var(--chart-stage-gap);
+        }
+
+        /* 桌機版把圖表內容改回置中（覆蓋上面 flex-start），視覺上不再貼著淨空區頂端。
+           top/height 與淨空 padding 完全不動，clearance 由 padding 保證、與 align-items
+           無關，所以置中只會在 padding 留出的空間內重新分配，不會讓內容更貼近固定導覽列 */
+        @media (min-width: 1025px) {
+            .gantt-sticky-box-rebuilt {
+                align-items: center !important;
+            }
         }
 
         .gantt-container-rebuilt {
@@ -4663,6 +4701,7 @@
             const ganttBox = document.getElementById('backdrop-gantt-rebuilt');
             const imagesBox = document.getElementById('backdrop-images-rebuilt');
             const chapter3 = document.getElementById('chapter-3-rebuilt');
+            const chapter3Intro = chapter3 ? chapter3.querySelector('.chapter-intro') : null;
 
             if (!chapter2 || !stage || !ganttBox || !imagesBox) return;
 
@@ -4693,6 +4732,12 @@
                 stage.style.setProperty('--history-exit-opacity', String(1 - progress));
                 stage.classList.toggle('history-exit-active', finalCardTop <= viewportHeight * 0.6);
                 stage.classList.toggle('history-exit-complete', progress >= 1);
+
+                // Chapter 3's intro reveals from the exact same completion state that
+                // already governs Chapter 2's exit fade, not a coarser stage-lifecycle signal.
+                if (chapter3Intro) {
+                    chapter3Intro.classList.toggle('chapter3-intro-revealed', stage.classList.contains('history-exit-complete'));
+                }
 
                 // Same exit guard, second target: the step-9 text story-card itself, not just
                 // the fixed image backdrop above. Only touch its inline opacity once actually
@@ -4769,7 +4814,9 @@
                     // 卡片 1 (引言)：手機版卡片以 rebuilt-step-N class 控制顯示，
                     // 少了這行 step-1 從不會被點亮 → 第一張卡片「回顧歷年審查歷程…」永遠不顯示
                     // （桌機版卡片在文件流中預設可見，故只有手機版看得出這個 bug）。
-                    // 此段為引言，圖表網格尚未登場，故不加 box-visible。
+                    // 圖表面板灰色空框在此就先長出（無座標軸強調），座標軸留給卡片 2 才亮起，
+                    // 讓兩張卡讀起來是漸進的兩個狀態，而不是同一瞬間全部冒出來。
+                    ganttBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-1');
                 }
                 else if (currentStep === 2) {
