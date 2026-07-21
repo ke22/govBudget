@@ -41,11 +41,12 @@ user confirmed this merge explicitly.
 | `fix-responsive-story-acceptance-gaps` | 14/14 | Bucket 1: hero stamp/title collision margin, Ch2 Gantt intermediate-width frame, Ch2 step-9 card/image sequencing, Ch2→3 exit guard extension | Yes — `openspec/changes/archive/2026-07-21-fix-responsive-story-acceptance-gaps/` (commit `970fd43` implement, `b662403` archive) |
 | `refine-chapter1-timeline-choreography` | 11/11 | Bucket 2a: Ch1 timeline 40px line-lead, pulsing-"?"/arrow terminal marker, 641-1024px reveal extension | Yes — `openspec/changes/archive/2026-07-21-refine-chapter1-timeline-choreography/` (commit `c6d030b` implement, `b662403` archive) |
 | `refine-chapter2-chapter3-reveal-choreography` | 13/13 | Bucket 2b: Ch2 card-1 gray state, Ch3 grey-bar distinct reveal, Ch3 sticky-box centering, Ch3 intro-reveal gating | Yes — `openspec/changes/archive/2026-07-21-refine-chapter2-chapter3-reveal-choreography/` (commit `aebde13` implement, `b662403` archive) |
+| `polish-story-page-visual-hierarchy` | 7/7 | Bucket 3: desktop scroll-indicator contrast, footer border separation, enlarged ≤1024px hero stamp + recomputed collision margin | Yes — `openspec/changes/archive/2026-07-21-polish-story-page-visual-hierarchy/` (commit `4d23368` implement, `6021fa1` archive) |
 
 The first three are functionally done per their `tasks.md` checkboxes and were
 verified in a prior session via browser screenshots + DOM overflow checks across a
 7-viewport matrix (390×844 up to 1440×900), forward/reverse scroll checks, and
-reduced-motion/no-JS states. The latter three (Buckets 1 and 2) were verified via
+reduced-motion/no-JS states. The latter four (Buckets 1-3) were verified via
 **source-level geometric/logical review only** — this session's browser automation
 cannot reach `localhost` dev servers in this environment (`chrome-error://
 chromewebdata/` despite `curl` returning 200, confirmed on 3+ separate attempts) —
@@ -57,12 +58,13 @@ user explicitly signed off on proceeding this way.
 `responsive-storytelling-motion`, `mobile-scrollytelling-card-motion`,
 `cjk-line-breaking`, `hero-scroll-indicator-visibility`,
 `chapter4-axis-mobile-legibility`, `project-card-keyword-tags`,
-`desktop-pill-row-scroll`, `chapter1-timeline-motion-choreography` (new), and
-`chapter2-chapter3-reveal-refinements` (new) — this is the current baseline
-Buckets 3/4 (below) should be diffed against.
+`desktop-pill-row-scroll`, `chapter1-timeline-motion-choreography`,
+`chapter2-chapter3-reveal-refinements`, and
+`story-page-visual-hierarchy-polish` — this is the current baseline
+Bucket 4 (below) should be diffed against, if it ever becomes actionable.
 
 Note: the `spectra-sync-specs` skill referenced by `spectra-archive`'s
-`SKILL.md` does not actually exist on this machine — spec syncing for all six
+`SKILL.md` does not actually exist on this machine — spec syncing for all seven
 changes archived so far was done by hand (writing `openspec/specs/<capability>/
 spec.md` directly from each change's delta — a new capability needs a full
 Purpose+Requirements doc; an existing one needs the delta merged into the
@@ -140,19 +142,28 @@ source code — see that file's "resolved against code" notes.
      intro text now explicitly gated on `history-exit-complete` instead of the far
      coarser "whole Ch2 section has scrolled past" signal.
      **Status: shipped — implemented, committed (`aebde13`), archived (`b662403`), pushed.**
-3. **`polish-story-page-visual-hierarchy`** — `.scroll-indicator` contrast (also
-   centered alignment specifically below 735px); footer visually distinguished
-   from body; `.hero-stamp` enlarged (while still not covering the title — that
-   part is bucket 1, the size increase is bucket 3). **Status: triaged only, no
-   `proposal.md` yet.**
+3. **`polish-story-page-visual-hierarchy`** — `.scroll-indicator` contrast fixed
+   (was `--ui-muted`, a token authored for light-card contexts, directly on the
+   dark hero collage; now `--ui-ink-inverse`, matching what the mobile/tablet
+   hero already used); footer visually distinguished from body (`.page-footer`
+   and `.footer-cta` shared the exact same background color — `--ui-canvas` and
+   `--bg-deep` are the identical hex value — so a `border-top` divider was added);
+   `.hero-stamp` enlarged (`scale(0.72)` → `scale(0.9)` at `≤1024px`, with
+   `.hero-title`'s collision margin recomputed from `34px` to `44px` using the
+   same geometry model Bucket 1 used, so the enlargement can't silently reopen
+   the collision Bucket 1 fixed). The "centered alignment specifically below
+   735px" sub-claim was **not implemented** — no matching breakpoint or
+   centering-loss mechanism found in the code; still needs the user to reproduce
+   with a specific viewport/screenshot.
+   **Status: shipped — implemented, committed (`4d23368`), archived (`6021fa1`), pushed.**
 4. **Needs specification before any change is written** — fragments too vague to
    implement as-is: "Also have animation with th…", "Cover chap 3", duplicate/
    garbled Chapter 3 HTML pastes. **Status: still needs the user re-asked for
    clarification, not actionable from the existing notes.**
 
-## Buckets 1-2 — implementation notes worth keeping
+## Buckets 1-3 — implementation notes worth keeping
 
-All three changes above went through the full propose → apply → commit → archive
+All four changes above went through the full propose → apply → commit → archive
 cycle in this session. A few things worth remembering if picking this up cold:
 
 - **Caught a sign-error bug during apply**: `refine-chapter1-timeline-choreography`'s
@@ -187,9 +198,10 @@ cycle in this session. A few things worth remembering if picking this up cold:
 5. ~~Propose, implement, commit, and archive Bucket 2 (split into
    `refine-chapter1-timeline-choreography` + `refine-chapter2-chapter3-reveal-choreography`)~~
    — done, see above.
-6. Propose `polish-story-page-visual-hierarchy` (Bucket 3) next.
+6. ~~Propose, implement, commit, and archive Bucket 3 (`polish-story-page-visual-hierarchy`)~~
+   — done, see above. One sub-item ("735px" alignment claim) left unresolved, flagged above.
 7. Bucket 4 fragments still need the user re-asked for clarification before any
-   change can be written for them.
+   change can be written for them. This is the only backlog item left.
 
 ## How to test
 
