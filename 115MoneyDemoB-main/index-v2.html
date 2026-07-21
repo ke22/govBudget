@@ -3247,16 +3247,18 @@
                 text-align: right;
             }
 
-            /* 印章疊釘在合併紙卡上緣，一半在卡片外、一半壓進卡片內，
-               紅底＋米色（--ui-paper）文字與粗箭頭呼應騎縫章視覺語彙。
-               放大到 0.9（原 0.72），.hero-title 的 margin-top 已同步重新計算為 44px */
+            /* 印章疊釘在合併紙卡上緣、水平置中（原本貼右上角，改為置中），
+               一半在卡片外、一半壓進卡片內，紅底＋米色（--ui-paper）文字與粗箭頭
+               呼應騎縫章視覺語彙。放大到 0.9（原 0.72），.hero-title 的 margin-top
+               已同步重新計算為 44px；水平置中不影響碰撞判斷（只看垂直淨空） */
             .hero-stamp-wrap {
                 position: absolute;
                 top: -26px;
                 bottom: auto;
-                right: clamp(16px, 5vw, 42px);
+                left: 50%;
+                right: auto;
                 z-index: 5;
-                transform: scale(0.9);
+                transform: translateX(-50%) scale(0.9);
             }
 
             .hero-stamp {

@@ -39,18 +39,18 @@ Target change: `polish-story-page-visual-hierarchy`
 | ID | Viewport | Component | Current | Expected | Severity |
 |---|---|---|---|---|---|
 | SCROLL-IND-CONTRAST-01 | ≥1025 | `.scroll-indicator` | Contrast described as insufficient (no specific numbers given) | Increase contrast against the hero background | P3 |
-| SCROLL-IND-ALIGN-01 | <735 (code-confirmed non-standard: the file's actual breakpoints are 640/968/1024/1025/1340 — 735 matches none of them) | `.scroll-indicator` | Not centered | Center-aligned — recommend snapping this to the existing 640px compact boundary unless there's a specific reason to add a fifth breakpoint | P3 |
-| HERO-STAMP-02 | Not stated, likely all widths | `.hero-stamp` | Current size | Larger, and center-aligned — **distinct from HERO-STAMP-01 above**: this is a size/alignment preference, not the overlap bug | P3 |
+| SCROLL-IND-ALIGN-01 | <735, confirmed by user 2026-07-21 to mean phone width | `.scroll-indicator` | Not centered per user report — but `.hero-section` has `justify-items: center` and `.scroll-indicator` itself has `flex; align-items: center` at all ≤1024px widths; no code-level centering bug found on re-check | Center-aligned | P3 — **status: handed off for human/manual verification**, no code change made. Need a screenshot or specific device/width where the offset is visible before touching this further; code looks structurally correct as-is. |
+| HERO-STAMP-02 | ≤1024px only, per user 2026-07-21 ("桌機版除外" / desktop excluded) | `.hero-stamp-wrap` | Pinned to upper-right corner (`right: clamp(...)`), straddling the card edge | Larger (done in `polish-story-page-visual-hierarchy`), **and horizontally centered** | P3 — **status: done**, ad-hoc edit (not a formal Spectra change) on 2026-07-21: `.hero-stamp-wrap` at ≤1024px changed from `right: clamp(16px, 5vw, 42px)` to `left: 50%; transform: translateX(-50%) scale(0.9)`. Desktop stamp (`top:110px; right:13%`) explicitly left unchanged. Collision-safe since the title's `margin-top` clearance only depends on vertical separation, not horizontal position. |
 | FOOTER-SEPARATION-01 | Not stated | Footer vs. body | Footer blends into body background | Visually distinguish the footer from the body (border, background shift, or spacing) | P3 |
 
 ## Bucket D — Needs specification before any change is written
 
-Not ready for a `proposal.md`. Ask the user to finish/clarify these before acting:
+**Update 2026-07-21:** the user clarified both notes below. Neither needs further code changes right now — both are handed off for manual/live verification before deciding if more work is needed, since browser automation in this environment can't reach the local dev server to check live.
 
-| Note as pasted | Why it's not actionable yet |
-|---|---|
-| "I want `#ch3-bar-total-grey`. Also have animation with th…" | Sentence cuts off mid-word ("th[is]?") — what animation, triggered by what, is unstated. Tracked provisionally as CH2-GREY-BAR-ANIM-01 above but flagged unconfident. |
-| "Cover chap 3" | No surrounding context anywhere in the notes. Could mean "add a cover/transition before Chapter 3," "something is incorrectly covering Chapter 3," or is an unrelated leftover fragment. Cannot guess responsibly. |
+| Note as pasted | User's 2026-07-21 clarification | Status |
+|---|---|---|
+| "I want `#ch3-bar-total-grey`. Also have animation with th…" | Confirms the original best-guess reading: the total-budget grey bar should have its own reveal animation, distinct from the other bars. | **Likely already done** in `refine-chapter2-chapter3-reveal-choreography` (`#ch3-bar-total-grey` has its own 1.2s width transition + delayed glow, distinct from the shared `.ch3-single-bar-layer` transition). **Handed off for human verification** — user to confirm the live behavior matches intent. |
+| "Cover chap 3" | Means: right as the reader scrolls into Chapter 3, it looks like Chapter 3 goes underneath/behind another section and appears covered. | Matches the overlap territory `CH2-CH3-OVERLAP-01`/Bucket 1 already targeted (extended `updateHistoryExit()`'s exit guard to the text story-card, not just the image backdrop). Unclear whether the user is describing behavior **still occurring after** that fix, or the **original (now-fixed) symptom**. **Handed off for human verification** — needs a live repro to tell which. |
 
 ## Open cross-cutting questions — RESOLVED 2026-07-21 by reading `index-v2.html` directly
 

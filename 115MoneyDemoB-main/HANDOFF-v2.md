@@ -156,10 +156,28 @@ source code — see that file's "resolved against code" notes.
    centering-loss mechanism found in the code; still needs the user to reproduce
    with a specific viewport/screenshot.
    **Status: shipped — implemented, committed (`4d23368`), archived (`6021fa1`), pushed.**
-4. **Needs specification before any change is written** — fragments too vague to
-   implement as-is: "Also have animation with th…", "Cover chap 3", duplicate/
-   garbled Chapter 3 HTML pastes. **Status: still needs the user re-asked for
-   clarification, not actionable from the existing notes.**
+4. **Bucket D, clarified 2026-07-21 by the user, now handed off for manual verification**
+   (no more code-guessing without a live check):
+   - "Also have animation with th…" confirmed to mean: the grey total-budget bar
+     (`#ch3-bar-total-grey`) should have its own reveal animation — **likely already
+     done** by `refine-chapter2-chapter3-reveal-choreography`'s distinct transition;
+     needs the user to confirm the live behavior matches intent.
+   - "Cover chap 3" confirmed to mean: scrolling into Chapter 3 makes it look covered/
+     hidden underneath another section — this is exactly the territory Bucket 1's
+     exit-guard extension targeted; unclear whether the user is describing behavior
+     that **still occurs after** that fix or the **original (now-fixed) symptom**.
+     Needs a live repro to tell which.
+   - The "735px alignment" sub-claim (SCROLL-IND-ALIGN-01) — user confirmed it's about
+     phone width, but re-checking the CSS found no bug (`.hero-section` has
+     `justify-items: center`, `.scroll-indicator` has `flex; align-items: center`, at
+     every ≤1024px width). **Also handed off** — needs a screenshot/specific device
+     width before touching anything.
+   - HERO-STAMP-02's "center-aligned" part **was implemented** (ad-hoc, not a formal
+     Spectra change) on 2026-07-21: `.hero-stamp-wrap` at `≤1024px` changed from
+     `right: clamp(16px, 5vw, 42px)` to `left: 50%; transform: translateX(-50%)
+     scale(0.9)`, desktop excluded per explicit user instruction. Collision-safe since
+     the title's clearance margin only depends on vertical separation.
+   - Full detail and status in `ISSUE-TRIAGE-v2.md`'s Bucket C/D sections.
 
 ## Buckets 1-3 — implementation notes worth keeping
 
