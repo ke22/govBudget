@@ -47,3 +47,45 @@ Each chart panel SHALL cap its height to the viewport space remaining after top 
 - **WHEN** a pinned chart band is rendered at 390 x 844 CSS pixels
 - **THEN** its complete panel fits beneath the fixed header within the band
 - **AND** its story-card reading zone remains available below the band
+
+### Requirement: Chart frame geometry resizes consistently at every breakpoint
+
+Any chart that uses a shared absolutely-positioned frame (matching `left`/`right`/`bottom` coordinates across its rows container, grid, axes, and deadline/threshold overlays) SHALL resize every one of those frame elements identically at each breakpoint that changes the chart stage's available width, so percentage-based content inside the frame (bars, axis ticks, threshold lines) stays aligned and contained. A breakpoint MUST NOT resize only a subset of the frame's elements (or only the surrounding card/wrapper) while leaving the frame's own coordinates at a wider breakpoint's values.
+
+#### Scenario: Intermediate width keeps the Chapter-2 Gantt contained
+
+- **WHEN** the Chapter-2 Gantt chart is rendered at 768 x 1024 or 1024 x 768 CSS pixels
+- **THEN** every bar remains fully inside the chart panel's bounds
+- **AND** no X-axis or Y-axis tick or label renders outside the chart panel
+
+#### Scenario: Adding an intermediate override does not require touching every element by hand
+
+- **WHEN** a breakpoint's frame override is authored
+- **THEN** it targets the complete set of frame elements that share the coordinate system (rows container, grid, axes, threshold/deadline overlays) rather than a partial subset
+
+##### Example: 641-1024px override touches the full frame set
+
+| Selector | Coordinate system | Overridden at 641-1024px |
+| --- | --- | --- |
+| `.gantt-rows-container-rebuilt` | shares `left`/`right`/`bottom` frame | Yes |
+| `.gantt-grid-rebuilt` | shares `left`/`right`/`bottom` frame | Yes |
+| `.gantt-x-axis-rebuilt` | shares `left`/`right`/`bottom` frame | Yes |
+| `.gantt-red-deadline-stage` | shares `left`/`right`/`bottom` frame, positioned as a percentage inside it | Yes |
+| `.gantt-card-rebuilt` (surrounding card, not part of the shared frame) | independent min-height only | Already overridden separately — not part of this requirement |
+
+### Requirement: Vertical distribution of content within cleared chart space is a presentation choice
+
+Within a chart stage's already-enforced top and bottom clearance, the vertical alignment of the chart panel's content (e.g. centered vs. top-anchored) SHALL be a presentation choice not constrained by this specification's clearance requirements, provided the enforced top and bottom clearance minimums remain intact regardless of the chosen alignment.
+
+#### Scenario: Centering content within the cleared band remains compliant
+
+- **WHEN** a chart stage's content is vertically centered within its already-clearance-padded content box instead of top-anchored
+- **THEN** the topmost visible chart content is still at least the required clearance below the fixed header
+- **AND** the bottommost visible chart content still remains inside the viewport
+
+##### Example: Chapter 3 sticky box at 1366x768
+
+| Alignment | Top clearance (padding-enforced) | Bottom clearance (padding-enforced) | Compliant? |
+| --- | --- | --- | --- |
+| `flex-start` (top-anchored) | Unchanged, from padding | Unchanged, from padding | Yes |
+| `center` | Unchanged, from padding (alignment only redistributes slack beyond the padding) | Unchanged, from padding | Yes |
