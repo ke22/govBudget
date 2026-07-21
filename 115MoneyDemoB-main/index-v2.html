@@ -575,6 +575,54 @@
             border-radius: 2px;
         }
 
+        /* 主線終點標記：未讀完（未達 100%）時是帶脈動的問號，象徵故事仍在展開；
+           讀完（--timeline-progress 達 100%）時變成箭頭，象徵告一段落、可以繼續往下讀。
+           獨立於 .center-main-line 之外（而非其子層），避免被該層 overflow:hidden 裁切 */
+        .timeline-terminus-mark {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translate(-50%, 50%);
+            z-index: 2;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--ui-accent);
+            color: var(--ui-paper);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            line-height: 1;
+            box-shadow: 0 2px 6px rgba(27, 23, 18, 0.25);
+            animation: timeline-terminus-pulse 1.8s ease-in-out infinite;
+        }
+
+        .timeline-terminus-mark::before {
+            content: '?';
+        }
+
+        .timeline-terminus-mark.timeline-complete {
+            animation: none;
+            transform: translate(-50%, 50%) scale(1);
+        }
+
+        .timeline-terminus-mark.timeline-complete::before {
+            content: '\2193';
+        }
+
+        @keyframes timeline-terminus-pulse {
+            0%, 100% {
+                opacity: 0.55;
+                transform: translate(-50%, 50%) scale(0.92);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, 50%) scale(1.08);
+            }
+        }
+
         /* 時間軸的每一行共通設定 */
         .timeline-row {
             position: relative;
@@ -654,10 +702,11 @@
             transform: none !important;
         }
 
-        /* Wide Chapter 1: the editorial cards are revealed by the same red line
-           that carries the reader through the chronology. Narrow layouts keep
-           their normal-flow cards so the mobile reading order stays uninterrupted. */
-        @media (min-width: 1025px) {
+        /* Intermediate + wide Chapter 1: the editorial cards are revealed by the
+           same red line that carries the reader through the chronology. Only
+           compact phone width keeps normal-flow cards so the mobile reading
+           order stays uninterrupted. */
+        @media (min-width: 641px) {
             .js .center-timeline-container .timeline-row.item-card .story-card {
                 opacity: 0 !important;
                 pointer-events: none !important;
@@ -678,9 +727,9 @@
         }
 
         /* =======================================================
-           第一章：手機與平板 RWD 自動調適成單欄
+           第一章：手機版 RWD 自動調適成單欄（平板/中寬改用下方 641-1024px 專屬區塊）
            ======================================================= */
-        @media (max-width: 1024px) {
+        @media (max-width: 640px) {
             .center-timeline-container {
                 padding: 20px 3%;
                 /* 縮減兩側內襯，給卡片更多伸展空間 */
@@ -718,6 +767,28 @@
                 max-width: 480px;
                 padding: 24px 28px;
                 /* 微調手機版卡片內距 */
+            }
+        }
+
+        /* =======================================================
+           第一章：641-1024px 平板專屬——沿用桌機左右交錯排版與捲動觸發，
+           但留白比桌機窄，卡片也稍微縮窄，貼合較窄的平板畫布
+           ======================================================= */
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .timeline-row.item-card.left-side {
+                align-self: flex-start;
+                justify-content: flex-end;
+                padding-right: 24px;
+            }
+
+            .timeline-row.item-card.right-side {
+                align-self: flex-end;
+                justify-content: flex-start;
+                padding-left: 24px;
+            }
+
+            .timeline-row.item-card .story-card {
+                max-width: 420px;
             }
         }
 
@@ -3587,6 +3658,7 @@
             <div class="center-main-line">
                 <div class="center-main-line-fill" id="center-main-line-fill"></div>
             </div>
+            <div class="timeline-terminus-mark" id="timeline-terminus-mark" aria-hidden="true"></div>
 
             <div class="timeline-row item-node">
                 <div class="timeline-block-node">
@@ -4834,13 +4906,24 @@
             const percent = total > 0 ? Math.min(100, Math.max(0, (scrolled / total) * 100)) : 0;
             fill.style.setProperty('--timeline-progress', percent + '%');
 
-            // Desktop cards follow the physical line. Each card is revealed when
-            // the fill reaches its leading edge, and the class is removed again
-            // when the reader scrolls backward.
-            if (window.innerWidth >= 1025 && total > 0) {
+            // Terminus marker reflects the same progress value the line itself uses,
+            // so it can never show "complete" while the line is still visually unfinished,
+            // and reverses for free when scrolling back up.
+            const terminusMark = document.getElementById('timeline-terminus-mark');
+            if (terminusMark) {
+                terminusMark.classList.toggle('timeline-complete', percent >= 100);
+            }
+
+            // Intermediate + desktop cards follow the physical line. Each card is
+            // revealed when the fill reaches its leading edge, and the class is
+            // removed again when the reader scrolls backward. Compact phone width
+            // keeps normal-flow cards (see the else branch below).
+            if (window.innerWidth >= 641 && total > 0) {
                 container.querySelectorAll('.timeline-row.item-card').forEach(card => {
                     const cardRect = card.getBoundingClientRect();
-                    const cardOffset = cardRect.top - rect.top + cardRect.height * 0.45;
+                    // 40px 領先量：主線要先捲過「卡片位置再往下 40px」，卡片才觸發，
+                    // 讓主線視覺上先抵達、卡片隨後跟上，而不是兩者同一瞬間一起變化
+                    const cardOffset = cardRect.top - rect.top + cardRect.height * 0.45 + 40;
                     const revealAt = Math.min(100, Math.max(0, (cardOffset / total) * 100));
                     card.classList.toggle('timeline-card-revealed', percent >= revealAt);
                 });
