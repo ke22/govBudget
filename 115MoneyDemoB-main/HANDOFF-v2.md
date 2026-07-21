@@ -38,26 +38,43 @@ user confirmed this merge explicitly.
 | `polish-index-database-v2` | 23/23 | Created `-v2` duplicates; 21 reported layout/copy/interaction fixes across both pages | Yes — `openspec/changes/archive/2026-07-21-polish-index-database-v2/` |
 | `stabilize-responsive-story-layout` | 23/23 | Responsive hero, editorial type/color roles, 3-tier (compact/intermediate/wide) layout+motion contract, header-aware chart clearance, Chapter 2 exit lifecycle | Yes — `openspec/changes/archive/2026-07-21-stabilize-responsive-story-layout/` |
 | `refine-v2-mobile-hero-cards-axis` | 8/8 | Scroll-indicator clipping, CJK line-breaking (`line-break: strict`), mobile Ch2/3 card motion rework (pinned top band + cards flow below), Chapter-4 axis de-crowd/align | Yes — `openspec/changes/archive/2026-07-21-refine-v2-mobile-hero-cards-axis/` |
+| `fix-responsive-story-acceptance-gaps` | 14/14 | Bucket 1: hero stamp/title collision margin, Ch2 Gantt intermediate-width frame, Ch2 step-9 card/image sequencing, Ch2→3 exit guard extension | Yes — `openspec/changes/archive/2026-07-21-fix-responsive-story-acceptance-gaps/` (commit `970fd43` implement, `b662403` archive) |
+| `refine-chapter1-timeline-choreography` | 11/11 | Bucket 2a: Ch1 timeline 40px line-lead, pulsing-"?"/arrow terminal marker, 641-1024px reveal extension | Yes — `openspec/changes/archive/2026-07-21-refine-chapter1-timeline-choreography/` (commit `c6d030b` implement, `b662403` archive) |
+| `refine-chapter2-chapter3-reveal-choreography` | 13/13 | Bucket 2b: Ch2 card-1 gray state, Ch3 grey-bar distinct reveal, Ch3 sticky-box centering, Ch3 intro-reveal gating | Yes — `openspec/changes/archive/2026-07-21-refine-chapter2-chapter3-reveal-choreography/` (commit `aebde13` implement, `b662403` archive) |
 
-All three are functionally done per their `tasks.md` checkboxes and were verified in
-a prior session via browser screenshots + DOM overflow checks across a 7-viewport
-matrix (390×844 up to 1440×900), forward/reverse scroll checks, and reduced-motion /
-no-JS states. `openspec/specs/` now has an accepted baseline for
+The first three are functionally done per their `tasks.md` checkboxes and were
+verified in a prior session via browser screenshots + DOM overflow checks across a
+7-viewport matrix (390×844 up to 1440×900), forward/reverse scroll checks, and
+reduced-motion/no-JS states. The latter three (Buckets 1 and 2) were verified via
+**source-level geometric/logical review only** — this session's browser automation
+cannot reach `localhost` dev servers in this environment (`chrome-error://
+chromewebdata/` despite `curl` returning 200, confirmed on 3+ separate attempts) —
+user explicitly signed off on proceeding this way.
+
+`openspec/specs/` now has an accepted baseline for
 `responsive-editorial-hero`, `chapter-visual-exit`,
 `editorial-type-and-color-hierarchy`, `chart-viewport-clearance`,
 `responsive-storytelling-motion`, `mobile-scrollytelling-card-motion`,
 `cjk-line-breaking`, `hero-scroll-indicator-visibility`,
-`chapter4-axis-mobile-legibility`, `project-card-keyword-tags`, and
-`desktop-pill-row-scroll` — this is the baseline the new-issue backlog's
-"acceptance gap" bucket (below) should be diffed against.
+`chapter4-axis-mobile-legibility`, `project-card-keyword-tags`,
+`desktop-pill-row-scroll`, `chapter1-timeline-motion-choreography` (new), and
+`chapter2-chapter3-reveal-refinements` (new) — this is the current baseline
+Buckets 3/4 (below) should be diffed against.
 
 Note: the `spectra-sync-specs` skill referenced by `spectra-archive`'s
-`SKILL.md` does not actually exist on this machine — spec syncing for all
-three changes was done by hand (writing `openspec/specs/<capability>/spec.md`
-directly from each change's delta), then each change was archived with
-`spectra archive <name> --skip-specs` to avoid double-applying. `@trace`
-metadata was not injected (that requires `.spectra/touched/<name>.json`,
-which was already cleaned up per the skill's own step ordering).
+`SKILL.md` does not actually exist on this machine — spec syncing for all six
+changes archived so far was done by hand (writing `openspec/specs/<capability>/
+spec.md` directly from each change's delta — a new capability needs a full
+Purpose+Requirements doc; an existing one needs the delta merged into the
+current file, checking for interleaving deltas from multiple changes touching
+the same capability), then each change was archived with `spectra archive <name>
+--skip-specs` to avoid double-applying. `@trace` metadata was not injected (that
+requires `.spectra/touched/<name>.json`, which was already cleaned up per the
+skill's own step ordering). Separately, that same `.spectra/touched/<name>.json`
+tracking file is unreliable for `/spectra-commit`'s purposes in this repo — it
+picks up hundreds of unrelated pre-existing untracked files rather than just
+what a task touched, so `/spectra-commit` runs here should stage from `git
+status` directly instead of trusting that file.
 
 ## Ad-hoc edits after `stabilize-responsive-story-layout` (not Spectra-tracked)
 
@@ -98,22 +115,31 @@ source code — see that file's "resolved against code" notes.
    reframed as verify/harden, not a confirmed break); Chapter 2's last card entering
    too early; chapter-transition ordering on forward/reverse scroll; per-component
    misalignment even where no page-level horizontal overflow exists.
-   **Status: proposed and parked** — see below.
-2. **`refine-story-scroll-choreography`** (new interaction/motion, desktop `≥1025px`
-   unless noted) — `center-main-line` appearing 40px before a `timeline-row`
-   item-node starts; a card triggering when the line passes 40px before it; the
-   line's end becoming an arrow, reverting to a line with a pulsing question mark
-   at the final point; Chapter 2 showing an empty gray chart on card 1 and
-   highlighting X/Y axes only on card 2; a reveal animation for the gray
-   `#ch3-bar-total-grey` layer; `#ch3-sticky-box-wrapper` centered vertically in
-   the viewport (confirmed not-a-bug — it's deliberately top-anchored per the
-   archived `chart-viewport-clearance` spec, so this is a spec amendment, not a
-   fix); last card/chart "scroll up" together when they'd otherwise overlap;
-   Chapter 2's closing paragraph waiting until the last card+image have scrolled
-   out before appearing; also picked up `CH1-TIMELINE-INTERMEDIATE-01` (extending
-   the desktop-only Chapter 1 timeline reveal to the 641–1024px intermediate
-   breakpoint — a new feature request, not a bug, split out from the original
-   layout complaint). **Status: triaged only, no `proposal.md` yet.**
+   **Status: shipped — implemented, committed (`970fd43`), archived (`b662403`), pushed.**
+2. Bucket 2 was split into two changes after review flagged the original single
+   9-item/3-chapter scope as too large:
+   - **`refine-chapter1-timeline-choreography`** — `center-main-line` appearing 40px
+     before a `timeline-row` item-node starts; a card triggering when the line passes
+     40px before it (implemented as one combined 40px-lead offset on the card's own
+     reveal threshold); the line's end becoming an arrow, reverting to a line with a
+     pulsing question mark at the final point; `CH1-TIMELINE-INTERMEDIATE-01`
+     (extending the desktop-only Chapter 1 timeline reveal to the 641–1024px
+     intermediate breakpoint).
+     **Status: shipped — implemented, committed (`c6d030b`), archived (`b662403`), pushed.**
+   - **`refine-chapter2-chapter3-reveal-choreography`** — Chapter 2 showing an empty
+     gray chart on card 1 and highlighting X/Y axes only on card 2; a reveal animation
+     for the gray `#ch3-bar-total-grey` layer; `#ch3-sticky-box-wrapper` centered
+     vertically at desktop width (found the actual CSS cascade winner —
+     `align-items: flex-start !important`, unconditional, wins at every breakpoint
+     today — and overrode it desktop-only without touching the header-clearance
+     anchor); last card/chart "scroll up" together when they'd otherwise overlap
+     (**turned out to need no code** — Chapter 3's chart is `position: sticky` and
+     already moves with the last card via the existing `--ch3-exit-offset` transform,
+     unlike Chapter 2's `position: fixed` backdrop which genuinely needed Bucket 1's
+     opacity-fade fix; downgraded to verification-only); Chapter 2's closing/Chapter 3
+     intro text now explicitly gated on `history-exit-complete` instead of the far
+     coarser "whole Ch2 section has scrolled past" signal.
+     **Status: shipped — implemented, committed (`aebde13`), archived (`b662403`), pushed.**
 3. **`polish-story-page-visual-hierarchy`** — `.scroll-indicator` contrast (also
    centered alignment specifically below 735px); footer visually distinguished
    from body; `.hero-stamp` enlarged (while still not covering the title — that
@@ -124,34 +150,31 @@ source code — see that file's "resolved against code" notes.
    garbled Chapter 3 HTML pastes. **Status: still needs the user re-asked for
    clarification, not actionable from the existing notes.**
 
-## `fix-responsive-story-acceptance-gaps` — proposed and parked, NOT committed
+## Buckets 1-2 — implementation notes worth keeping
 
-Full Spectra proposal workflow ran via `/spectra-propose` on 2026-07-21: `proposal.md`
-(Bug Fix format, 4 root-caused defects with exact `index-v2.html` line citations),
-`design.md` (4 decisions: hero-stamp position from title geometry, extend the
-existing intermediate-breakpoint Gantt-frame block, `transitionend`-driven card/image
-sequencing, extend `updateHistoryExit()`'s exit guard to the last story card),
-3 spec deltas (`responsive-editorial-hero`, `chart-viewport-clearance`,
-`chapter-visual-exit` — all ADDED requirements, since items 1–2 were pure
-implementation gaps against already-correct spec text and only items 3–4 needed new
-normative requirements), and `tasks.md` (5 groups, 14 tasks). `spectra analyze` is
-clean on all 4 dimensions, `spectra validate` passed, then the change was parked
-per the propose skill's workflow.
+All three changes above went through the full propose → apply → commit → archive
+cycle in this session. A few things worth remembering if picking this up cold:
 
-**Important: parking moves the change's files out of `openspec/changes/` into
-`.git/spectra-app/changes/fix-responsive-story-acceptance-gaps/`** — they will
-*not* show up in a normal `ls openspec/changes/` or `git status` (that path is
-inside `.git/`, which is why it looks "gone" if you go looking for it the ordinary
-way). Nothing is lost — `spectra list --parked --json` confirms it's there with all
-14 tasks. Run `/spectra-apply fix-responsive-story-acceptance-gaps` (auto-unparks)
-when ready to implement.
-
-Branch decision (2026-07-21): staying on `optimize-index-frontend-perf` for this
-work rather than cutting a new branch — this branch already holds the entire
-`index-v2.html` workstream (perf, `stabilize-responsive-story-layout`, this handoff,
-the triage doc), so keeping the fix here keeps it in context. Revisit if a
-standalone PR for just the acceptance-gap fixes (separate from the earlier
-perf/stabilize work) becomes desirable.
+- **Caught a sign-error bug during apply**: `refine-chapter1-timeline-choreography`'s
+  own `design.md` said to *subtract* 40px from the card's reveal threshold, which
+  actually would have made the card reveal *earlier* — contradicting both the spec
+  text and the design's own stated rationale ("line arrives, then card follows").
+  Caught by working through concrete numbers before shipping; fixed to *add* 40px,
+  and corrected `design.md`/`tasks.md` to match so the artifacts don't contradict
+  the code.
+- **The `#ch3-sticky-box-wrapper` centering fix required tracing the real cascade**,
+  not just the first-declared `align-items` rule — a later, unconditional (not
+  media-scoped) rule with `!important` was the actual winner at every breakpoint.
+  The fix only works because that same rule's `padding` (not `align-items`) is what
+  enforces the header-clearance minimum, so re-centering never violates it.
+- **Verification for all three changes was source-level only** — this session's
+  Chrome extension can't reach `localhost:8001` (`chrome-error://chromewebdata/`
+  despite `curl` returning 200, confirmed again on a fresh attempt this session).
+  If real pixel verification is ever needed, that environment issue needs solving
+  first, or use a different viewing method.
+- **`spectra park`/`unpark` moves change files into `.git/spectra-app/changes/<name>/`**
+  — invisible to normal `ls`/`git status` but not lost; confirm with `spectra list
+  --parked --json`.
 
 ## Recommended next steps (in order)
 
@@ -159,14 +182,13 @@ perf/stabilize work) becomes desirable.
 2. ~~Archive the three completed changes~~ — done, `6fcf12a`.
 3. ~~Turn the new-issue backlog into an actual triage table~~ — done, see
    `ISSUE-TRIAGE-v2.md`, all open questions resolved against source code.
-4. ~~Run `/spectra-propose` for `fix-responsive-story-acceptance-gaps`~~ — done,
-   parked (see above). Run `/spectra-apply fix-responsive-story-acceptance-gaps`
-   when ready to implement.
-5. Then propose `refine-story-scroll-choreography`, then
-   `polish-story-page-visual-hierarchy` — deliberately in that order so
-   animation/choreography work doesn't get layered on top of a still-broken
-   layout baseline.
-6. Bucket 4 fragments still need the user re-asked for clarification before any
+4. ~~Propose, implement, commit, and archive Bucket 1 (`fix-responsive-story-acceptance-gaps`)~~
+   — done, see above.
+5. ~~Propose, implement, commit, and archive Bucket 2 (split into
+   `refine-chapter1-timeline-choreography` + `refine-chapter2-chapter3-reveal-choreography`)~~
+   — done, see above.
+6. Propose `polish-story-page-visual-hierarchy` (Bucket 3) next.
+7. Bucket 4 fragments still need the user re-asked for clarification before any
    change can be written for them.
 
 ## How to test
