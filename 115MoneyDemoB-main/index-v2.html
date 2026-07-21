@@ -325,8 +325,9 @@
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            color: var(--ui-muted);
-            /* 原為 var(--np-muted)，該 token 是給淺色卡片內文用的，直接放在 hero 深色拼貼圖上對比不足 */
+            color: var(--ui-ink-inverse);
+            /* 原為 var(--ui-muted)，該 token 是給淺色卡片內文用的，直接放在 hero 深色拼貼圖上對比不足；
+               改用 --ui-ink-inverse，與手機／平板版 .scroll-indicator 已經驗證過對比足夠的做法一致 */
             font-size: var(--type-caption);
             font-weight: 500;
             animation: bounce 2s infinite;
@@ -336,8 +337,7 @@
             content: '';
             width: 2px;
             height: 40px;
-            background: linear-gradient(to bottom, var(--ui-muted), transparent);
-            /* 原為 var(--primary) 藍綠色，改為新聞剪貼風格暖灰色 */
+            background: linear-gradient(to bottom, var(--ui-ink-inverse), transparent);
         }
 
         /* 手機版：指示器（文字＋向下延伸的線）在 bottom:40px 時，加上其自身高度
@@ -3077,6 +3077,10 @@
         .page-footer {
             padding: 24px 20px;
             background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.2px) 0 0/4px 4px, var(--ui-canvas);
+            /* --ui-canvas 與上方 .footer-cta 漸層終點 --bg-deep 是同一個色值，
+               單靠背景色分不出頁尾邊界，加一條淡色分隔線（沿用本檔案深色面板既有的
+               細線做法，如第二三章圖表面板邊框）標出視覺分界 */
+            border-top: 1px solid rgba(237, 230, 211, 0.1);
             color: var(--ui-muted);
             font-size: var(--type-caption);
             text-align: center;
@@ -3208,9 +3212,10 @@
             .hero-title {
                 position: static;
                 width: 100%;
-                /* 34px 保留給疊在卡片上緣的印章（top:-26px, scale(0.72), 含箭頭尖角，
-                   計算後最深壓進卡片內約 26px）留出淨空，不論標題斷成幾行都不會被壓到 */
-                margin: 34px 0 0;
+                /* 44px 保留給疊在卡片上緣的印章（top:-26px, scale(0.9), 含箭頭尖角，
+                   放大後計算最深壓進卡片內約 36.4px）留出淨空，不論標題斷成幾行都不會被壓到。
+                   印章放大時（見 .hero-stamp-wrap scale）此值需同步重新計算，不能各自維護 */
+                margin: 44px 0 0;
                 padding: 0;
                 background: none;
                 box-shadow: none;
@@ -3243,14 +3248,15 @@
             }
 
             /* 印章疊釘在合併紙卡上緣，一半在卡片外、一半壓進卡片內，
-               紅底＋米色（--ui-paper）文字與粗箭頭呼應騎縫章視覺語彙 */
+               紅底＋米色（--ui-paper）文字與粗箭頭呼應騎縫章視覺語彙。
+               放大到 0.9（原 0.72），.hero-title 的 margin-top 已同步重新計算為 44px */
             .hero-stamp-wrap {
                 position: absolute;
                 top: -26px;
                 bottom: auto;
                 right: clamp(16px, 5vw, 42px);
                 z-index: 5;
-                transform: scale(0.72);
+                transform: scale(0.9);
             }
 
             .hero-stamp {
