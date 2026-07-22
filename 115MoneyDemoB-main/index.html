@@ -347,6 +347,34 @@
                 font-size: 1.1rem !important;
                 line-height: 1.8 !important;
             }
+
+            .scroll-indicator {
+                bottom: 90px;
+                animation: bounce-mobile 2s infinite;
+            }
+
+            .scroll-indicator::after {
+                height: 26px;
+            }
+        }
+
+        @keyframes bounce-mobile {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translate(-50%, 0);
+            }
+
+            40% {
+                transform: translate(-50%, -6px);
+            }
+
+            60% {
+                transform: translate(-50%, -3px);
+            }
         }
 
         @keyframes bounce {
@@ -481,6 +509,18 @@
             pointer-events: auto !important;
         }
 
+        /* 718億先行動支方案金字塔圖：獨立於 is-active-chapter 機制，捲入視窗後自行淡入 */
+        #ch4-pyramid {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        #ch4-pyramid.visible-box {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* =======================================================
            第一章：全新置中交叉時間軸
            ======================================================= */
@@ -519,6 +559,52 @@
             height: 0%;
             background: var(--np-seal-red);
             border-radius: 2px;
+        }
+
+        /* 時間軸終點標記：未完成時脈動顯示「?」，完成時變為「↓」 */
+        .timeline-terminus-mark {
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translate(-50%, 50%);
+            z-index: 2;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--np-seal-red-bright);
+            color: var(--np-text-ondark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            line-height: 1;
+            box-shadow: 0 2px 6px rgba(27, 23, 18, 0.25);
+            animation: timeline-terminus-pulse 1.8s ease-in-out infinite;
+        }
+
+        .timeline-terminus-mark::before {
+            content: '?';
+        }
+
+        .timeline-terminus-mark.timeline-complete {
+            animation: none;
+            transform: translate(-50%, 50%) scale(1);
+        }
+
+        .timeline-terminus-mark.timeline-complete::before {
+            content: '\2193';
+        }
+
+        @keyframes timeline-terminus-pulse {
+            0%, 100% {
+                opacity: 0.55;
+                transform: translate(-50%, 50%) scale(0.92);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, 50%) scale(1.08);
+            }
         }
 
         /* 時間軸的每一行共通設定 */
@@ -634,8 +720,29 @@
         /* 強制重置故事卡片在置中佈局時的互動指針效果（因為原本是寫在隨捲動觸發的 class 上） */
         .timeline-row.item-card .story-card {
             pointer-events: auto !important;
-            opacity: 1 !important;
             transform: none !important;
+        }
+
+        /* 卡片與節點隨紅線捲動漸進顯現 */
+        .js .center-timeline-container .timeline-row.item-card .story-card {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: translateY(18px) rotate(-0.4deg) !important;
+            transition: opacity 320ms ease, transform 420ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .js .center-timeline-container .timeline-row.item-card.timeline-card-revealed .story-card {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            transform: translateY(0) rotate(-0.4deg) !important;
+        }
+        .js .center-timeline-container .timeline-row.item-node .timeline-block-node {
+            opacity: 0 !important;
+            transform: translateY(18px) !important;
+            transition: opacity 320ms ease, transform 420ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        .js .center-timeline-container .timeline-row.item-node.timeline-node-revealed .timeline-block-node {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
         }
 
         .timeline-row.item-card:hover .story-card {
@@ -2055,7 +2162,7 @@
                 left: 50%;
                 width: 2px;
                 /* 行動版軸線漸層，改由主藍綠色與點綴藍綠色延伸至警示紅 */
-                background: linear-gradient(to bottom, var(--primary) 0%, var(--accent) 70%, var(--danger) 100%);
+                background: linear-gradient(to bottom, var(--np-seal-red-bright) 0%, var(--accent) 70%, var(--danger) 100%);
                 transform: translateX(-50%);
                 z-index: 0;
             }
@@ -2074,7 +2181,7 @@
             #chapter-1 .mobile-node-item {
                 background: #f0fdfa;
                 /* 原為暗藍，改為極淺的藍綠色底（Mint tint） */
-                border: 2px solid var(--primary);
+                border: 2px solid var(--np-seal-red-bright);
                 padding: 8px 20px;
                 border-radius: 50px;
                 font-size: 0.85rem;
@@ -2713,6 +2820,7 @@
 </head>
 
 <body>
+    <script>document.documentElement.classList.add('js');</script>
 
     <a href="#main" class="skip-link">略過導覽，直接跳至主要內容</a>
 
@@ -2823,6 +2931,7 @@
             <div class="center-main-line">
                 <div class="center-main-line-fill" id="center-main-line-fill"></div>
             </div>
+            <div class="timeline-terminus-mark" id="timeline-terminus-mark" aria-hidden="true"></div>
 
             <div class="timeline-row item-node">
                 <div class="timeline-block-node">
@@ -3316,8 +3425,8 @@
                     style="font-size: 1.35rem; color: var(--np-text-ondark); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
                     國民黨立法院黨團1月16日提出718億新興計畫先行動支案並逕付二讀，共涵蓋38項計畫。國民黨立委羅智強指出，動支案主要是針對地方民生急迫的一些新增計畫，或者是新興計畫裡面的一些支出專案。該案於3月6日通過。
                 </p>
-                <div class="dynamic-chart-box"
-                    style="position: relative; opacity: 1; visibility: visible !important; transform: none !important; height: auto; width: 100%; padding: 0; pointer-events: auto;">
+                <div class="dynamic-chart-box" id="ch4-pyramid"
+                    style="position: relative; height: auto; width: 100%; padding: 0; pointer-events: auto;">
                     <div class="dash-container-box" style="max-width: 100%;">
                         <div class="dash-header">
                             <h3>718億先行動支方案納入與排除項目金額對比</h3>
@@ -3348,60 +3457,60 @@
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 0%;"></div><span
+                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 0ms;" data-target-width="0%"></div><span
                                     class="val-num">0</span>
                             </div>
                             <div class="cat-item">地方財政與<br>大眾通勤補貼</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 100%;"></div><span
+                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 0ms;" data-target-width="100%"></div><span
                                     class="val-num">399.35</span>
                             </div>
                         </div>
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 16.17%;"></div><span
+                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 50ms;" data-target-width="16.17%"></div><span
                                     class="val-num">64.58</span>
                             </div>
                             <div class="cat-item">氣候調適、治水<br>與環保基建</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 38.03%;"></div><span
+                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 50ms;" data-target-width="38.03%"></div><span
                                     class="val-num">151.88</span>
                             </div>
                         </div>
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 10.15%;"></div><span
+                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 100ms;" data-target-width="10.15%"></div><span
                                     class="val-num">40.53</span>
                             </div>
                             <div class="cat-item">醫療與少子化對策</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 29.84%;"></div><span
+                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 100ms;" data-target-width="29.84%"></div><span
                                     class="val-num">119.18</span>
                             </div>
                         </div>
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 33.14%;"></div><span
+                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 150ms;" data-target-width="33.14%"></div><span
                                     class="val-num">132.34</span>
                             </div>
                             <div class="cat-item">戰略科技研發與國防升級</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 4.94%;"></div><span
+                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 150ms;" data-target-width="4.94%"></div><span
                                     class="val-num">19.74</span>
                             </div>
                         </div>
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 15.48%;"></div><span
+                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 200ms;" data-target-width="15.48%"></div><span
                                     class="val-num">61.83</span>
                             </div>
                             <div class="cat-item">其他<br>（建物整修、公務車汰換）</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 6.89%;"></div><span
+                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 200ms;" data-target-width="6.89%"></div><span
                                     class="val-num">27.50</span>
                             </div>
                         </div>
@@ -3718,7 +3827,7 @@
         </div>
     </section>
 
-    <footer style="background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.2px) 0 0/4px 4px, var(--bg-deep); color: var(--np-muted-ondark); text-align: center; padding: 24px 20px; font-size: 0.85rem;">
+    <footer style="background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.2px) 0 0/4px 4px, #1E1410; border-top: 1px solid rgba(237, 230, 211, 0.12); color: var(--np-muted-ondark); text-align: center; padding: 24px 20px; font-size: 0.85rem;">
         copyright © 2026 中央通訊社版權所有
     </footer>
 
@@ -3806,6 +3915,24 @@
         }, { rootMargin: '-10% 0px -20% 0px', threshold: 0.05 }); // 🔥 大幅拓寬上下安全感應帶，字卡再也不會在半路閃退！
 
         scenes.forEach(scene => observer.observe(scene));
+
+        // 718億先行動支方案金字塔圖：捲入視窗時觸發一次進場動畫，之後不再重複觸發
+        const ch4Pyramid = document.getElementById('ch4-pyramid');
+        if (ch4Pyramid) {
+            const ch4PyramidObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible-box');
+                        entry.target.querySelectorAll('.bar-rect').forEach(bar => {
+                            bar.style.width = bar.getAttribute('data-target-width');
+                        });
+                        ch4PyramidObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+            ch4PyramidObserver.observe(ch4Pyramid);
+        }
+
         // =======================================================
         // 全新重構：第二章獨立物理滾動監聽器 (終極百分比放行版)
         // =======================================================
@@ -4026,6 +4153,43 @@
             const scrolled = window.innerHeight * 0.5 - rect.top;
             const percent = total > 0 ? Math.min(100, Math.max(0, (scrolled / total) * 100)) : 0;
             fill.style.height = percent + '%';
+
+            const terminusMark = document.getElementById('timeline-terminus-mark');
+            if (terminusMark) {
+                terminusMark.classList.toggle('timeline-complete', percent >= 100);
+            }
+
+            const timelineOnScreen = rect.bottom > 0 && rect.top < window.innerHeight;
+            if (timelineOnScreen) {
+                const fillTipViewportY = rect.top + (percent / 100) * rect.height;
+                container.querySelectorAll('.timeline-row.item-card, .timeline-row.item-node').forEach(row => {
+                    const rowRect = row.getBoundingClientRect();
+                    const revealedClass = row.classList.contains('item-card') ? 'timeline-card-revealed' : 'timeline-node-revealed';
+                    row.classList.toggle(revealedClass, fillTipViewportY >= rowRect.top + 40);
+                });
+            }
+        }
+
+        // 第二章歷史故事卡：桌機版依卡片頂部相對於視窗高度的比例連續淡出（僅在捲出畫面上緣時），
+        // 於 50% 視窗高度前維持可讀，30% 前淡至全透明；手機版沿用既有的整步驟切換機制，不受影響
+        function updateChapter2CardOpacity() {
+            const isDesktop = typeof window.matchMedia === 'function' && window.matchMedia('(min-width: 969px)').matches;
+            document.querySelectorAll('#chapter-2-rebuilt .gantt-card-rebuilt .story-card').forEach(card => {
+                if (!card.textContent.trim()) return;
+                if (!isDesktop) {
+                    card.style.opacity = '';
+                    card.style.pointerEvents = '';
+                    return;
+                }
+                const rect = card.getBoundingClientRect();
+                const topRatio = rect.top / window.innerHeight;
+                let opacity;
+                if (topRatio >= 0.5) opacity = 1;
+                else if (topRatio <= 0.3) opacity = 0;
+                else opacity = (topRatio - 0.3) / 0.2;
+                card.style.opacity = opacity;
+                card.style.pointerEvents = opacity < 0.05 ? 'none' : 'auto';
+            });
         }
 
         // =======================================================
@@ -4035,6 +4199,7 @@
         function onScrollFrame() {
             scrollRafPending = false;
             updateChapter2Stage();
+            updateChapter2CardOpacity();
             updateChapter3Bars();
             updateTimelineMainLineFill();
         }

@@ -1,34 +1,41 @@
-# hero-scroll-indicator-visibility Specification
+# chapter2-story-card-readability Specification
 
 ## Purpose
 
-The hero's「向下捲動探索」scroll indicator stays fully visible on phone throughout its bounce animation, instead of being clipped by the hero's torn bottom edge.
+TBD - created by archiving change 'fix-timeline-chart-polish'. Update Purpose after archive.
 
 ## Requirements
 
-### Requirement: Hero scroll indicator stays fully visible on phone
+### Requirement: History story cards remain readable until past 50% viewport height
 
-On phone widths (viewport <= 640px), the hero「向下捲動探索」scroll indicator (`.scroll-indicator`, its label and its downward `::after` line) SHALL remain fully within the hero's visible area throughout its bounce animation, never clipped by the hero section's torn `clip-path` bottom edge. The indicator SHALL NOT be hidden on phone.
+The Chapter 2 mapping-history story cards SHALL maintain an opacity of at least 0.85 (fully readable text) while any part of the card is at or below the 50% viewport height mark. The opacity fade-out SHALL begin only after the card's top edge rises above the 50% viewport height threshold.
 
-The implementation SHALL use a dedicated `@keyframes bounce-mobile` animation with dampened bounce heights (`-6px` at 40% keyframe, `-3px` at 60% keyframe) instead of the desktop `@keyframes bounce` (which uses `-10px`). The mobile override SHALL set `bottom: 90px` (up from 40px) and `.scroll-indicator::after { height: 26px; }` (down from 40px) to keep the indicator above the hero's torn clip-path bottom edge.
+The scroll handler that computes story card opacity SHALL use `viewportHeight * 0.50` as the start threshold (where fade begins) and `viewportHeight * 0.30` as the end threshold (where opacity reaches 0), ensuring that cards at the center of the screen are always legible.
 
-The indicator label "向下捲動探索" SHALL be horizontally centered in the hero section via `left: 50%; transform: translateX(-50%)` at all viewport widths.
+#### Scenario: Card fully readable at 50% viewport height
 
-#### Scenario: Indicator not clipped during bounce on mobile
+- **WHEN** a Chapter 2 history story card's top edge is at or below 50% of the viewport height
+- **THEN** the card's opacity is >= 0.85 and the text is fully legible
 
-- **WHEN** the hero is viewed on a phone-width viewport (<= 640px) and the `.scroll-indicator` bounce animation runs
-- **THEN** the full label text and the entire downward line remain visible (not cut off by the hero's clipped bottom) at every point of the bounce cycle
-- **AND** the indicator uses `@keyframes bounce-mobile` with maximum vertical displacement of `-6px` (not `-10px`)
+#### Scenario: Card begins fading above 50% viewport height
 
-#### Scenario: Indicator horizontally centered on all viewports
+- **WHEN** a Chapter 2 history story card's top edge rises above 50% of the viewport height
+- **THEN** the card's opacity begins decreasing proportionally from 1.0 toward 0.0
 
-- **WHEN** the hero section is viewed at any viewport width
-- **THEN** the "向下捲動探索" text is horizontally centered relative to the hero section
+#### Scenario: Card fully transparent above 30% viewport height
 
-#### Scenario: Desktop indicator unchanged
+- **WHEN** a Chapter 2 history story card's top edge is at or above 30% of the viewport height
+- **THEN** the card's opacity is 0 and pointer-events are set to none
 
-- **WHEN** the hero is viewed at desktop width (>= 969px)
-- **THEN** the scroll indicator keeps its original bottom offset (40px) and bounce amplitude (`@keyframes bounce`)
+##### Example: opacity at different scroll positions
+
+| Card top edge (relative to viewport height) | Expected opacity | Readable? |
+| --- | --- | --- |
+| 70% vh (below center) | 1.0 | Yes |
+| 50% vh (at threshold) | 1.0 | Yes |
+| 40% vh (between thresholds) | 0.5 | Partially |
+| 30% vh (at end threshold) | 0.0 | No |
+| 20% vh (above end) | 0.0 | No |
 
 <!-- @trace
 source: fix-timeline-chart-polish

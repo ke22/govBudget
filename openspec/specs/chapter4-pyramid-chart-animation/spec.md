@@ -1,34 +1,39 @@
-# hero-scroll-indicator-visibility Specification
+# chapter4-pyramid-chart-animation Specification
 
 ## Purpose
 
-The hero's「向下捲動探索」scroll indicator stays fully visible on phone throughout its bounce animation, instead of being clipped by the hero's torn bottom edge.
+TBD - created by archiving change 'fix-timeline-chart-polish'. Update Purpose after archive.
 
 ## Requirements
 
-### Requirement: Hero scroll indicator stays fully visible on phone
+### Requirement: Pyramid chart bars animate from zero to target width on scroll entry
 
-On phone widths (viewport <= 640px), the hero「向下捲動探索」scroll indicator (`.scroll-indicator`, its label and its downward `::after` line) SHALL remain fully within the hero's visible area throughout its bounce animation, never clipped by the hero section's torn `clip-path` bottom edge. The indicator SHALL NOT be hidden on phone.
+The 718億先行動支方案 pyramid comparison chart (`.dash-container-box`) SHALL animate its bar elements (`.bar-rect`) from `width: 0` to their target width with a `1s ease-out` CSS transition when the chart first enters the viewport. The animation SHALL be triggered by the IntersectionObserver adding the `.visible-box` class to the chart container.
 
-The implementation SHALL use a dedicated `@keyframes bounce-mobile` animation with dampened bounce heights (`-6px` at 40% keyframe, `-3px` at 60% keyframe) instead of the desktop `@keyframes bounce` (which uses `-10px`). The mobile override SHALL set `bottom: 90px` (up from 40px) and `.scroll-indicator::after { height: 26px; }` (down from 40px) to keep the indicator above the hero's torn clip-path bottom edge.
+All inline styles that force `opacity: 1; visibility: visible !important; transform: none !important;` on the chart container elements SHALL be removed so the CSS transition classes can take effect.
 
-The indicator label "向下捲動探索" SHALL be horizontally centered in the hero section via `left: 50%; transform: translateX(-50%)` at all viewport widths.
+The `.bar-rect` elements SHALL start with `width: 0` and transition to their specified width only when the ancestor `.dynamic-chart-box` receives the `.visible-box` class. The transition SHALL use `transition: width 1s ease-out` and the bars SHALL stagger slightly (50ms incremental delay per row via `transition-delay`) so the rows animate sequentially from top to bottom.
 
-#### Scenario: Indicator not clipped during bounce on mobile
+#### Scenario: Chart bars animate on first scroll into view
 
-- **WHEN** the hero is viewed on a phone-width viewport (<= 640px) and the `.scroll-indicator` bounce animation runs
-- **THEN** the full label text and the entire downward line remain visible (not cut off by the hero's clipped bottom) at every point of the bounce cycle
-- **AND** the indicator uses `@keyframes bounce-mobile` with maximum vertical displacement of `-6px` (not `-10px`)
+- **WHEN** the pyramid chart scrolls into the viewport for the first time
+- **THEN** each `.bar-rect` grows from `width: 0` to its target percentage width over 1 second with ease-out timing
+- **AND** the rows animate sequentially with 50ms stagger between each row
 
-#### Scenario: Indicator horizontally centered on all viewports
+#### Scenario: Chart bars remain at target width after animation completes
 
-- **WHEN** the hero section is viewed at any viewport width
-- **THEN** the "向下捲動探索" text is horizontally centered relative to the hero section
+- **WHEN** the user scrolls past the chart and returns
+- **THEN** the bars remain at their target width (the IntersectionObserver does not re-trigger the animation)
 
-#### Scenario: Desktop indicator unchanged
+##### Example: 5-row pyramid chart animation sequence
 
-- **WHEN** the hero is viewed at desktop width (>= 969px)
-- **THEN** the scroll indicator keeps its original bottom offset (40px) and bounce amplitude (`@keyframes bounce`)
+| Row | Category | Transition delay | Animation start |
+| --- | --- | --- | --- |
+| 1 | 地方財政與大眾通勤補貼 | 0ms | Immediate on `.visible-box` |
+| 2 | 氣候調適、治水與環保基建 | 50ms | 50ms after `.visible-box` |
+| 3 | 醫療與少子化對策 | 100ms | 100ms after `.visible-box` |
+| 4 | 戰略科技研發與國防升級 | 150ms | 150ms after `.visible-box` |
+| 5 | 其他 | 200ms | 200ms after `.visible-box` |
 
 <!-- @trace
 source: fix-timeline-chart-polish

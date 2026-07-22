@@ -1,34 +1,26 @@
-# hero-scroll-indicator-visibility Specification
+# footer-visual-separation Specification
 
 ## Purpose
 
-The hero's「向下捲動探索」scroll indicator stays fully visible on phone throughout its bounce animation, instead of being clipped by the hero's torn bottom edge.
+TBD - created by archiving change 'fix-timeline-chart-polish'. Update Purpose after archive.
 
 ## Requirements
 
-### Requirement: Hero scroll indicator stays fully visible on phone
+### Requirement: Footer is visually distinct from the content section above
 
-On phone widths (viewport <= 640px), the hero「向下捲動探索」scroll indicator (`.scroll-indicator`, its label and its downward `::after` line) SHALL remain fully within the hero's visible area throughout its bounce animation, never clipped by the hero section's torn `clip-path` bottom edge. The indicator SHALL NOT be hidden on phone.
+The `<footer>` element SHALL use a background color that is visually distinguishable from the `.footer-cta` section immediately above it. The footer background SHALL differ from `--bg-deep` (`#12191A`) by at least a noticeable tonal shift, creating a clear visual boundary without requiring the reader to locate the copyright text.
 
-The implementation SHALL use a dedicated `@keyframes bounce-mobile` animation with dampened bounce heights (`-6px` at 40% keyframe, `-3px` at 60% keyframe) instead of the desktop `@keyframes bounce` (which uses `-10px`). The mobile override SHALL set `bottom: 90px` (up from 40px) and `.scroll-indicator::after { height: 26px; }` (down from 40px) to keep the indicator above the hero's torn clip-path bottom edge.
+The footer SHALL use a warmer dark tone (e.g., `#1E1410` or similar warm-charcoal) or a top border (1px solid with 10-15% opacity separator) to mark the transition from editorial content to site metadata.
 
-The indicator label "向下捲動探索" SHALL be horizontally centered in the hero section via `left: 50%; transform: translateX(-50%)` at all viewport widths.
+#### Scenario: Footer background differs from content above
 
-#### Scenario: Indicator not clipped during bounce on mobile
+- **WHEN** the page is scrolled to the bottom
+- **THEN** the footer area is visually distinguishable from the `.footer-cta` section above it via a noticeable background color or border difference
 
-- **WHEN** the hero is viewed on a phone-width viewport (<= 640px) and the `.scroll-indicator` bounce animation runs
-- **THEN** the full label text and the entire downward line remain visible (not cut off by the hero's clipped bottom) at every point of the bounce cycle
-- **AND** the indicator uses `@keyframes bounce-mobile` with maximum vertical displacement of `-6px` (not `-10px`)
+#### Scenario: Footer maintains design cohesion
 
-#### Scenario: Indicator horizontally centered on all viewports
-
-- **WHEN** the hero section is viewed at any viewport width
-- **THEN** the "向下捲動探索" text is horizontally centered relative to the hero section
-
-#### Scenario: Desktop indicator unchanged
-
-- **WHEN** the hero is viewed at desktop width (>= 969px)
-- **THEN** the scroll indicator keeps its original bottom offset (40px) and bounce amplitude (`@keyframes bounce`)
+- **WHEN** the footer is viewed alongside the rest of the page
+- **THEN** the footer's background color remains within the overall dark editorial color palette (no bright or jarring colors) while still being perceptibly different from the content above
 
 <!-- @trace
 source: fix-timeline-chart-polish
