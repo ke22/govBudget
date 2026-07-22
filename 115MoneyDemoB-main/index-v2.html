@@ -697,30 +697,40 @@
             /* 與中央線保持呼吸間距 */
         }
 
-        /* 強制重置故事卡片在置中佈局時的互動指針效果（因為原本是寫在隨捲動觸發的 class 上） */
+        /* 保留互動指針/transform 基準值；opacity 現在一律由捲動觸發的 class 決定（含手機版） */
         .timeline-row.item-card .story-card {
             pointer-events: auto !important;
-            opacity: 1 !important;
             transform: none !important;
         }
 
-        /* Intermediate + wide Chapter 1: the editorial cards are revealed by the
-           same red line that carries the reader through the chronology. Only
-           compact phone width keeps normal-flow cards so the mobile reading
-           order stays uninterrupted. */
-        @media (min-width: 641px) {
-            .js .center-timeline-container .timeline-row.item-card .story-card {
-                opacity: 0 !important;
-                pointer-events: none !important;
-                transform: translateY(18px) rotate(-0.4deg) !important;
-                transition: opacity 320ms ease, transform 420ms cubic-bezier(0.16, 1, 0.3, 1) !important;
-            }
+        /* Chapter 1 story cards and date nodes are both revealed by the same red
+           line that carries the reader through the chronology, at every width
+           including compact phone — the line leads by a fixed pixel offset
+           before each row's content fades in, so the whole timeline reads as
+           one consistent sequence instead of nodes appearing for free while
+           only cards lag behind. */
+        .js .center-timeline-container .timeline-row.item-card .story-card {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: translateY(18px) rotate(-0.4deg) !important;
+            transition: opacity 320ms ease, transform 420ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
 
-            .js .center-timeline-container .timeline-row.item-card.timeline-card-revealed .story-card {
-                opacity: 1 !important;
-                pointer-events: auto !important;
-                transform: translateY(0) rotate(-0.4deg) !important;
-            }
+        .js .center-timeline-container .timeline-row.item-card.timeline-card-revealed .story-card {
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            transform: translateY(0) rotate(-0.4deg) !important;
+        }
+
+        .js .center-timeline-container .timeline-row.item-node .timeline-block-node {
+            opacity: 0 !important;
+            transform: translateY(18px) !important;
+            transition: opacity 320ms ease, transform 420ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+
+        .js .center-timeline-container .timeline-row.item-node.timeline-node-revealed .timeline-block-node {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
         }
 
         .timeline-row.item-card:hover .story-card {
@@ -2900,6 +2910,11 @@
                 transform: rotate(-0.4deg) !important;
             }
 
+            .js .center-timeline-container .timeline-row.item-node .timeline-block-node {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
             .scroll-indicator {
                 animation: none !important;
             }
@@ -4944,28 +4959,32 @@
                 terminusMark.classList.toggle('timeline-complete', percent >= 100);
             }
 
-            // Intermediate + desktop cards follow the physical line. Each card is
-            // revealed when the fill reaches its leading edge, and the class is
-            // removed again when the reader scrolls backward. Compact phone width
-            // keeps normal-flow cards (see the else branch below).
+            // Every row — date node and story card alike, at every width including
+            // mobile — follows the physical line. Each row is revealed when the
+            // fill reaches its own leading edge, and the class is removed again
+            // when the reader scrolls backward, so both directions stay symmetric.
             // The cheap fill/terminus update above runs every frame (so the end-state
             // is always correct, even right after a fast scroll jump); the expensive
-            // per-card querySelectorAll + getBoundingClientRect loop below is gated to
+            // per-row querySelectorAll + getBoundingClientRect loop below is gated to
             // when Chapter 1 is actually on screen — it's pure waste otherwise, which is
             // most of the page (all of Chapters 2/3/4).
             const timelineOnScreen = rect.bottom > 0 && rect.top < window.innerHeight;
-            if (timelineOnScreen && window.innerWidth >= 641 && total > 0) {
-                container.querySelectorAll('.timeline-row.item-card').forEach(card => {
-                    const cardRect = card.getBoundingClientRect();
-                    // 40px 領先量：主線要先捲過「卡片位置再往下 40px」，卡片才觸發，
-                    // 讓主線視覺上先抵達、卡片隨後跟上，而不是兩者同一瞬間一起變化
-                    const cardOffset = cardRect.top - rect.top + cardRect.height * 0.45 + 40;
-                    const revealAt = Math.min(100, Math.max(0, (cardOffset / total) * 100));
-                    card.classList.toggle('timeline-card-revealed', percent >= revealAt);
-                });
-            } else if (timelineOnScreen) {
-                container.querySelectorAll('.timeline-row.item-card').forEach(card => {
-                    card.classList.remove('timeline-card-revealed');
+            if (timelineOnScreen) {
+                // 紅線視覺頂端在畫面上的實際 Y 座標。不可直接拿 percent（用 total =
+                // rect.height - innerHeight*0.5 當分母的捲動進度）去對應每一行的容器內
+                // 座標來比較 —— 那個分母跟畫出填色高度用的 rect.height 不是同一個比例尺，
+                // 兩者換算會有落差，且落差隨行距容器頂端越遠越放大，導致線明明已經視覺上
+                // 劃過整張卡片、甚至到卡片中段才觸發淡入。改成直接用「紅線視覺頂端的螢幕
+                // 座標」跟「這一行視覺頂端的螢幕座標」比較，才是使用者實際在畫面上看到的
+                // 位置關係，不會受那個比例尺落差影響。
+                const fillTipViewportY = rect.top + (percent / 100) * rect.height;
+                container.querySelectorAll('.timeline-row.item-card, .timeline-row.item-node').forEach(row => {
+                    const rowRect = row.getBoundingClientRect();
+                    // 40px 領先量：紅線視覺頂端要先劃過「這一行視覺頂部再往下 40px」，
+                    // 該行（節點或卡片）才觸發淡入，讓紅線視覺上先抵達、內容隨後跟上。
+                    // 節點與卡片共用同一套比較方式與領先量，讓整條時間軸讀起來是同一種節奏。
+                    const revealedClass = row.classList.contains('item-card') ? 'timeline-card-revealed' : 'timeline-node-revealed';
+                    row.classList.toggle(revealedClass, fillTipViewportY >= rowRect.top + 40);
                 });
             }
         }

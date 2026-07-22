@@ -12,18 +12,33 @@ production pages. This is a **separate file** from `115MoneyDemoB-main/index.htm
 newsprint-identity history. Nothing in this document affects the live
 `index.html`/`database.html`.
 
-## ⚠️ ONE open action: scroll-test the hot-path JS change
+## ⚠️ OPEN ACTIONS: two unverified scroll-behavior changes stacked on this file
 
-A 2026-07-22 review + optimize pass (details below) trimmed the scroll engine.
-Those changes are logic-equivalent by inspection but were **not** verifiable in
-the working environment (browser automation can't reach localhost here). **Before
-trusting them, do a manual scroll-through of all three chapters, forward and
-reverse**, at desktop and mobile widths — confirm the Chapter-1 timeline reveal,
-the Chapter-2 Gantt sequence, and the Chapter-3 bar growth all behave exactly as
-before. If anything regresses, the suspects are commit `2168b29`'s two edits:
-the cached `MQ_REDUCED`/`MQ_MOBILE` MediaQueryLists and the `timelineOnScreen`
-gate in `updateTimelineMainLineFill()`. Everything else in the optimize pass is
-zero-visual-risk. This is the only unverified item in the whole workstream.
+Neither has been scroll-tested (browser automation can't reach `localhost`
+here — see Gotchas). Both need a manual forward+reverse scroll-through,
+desktop and mobile widths, before being trusted:
+
+1. **2026-07-22 optimize pass's scroll-hot-path trims** (commit `2168b29`,
+   committed). Logic-equivalent by inspection. Confirm the Chapter-1 timeline
+   reveal, the Chapter-2 Gantt sequence, and the Chapter-3 bar growth all
+   behave exactly as before. Suspects if anything regresses: the cached
+   `MQ_REDUCED`/`MQ_MOBILE` MediaQueryLists and the `timelineOnScreen` gate in
+   `updateTimelineMainLineFill()`.
+2. **2026-07-22 Chapter 1 node+card fade unification** (details below,
+   **UNCOMMITTED**). Bigger surface than #1: item-nodes now fade in (new), the
+   fade runs on mobile too for both nodes and cards (new), and the reveal
+   trigger itself was rewritten from a scroll-progress-percentage comparison to
+   a direct on-screen-pixel comparison (`fillTipViewportY` vs each row's own
+   `getBoundingClientRect().top + 40`) after the percentage-based version
+   turned out to have a real bug (see the "three iterations" writeup below —
+   the visual reveal was firing near each row's center, not near its top, and
+   the gap grew with how deep a row sat in the container). Confirm: (a) the red
+   line's visible tip reaching ~40px above a row is what makes that row fade
+   in, not some point deep inside it, (b) this holds for rows near the top of
+   the timeline AND rows near the bottom equally, (c) each date node fades in
+   with the same rhythm as its story card, (d) mobile now shows the fade
+   instead of always-visible content, (e) reverse-scroll un-reveals nodes
+   symmetrically, same as cards already do.
 
 ## 2026-07-22 review + optimize pass (shipped)
 
@@ -39,6 +54,127 @@ charts still have no screen-reader text alternative, a real WCAG 1.1.1 gap) and 
 verified NON-issues (muted-on-dark text passes AA at 6.6:1; listeners already
 passive; reduced-motion comprehensive) — is in `HANDOFF-REVIEW-OPTIMIZE.md`.**
 Image tooling on this machine: `sips`, `cwebp`, `avifenc`, `ffmpeg` (no imagemagick).
+
+## 2026-07-22 Chapter 1 node+card fade unification (⚠️ UNCOMMITTED)
+
+**Not yet committed, not yet scroll-tested.** `index-v2.html` has an uncommitted
+45+/33- diff (`git diff --stat index-v2.html`) touching the Chapter 1 timeline
+reveal mechanism. Summary for whoever picks this up:
+
+**The problem (found via screenshot, not by reading code first):** the
+`.item-card` story-card reveal was anchored entirely to its own geometry —
+`cardRect.top - rect.top + cardRect.height * 0.45 + 40`. Because each story
+card sits in the DOM *after* the 1-2 `.item-node` date blocks it explains
+(separated by the container's `gap: 40px`), the red line would finish passing
+both referenced dates, cross the 40px row-gap, then have to travel 45% *into*
+the card's own height plus another 40px lead — before the card appeared. Net
+effect: a visible "dead" scroll zone where the line had clearly finished the
+narrative beat but nothing new showed up. Confirmed this holds for all 5
+`.item-card` rows in the timeline (each is always immediately preceded by an
+`.item-node`).
+
+**This went through three iterations before landing on the actual root cause.
+Only the last one is in the file now:**
+
+1. *Considered, NOT shipped*: anchor the card's `cardOffset` to
+   `card.previousElementSibling.getBoundingClientRect().bottom + 40` instead of
+   the card's own top. Narrow, surgical, verified safe (ternary fallback to the
+   card's own geometry if `previousElementSibling` is ever null), generalizes
+   cleanly to all 5 cards without special-casing. This is the fix described in
+   a pasted external analysis this session — that write-up is accurate as far
+   as it goes, but describes a fix that was **superseded before being written**,
+   not what ended up in the file.
+2. *Shipped, then superseded*: the user asked for more — nodes should also
+   fade in, and the whole node/card reveal mechanism should be rethought
+   together rather than patched. Design at this point: both `.item-node` and
+   `.item-card` rows use the identical own-geometry formula
+   (`row.top + row.height * 0.45 + 40`), each toggling its own class
+   (`.timeline-node-revealed` for nodes — new; `.timeline-card-revealed` for
+   cards — kept separate, not unified into one class name, by explicit choice).
+   This resolved the "dead zone after finishing the nodes" complaint by giving
+   nodes their own delayed reveal too, instead of tying cards to the node
+   before them.
+3. *Shipped, then superseded again*: the user reported the reveal still
+   visually fires near each row's *center*, not its top, no matter the ratio.
+   Investigating turned up the actual root cause — not the ratio at all, but a
+   **unit mismatch baked into the scroll-progress math from the start**:
+   `percent` is computed as `scrolled / total` where
+   `total = rect.height - innerHeight*0.5`, but the *visual* fill height is
+   rendered as `percent% of rect.height` — a different, larger denominator
+   than `total`. Since `total < rect.height` always, the on-screen fill grows
+   faster than the percent-based trigger math assumes, and the gap **widens
+   the deeper a row sits in the container** (verified with concrete numbers:
+   for a row ~500px into a ~3000px-tall container at 800px viewport height,
+   the real on-screen fill tip lands ~80-120px past where the naive formula
+   thinks it is — enough to visually reach a card's center before the class
+   ever toggles, regardless of whether the row-offset ratio is 0.45 or 0).
+4. *Shipped (current)*: stopped comparing scroll-progress percentages
+   entirely. Now computes `fillTipViewportY = rect.top + (percent/100) * rect.height`
+   — the fill tip's *actual on-screen pixel position*, once per frame — and
+   compares it directly against each row's own `getBoundingClientRect().top + 40`.
+   Both sides of the comparison are now real viewport pixel coordinates, so
+   there's no scale mismatch left to compound with row depth. Applies
+   identically to `.item-node` and `.item-card` (same class-selection logic as
+   step 2), at every width including mobile.
+
+**Decisions confirmed via AskUserQuestion (all explicit user choices, not
+assumptions):**
+1. Nodes fade in on mobile (≤640px) too — **not** excluded like the old card
+   behavior was.
+2. Node-reveal class stays separate from card-reveal class (`.timeline-node-revealed`
+   vs `.timeline-card-revealed`), not unified into one shared class name — lower
+   risk, doesn't touch the class name already documented in the accepted spec.
+3. Nodes use the same 40px lead as cards (not a separately-tuned smaller value)
+   — one consistent tempo across the whole timeline.
+4. Follow-up consequence surfaced and confirmed: since nodes now fade on mobile,
+   **mobile cards were also switched from "always-visible, no scroll trigger"
+   to scroll-triggered fade** — this *reverses* the earlier, deliberate mobile
+   exclusion decision from the `chapter1-timeline-motion-choreography` /
+   `fix-responsive-story-acceptance-gaps` era ("compact phone width keeps
+   normal-flow cards so mobile reading order stays uninterrupted"). That
+   rationale no longer applies to this file as of this change.
+
+**Known side effect (intentional, not a regression):** the 2026-07-22 optimize
+pass (`2168b29`) added a `window.innerWidth >= 641` gate specifically to skip
+the expensive per-card `querySelectorAll` + `getBoundingClientRect` loop on
+mobile, because mobile cards never needed live position data (they were always
+visible). That gate is now **removed** — mobile runs the same per-row geometry
+loop as desktop whenever Chapter 1 is on screen, because mobile now genuinely
+needs it to drive its own fade-in. Worth knowing if mobile scroll perf ever
+gets profiled again; this is a deliberate cost of the feature, not something
+to "optimize away."
+
+**Stale doc, not yet fixed:** `openspec/specs/chapter1-timeline-motion-choreography/spec.md`
+still says the card-reveal-with-lead requirement applies "At intermediate and
+wide widths" only, and says nothing about nodes. Pending user decision: quick
+direct edit to the spec file, or a proper `/spectra-propose` change so this has
+a tracked artifact trail instead of a silent doc patch.
+
+**Verification done so far:** CSS brace-balance (435/435, balanced) and
+`new Function()` parse check on all inline `<script>` blocks (5/5 clean) —
+same discipline as every other change in this file, because browser automation
+still can't reach `localhost` in this environment. **No live scroll-test yet.**
+This is now the third layer of unverified scroll-behavior change stacked on
+this same function this session — all the more reason it needs an actual
+scroll-through before being trusted.
+
+**Lessons worth keeping:**
+- A narrow, well-verified fix (anchor-to-previous-sibling, step 1 above) can be
+  completely correct and still be throwaway work if the real ask is broader.
+  The tell was already there before implementing anything — the user's phrasing
+  ("check all relative coding... **rethink** how to implement") signaled they
+  wanted the mechanism reconsidered, not patched, even though the narrow patch
+  alone would have shipped cleanly and solved the reported symptom. Read
+  "rethink"/"redesign" language as a scope signal before reaching for the
+  smallest fix that satisfies the literal bug report.
+- When a symptom survives a targeted parameter change (steps 2→3: changing the
+  ratio from 0.45 to 0 didn't fix "reveals at center, not top"), stop tuning
+  parameters and re-derive the underlying math from scratch with concrete
+  numbers. The bug wasn't in the ratio at all — it was a unit mismatch between
+  two *different* denominators (`total` vs `rect.height`) that happened to
+  look like a tunable "how far into the row" question. No amount of ratio
+  adjustment could have fixed it, because the ratio wasn't where the error
+  lived.
 
 ## Current state: everything triaged so far is shipped
 
