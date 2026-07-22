@@ -7,7 +7,7 @@
     <script>document.documentElement.classList.add('js');</script>
     <title>總預算卡關 203 天 — 115年度中央政府總預算審議回顧</title>
     <link rel="preload" as="image" href="hero-collage.jpg" fetchpriority="high" media="(min-width: 1025px)">
-    <link rel="preload" as="image" href="hero-collage-mobile-clean.jpg" fetchpriority="high"
+    <link rel="preload" as="image" href="hero-collage-mobile-clean.webp" type="image/webp" fetchpriority="high"
         media="(max-width: 1024px)">
     <!-- Published at https://ke22.github.io/govBudget/ (GitHub Pages) -->
     <meta name="description" content="115年度中央政府總預算審議創下憲政史上最長延宕紀錄，卡關203天。中央社深度回顧朝野協商過程、歷年預算延宕比較，以及對新興政策計畫的影響。">
@@ -228,7 +228,7 @@
             .hero-section {
                 background-image:
                     radial-gradient(circle, rgba(237, 230, 211, 0.06) 1px, transparent 1.2px),
-                    url('hero-collage-mobile-clean.jpg');
+                    url('hero-collage-mobile-clean.webp');
                 background-size: 4px 4px, cover;
                 background-repeat: repeat, no-repeat;
                 background-position: 0 0, center top;
@@ -3156,7 +3156,7 @@
                 padding: calc(env(safe-area-inset-top) + 18px) 20px 28px;
                 background-image:
                     radial-gradient(circle, rgba(237, 230, 211, 0.06) 1px, transparent 1.2px),
-                    url('hero-collage-mobile-clean.jpg');
+                    url('hero-collage-mobile-clean.webp');
                 background-size: 6px 6px, cover;
                 background-repeat: repeat, no-repeat;
                 background-position: 0 0, center top;
@@ -4673,6 +4673,14 @@
             setTimeout(settle, 600);
         }
 
+        // Cached once: MediaQueryList objects stay live (their `.matches` reflects the
+        // current viewport), so re-calling window.matchMedia() on every scroll frame was
+        // pure overhead. Guarded so a missing matchMedia degrades to "not matched".
+        const MQ_REDUCED = (typeof window.matchMedia === 'function')
+            ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+        const MQ_MOBILE = (typeof window.matchMedia === 'function')
+            ? window.matchMedia('(max-width: 1024px)') : { matches: false };
+
         function updateChapter2Stage() {
             const chapter2 = document.getElementById('chapter-2-rebuilt');
             const stage = document.getElementById('gantt-stage-rebuilt');
@@ -4692,8 +4700,7 @@
                 const viewportHeight = window.innerHeight;
                 const finalCardTop = finalStoryCard.getBoundingClientRect().top;
                 const chapter3Top = chapter3 ? chapter3.getBoundingClientRect().top : Infinity;
-                const reducedMotion = typeof window.matchMedia === 'function'
-                    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                const reducedMotion = MQ_REDUCED.matches;
                 const start = viewportHeight * 0.55;
                 const end = viewportHeight * 0.35;
                 let progress = reducedMotion
@@ -4737,8 +4744,7 @@
             if (rect.top <= 0 && rect.bottom >= 0) {
                 stage.classList.add('stage-active-rebuilt-now'); // 點亮 Fixed 舞台
 
-                const isMobile = typeof window.matchMedia === 'function'
-                    && window.matchMedia('(max-width: 1024px)').matches;
+                const isMobile = MQ_MOBILE.matches;
 
                 // 3. 判斷「目前第幾步」。
                 //    桌機：沿用原本的整章捲動百分比分段——桌機卡片固定 100vh、與圖表左右並排，
@@ -4872,8 +4878,7 @@
                 // 桌機：卡片頂端越過圖表頂端下方 100px 即算數。
                 // 手機：圖表釘在上方帶狀區，卡片要「進入下方閱讀區」才算數，
                 //       否則步驟會在卡片還被帶狀區蓋住時就先觸發（動畫早於文字）。
-                const isMobile = typeof window.matchMedia === 'function'
-                    && window.matchMedia('(max-width: 1024px)').matches;
+                const isMobile = MQ_MOBILE.matches;
                 const triggerOffset = isMobile ? window.innerHeight * 0.6 : 100;
 
                 let currentStep = 1;
@@ -4943,7 +4948,13 @@
             // revealed when the fill reaches its leading edge, and the class is
             // removed again when the reader scrolls backward. Compact phone width
             // keeps normal-flow cards (see the else branch below).
-            if (window.innerWidth >= 641 && total > 0) {
+            // The cheap fill/terminus update above runs every frame (so the end-state
+            // is always correct, even right after a fast scroll jump); the expensive
+            // per-card querySelectorAll + getBoundingClientRect loop below is gated to
+            // when Chapter 1 is actually on screen — it's pure waste otherwise, which is
+            // most of the page (all of Chapters 2/3/4).
+            const timelineOnScreen = rect.bottom > 0 && rect.top < window.innerHeight;
+            if (timelineOnScreen && window.innerWidth >= 641 && total > 0) {
                 container.querySelectorAll('.timeline-row.item-card').forEach(card => {
                     const cardRect = card.getBoundingClientRect();
                     // 40px 領先量：主線要先捲過「卡片位置再往下 40px」，卡片才觸發，
@@ -4952,7 +4963,7 @@
                     const revealAt = Math.min(100, Math.max(0, (cardOffset / total) * 100));
                     card.classList.toggle('timeline-card-revealed', percent >= revealAt);
                 });
-            } else {
+            } else if (timelineOnScreen) {
                 container.querySelectorAll('.timeline-row.item-card').forEach(card => {
                     card.classList.remove('timeline-card-revealed');
                 });
