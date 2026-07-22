@@ -12,6 +12,34 @@ production pages. This is a **separate file** from `115MoneyDemoB-main/index.htm
 newsprint-identity history. Nothing in this document affects the live
 `index.html`/`database.html`.
 
+## ⚠️ ONE open action: scroll-test the hot-path JS change
+
+A 2026-07-22 review + optimize pass (details below) trimmed the scroll engine.
+Those changes are logic-equivalent by inspection but were **not** verifiable in
+the working environment (browser automation can't reach localhost here). **Before
+trusting them, do a manual scroll-through of all three chapters, forward and
+reverse**, at desktop and mobile widths — confirm the Chapter-1 timeline reveal,
+the Chapter-2 Gantt sequence, and the Chapter-3 bar growth all behave exactly as
+before. If anything regresses, the suspects are commit `2168b29`'s two edits:
+the cached `MQ_REDUCED`/`MQ_MOBILE` MediaQueryLists and the `timelineOnScreen`
+gate in `updateTimelineMainLineFill()`. Everything else in the optimize pass is
+zero-visual-risk. This is the only unverified item in the whole workstream.
+
+## 2026-07-22 review + optimize pass (shipped)
+
+A four-lens review (performance / code-quality / accessibility / UI-UX) ran and
+its **approved** fixes shipped in commits `dd4fd10`, `2168b29`, `b4bbf30`. The
+biggest win: the mobile hero was a **3.6MB / 9-megapixel JPEG** served to every
+phone (the mobile LCP) — re-encoded to a **559K 1200px WebP** (~85% off), original
+`.jpg` kept on disk/in git and still referenced by nothing in v2. Plus dead-CSS
+removal, font `preconnect` + dropped unused weight 300, image `decoding`/dimensions,
+and the scroll-JS trims above. **Full record — including what was left by explicit
+user choice (history photos + `paper-texture.png` still full-size ≈3MB recoverable;
+charts still have no screen-reader text alternative, a real WCAG 1.1.1 gap) and the
+verified NON-issues (muted-on-dark text passes AA at 6.6:1; listeners already
+passive; reduced-motion comprehensive) — is in `HANDOFF-REVIEW-OPTIMIZE.md`.**
+Image tooling on this machine: `sips`, `cwebp`, `avifenc`, `ffmpeg` (no imagemagick).
+
 ## Current state: everything triaged so far is shipped
 
 Seven Spectra changes have landed on `index-v2.html`, all archived, all pushed.
@@ -116,7 +144,10 @@ Open `http://localhost:8001/index-v2.html` (works over plain HTTP `curl`, but
 not from this session's Chrome-extension automation — see Gotchas above). For
 phone testing, bind to `0.0.0.0` and use the machine's LAN IP. The seven-viewport
 matrix used across all changes: 390×844, 430×932, 768×1024, 820×1180, 1024×768,
-1366×768, 1440×900.
+1366×768, 1440×900. The mobile hero is now `hero-collage-mobile-clean.webp`
+(≤1024px); the original `.jpg` remains on disk but is referenced by nothing in v2.
+**Priority manual check right now: the scroll-through described in the open-action
+section at the top.**
 
 ## Related
 
@@ -126,4 +157,7 @@ mostly still apply to the "rebuilt" chapter classes shared by both files
 (`.gantt-fixed-stage-rebuilt`, `.gantt-sticky-box-rebuilt`, the
 absolutely-positioned Gantt frame, the two different step-trigger mechanisms
 for Chapter 2 vs. Chapter 3). See `ISSUE-TRIAGE-v2.md` for the full triage
-table with exact line citations for every item above.
+table with exact line citations for every item above, and
+`HANDOFF-REVIEW-OPTIMIZE.md` for the full record of the 2026-07-22 review +
+optimize pass (findings, what shipped, what was deferred by choice, verified
+non-issues).
