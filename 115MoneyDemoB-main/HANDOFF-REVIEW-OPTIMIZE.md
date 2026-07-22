@@ -1,14 +1,64 @@
-# Handoff — Review & optimize `index-v2.html` (IN PROGRESS)
+# Handoff — Review & optimize `index-v2.html` (LARGELY COMPLETE)
 
-_Created: 2026-07-22 · Branch: `optimize-index-frontend-perf` · Written for a fresh account on the **Sonnet** model_
+_Created 2026-07-22, updated same day · Branch: `optimize-index-frontend-perf`_
 
-## Why this doc exists
+## Status: the review + the approved optimizations are DONE and pushed
 
-The user asked: **"review all and optimize on ui ux and coding, can use subagent to accelerate"** for `115MoneyDemoB-main/index-v2.html` (5,122-line single-file scrollytelling report). I launched **4 parallel review agents** (performance, code-quality, accessibility, UI/UX). **Only the performance review finished** — the other three were terminated mid-run by _"You've hit your monthly spend limit"_. The user is switching to another account (Sonnet) to continue, hence this handoff.
+The task ("review all and optimize on ui ux and coding") is substantially complete.
+All four review lenses were finished (performance via agent; code-quality,
+accessibility, UI/UX done **inline** on the resumed session after the agent fan-out
+hit the first account's spend limit — the inline approach is what the budget lesson
+below recommended). Findings were consolidated and the approved fixes shipped in
+three commits on `optimize-index-frontend-perf`:
 
-**No code has been changed yet.** This was still the review/planning phase. Working tree was clean when the reviews ran; `git status` before doing anything.
+- **`dd4fd10`** — safe/mechanical: removed 3 accidental dead-CSS blocks
+  (`.gantt-chart-container-rebuilt` @871, `.gantt-rows-container-rebuilt` @1017,
+  redundant `.back-to-hero-btn:hover`); added font `preconnect`; dropped unused
+  font-weight 300; `decoding="async"` + intrinsic width/height on the 4 `<img>`.
+- **`2168b29`** — mobile hero → WebP: 3.6MB/9MP JPEG → **559K** 1200px WebP
+  (~85% off the mobile LCP); + scroll hot-path: cached the 2 MediaQueryLists
+  (were called 3×/frame), gated the Ch1 timeline per-card loop behind an on-screen
+  check. **The scroll changes still want a human scroll-test** (all 3 chapters,
+  forward+reverse) — logic-equivalent by inspection but unverifiable in this
+  environment.
+- Every change was brace-balance + JS-parse checked before commit.
 
-> **Budget lesson for the next session:** spawning 4 review subagents over a 5,122-line file is what exhausted the limit. On the fresh account, prefer doing the 3 remaining reviews **inline** (read the file yourself in focused passes) or launch **one agent at a time**, not a fan-out. Reviews are read-heavy; batch greps and read only the ranges you need.
+### What remains (all by explicit user choice — NOT oversights)
+
+- **Images beyond the hero** — user chose "hero only". The history photos
+  (budget96001/96002 @2100px = 1.3M+1.5M, budget003 540K) and `paper-texture.png`
+  (450K) are still full-size. Re-encoding them the same way (`cwebp -q ~72
+  -resize ~1500`) would recover another ~3MB. Revisit if wanted.
+- **Chart text-alternatives (WCAG 1.1.1)** — user chose "skip for now". The Gantt
+  (Ch2), stacked-bar (Ch3), and Chapter-4 charts still have **zero** text
+  alternative (confirmed: no `role`/`figure`/`table` anywhere). Real AT gap, left
+  documented. Fix options when ready: visually-hidden `<table>`s (best) or
+  `role="img"`+`aria-label` summaries (lighter).
+- **`onScrollFrame` read/write batching** (perf #6) and **width→transform bar
+  animation** (#10) — larger refactors, deferred; low real-world payoff on the
+  already-correct rAF base.
+
+### Verified NON-issues (don't re-chase)
+
+- Muted-on-dark text **passes** AA (computed: `#A79C8C` on `--bg-deep` = 6.59:1,
+  on `--bg-chart` = 5.73:1). The earlier "probably fails" hunch was wrong.
+- All scroll listeners already `{passive:true}`; reduced-motion already
+  comprehensive (universal `*` rule); one clean `<h1>`; skip-link present;
+  `nav-toggle` already updates `aria-expanded` in JS; type scale disciplined
+  (only 2 relative one-offs). `--np-*` tokens still actively used (not dead).
+- Two computed contrast FAILs exist as raw token pairings but weren't confirmed
+  in live use: `--ui-accent` on dark (2.47:1 — the bright `#E2564A` variant exists
+  for on-dark and passes at 4.80) and `--ui-muted` on `--ui-paper` (1.73:1). Worth
+  a grep-confirm if doing an a11y pass later, but no confirmed on-page instance.
+
+## Why this doc exists / budget lesson
+
+Originally created mid-task: I launched **4 parallel review agents**; only the
+performance one finished before the other three hit _"You've hit your monthly spend
+limit."_ **Budget lesson (proved correct on resume):** don't fan out 4 review
+subagents over a 5,000-line file — do the reviews **inline** with targeted greps +
+focused reads, or one agent at a time. The resumed session did exactly that and
+finished all three remaining lenses cheaply.
 
 ## Task framing (unchanged)
 
