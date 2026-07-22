@@ -22,8 +22,10 @@
     <meta name="twitter:image" content="https://ke22.github.io/govBudget/hero-collage.jpg">
     <link rel="canonical" href="https://ke22.github.io/govBudget/index.html">
     <link rel="icon" type="image/svg+xml" href="cna-favicon-adaptive.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap"
         rel="stylesheet">
     <style>
         /* --- 核心視覺規範 (CNA 數位敘事風格) --- */
@@ -867,24 +869,6 @@
             padding: 0 20px;
         }
 
-        /* 甘特圖容器 */
-        .gantt-chart-container-rebuilt {
-            position: relative !important;
-            width: 100%;
-            max-width: 920px;
-            height: 78vh;
-            height: 78dvh;
-            display: flex;
-            flex-direction: column;
-            padding: 80px 30px 60px 80px;
-            /* 給左邊 Y 軸和下面 X 軸留呼吸空間 */
-            border-radius: 12px;
-            border: 1px solid transparent !important;
-            background: transparent !important;
-            box-shadow: none !important;
-            transition: border 0.5s ease, background-color 0.5s ease, box-shadow 0.5s ease !important;
-        }
-
         /* 🔓 階梯 2：浮現框線、底色與陰影（原為新聞剪貼風格牛皮紙 + 淡網點紋理，圖表全面改為深色底後
            邊框/網點改用淺色，陰影改用向下的黑色深度陰影） */
         .rebuilt-step-2 {
@@ -1014,19 +998,6 @@
         }
 
         /* 💡 內部背景網格線 */
-        .gantt-rows-container-rebuilt {
-            position: absolute;
-            left: 80px;
-            top: 40px;
-            right: 30px;
-            bottom: 80px;
-            /* 💡 修正：彩色 Bar 的容器底部對齊 80px，完美與年份一行行對齊 */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            z-index: 3;
-        }
-
         .rebuilt-step-1 .gantt-grid-rebuilt,
         .rebuilt-step-2 .gantt-grid-rebuilt {
             opacity: 1;
@@ -2977,10 +2948,6 @@
             transform: translateY(0);
         }
 
-        .back-to-hero-btn:hover {
-            background: var(--ui-paper);
-        }
-
         .back-to-hero-btn:focus-visible {
             outline: 2px solid var(--ui-accent);
             outline-offset: 2px;
@@ -3602,7 +3569,7 @@
         <button class="nav-toggle" id="nav-toggle" type="button" aria-label="開啟導覽選單" aria-expanded="false"
             aria-controls="site-nav">☰</button>
         <nav id="site-nav">
-            <img src="cna-favicon-light.svg" alt="中央社" class="nav-logo">
+            <img src="cna-favicon-light.svg" alt="中央社" class="nav-logo" decoding="async">
             <a href="index-v2.html" class="nav-btn nav-active" aria-current="page">年度深度報導</a>
             <a href="database-v2.html" class="nav-btn">完整資料庫</a>
             <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="nav-btn">總預算案專頁 ↗</a>
@@ -4029,16 +3996,19 @@
             <div class="gantt-backdrop-box-rebuilt" id="backdrop-images-rebuilt">
                 <div class="history-images-container">
                     <div class="history-img-frame">
-                        <img src="budget96001.jpg" alt="陳水扁時期預算案審議" loading="lazy">
+                        <img src="budget96001.jpg" alt="陳水扁時期預算案審議" loading="lazy" decoding="async"
+                            width="2100" height="1395">
                         <div class="img-caption editorial-caption">民國96年5月11日，民進黨立委為通過總預算案，聚眾佔據議場主席台，將立法院長王金平團團包圍。</div>
                     </div>
                     <div class="history-img-frame">
-                        <img src="budget96002.jpg" alt="朝小野大政治攻防" loading="lazy">
+                        <img src="budget96002.jpg" alt="朝小野大政治攻防" loading="lazy" decoding="async"
+                            width="2100" height="1395">
                         <div class="img-caption editorial-caption">民國96年5月11日，立法院處理「中央選舉委員會組織法早案」及總預算案，藍、綠立委舉標語互相指控。
                         </div>
                     </div>
                     <div class="history-img-frame">
-                        <img src="budget003.jpg" alt="大結局照片：內閣改組與預算退回" loading="lazy">
+                        <img src="budget003.jpg" alt="大結局照片：內閣改組與預算退回" loading="lazy" decoding="async"
+                            width="1080" height="720">
                         <div class="img-caption editorial-caption">
                             過去三次總預算退回重編都是因為行政院長請辭，分別發生在民國89年唐飛請辭、99年劉兆玄請辭及107年林全請辭。</div>
                     </div>
