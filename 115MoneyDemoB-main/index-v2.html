@@ -2664,8 +2664,26 @@
            的樣式。 */
         @media (max-width: 1024px) {
 
-            /* ---------- 第二章：甘特圖釘在頂部帶狀區（約 58dvh） ---------- */
+            /* ---------- 第二章：甘特圖釘在視窗垂直 50% 處 ----------
+               手機／平板改用與第三章 .gantt-sticky-box-rebuilt 相同的 position:sticky
+               機制（桌機版維持 position:fixed 的全螢幕背景疊層設計，此處不動）。
+               ⚠️ 已改回 position:fixed（與桌機版一致）：改用 position:sticky 會讓瀏覽器
+               在章節捲動到底時「原生自動」把帶狀區跟著文件流一起滑走，這個原生滑走
+               動作跟 updateHistoryExit() 原本針對 fixed 元素設計、只靠 opacity 淡出的
+               收尾動畫同時發生、疊加在一起，導致第二章結尾感覺「收得太快」。第三章的
+               sticky 版本另外用 --ch3-exit-offset 這個 transform 專門馴服原生滑走時機，
+               第二章沒有這套機制，所以改回 fixed（原生完全沒有自動滑走行為）能讓收尾
+               動畫完全交回 updateHistoryExit() 掌控，與桌機版行為一致。
+               top:50%+translateY(-50%) 讓帶狀區的垂直中心卡在視窗中央，而非貼齊頂部。 */
             .gantt-fixed-stage-rebuilt {
+                position: fixed !important;
+                top: 50% !important;
+                /* -50% keeps it centered; --ch2-exit-offset (px, published by
+                   updateHistoryExit()) additionally slides it upward in sync with
+                   the naturally-scrolling final story card, so the photo band and
+                   the text exit the screen together instead of the band just
+                   fading in place while the text scrolls past it. */
+                transform: translateY(calc(-50% - var(--ch2-exit-offset, 0px))) !important;
                 height: 58dvh;
                 align-items: center;
                 background: var(--bg-deep);
@@ -2774,7 +2792,9 @@
                 align-items: center;
                 justify-content: center;
                 padding: 0 16px;
-                padding-top: calc(var(--site-header-h) + 60dvh);
+                /* Band is now centered at 50vh (roughly 21dvh–79dvh), not top-anchored
+                   (roughly 0–58dvh), so clearance below it moved from ~60dvh to ~82dvh. */
+                padding-top: calc(var(--site-header-h) + 82dvh);
                 box-sizing: border-box;
             }
 
@@ -2791,8 +2811,29 @@
                 max-width: 78vw !important;
             }
 
-            /* ---------- 第三章：堆疊長條圖釘在頂部帶狀區（約 58dvh） ---------- */
+            /* ---------- 第三章：堆疊長條圖釘在垂直置中的帶狀區 ----------
+               ⚠️ 原本寫 top:50% + translateY(-50%)（照抄第二章 fixed 版的置中寫法），
+               但 sticky 與 fixed 的百分比解析基準根本不同：
+                 · fixed  → 百分比對「視窗」解析，50% 就是半個視窗高（第二章寫法正確）
+                 · sticky → 百分比對「containing block」解析，此處是 #chapter-3-rebuilt
+                            （開場白 + 5×100svh 卡片 + 結語，總高 300svh 以上），
+                            50% 因而變成 150svh 級別的失控數值。
+               而且 sticky 的 top 一值兩用 —— 同時是「貼住後的停駐位置」與「開始貼住的
+               觸發時機」，一個失控的 top 會同時破壞這兩件事，這正是圖表壓在
+               .chapter-intro 上的病根。
+               改用視窗單位直接寫死停駐位置：(100dvh − 58dvh) / 2 = 21dvh，帶狀區佔
+               21dvh~79dvh 垂直置中，因此也不再需要 translateY(-50%)。少了那個 -50%，
+               圖表在「尚未貼住」的階段就完全畫在自己的文件流位置上（不會往上偷跑半個
+               帶狀區高度去蓋住上方元素），開場白與圖表在結構上不可能再重疊。 */
+            #chapter-3-rebuilt .chapter-intro {
+                /* 純閱讀節奏用的留白：開場白讀完後留一段深色空白，圖表才由下方升起，
+                   讓「開場白獨佔」與「圖表釘住＋卡片輪替」兩段有清楚的段落感。
+                   重疊問題已由上方 top/transform 的修正在結構上根除，這裡不負責防撞。 */
+                margin-bottom: 18dvh;
+            }
+
             .gantt-sticky-box-rebuilt {
+                top: 21dvh !important;
                 height: 58dvh !important;
                 align-items: center !important;
                 background: var(--bg-deep) !important;
@@ -2800,6 +2841,9 @@
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
                 z-index: 5 !important;
             }
+
+            /* 垂直置中已改由 top:21dvh 負責，transform 交還給基底規則（見上方
+               #ch3-sticky-box-wrapper），單純表達退場位移 --ch3-exit-offset。 */
 
             .gantt-container-rebuilt {
                 /* 扣除外距寬度，避免與 margin 疊加溢出（同第二章甘特圖容器寫法） */
@@ -2818,7 +2862,12 @@
             .story-timeline-rebuilt {
                 margin-top: 0 !important;
                 align-items: center !important;
-                z-index: 7 !important;
+                /* ⚠️ 原為 7（高於帶狀區的 5），文字卡因此是「疊在圖表上」往上飄，
+                   卡片捲到帶狀區高度時會直接壓住長條圖，正是實測截圖看到的錯位。
+                   桌機版刻意讓卡片浮在圖表上（基底 z-index:2 > 帶狀區 1），但手機版
+                   的設計是「帶狀區＝舞台、文字卡＝從下方經過的字幕」，兩者不該重疊。
+                   改為 1（低於帶狀區的 5），卡片讀完後乾淨地滑進帶狀區底下消失。 */
+                z-index: 1 !important;
             }
 
             .story-timeline-rebuilt .gantt-card-rebuilt {
@@ -2826,7 +2875,9 @@
                 align-items: center !important;
                 padding-right: 0 !important;
                 padding: 0 16px !important;
-                padding-top: calc(var(--site-header-h) + 60dvh) !important;
+                /* Band is now centered at 50vh (roughly 21dvh–79dvh), not top-anchored
+                   (roughly 0–58dvh), so clearance below it moved from ~60dvh to ~82dvh. */
+                padding-top: calc(var(--site-header-h) + 82dvh) !important;
                 box-sizing: border-box;
             }
 
@@ -2838,6 +2889,8 @@
                 background-blend-mode: multiply;
                 backdrop-filter: none;
                 max-width: 100%;
+                /* 桌機版 40px 內距在窄螢幕上吃掉太多可讀寬度，縮小為 24px/18px */
+                padding: 24px 18px;
             }
         }
 
@@ -3283,8 +3336,10 @@
             .hero-headline-panel {
                 display: flex;
                 flex-direction: column;
-                position: relative;
-                grid-row: 2;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
                 width: min(92%, 680px);
                 margin: 0;
                 padding: 30px 28px 22px;
@@ -3307,9 +3362,10 @@
             }
 
             .scroll-indicator {
-                position: static;
-                grid-row: 3;
-                transform: none;
+                position: absolute;
+                bottom: 40px;
+                left: 50%;
+                transform: translateX(-50%);
                 animation: bounce-mobile 2.4s infinite;
                 color: var(--ui-ink-inverse);
                 font-size: var(--type-caption);
@@ -3359,6 +3415,8 @@
                 min-height: var(--scene-read-interval) !important;
             }
 
+            /* 平板僅需把退場位移夾在 12svh 以內（避免圖表在較高的視窗上被推得太遠），
+               置中已由 ≤1024 區塊的 top:21dvh 負責，故此處同步移除已失效的 -50%。 */
             #ch3-sticky-box-wrapper {
                 transform: translateY(calc(-1 * min(var(--ch3-exit-offset), 12svh))) !important;
             }
@@ -3392,41 +3450,13 @@
                 --type-chapter-heading: clamp(1.75rem, calc(1.68rem + 0.3vw), 1.875rem);
             }
 
-            /* Compact storytelling (chapter 2 only): visual stage becomes a bounded
-               block in the document flow; cards no longer reserve viewport-sized
-               reveal slots. Chapter 3's pinned/scroll-linked bar chart keeps the
-               same mechanism it uses at tablet widths (see the shared
-               @media (max-width: 1024px) card layout above) — it is NOT flattened
-               here, unlike chapter 2. */
-            #chapter-2-rebuilt {
-                min-height: auto !important;
-            }
-
-            .gantt-fixed-stage-rebuilt {
-                position: relative !important;
-                top: auto !important;
-                left: auto;
-                width: 100% !important;
-                height: var(--story-visual-stage-height);
-                opacity: 1;
-                visibility: visible;
-                transform: none !important;
-            }
-
-            .gantt-backdrop-box-rebuilt,
-            #chapter-2-rebuilt .gantt-chart-container-rebuilt {
-                transform: none !important;
-            }
-
+            /* Both chapter 2 and chapter 3 keep the pinned-band / scroll-linked-reveal
+               mechanism that already works at tablet widths (see the shared
+               @media (max-width: 1024px) rules above, e.g. .gantt-card-rebuilt's
+               documented min-height:100vh requirement) — neither is flattened here. */
             #chapter-2-rebuilt .gantt-scroll-content-rebuilt {
                 gap: 24px;
                 padding-block: 32px;
-            }
-
-            #chapter-2-rebuilt .gantt-card-rebuilt {
-                min-height: auto !important;
-                padding: 24px 16px !important;
-                transform: none !important;
             }
 
             .ch3-conclusion-footer-rebuilt {
@@ -4731,10 +4761,17 @@
                 const finalCardTop = finalStoryCard.getBoundingClientRect().top;
                 const chapter3Top = chapter3 ? chapter3.getBoundingClientRect().top : Infinity;
                 const reducedMotion = MQ_REDUCED.matches;
-                // 原本 0.55/0.35 讓文字在讀者還沒讀完就開始淡出；延後到 0.40/0.20，
-                // 給讀者多一段捲動距離維持全不透明，淡出區間寬度不變（都是 0.2）
-                const start = viewportHeight * 0.40;
-                const end = viewportHeight * 0.20;
+                const isMobileExit = MQ_MOBILE.matches;
+                // 桌機：原本 0.55/0.35 讓文字在讀者還沒讀完就開始淡出；延後到 0.40/0.20，
+                // 給讀者多一段捲動距離維持全不透明，淡出區間寬度不變（都是 0.2）。
+                // 手機：讀者反應結尾（最後一張字卡＋最後一張歷史照片對齊呈現）收得太快——
+                // 應該等兩者對齊、讀者看完，字卡本身自然捲到視窗頂端準備離開時，才開始
+                // 淡出。故手機版把起點延後到卡片頂端逼近視窗頂端（10%）才開始，終點延到
+                // 卡片頂端已捲出視窗上緣一小段（-15%）才算全淡出，且不再用「第三章頂部
+                // 一露出畫面底部」當強制淡出的門檻（那時第二章可能還佔滿大半螢幕），改成
+                // 「第三章頂端已經抵達視窗最頂端」（第二章已完全捲出）才強制收尾完成。
+                const start = viewportHeight * (isMobileExit ? 0.10 : 0.40);
+                const end = viewportHeight * (isMobileExit ? -0.15 : 0.20);
                 let progress = reducedMotion
                     ? (finalCardTop <= viewportHeight * 0.30 ? 1 : 0)
                     : Math.min(1, Math.max(0, (start - finalCardTop) / (start - end)));
@@ -4744,28 +4781,53 @@
                 if (!reducedMotion && finalCardTop <= end + 1) progress = 1;
 
                 // Chapter 3 entering from below is the hard exit boundary for large scroll jumps.
-                if (chapter3Top <= viewportHeight) progress = 1;
+                // Mobile waits until chapter 3's top has reached the very top of the viewport
+                // (chapter 2 has fully scrolled past) rather than the moment it merely peeks
+                // in from the bottom, so the card/photo pairing isn't cut short.
+                if (isMobileExit ? chapter3Top <= 0 : chapter3Top <= viewportHeight) progress = 1;
 
-                stage.style.setProperty('--history-exit-opacity', String(1 - progress));
                 stage.classList.toggle('history-exit-active', finalCardTop <= viewportHeight * 0.6);
                 stage.classList.toggle('history-exit-complete', progress >= 1);
 
                 // Chapter 3's intro reveals from the exact same completion state that
-                // already governs Chapter 2's exit fade, not a coarser stage-lifecycle signal.
+                // already governs Chapter 2's exit, not a coarser stage-lifecycle signal.
                 if (chapter3Intro) {
                     chapter3Intro.classList.toggle('chapter3-intro-revealed', stage.classList.contains('history-exit-complete'));
                 }
 
-                // Same exit guard, second target: the step-9 text story-card itself, not just
-                // the fixed image backdrop above. Only touch its inline opacity once actually
-                // exiting (progress > 0) so this never fights the card's own entrance reveal
-                // (armStep9CardReveal's `.history-image-settled` class) while still inside step 9.
-                if (progress > 0) {
-                    finalStoryCard.style.opacity = String(1 - progress);
-                    finalStoryCard.style.pointerEvents = progress >= 1 ? 'none' : 'auto';
-                } else {
+                if (isMobileExit) {
+                    // Reader asked for the photo band and the final text card to scroll
+                    // up and off the screen TOGETHER, not have the (fixed, otherwise
+                    // static) photo band merely dissolve in place while the text — which
+                    // already scrolls naturally — slides past it. So instead of fading
+                    // opacity, publish a translateY offset (--ch2-exit-offset, combined
+                    // with the -50% centering in CSS) that grows from 0 to however far the
+                    // band's own rest-position bottom edge sits from the viewport top
+                    // (vh/2 + height/2, since it's vertically centered) as `progress`
+                    // advances — that's the exact distance needed to fully clear the top
+                    // of the viewport, not just the band's own height.
+                    const stageHeight = stage.getBoundingClientRect().height;
+                    const restBottom = (viewportHeight / 2) + (stageHeight / 2);
+                    stage.style.setProperty('--ch2-exit-offset', (progress * restBottom) + 'px');
+                    stage.style.setProperty('--history-exit-opacity', '1');
                     finalStoryCard.style.removeProperty('opacity');
                     finalStoryCard.style.removeProperty('pointer-events');
+                } else {
+                    stage.style.setProperty('--ch2-exit-offset', '0px');
+                    stage.style.setProperty('--history-exit-opacity', String(1 - progress));
+
+                    // Same exit guard, second target: the step-9 text story-card itself, not
+                    // just the fixed image backdrop above. Only touch its inline opacity once
+                    // actually exiting (progress > 0) so this never fights the card's own
+                    // entrance reveal (armStep9CardReveal's `.history-image-settled` class)
+                    // while still inside step 9.
+                    if (progress > 0) {
+                        finalStoryCard.style.opacity = String(1 - progress);
+                        finalStoryCard.style.pointerEvents = progress >= 1 ? 'none' : 'auto';
+                    } else {
+                        finalStoryCard.style.removeProperty('opacity');
+                        finalStoryCard.style.removeProperty('pointer-events');
+                    }
                 }
             };
 
@@ -4923,16 +4985,26 @@
                 const containerTop = ch3Container.getBoundingClientRect().top;
                 const cards = ch3Section.querySelectorAll('.gantt-card-rebuilt');
 
-                // 桌機：卡片頂端越過圖表頂端下方 100px 即算數。
-                // 手機：圖表釘在上方帶狀區，卡片要「進入下方閱讀區」才算數，
-                //       否則步驟會在卡片還被帶狀區蓋住時就先觸發（動畫早於文字）。
+                // 桌機：卡片頂端越過圖表頂端下方 100px 即算數（外框與可見文字幾乎重合）。
+                // 手機：⚠️ 外框 .gantt-card-rebuilt 帶有 padding-top: header + 82dvh，
+                //       用來把可見文字推到帶狀區下方的閱讀區；也就是說「外框頂端」比
+                //       「讀者真正看得見的文字」整整高出 82dvh。原本仍拿外框量測，
+                //       導致每一步都提早約 82dvh 觸發 —— 實測畫面：卡1 的文字還飄在
+                //       帶狀區上方時，圖表就已經跳到 step2（紅條＋2992億），圖文完全對不上。
+                //       故手機改量測真正看得見的 .story-card。
                 const isMobile = MQ_MOBILE.matches;
-                const triggerOffset = isMobile ? window.innerHeight * 0.6 : 100;
+                const measureTop = (card) => {
+                    if (!isMobile) return card.getBoundingClientRect().top;
+                    return (card.querySelector('.story-card') || card).getBoundingClientRect().top;
+                };
+                // 門檻 88dvh 的推導：帶狀區下緣在 79dvh（top:21dvh + height:58dvh），
+                // 再往下留 9dvh 呼吸 —— 即「這張卡剛從畫面底部進入閱讀區」的那一刻換步驟，
+                // 此後到下一張卡進場前它都是當前步驟，一卡一步完全對齊。
+                const triggerLine = isMobile ? window.innerHeight * 0.88 : containerTop + 100;
 
                 let currentStep = 1;
                 cards.forEach((card, idx) => {
-                    const cardTop = card.getBoundingClientRect().top;
-                    if (cardTop <= containerTop + triggerOffset) { currentStep = idx + 1; }
+                    if (measureTop(card) <= triggerLine) { currentStep = idx + 1; }
                 });
 
                 const finalLabel = document.getElementById('ch3-label-final');
@@ -4940,8 +5012,10 @@
                 ch3Section.classList.remove('ch3-step-1', 'ch3-step-2', 'ch3-step-3', 'ch3-step-4', 'ch3-step-5');
                 ch3Section.classList.add('ch3-step-' + Math.min(currentStep, 5));
 
-                // 🔥 【量測攔截點】
-                const cardFiveTop = cardFive.getBoundingClientRect().top;
+                // 🔥 【量測攔截點】同樣改用可見文字卡：拿外框量測會讓退場位移在卡5 的
+                //    文字都還沒進畫面（外框頂端已過圖表頂端，文字卻還在 103dvh 之下）
+                //    時就開始把圖表往上推，圖表等於在讀者看到最後一段文字前先跑掉。
+                const cardFiveTop = measureTop(cardFive);
 
                 // CSS resolves the transform. JavaScript publishes only a bounded
                 // progress length so layout ownership stays in the stylesheet.
