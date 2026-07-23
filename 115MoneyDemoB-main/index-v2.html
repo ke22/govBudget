@@ -2862,12 +2862,12 @@
             .story-timeline-rebuilt {
                 margin-top: 0 !important;
                 align-items: center !important;
-                /* ⚠️ 原為 7（高於帶狀區的 5），文字卡因此是「疊在圖表上」往上飄，
-                   卡片捲到帶狀區高度時會直接壓住長條圖，正是實測截圖看到的錯位。
-                   桌機版刻意讓卡片浮在圖表上（基底 z-index:2 > 帶狀區 1），但手機版
-                   的設計是「帶狀區＝舞台、文字卡＝從下方經過的字幕」，兩者不該重疊。
-                   改為 1（低於帶狀區的 5），卡片讀完後乾淨地滑進帶狀區底下消失。 */
-                z-index: 1 !important;
+                /* 文字卡疊在帶狀區「之上」往上飄（7 > 帶狀區的 5），與桌機版一致的
+                   剪貼疊圖語彙（桌機基底 z-index:2 > 帶狀區 1）。曾一度改為 1 讓卡片
+                   滑進帶狀區底下，但那會讓卡片被圖表吃掉、失去紙卡壓在圖表上的層次感，
+                   已依美編指示改回。真正該解的「圖文對不上」是量測基準問題（見
+                   updateChapter3Bars 的 measureTop），與這裡的疊放順序無關。 */
+                z-index: 7 !important;
             }
 
             .story-timeline-rebuilt .gantt-card-rebuilt {
