@@ -537,15 +537,19 @@
             pointer-events: auto !important;
         }
 
-        /* 718億先行動支方案金字塔圖：獨立於 is-active-chapter 機制，捲入視窗後自行淡入 */
+        /* 718億先行動支方案金字塔圖：獨立於 is-active-chapter 機制，捲入視窗後自行淡入。
+           必須自己覆寫 visibility——基底 .dynamic-chart-box 用 !important 強制 hidden，
+           這裡若不寫 visibility，就會永遠被那條 !important 蓋住，opacity 淡入也看不見。 */
         #ch4-pyramid {
             opacity: 0;
+            visibility: hidden !important;
             transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s;
         }
 
         #ch4-pyramid.visible-box {
             opacity: 1;
+            visibility: visible !important;
             transform: translateY(0);
         }
 
