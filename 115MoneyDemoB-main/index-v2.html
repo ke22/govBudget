@@ -281,16 +281,35 @@
             opacity: 0.6;
         }
 
+        /* 數字與單位「天」同一行、以基線對齊（原本「天」跟「逾期」擠在下排，
+           三位數之後整串過寬而換行）。unit 用小字，維持數字才是視覺主體。 */
+        .hero-stamp .num-row {
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+            white-space: nowrap;
+        }
+
         .hero-stamp .num {
             font-size: var(--type-report-display);
             font-weight: 700;
             line-height: 1;
         }
 
+        .hero-stamp .unit {
+            font-size: var(--type-caption);
+            font-weight: 500;
+            line-height: 1;
+        }
+
         .hero-stamp .label {
             font-size: var(--type-caption);
             font-weight: 500;
-            letter-spacing: 0.15em;
+            /* 下排只剩「逾期」兩字，字距加寬維持印章的疏朗感；
+               text-indent 補回最後一字的行尾字距，讓兩字在圓心維持視覺置中 */
+            letter-spacing: 0.3em;
+            text-indent: 0.3em;
+            white-space: nowrap;
             margin-top: 4px;
         }
 
@@ -340,20 +359,15 @@
             background: linear-gradient(to bottom, #a5271e, transparent);
         }
 
-        /* 手機版：指示器（文字＋向下延伸的線）在 bottom:40px 時，加上其自身高度
-           （文字列高＋間距＋40px 線）後，會逼近 .hero-section 底部撕紙 clip-path
-           的裁切區，造成「被裁到」。往上抬到 bottom:90px、並縮短下方延伸線與彈跳
-           幅度，讓文字與線條全程都留在裁切區之上。 */
-        @media (max-width: 640px) {
-            .scroll-indicator {
-                bottom: 90px;
-                animation: bounce-mobile 2s infinite;
-            }
-
-            .scroll-indicator::after {
-                height: 26px;
-            }
-        }
+        /* 【已移除】此處原有一塊 @media (max-width: 640px) 的 .scroll-indicator 覆寫
+           （bottom:90px / animation:2s / ::after height:26px），用途是閃避
+           .hero-section 底部撕紙 clip-path 的裁切。移除原因有二：
+             1. 它是死碼 —— 後面那塊 @media (max-width: 1024px) 同樣命中手機寬度、
+                且在原始碼中排序更後，把 bottom / animation / ::after height 三個
+                屬性全部覆寫掉，這裡宣告的值從來沒有生效過。
+             2. 前提已消失 —— .hero-section 在 ≤1024 已設 clip-path: none，
+                手機根本沒有撕紙裁切需要閃避。
+           手機版的 .scroll-indicator 現由 @media (max-width: 1024px) 單一來源掌管。 */
 
         @keyframes bounce-mobile {
 
@@ -463,7 +477,18 @@
         }
 
         .story-card {
-            background-color: var(--ui-paper);
+            /* 目標是與 .timeline-block-node 的 #ebe5d2「看起來一樣」。
+               但這張卡疊了 paper-texture.png 且 background-blend-mode: multiply，
+               而該紙紋平均亮度為 #f4f4f4（244.4/255），會把底色每通道壓暗約 4%。
+               故填入值需反推放亮：255 × 目標 ÷ 紙紋均值
+                 R: 255×235/244.4 = 245.2 → f5
+                 G: 255×229/244.3 = 239.0 → ef
+                 B: 255×210/244.3 = 219.2 → db
+               填 #f5efdb，疊紙紋後即還原為 #ebe5d2，與平塗的日期節點一致。
+               （直接填 #ebe1de 會呈現 #e1d8d5，比日期節點暗且偏灰。）
+               寫在基底規則＝手機桌機共用同一色；手機版 @media 區塊只保留
+               內距／backdrop-filter 等真正需要分breakpoint 的差異。 */
+            background-color: #f5efdb;
             /* 原為 var(--bg-card) 藍綠半透明，改為新聞剪貼風格牛皮紙卡片。
                左側朱印紅邊框已移除 */
             background-image: url('paper-texture.png');
@@ -598,10 +623,18 @@
             position: absolute;
             left: 50%;
             bottom: 0;
-            transform: translate(-50%, 50%);
+            /* 原為 translateY(50%)：圓心壓在主線末端上，圓的上半部與線重疊。
+               改為 100%＝整顆圓往下平移一個自身高度，圓的「頂端」正好接在線的末端，
+               兩者相切不相疊。 */
+            transform: translate(-50%, 100%);
+            /* 脈動用的 scale 以頂端為錨點，圓再怎麼放大縮小，接點都固定在線末端，
+               不會在放大瞬間往上吃進線裡（見 @keyframes timeline-terminus-pulse）。 */
+            transform-origin: 50% 0;
             z-index: 2;
-            width: 28px;
-            height: 28px;
+            /* 依美編需求放大（28px → 44px）。容器 margin-bottom 有 100px，
+               圓下緣最深 44px×1.08（脈動峰值）＋陰影 ≈ 54px，仍在留白內不會撞到下一段。 */
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             background: var(--ui-accent);
             color: var(--ui-paper);
@@ -609,7 +642,7 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 1.35rem;
             line-height: 1;
             box-shadow: 0 2px 6px rgba(27, 23, 18, 0.25);
             animation: timeline-terminus-pulse 1.8s ease-in-out infinite;
@@ -619,14 +652,19 @@
             content: '?';
         }
 
+        /* translateY 需與 .timeline-terminus-mark 的靜態值一致（100%），否則動畫一啟動
+           圓就會跳回舊位置；scale 的錨點由該處的 transform-origin: 50% 0 固定在頂端。 */
         @keyframes timeline-terminus-pulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 opacity: 0.55;
-                transform: translate(-50%, 50%) scale(0.92);
+                transform: translate(-50%, 100%) scale(0.92);
             }
+
             50% {
                 opacity: 1;
-                transform: translate(-50%, 50%) scale(1.08);
+                transform: translate(-50%, 100%) scale(1.08);
             }
         }
 
@@ -644,8 +682,11 @@
         }
 
         .timeline-block-node {
-            /* 原為明亮微藍綠色底 #f0fdfa，殘留自舊版樣式，改為純白底 */
-            background: var(--ui-paper);
+            /* 原為明亮微藍綠色底 #f0fdfa，殘留自舊版樣式，改為純白底。
+               再依美編指定改為 #f0e9e5（歷經 --ui-paper #d5cdcd → #ebe5d2 → 現值）。
+               此節點為平塗、未疊紙紋，填入值即為畫面實際呈色。
+               寫在基底規則＝手機桌機共用同一色，不再分breakpoint。 */
+            background: #f0e9e5;
             /* 邊框已移除，狀態改由右上角印章（::after）標示 */
             padding: 10px 24px;
             border-radius: 8px;
@@ -2288,7 +2329,10 @@
 
             .story-card {
                 max-width: 100%;
-                background-color: var(--ui-paper);
+                /* ⚠️ 此處原有 background-color: var(--ui-paper)（#d5cdcd）。
+                   它與基底規則同特異性但排序更後，會蓋掉基底新設的 #f5efdb，
+                   導致 ≤968px 的手機仍呈現舊的偏灰色。底色統一由基底規則掌管
+                   （手機桌機共用），這裡移除宣告，不再是第三個維護點。 */
                 background-image: url('paper-texture.png');
                 background-repeat: repeat;
                 background-blend-mode: multiply;
@@ -2883,7 +2927,8 @@
 
             /* ---------- 共用：手機版文字卡改為完全不透明（新聞剪貼風格牛皮紙色） ---------- */
             .story-card {
-                background-color: var(--ui-paper);
+                /* 底色已上移到基底規則（手機桌機共用 #ebe1de），此處不再宣告，
+                   避免兩個 breakpoint 各自維護同一個顏色而走鐘。 */
                 background-image: url('paper-texture.png');
                 background-repeat: repeat;
                 background-blend-mode: multiply;
@@ -2891,6 +2936,12 @@
                 max-width: 100%;
                 /* 桌機版 40px 內距在窄螢幕上吃掉太多可讀寬度，縮小為 24px/18px */
                 padding: 24px 18px;
+            }
+
+            /* 卡片本身已是滿版寬（width/max-width:100%），無法再放大，故「放大」
+               落在內文字級：由 --type-body（約 16px）提升到約 18–20px。 */
+            .story-card p {
+                font-size: clamp(1.125rem, calc(1.05rem + 0.32vw), 1.25rem);
             }
         }
 
@@ -3006,6 +3057,12 @@
             font-size: var(--type-panel-heading);
             line-height: 1;
             color: var(--ui-accent);
+            /* 箭頭加粗。「↑」(U+2191) 是符號字元，多數字型不提供粗體字重，
+               單靠 font-weight 往往毫無變化（瀏覽器也未必會做合成粗體），
+               因此改以 text-stroke 沿字形輪廓加粗 —— 不依賴字型是否有粗體版本，
+               任何字型都能穩定變粗。font-weight 一併留著，字型若真有粗體則加乘。 */
+            font-weight: 900;
+            -webkit-text-stroke: 1.2px currentColor;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
@@ -3251,10 +3308,14 @@
             .hero-title {
                 position: static;
                 width: 100%;
-                /* 44px 保留給疊在卡片上緣的印章（top:-26px, scale(0.9), 含箭頭尖角，
-                   放大後計算最深壓進卡片內約 36.4px）留出淨空，不論標題斷成幾行都不會被壓到。
-                   印章放大時（見 .hero-stamp-wrap scale）此值需同步重新計算，不能各自維護 */
-                margin: 44px 0 0;
+                /* 68px 保留給疊在卡片上緣的印章留出淨空，不論標題斷成幾行都不會被壓到。
+                   推導（皆相對紙卡 border box，紙卡 padding-top 為 30px）：
+                     印章 top:-30px、直徑 104px  → 章體下緣 = -30 + 104 = 74px
+                     箭頭 bottom:-14px、高 16px  → 尖角最深 = 74 + 16 = 90px
+                     壓進卡片內容區深度        = 90 - 30 = 60px
+                     留 8px 餘裕               → margin-top = 68px
+                   ⚠️ 印章尺寸／top／箭頭高度任一改動，此值都必須依上式重算，不能各自維護 */
+                margin: 68px 0 0;
                 padding: 0;
                 background: none;
                 box-shadow: none;
@@ -3283,26 +3344,31 @@
                 font-size: var(--type-caption);
                 font-weight: 700;
                 line-height: 1.6;
-                text-align: right;
+                /* 原為 right（副標靠右對齊），與主標／印章／前言全都置中的紙卡軸線不一致，
+                   改為 center 讓整張紙卡共用同一條中軸 */
+                text-align: center;
             }
 
             /* 印章疊釘在合併紙卡上緣、水平置中（原本貼右上角，改為置中），
-               一半在卡片外、一半壓進卡片內，紅底＋米色（--ui-paper）文字與粗箭頭
-               呼應騎縫章視覺語彙。放大到 0.9（原 0.72），.hero-title 的 margin-top
-               已同步重新計算為 44px；水平置中不影響碰撞判斷（只看垂直淨空） */
+               一部分在卡片外、一部分壓進卡片內，紅底＋米色（--ui-paper）文字與粗箭頭
+               呼應騎縫章視覺語彙。水平置中不影響碰撞判斷（只看垂直淨空）。
+               依美編需求再放大：改以 width/height 直接指定 104px（原 84px×scale(0.9)
+               ＝視覺 75.6px），並移除 scale —— 邊框與箭頭不再被縮小、邊緣更銳利，
+               尺寸也回到單一真實來源，不必再心算「宣告值 × 縮放比」。
+               ⚠️ top 與 .hero-title 的 margin-top 已依新尺寸重算（見該處推導式）。 */
             .hero-stamp-wrap {
                 position: absolute;
-                top: -26px;
+                top: -30px;
                 bottom: auto;
                 left: 50%;
                 right: auto;
                 z-index: 5;
-                transform: translateX(-50%) scale(0.9);
+                transform: translateX(-50%);
             }
 
             .hero-stamp {
-                width: 84px;
-                height: 84px;
+                width: 104px;
+                height: 104px;
                 background: var(--ui-accent);
                 border-color: var(--ui-paper);
                 color: var(--ui-paper);
@@ -3313,23 +3379,29 @@
                 opacity: 0.7;
             }
 
+            /* 手機版沿用與桌機完全相同的排法（297＋小字天／下排逾期），只有尺寸縮小；
+               顏色則維持與桌機對調（桌機：米底＋朱印紅字；手機：朱印紅底＋米色字，
+               見上方 .hero-stamp 的 background/border-color/color 覆寫）。 */
             .hero-stamp .num {
                 font-size: var(--type-report-display);
             }
 
+            .hero-stamp .unit,
             .hero-stamp .label {
                 font-size: var(--type-caption);
             }
 
+            /* 箭頭隨圓章放大等比加大（8/14 → 10/16）。高度 16px 已計入
+               .hero-title margin-top 的推導式，改動此值必須回頭重算該值。 */
             .hero-stamp-wrap::after {
                 content: '';
                 position: absolute;
                 left: 50%;
-                bottom: -14px;
+                bottom: -16px;
                 transform: translateX(-50%);
-                border-left: 8px solid transparent;
-                border-right: 8px solid transparent;
-                border-top: 14px solid var(--ui-paper);
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-top: 16px solid var(--ui-paper);
             }
 
             /* 標題＋副標＋前言合併為同一張紙卡，取代原本各自獨立的浮動面板，留更舒適的內距 */
@@ -3372,9 +3444,12 @@
                 gap: 4px;
             }
 
+            /* 依美編需求改回與桌機基底相同的 40px 長線（原 20px）。
+               手機縮短這條線原本是為了閃避 .hero-section 底部的撕紙 clip-path，
+               但該 clip-path 在本區塊已設為 none（見上方 .hero-section），
+               縮短的理由不存在了。background 與基底完全相同，不再重複宣告。 */
             .scroll-indicator::after {
-                height: 20px;
-                background: linear-gradient(to bottom, #a5271e, transparent);
+                height: 40px;
             }
 
             .gantt-backdrop-box-rebuilt {
@@ -3459,8 +3534,21 @@
                 padding-block: 32px;
             }
 
+            /* ⚠️ padding-top 原為 64px，把基底規則那條 80vh 的安全呼吸帶砍掉了，
+               結語文字因此在圖表還釘在畫面上時就捲了上來，被 z-index:5 的帶狀區蓋住
+               （結語自身只有 z-index:3）。
+               需要多少才夠，可以精確推導 —— 退場一旦開始，圖表與結語都以 1:1 的速率
+               隨捲動上移（--ch3-exit-offset = containerTop − card5Top，containerTop 在
+               sticky 狀態下固定，card5Top 隨捲動等速遞減），兩者相對距離是常數。
+               所以只需檢查「退場起點」那一瞬間的幾何：
+                 圖表下緣          = 21dvh + 58dvh          = 79dvh
+                 卡5 文字卡此刻在  = containerTop           ≈ 21dvh
+                 卡5 區塊下緣      ≈ 文字卡 + 卡高          ≈ 39dvh
+                 結語文字頂端      = 39dvh + padding-top
+               不重疊條件：39 + padding-top > 79  →  padding-top > 40dvh
+               取 56dvh（留 16dvh 餘裕，涵蓋卡高估算誤差）。 */
             .ch3-conclusion-footer-rebuilt {
-                padding-top: 64px;
+                padding-top: 56dvh;
                 padding-bottom: 120px;
             }
 
@@ -3640,8 +3728,9 @@
         <div class="hero-headline-panel">
             <div class="hero-stamp-wrap">
                 <div class="hero-stamp">
-                    <span class="num" id="hero-stamp-num" data-start="2025-09-30">294</span>
-                    <span class="label">天　逾　期</span>
+                    <span class="num-row"><span class="num" id="hero-stamp-num"
+                            data-start="2025-09-30">294</span><span class="unit">天</span></span>
+                    <span class="label">逾期</span>
                 </div>
             </div>
             <h1 class="hero-title hero-sr-only report-display">
@@ -5019,9 +5108,26 @@
 
                 // CSS resolves the transform. JavaScript publishes only a bounded
                 // progress length so layout ownership stays in the stylesheet.
+                //
+                // ⚠️ 退場基準點不可以用 containerTop（面板的 getBoundingClientRect）——
+                // 面板是被 --ch3-exit-offset 的 translateY 推動的元素，其 rect 已經含入
+                // 該位移，於是形成回饋迴圈：
+                //     offset_n = (靜止位置 − offset_{n−1}) − cardTop
+                // 這個遞迴不收斂，會在 offset 與 (B − offset) 兩值之間來回跳；再經過
+                // .gantt-sticky-box-rebuilt 那條 transition: transform 0.1s 的低通濾波
+                // 阻尼後，實際穩定在正確值的「一半」。結果就是圖表退場只跑一半速度，
+                // 卡5 讀完、結語都捲上來了，帶狀區（不透明深色底、z-index:5）還蓋在上面。
+                //
+                // 手機版改用帶狀區的 CSS top 計算值當基準：getComputedStyle().top 回傳的是
+                // 指定的 inset（21dvh 換算成 px），完全不受 transform 影響，沒有回饋。
+                // 帶狀區處於 sticky 貼住狀態時，該值就等於它在視窗中的實際頂端位置。
+                // 桌機維持原本以面板頂端為基準的行為，不受本次修正影響。
+                const exitAnchor = isMobile
+                    ? (parseFloat(getComputedStyle(stickyWrapper).top) || 0)
+                    : containerTop;
                 const exitOffset = Math.min(
                     stickyWrapper.getBoundingClientRect().height,
-                    Math.max(0, containerTop - cardFiveTop)
+                    Math.max(0, exitAnchor - cardFiveTop)
                 );
                 ch3Section.style.setProperty('--ch3-exit-offset', exitOffset + 'px');
 
