@@ -537,6 +537,18 @@
             pointer-events: auto !important;
         }
 
+        /* 718億先行動支方案金字塔圖：獨立於 is-active-chapter 機制，捲入視窗後自行淡入 */
+        #ch4-pyramid {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        #ch4-pyramid.visible-box {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* =======================================================
            第一章：全新置中交叉時間軸
            ======================================================= */
@@ -603,15 +615,6 @@
 
         .timeline-terminus-mark::before {
             content: '?';
-        }
-
-        .timeline-terminus-mark.timeline-complete {
-            animation: none;
-            transform: translate(-50%, 50%) scale(1);
-        }
-
-        .timeline-terminus-mark.timeline-complete::before {
-            content: '\2193';
         }
 
         @keyframes timeline-terminus-pulse {
@@ -2229,17 +2232,19 @@
             align-items: center;
             text-align: center;
             padding: 80px 20px 120px 20px;
-            /* 背景改為由極淡的朱印紅朝純白底色向上漸層 */
-            background: linear-gradient(0deg, rgba(165, 39, 30, 0.05) 0%, var(--bg-deep) 100%);
+            /* 原本朱印紅漸層太淡（0.05），跟上方第四章、下方 footer 幾乎同色，凸顯不出來；
+               改用高對比亮紅、拉高透明度，並將終點色改為暖褐色 #664b49，讓 CTA 按鈕所在的
+               底部區域有明顯暖色調 */
+            background: linear-gradient(6deg, rgba(226, 86, 74, 0.16) 0%, #664b49 100%);
         }
 
-        /* 進入資料庫按鈕，套用主色朱印紅配色 */
+        /* 進入資料庫按鈕：原用 --ui-accent（暗朱印紅 #A5271E）跟頁尾深色背景太接近，
+           不夠凸顯，改用高對比亮紅 --np-seal-red-bright，讓按鈕在深色底上跳出來 */
         .cta-btn {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            background-color: var(--ui-accent) !important;
-            /* 原為金黃色，改為主色朱印紅 */
+            background-color: var(--np-seal-red-bright) !important;
             color: var(--ui-ink-inverse) !important;
             /* 改為純白文字以利高對比閱讀 */
             padding: 15px 45px;
@@ -2248,17 +2253,15 @@
             font-size: var(--type-panel-heading);
             font-weight: 900;
             text-decoration: none;
-            box-shadow: 0 10px 30px rgba(165, 39, 30, 0.2);
-            /* 調整為淺朱印紅外陰影 */
+            box-shadow: 0 10px 30px rgba(226, 86, 74, 0.35);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .cta-btn:hover {
-            background-color: var(--ui-accent) !important;
-            filter: brightness(0.85);
-            /* 懸停時加深為深朱印紅 */
+            background-color: var(--np-seal-red-bright) !important;
+            filter: brightness(0.9);
             transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(165, 39, 30, 0.35);
+            box-shadow: 0 15px 35px rgba(226, 86, 74, 0.5);
         }
 
         /* 手機版適配 */
@@ -3058,10 +3061,10 @@
 
         .page-footer {
             padding: 24px 20px;
-            background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.2px) 0 0/4px 4px, var(--ui-canvas);
-            /* --ui-canvas 與上方 .footer-cta 漸層終點 --bg-deep 是同一個色值，
-               單靠背景色分不出頁尾邊界，加一條淡色分隔線（沿用本檔案深色面板既有的
-               細線做法，如第二三章圖表面板邊框）標出視覺分界 */
+            background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.2px) 0 0/4px 4px, #1E1410;
+            /* 原背景 var(--ui-canvas) 與上方 .footer-cta 漸層終點 --bg-deep 是同一個色值，
+               單靠底色分不出頁尾邊界；改用暖色深炭色 #1E1410 讓底色本身也有區隔，
+               保留既有細線分隔線做雙重標示 */
             border-top: 1px solid rgba(237, 230, 211, 0.1);
             color: var(--ui-muted);
             font-size: var(--type-caption);
@@ -3161,11 +3164,10 @@
                 height: auto;
                 min-height: calc(100svh - var(--site-header-h));
                 overflow: visible;
-                display: grid;
-                grid-template-rows: minmax(13rem, 31svh) auto auto;
-                align-content: start;
-                justify-items: center;
-                gap: 14px;
+                /* Headline panel and scroll indicator are positioned independently
+                   (see .hero-headline-panel / .scroll-indicator below) rather than
+                   flowed as a group, so the panel's own center lands exactly on the
+                   viewport's vertical midpoint regardless of the image/indicator. */
                 /* Header clearance is provided once by body padding above.
                    Keep only the hero's internal safe-area/content breathing room here. */
                 padding: calc(env(safe-area-inset-top) + 18px) 20px 28px;
@@ -3388,10 +3390,13 @@
                 --type-chapter-heading: clamp(1.75rem, calc(1.68rem + 0.3vw), 1.875rem);
             }
 
-            /* Compact storytelling: visual stages become bounded blocks in the
-               document flow; cards no longer reserve viewport-sized reveal slots. */
-            #chapter-2-rebuilt,
-            .scroll-story-rebuilt {
+            /* Compact storytelling (chapter 2 only): visual stage becomes a bounded
+               block in the document flow; cards no longer reserve viewport-sized
+               reveal slots. Chapter 3's pinned/scroll-linked bar chart keeps the
+               same mechanism it uses at tablet widths (see the shared
+               @media (max-width: 1024px) card layout above) — it is NOT flattened
+               here, unlike chapter 2. */
+            #chapter-2-rebuilt {
                 min-height: auto !important;
             }
 
@@ -3411,35 +3416,20 @@
                 transform: none !important;
             }
 
-            #chapter-2-rebuilt .gantt-scroll-content-rebuilt,
-            .story-timeline-rebuilt {
+            #chapter-2-rebuilt .gantt-scroll-content-rebuilt {
                 gap: 24px;
                 padding-block: 32px;
             }
 
-            #chapter-2-rebuilt .gantt-card-rebuilt,
-            .story-timeline-rebuilt .gantt-card-rebuilt {
+            #chapter-2-rebuilt .gantt-card-rebuilt {
                 min-height: auto !important;
                 padding: 24px 16px !important;
-                transform: none !important;
-            }
-
-            .gantt-sticky-box-rebuilt {
-                position: relative !important;
-                top: auto !important;
-                left: auto;
-                width: 100% !important;
-                height: var(--story-visual-stage-height) !important;
                 transform: none !important;
             }
 
             .ch3-conclusion-footer-rebuilt {
                 padding-top: 64px;
                 padding-bottom: 120px;
-            }
-
-            .center-main-line-fill {
-                height: 100% !important;
             }
 
             .hero-section {
@@ -4184,8 +4174,8 @@
                 <p class="editorial-body on-dark">
                     國民黨立法院黨團1月16日提出718億新興計畫先行動支案並逕付二讀，共涵蓋38項計畫。國民黨立委羅智強指出，動支案主要是針對地方民生急迫的一些新增計畫，或者是新興計畫裡面的一些支出專案。該案於3月6日通過。
                 </p>
-                <div class="dynamic-chart-box"
-                    style="position: relative; opacity: 1; visibility: visible !important; transform: none !important; height: auto; width: 100%; padding: 0; pointer-events: auto;">
+                <div class="dynamic-chart-box" id="ch4-pyramid"
+                    style="position: relative; height: auto; width: 100%; padding: 0; pointer-events: auto;">
                     <div class="dash-container-box" style="max-width: 100%;">
                         <div class="dash-header">
                             <h3>718億先行動支方案納入與排除項目金額對比</h3>
@@ -4216,60 +4206,60 @@
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 0%;"></div><span
+                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 0ms;" data-target-width="0%"></div><span
                                     class="val-num">0</span>
                             </div>
                             <div class="cat-item">地方財政與<br>大眾通勤補貼</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 100%;"></div><span
+                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 0ms;" data-target-width="100%"></div><span
                                     class="val-num">399.35</span>
                             </div>
                         </div>
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 16.17%;"></div><span
+                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 50ms;" data-target-width="16.17%"></div><span
                                     class="val-num">64.58</span>
                             </div>
                             <div class="cat-item">氣候調適、治水<br>與環保基建</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 38.03%;"></div><span
+                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 50ms;" data-target-width="38.03%"></div><span
                                     class="val-num">151.88</span>
                             </div>
                         </div>
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 10.15%;"></div><span
+                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 100ms;" data-target-width="10.15%"></div><span
                                     class="val-num">40.53</span>
                             </div>
                             <div class="cat-item">醫療與少子化對策</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 29.84%;"></div><span
+                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 100ms;" data-target-width="29.84%"></div><span
                                     class="val-num">119.18</span>
                             </div>
                         </div>
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 33.14%;"></div><span
+                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 150ms;" data-target-width="33.14%"></div><span
                                     class="val-num">132.34</span>
                             </div>
                             <div class="cat-item">戰略科技研發與國防升級</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 4.94%;"></div><span
+                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 150ms;" data-target-width="4.94%"></div><span
                                     class="val-num">19.74</span>
                             </div>
                         </div>
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 15.48%;"></div><span
+                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 200ms;" data-target-width="15.48%"></div><span
                                     class="val-num">61.83</span>
                             </div>
                             <div class="cat-item">其他<br>（建物整修、公務車汰換）</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 6.89%;"></div><span
+                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 200ms;" data-target-width="6.89%"></div><span
                                     class="val-num">27.50</span>
                             </div>
                         </div>
@@ -4653,6 +4643,29 @@
         }, { rootMargin: '-10% 0px -8% 0px', threshold: 0.05 });
 
         scenes.forEach(scene => observer.observe(scene));
+
+        // 718億先行動支方案金字塔圖：每一列（.pyramid-align-row）各自捲入視窗時觸發一次
+        // 進場動畫，之後不再重複觸發。改為逐列觀察（而非觀察整個高盒子）是因為手機版
+        // 直式堆疊 5 列後整個 #ch4-pyramid 相當高，若用單一 threshold 觀察整個盒子，
+        // 盒子頂端一露出一小截就達到門檻觸發，此時長條本體其實還在螢幕下方看不到，
+        // 使用者捲到看得見長條時寬度早已是最終值，長出動畫等於白跑
+        const ch4Pyramid = document.getElementById('ch4-pyramid');
+        if (ch4Pyramid) {
+            const ch4PyramidRows = ch4Pyramid.querySelectorAll('.pyramid-align-row');
+            const ch4PyramidObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        ch4Pyramid.classList.add('visible-box');
+                        entry.target.querySelectorAll('.bar-rect').forEach(bar => {
+                            bar.style.width = bar.getAttribute('data-target-width');
+                        });
+                        ch4PyramidObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            ch4PyramidRows.forEach(row => ch4PyramidObserver.observe(row));
+        }
+
         // =======================================================
         // 全新重構：第二章獨立物理滾動監聽器 (終極百分比放行版)
         // =======================================================
@@ -4716,10 +4729,12 @@
                 const finalCardTop = finalStoryCard.getBoundingClientRect().top;
                 const chapter3Top = chapter3 ? chapter3.getBoundingClientRect().top : Infinity;
                 const reducedMotion = MQ_REDUCED.matches;
-                const start = viewportHeight * 0.55;
-                const end = viewportHeight * 0.35;
+                // 原本 0.55/0.35 讓文字在讀者還沒讀完就開始淡出；延後到 0.40/0.20，
+                // 給讀者多一段捲動距離維持全不透明，淡出區間寬度不變（都是 0.2）
+                const start = viewportHeight * 0.40;
+                const end = viewportHeight * 0.20;
                 let progress = reducedMotion
-                    ? (finalCardTop <= viewportHeight * 0.45 ? 1 : 0)
+                    ? (finalCardTop <= viewportHeight * 0.30 ? 1 : 0)
                     : Math.min(1, Math.max(0, (start - finalCardTop) / (start - end)));
 
                 // Scroll positions resolve to whole CSS pixels, so retain the intended
@@ -4804,6 +4819,17 @@
                 ganttBox.classList.remove('box-visible-rebuilt-now');
                 imagesBox.classList.remove('box-visible-rebuilt-now');
 
+                // 座標軸（卡片2）與紅線／灰底區塊（卡片4）改用各自對應卡片本身的位置判斷，
+                // 而不是等整章百分比制的 currentStep 追上——只要該卡片的 story-card 頂部已經
+                // 捲到視窗高度 50% 就先點亮，讓圖表元素跟著卡片文字同步出現，不會慢半拍。
+                // 限制在 currentStep<=6（圖表仍相關的範圍）內才生效，避免捲到卡片7~9歷史照片
+                // 段時，這兩張卡片的殘留位置（已遠遠捲出畫面上方）誤判成「還沒到」而被錯誤點亮。
+                const vh = window.innerHeight;
+                const card2Story = chapter2.querySelector('[data-rebuilt-step="2"] .story-card');
+                const card4Story = chapter2.querySelector('[data-rebuilt-step="4"] .story-card');
+                const axisEarly = currentStep <= 6 && card2Story && card2Story.getBoundingClientRect().top <= vh * 0.5;
+                const deadlineEarly = currentStep <= 6 && card4Story && card4Story.getBoundingClientRect().top <= vh * 0.5;
+
                 // 方塊長出時機：第二張卡片「…這張圖表橫向展現了歷年各政黨執政時的預算審議時程」
                 // 一出現，圖表網格同步顯示，方塊就應該一起長出，讓「卡片提到圖表」與「圖表有內容」
                 // 同步，不再慢半拍。故只要進入圖表區間（卡片 2～6）方塊即長出；引言（卡片1）與
@@ -4866,6 +4892,11 @@
                         armStep9CardReveal(finalCard);
                     }
                 }
+
+                // 卡片本身已經捲到 50% 視窗高度，就強制補上對應 class，讓座標軸／紅線區塊
+                // 提早跟卡片文字同步出現，不等整章百分比制的門檻追上。
+                if (axisEarly) chapter2.classList.add('rebuilt-step-2');
+                if (deadlineEarly) chapter2.classList.add('rebuilt-step-4');
             } else {
                 // 滾出第二章範圍，徹底關燈，不遮擋上下章節
                 stage.classList.remove('stage-active-rebuilt-now');
@@ -4951,13 +4982,8 @@
             const percent = total > 0 ? Math.min(100, Math.max(0, (scrolled / total) * 100)) : 0;
             fill.style.setProperty('--timeline-progress', percent + '%');
 
-            // Terminus marker reflects the same progress value the line itself uses,
-            // so it can never show "complete" while the line is still visually unfinished,
-            // and reverses for free when scrolling back up.
-            const terminusMark = document.getElementById('timeline-terminus-mark');
-            if (terminusMark) {
-                terminusMark.classList.toggle('timeline-complete', percent >= 100);
-            }
+            // 依需求改為終點標記永遠是脈動的「?」，不再於捲滿時切換成「↓」箭頭——
+            // 完成與否已經由紅線本身畫滿與否傳達，標記本身不需要再變換內容。
 
             // Every row — date node and story card alike, at every width including
             // mobile — follows the physical line. Each row is revealed when the
