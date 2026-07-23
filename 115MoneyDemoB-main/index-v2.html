@@ -327,9 +327,7 @@
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            color: var(--ui-ink-inverse);
-            /* 原為 var(--ui-muted)，該 token 是給淺色卡片內文用的，直接放在 hero 深色拼貼圖上對比不足；
-               改用 --ui-ink-inverse，與手機／平板版 .scroll-indicator 已經驗證過對比足夠的做法一致 */
+            color: #a5271e;
             font-size: var(--type-caption);
             font-weight: 500;
             animation: bounce 2s infinite;
@@ -339,7 +337,7 @@
             content: '';
             width: 2px;
             height: 40px;
-            background: linear-gradient(to bottom, var(--ui-ink-inverse), transparent);
+            background: linear-gradient(to bottom, #a5271e, transparent);
         }
 
         /* 手機版：指示器（文字＋向下延伸的線）在 bottom:40px 時，加上其自身高度
@@ -3320,7 +3318,7 @@
 
             .scroll-indicator::after {
                 height: 20px;
-                background: linear-gradient(to bottom, var(--ui-ink-inverse), transparent);
+                background: linear-gradient(to bottom, #a5271e, transparent);
             }
 
             .gantt-backdrop-box-rebuilt {

@@ -49,6 +49,13 @@
 
             --font-display: 'Noto Serif TC', 'Songti TC', 'PMingLiU', serif;
             --font-body: 'Noto Sans TC', sans-serif;
+
+            /* 字級系統 —— 與 index-v2.html 共用同一套流體 clamp() 字級 token */
+            --type-report-display: clamp(2.125rem, calc(1.4rem + 1.1vw), 2.5rem);
+            --type-chapter-heading: clamp(2rem, calc(1.25rem + 1.2vw), 2.5rem);
+            --type-panel-heading: clamp(1.05rem, calc(0.98rem + 0.18vw), 1.15rem);
+            --type-body: clamp(1rem, calc(0.96rem + 0.14vw), 1.1rem);
+            --type-caption: clamp(0.75rem, calc(0.71rem + 0.12vw), 0.85rem);
         }
 
         * {
@@ -113,7 +120,7 @@
 
         header h1 {
             margin: 0;
-            font-size: 1.4rem;
+            font-size: var(--type-panel-heading);
             font-weight: 900;
             color: var(--np-seal-red-bright);
         }
@@ -141,7 +148,7 @@
             padding: 13px 14px;
             cursor: pointer;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: var(--type-caption);
             transition: 0.2s;
             font-weight: 700;
             text-decoration: none;
@@ -209,14 +216,14 @@
         }
 
         .db-intro h1 {
-            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            font-size: var(--type-report-display);
             color: var(--np-seal-red-bright);
             margin-bottom: 14px;
             line-height: 1.4;
         }
 
         .db-intro p {
-            font-size: 1.05rem;
+            font-size: var(--type-body);
             color: var(--np-text-ondark);
             line-height: 1.8;
             max-width: 720px;
@@ -251,7 +258,7 @@
             color: var(--np-ink);
             margin-bottom: 10px;
             display: block;
-            font-size: 1.05rem;
+            font-size: var(--type-panel-heading);
         }
 
         /* 橫向滑動按鈕列 */
@@ -290,7 +297,7 @@
             color: var(--np-muted);
             padding: 12px 18px;
             border-radius: 50px;
-            font-size: 0.95rem;
+            font-size: var(--type-body);
             font-weight: bold;
             cursor: pointer;
             transition: 0.2s;
@@ -319,7 +326,7 @@
         .search-box {
             width: 100%;
             padding: 15px 20px;
-            font-size: 1.1rem;
+            font-size: var(--type-body);
             font-family: var(--font-body);
             border: 2px solid var(--np-seal-red);
             border-radius: 50px;
@@ -354,7 +361,7 @@
         }
 
         .summary-text {
-            font-size: 1.1rem;
+            font-size: var(--type-body);
             font-weight: bold;
             color: var(--np-ink);
         }
@@ -394,7 +401,7 @@
         }
 
         .pb-title {
-            font-size: 1.15rem;
+            font-size: var(--type-panel-heading);
             font-weight: bold;
             margin: 0;
             color: var(--np-ink);
@@ -405,7 +412,7 @@
             color: var(--np-seal-red);
             padding: 3px 10px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: var(--type-caption);
             font-weight: bold;
             width: fit-content;
         }
@@ -425,7 +432,7 @@
             color: var(--np-muted);
             padding: 3px 10px;
             border-radius: 50px;
-            font-size: 0.72rem;
+            font-size: var(--type-caption);
             font-weight: 600;
             font-family: inherit;
             white-space: nowrap;
@@ -556,7 +563,7 @@
         }
 
         .stat-label {
-            font-size: 0.85rem;
+            font-size: var(--type-caption);
             color: var(--np-muted);
             font-weight: bold;
             margin-bottom: 5px;
@@ -622,7 +629,7 @@
 
         @media (max-width: 600px) {
             header h1 {
-                font-size: 1.15rem;
+                font-size: var(--type-panel-heading);
             }
 
             .nav-toggle {
@@ -782,7 +789,7 @@
 
                 <div
                     style="background:var(--np-paper); padding:20px; border-radius:12px; margin-bottom:25px; border:1px solid var(--border-color);">
-                    <strong style="color:var(--secondary-color); font-size:1.1rem;">工作內容：</strong>
+                    <strong style="color:var(--secondary-color); font-size:var(--type-body);">工作內容：</strong>
                     <div style="margin-top:10px; line-height: 1.7;"><span id="u-desc" style="color:var(--np-ink);"></span></div>
                 </div>
 
@@ -795,7 +802,7 @@
         </div>
     </div>
 
-    <footer style="background: var(--bg-color); color: var(--np-muted-ondark); text-align: center; padding: 24px 20px; font-size: 0.85rem;">
+    <footer style="background: var(--bg-color); color: var(--np-muted-ondark); text-align: center; padding: 24px 20px; font-size: var(--type-caption);">
         copyright © 2026 中央通訊社版權所有
     </footer>
 
