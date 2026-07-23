@@ -4,11 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>document.documentElement.classList.add('js');</script>
     <title>總預算卡關 203 天 — 115年度中央政府總預算審議回顧</title>
-    <link rel="preload" as="image" href="hero-collage.jpg" fetchpriority="high" media="(min-width: 1025px)">
-    <link rel="preload" as="image" href="hero-collage-mobile-clean.webp" type="image/webp" fetchpriority="high"
-        media="(max-width: 1024px)">
+    <link rel="preload" as="image" href="hero-collage.jpg" fetchpriority="high" media="(min-width: 641px)">
+    <link rel="preload" as="image" href="hero-collage-mobile.jpg" fetchpriority="high" media="(max-width: 640px)">
     <!-- Published at https://ke22.github.io/govBudget/ (GitHub Pages) -->
     <meta name="description" content="115年度中央政府總預算審議創下憲政史上最長延宕紀錄，卡關203天。中央社深度回顧朝野協商過程、歷年預算延宕比較，以及對新興政策計畫的影響。">
     <meta property="og:title" content="總預算卡關 203 天 — 115年度中央政府總預算審議回顧">
@@ -22,10 +20,8 @@
     <meta name="twitter:image" content="https://ke22.github.io/govBudget/hero-collage.jpg">
     <link rel="canonical" href="https://ke22.github.io/govBudget/index.html">
     <link rel="icon" type="image/svg+xml" href="cna-favicon-adaptive.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap"
         rel="stylesheet">
     <style>
         /* --- 核心視覺規範 (CNA 數位敘事風格) --- */
@@ -38,6 +34,10 @@
             /* 原為牛皮紙淺色，改為與 hero 一致的深色桌面 */
             --bg-card: #d5cdcd;
             /* 原為極淺灰藍半透明，改為不透明牛皮紙卡片色 */
+            --text-main: #1B1712;
+            /* 原為深灰，改為新聞剪貼風格墨黑色 */
+            --text-muted: #6B6156;
+            /* 原為中灰，改為暖褐灰 */
             --primary: #A5271E;
             /* 原為藍綠色 (Teal)，改為朱印紅 */
             --accent: #A8823C;
@@ -84,27 +84,7 @@
             --chart-cat-reserve: #D4A857;
 
             /* 固定頂部導覽列高度，供釘住的甘特圖舞台預留頂部間距，避免圖表標題被 nav 蓋住 */
-            --site-header-h: 83px;
-            --chart-stage-gap: 24px;
-            --chart-stage-short-extra: 0px;
-            --chart-stage-clearance: calc(var(--site-header-h) + env(safe-area-inset-top) + var(--chart-stage-gap) + var(--chart-stage-short-extra));
-            --chart-stage-top: calc(var(--site-header-h) + env(safe-area-inset-top));
-            --chart-stage-height: calc(100svh - var(--chart-stage-top));
-            --chart-stage-content-clearance: calc(var(--chart-stage-gap) + var(--chart-stage-short-extra));
-
-            /* Editorial roles: UI surfaces use these roles; chart categories retain their data-only palette. */
-            --ui-canvas: #12191A;
-            --ui-paper: #d5cdcd;
-            --ui-ink: #1B1712;
-            --ui-ink-inverse: #EDE6D3;
-            --ui-accent: #A5271E;
-            --ui-muted: #A79C8C;
-            --type-report-display: clamp(2.125rem, calc(1.4rem + 1.1vw), 2.5rem);
-            --type-chapter-heading: clamp(2rem, calc(1.25rem + 1.2vw), 2.5rem);
-            --type-panel-heading: clamp(1.05rem, calc(0.98rem + 0.18vw), 1.15rem);
-            --type-body: clamp(1rem, calc(0.96rem + 0.14vw), 1.1rem);
-            --type-caption: clamp(0.75rem, calc(0.71rem + 0.12vw), 0.85rem);
-            --scene-read-interval: 100svh;
+            --site-header-h: 57px;
         }
 
         * {
@@ -115,7 +95,7 @@
 
         body {
             font-family: var(--font-body);
-            background-color: var(--ui-canvas);
+            background-color: var(--bg-deep);
             /* 網點層（印刷網點紋理）疊在漸層暗角層之上：每個 100vh 視窗高度重複一次漸層，
                讓每個章節進場時桌面邊緣自然變暗，避免整頁一次性漸層在長頁面中段變成純平色 */
             background-image:
@@ -124,11 +104,14 @@
                 radial-gradient(ellipse at 50% 100%, rgba(0, 0, 0, 0.35) 0%, transparent 65%);
             background-size: 4px 4px, 100% 100vh, 100% 100vh;
             background-repeat: repeat, repeat-y, repeat-y;
-            color: var(--ui-ink-inverse);
+            color: var(--np-text-ondark);
             /* 原為 var(--text-main) 深墨色，頁面底色改深後預設文字改為淺色；淺色卡片內文另有各自明確設色，不受影響 */
             line-height: 1.75;
             letter-spacing: 0.03em;
             width: 100%;
+            /* 🎯 確保主體寬度鎖死 */
+            overflow-x: hidden;
+            /* 🎯 剛性切除任何橫向溢出 */
             position: relative;
         }
 
@@ -156,16 +139,15 @@
             display: block;
             width: 52px;
             height: 6px;
-            background: var(--ui-accent);
+            background: var(--primary);
             opacity: 0.85;
             margin: 16px auto 0;
         }
 
         /* --- Hero 序章區塊 --- */
         .hero-section {
-            height: calc(100vh - var(--site-header-h));
-            height: calc(100svh - var(--site-header-h));
-            min-height: calc(100svh - var(--site-header-h));
+            height: 100vh;
+            height: 100dvh;
             width: 100%;
             /* 🎯 強制鎖定寬度為純 100% */
             overflow: hidden;
@@ -179,7 +161,7 @@
             position: relative;
             /* 新聞剪貼風格：實際拼貼圖檔（hero-collage.jpg）+ 底部撕紙邊。
                原為淺牛皮紙色備援底/信封邊色，改為深黑色，與全站深色化後的其餘區塊一致 */
-            background-color: var(--ui-canvas);
+            background-color: var(--bg-deep);
             /* 疊加一層淺色網點呼應全站的印刷網點紋理，再蓋拼貼圖 */
             background-image:
                 radial-gradient(circle, rgba(237, 230, 211, 0.06) 1px, transparent 1.2px),
@@ -222,13 +204,12 @@
         }
 
         @media (max-width: 640px) {
-
             /* 手機版改用直式構圖的專屬拼貼圖（標題置於上段，下方留深色網點區給
                dek-panel／stamp 疊加），比例貼近手機螢幕，改回 cover 避免大片留白信封邊 */
             .hero-section {
                 background-image:
                     radial-gradient(circle, rgba(237, 230, 211, 0.06) 1px, transparent 1.2px),
-                    url('hero-collage-mobile-clean.webp');
+                    url('hero-collage-mobile.jpg');
                 background-size: 4px 4px, cover;
                 background-repeat: repeat, no-repeat;
                 background-position: 0 0, center top;
@@ -240,19 +221,11 @@
             }
         }
 
-        /* 手機版標題容器：桌機／平板維持 display:contents（不佔版面，不影響
-           .hero-title／.hero-dek-panel 原本的絕對定位與桌機排版），
-           手機版才變成有實體外框、合併標題＋副標＋前言的紙卡 */
-        .hero-headline-panel {
-            display: contents;
-        }
-
         .hero-stamp-wrap {
-            /* 桌機版：釘在拼貼圖右上角，避開中段的報頭標題與底部的 dek-panel。
-               right 由 6% 內移到 13%，讓印章在寬螢幕上不再貼齊畫面右緣、更靠近中間 */
+            /* 桌機版：釘在拼貼圖右上角，避開中段的報頭標題與底部的 dek-panel */
             position: absolute;
             top: 110px;
-            right: 13%;
+            right: 6%;
             z-index: 3;
         }
 
@@ -261,13 +234,13 @@
             width: 128px;
             height: 128px;
             border-radius: 50%;
-            border: 3px solid var(--ui-accent);
-            background: var(--ui-paper);
+            border: 3px solid var(--np-seal-red);
+            background: var(--np-paper-panel);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: var(--ui-accent);
+            color: var(--np-seal-red);
             transform: rotate(-9deg);
             box-shadow: 0 10px 24px rgba(27, 23, 18, 0.25);
         }
@@ -276,54 +249,44 @@
             content: '';
             position: absolute;
             inset: 8px;
-            border: 1px solid var(--ui-accent);
+            border: 1px solid var(--np-seal-red);
             border-radius: 50%;
             opacity: 0.6;
         }
 
-        /* 數字與單位「天」同一行、以基線對齊（原本「天」跟「逾期」擠在下排，
-           三位數之後整串過寬而換行）。unit 用小字，維持數字才是視覺主體。 */
-        .hero-stamp .num-row {
-            display: flex;
-            align-items: baseline;
-            gap: 2px;
-            white-space: nowrap;
-        }
-
         .hero-stamp .num {
-            font-size: var(--type-report-display);
+            font-size: 2.2rem;
             font-weight: 700;
             line-height: 1;
         }
 
-        .hero-stamp .unit {
-            font-size: var(--type-caption);
-            font-weight: 500;
-            line-height: 1;
-        }
-
         .hero-stamp .label {
-            font-size: var(--type-caption);
-            font-weight: 500;
-            /* 下排只剩「逾期」兩字，字距加寬維持印章的疏朗感；
-               text-indent 補回最後一字的行尾字距，讓兩字在圓心維持視覺置中 */
-            letter-spacing: 0.3em;
-            text-indent: 0.3em;
-            white-space: nowrap;
+            font-size: 0.68rem;
+            letter-spacing: 0.15em;
             margin-top: 4px;
         }
 
+        @media (max-width: 640px) {
+            .hero-stamp-wrap {
+                /* 手機版拼貼圖標題置於上段，改回底部的深色網點區與 dek-panel 疊加 */
+                top: auto;
+                bottom: 420px;
+                right: 4%;
+                transform: scale(0.8);
+            }
+        }
+
         .hero-title {
-            font-size: var(--type-report-display);
+            font-size: clamp(2rem, 4vw, 3.5rem);
             margin-bottom: 30px;
             font-weight: 900;
-            color: var(--ui-ink);
+            color: var(--np-ink);
             /* 新聞剪貼風格：主標改為墨黑色 */
         }
 
         .hero-title span {
-            font-size: inherit;
-            color: var(--ui-ink);
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            color: var(--np-ink);
             /* 原為 var(--primary) 藍綠色，改為新聞剪貼風格墨黑色 */
             display: block;
             margin-top: 15px;
@@ -331,8 +294,8 @@
         }
 
         .hero-meta {
-            font-size: var(--type-caption);
-            color: var(--ui-muted);
+            font-size: 1rem;
+            color: var(--np-muted);
             /* 原為 var(--text-muted) */
             margin-top: 40px;
         }
@@ -346,9 +309,9 @@
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            color: #a5271e;
-            font-size: var(--type-caption);
-            font-weight: 500;
+            color: var(--np-muted-ondark);
+            /* 原為 var(--np-muted)，該 token 是給淺色卡片內文用的，直接放在 hero 深色拼貼圖上對比不足 */
+            font-size: 0.9rem;
             animation: bounce 2s infinite;
         }
 
@@ -356,45 +319,17 @@
             content: '';
             width: 2px;
             height: 40px;
-            background: linear-gradient(to bottom, #a5271e, transparent);
-        }
-
-        /* 【已移除】此處原有一塊 @media (max-width: 640px) 的 .scroll-indicator 覆寫
-           （bottom:90px / animation:2s / ::after height:26px），用途是閃避
-           .hero-section 底部撕紙 clip-path 的裁切。移除原因有二：
-             1. 它是死碼 —— 後面那塊 @media (max-width: 1024px) 同樣命中手機寬度、
-                且在原始碼中排序更後，把 bottom / animation / ::after height 三個
-                屬性全部覆寫掉，這裡宣告的值從來沒有生效過。
-             2. 前提已消失 —— .hero-section 在 ≤1024 已設 clip-path: none，
-                手機根本沒有撕紙裁切需要閃避。
-           手機版的 .scroll-indicator 現由 @media (max-width: 1024px) 單一來源掌管。 */
-
-        @keyframes bounce-mobile {
-
-            0%,
-            20%,
-            50%,
-            80%,
-            100% {
-                transform: translate(-50%, 0);
-            }
-
-            40% {
-                transform: translate(-50%, -6px);
-            }
-
-            60% {
-                transform: translate(-50%, -3px);
-            }
+            background: linear-gradient(to bottom, var(--np-muted-ondark), transparent);
+            /* 原為 var(--primary) 藍綠色，改為新聞剪貼風格暖灰色 */
         }
 
         .chapter-intro p {
             /* 統一為 1.1rem，與 .story-card p / .timeline-block-node p 一致 */
-            font-size: var(--type-body) !important;
+            font-size: 1.1rem !important;
             line-height: 2 !important;
             text-align: center !important;
             font-weight: 500 !important;
-            color: var(--ui-ink-inverse) !important;
+            color: var(--np-text-ondark) !important;
             /* 原為 var(--text-main)，此段文字直接位於深色頁面底上 */
             max-width: 750px;
             margin: 0 auto;
@@ -409,7 +344,7 @@
             }
 
             .chapter-intro p {
-                font-size: var(--type-body) !important;
+                font-size: 1.1rem !important;
                 line-height: 1.8 !important;
             }
         }
@@ -477,18 +412,7 @@
         }
 
         .story-card {
-            /* 目標是與 .timeline-block-node 的 #ebe5d2「看起來一樣」。
-               但這張卡疊了 paper-texture.png 且 background-blend-mode: multiply，
-               而該紙紋平均亮度為 #f4f4f4（244.4/255），會把底色每通道壓暗約 4%。
-               故填入值需反推放亮：255 × 目標 ÷ 紙紋均值
-                 R: 255×235/244.4 = 245.2 → f5
-                 G: 255×229/244.3 = 239.0 → ef
-                 B: 255×210/244.3 = 219.2 → db
-               填 #f5efdb，疊紙紋後即還原為 #ebe5d2，與平塗的日期節點一致。
-               （直接填 #ebe1de 會呈現 #e1d8d5，比日期節點暗且偏灰。）
-               寫在基底規則＝手機桌機共用同一色；手機版 @media 區塊只保留
-               內距／backdrop-filter 等真正需要分breakpoint 的差異。 */
-            background-color: #f5efdb;
+            background-color: var(--np-paper-panel);
             /* 原為 var(--bg-card) 藍綠半透明，改為新聞剪貼風格牛皮紙卡片。
                左側朱印紅邊框已移除 */
             background-image: url('paper-texture.png');
@@ -511,9 +435,9 @@
         }
 
         .story-card h2 {
-            font-size: var(--type-panel-heading);
+            font-size: 2rem;
             font-weight: 700;
-            color: var(--ui-ink);
+            color: var(--np-ink);
             /* 原為 var(--primary) 藍綠色 */
             margin-bottom: 20px;
             display: flex;
@@ -522,14 +446,11 @@
         }
 
         .story-card p {
-            font-size: var(--type-body);
+            font-size: 1.1rem;
             margin-bottom: 16px;
-            color: var(--ui-ink);
+            color: var(--np-ink);
             /* 原為 var(--text-main)，改為新聞剪貼風格墨黑色 */
             line-height: 1.8;
-            /* 中文斷行禁則：避免行首出現「」）、。」等收尾標點、行尾出現「（「」等起始標點。
-               此規則不改變原本的靠左對齊（本來就沒有 justify），只修正斷行位置。 */
-            line-break: strict;
         }
 
         .mobile-timeline-badge {
@@ -558,22 +479,6 @@
             visibility: visible !important;
             transform: scale(1) translateY(0);
             pointer-events: auto !important;
-        }
-
-        /* 718億先行動支方案金字塔圖：獨立於 is-active-chapter 機制，捲入視窗後自行淡入。
-           必須自己覆寫 visibility——基底 .dynamic-chart-box 用 !important 強制 hidden，
-           這裡若不寫 visibility，就會永遠被那條 !important 蓋住，opacity 淡入也看不見。 */
-        #ch4-pyramid {
-            opacity: 0;
-            visibility: hidden !important;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease, visibility 0.6s;
-        }
-
-        #ch4-pyramid.visible-box {
-            opacity: 1;
-            visibility: visible !important;
-            transform: translateY(0);
         }
 
         /* =======================================================
@@ -611,61 +516,9 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: var(--timeline-progress, 0%);
-            background: var(--ui-accent);
+            height: 0%;
+            background: var(--np-seal-red);
             border-radius: 2px;
-        }
-
-        /* 主線終點標記：未讀完（未達 100%）時是帶脈動的問號，象徵故事仍在展開；
-           讀完（--timeline-progress 達 100%）時變成箭頭，象徵告一段落、可以繼續往下讀。
-           獨立於 .center-main-line 之外（而非其子層），避免被該層 overflow:hidden 裁切 */
-        .timeline-terminus-mark {
-            position: absolute;
-            left: 50%;
-            bottom: 0;
-            /* 原為 translateY(50%)：圓心壓在主線末端上，圓的上半部與線重疊。
-               改為 100%＝整顆圓往下平移一個自身高度，圓的「頂端」正好接在線的末端，
-               兩者相切不相疊。 */
-            transform: translate(-50%, 100%);
-            /* 脈動用的 scale 以頂端為錨點，圓再怎麼放大縮小，接點都固定在線末端，
-               不會在放大瞬間往上吃進線裡（見 @keyframes timeline-terminus-pulse）。 */
-            transform-origin: 50% 0;
-            z-index: 2;
-            /* 依美編需求放大（28px → 44px）。容器 margin-bottom 有 100px，
-               圓下緣最深 44px×1.08（脈動峰值）＋陰影 ≈ 54px，仍在留白內不會撞到下一段。 */
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--ui-accent);
-            color: var(--ui-paper);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.35rem;
-            line-height: 1;
-            box-shadow: 0 2px 6px rgba(27, 23, 18, 0.25);
-            animation: timeline-terminus-pulse 1.8s ease-in-out infinite;
-        }
-
-        .timeline-terminus-mark::before {
-            content: '?';
-        }
-
-        /* translateY 需與 .timeline-terminus-mark 的靜態值一致（100%），否則動畫一啟動
-           圓就會跳回舊位置；scale 的錨點由該處的 transform-origin: 50% 0 固定在頂端。 */
-        @keyframes timeline-terminus-pulse {
-
-            0%,
-            100% {
-                opacity: 0.55;
-                transform: translate(-50%, 100%) scale(0.92);
-            }
-
-            50% {
-                opacity: 1;
-                transform: translate(-50%, 100%) scale(1.08);
-            }
         }
 
         /* 時間軸的每一行共通設定 */
@@ -682,11 +535,8 @@
         }
 
         .timeline-block-node {
-            /* 原為明亮微藍綠色底 #f0fdfa，殘留自舊版樣式，改為純白底。
-               再依美編指定改為 #f0e9e5（歷經 --ui-paper #d5cdcd → #ebe5d2 → 現值）。
-               此節點為平塗、未疊紙紋，填入值即為畫面實際呈色。
-               寫在基底規則＝手機桌機共用同一色，不再分breakpoint。 */
-            background: #f0e9e5;
+            /* 原為明亮微藍綠色底 #f0fdfa，殘留自舊版樣式，改為純白底 */
+            background: #ffffff;
             /* 邊框已移除，狀態改由右上角印章（::after）標示 */
             padding: 10px 24px;
             border-radius: 8px;
@@ -697,22 +547,60 @@
             position: relative;
         }
 
-        /* 狀態圓章（逾期／警示／付委）已依美編需求移除；
-           danger/warning/success 節點卡片與基本款完全相同，不再有任何狀態標記。 */
+        /* 狀態印章：danger/warning/success 節點卡片樣式統一與基本款相同，
+           改用右上角小圓章（呼應 hero「203天」印章的視覺語彙）標示狀態，
+           而非改變卡片本身的邊框／底色 */
+        .timeline-block-node.node-danger::after,
+        .timeline-block-node.node-warning::after,
+        .timeline-block-node.node-success::after {
+            position: absolute;
+            top: -14px;
+            right: -14px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.68rem;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            background: #ffffff;
+            transform: rotate(-10deg);
+            box-shadow: 0 4px 10px rgba(27, 23, 18, 0.2);
+        }
+
+        .timeline-block-node.node-danger::after {
+            content: '逾期';
+            border: 2px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .timeline-block-node.node-warning::after {
+            content: '警示';
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .timeline-block-node.node-success::after {
+            content: '付委';
+            border: 2px solid #2ea85c;
+            color: #2ea85c;
+        }
 
         .timeline-block-node .node-date {
             display: block;
             font-family: 'Courier New', monospace;
             font-weight: 900;
-            font-size: var(--type-panel-heading);
-            color: var(--ui-accent);
+            font-size: 1.05rem;
+            color: var(--primary);
             margin-bottom: 4px;
         }
 
         .timeline-block-node p {
             /* 統一為 1.1rem，與 .story-card p / .chapter-intro p 一致 */
-            font-size: var(--type-body);
-            color: var(--ui-ink);
+            font-size: 1.1rem;
+            color: var(--text-main);
             margin: 0;
             font-weight: 500;
             line-height: 1.4;
@@ -743,40 +631,11 @@
             /* 與中央線保持呼吸間距 */
         }
 
-        /* 保留互動指針/transform 基準值；opacity 現在一律由捲動觸發的 class 決定（含手機版） */
+        /* 強制重置故事卡片在置中佈局時的互動指針效果（因為原本是寫在隨捲動觸發的 class 上） */
         .timeline-row.item-card .story-card {
             pointer-events: auto !important;
+            opacity: 1 !important;
             transform: none !important;
-        }
-
-        /* Chapter 1 story cards and date nodes are both revealed by the same red
-           line that carries the reader through the chronology, at every width
-           including compact phone — the line leads by a fixed pixel offset
-           before each row's content fades in, so the whole timeline reads as
-           one consistent sequence instead of nodes appearing for free while
-           only cards lag behind. */
-        .js .center-timeline-container .timeline-row.item-card .story-card {
-            opacity: 0 !important;
-            pointer-events: none !important;
-            transform: translateY(18px) rotate(-0.4deg) !important;
-            transition: opacity 320ms ease, transform 420ms cubic-bezier(0.16, 1, 0.3, 1) !important;
-        }
-
-        .js .center-timeline-container .timeline-row.item-card.timeline-card-revealed .story-card {
-            opacity: 1 !important;
-            pointer-events: auto !important;
-            transform: translateY(0) rotate(-0.4deg) !important;
-        }
-
-        .js .center-timeline-container .timeline-row.item-node .timeline-block-node {
-            opacity: 0 !important;
-            transform: translateY(18px) !important;
-            transition: opacity 320ms ease, transform 420ms cubic-bezier(0.16, 1, 0.3, 1) !important;
-        }
-
-        .js .center-timeline-container .timeline-row.item-node.timeline-node-revealed .timeline-block-node {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
         }
 
         .timeline-row.item-card:hover .story-card {
@@ -785,9 +644,9 @@
         }
 
         /* =======================================================
-           第一章：手機版 RWD 自動調適成單欄（平板/中寬改用下方 641-1024px 專屬區塊）
+           第一章：手機與平板 RWD 自動調適成單欄
            ======================================================= */
-        @media (max-width: 640px) {
+        @media (max-width: 968px) {
             .center-timeline-container {
                 padding: 20px 3%;
                 /* 縮減兩側內襯，給卡片更多伸展空間 */
@@ -829,44 +688,23 @@
         }
 
         /* =======================================================
-           第一章：641-1024px 平板專屬——沿用桌機左右交錯排版與捲動觸發，
-           但留白比桌機窄，卡片也稍微縮窄，貼合較窄的平板畫布
-           ======================================================= */
-        @media (min-width: 641px) and (max-width: 1024px) {
-            .timeline-row.item-card.left-side {
-                align-self: flex-start;
-                justify-content: flex-end;
-                padding-right: 24px;
-            }
-
-            .timeline-row.item-card.right-side {
-                align-self: flex-end;
-                justify-content: flex-start;
-                padding-left: 24px;
-            }
-
-            .timeline-row.item-card .story-card {
-                max-width: 420px;
-            }
-        }
-
-        /* =======================================================
            🚀 全新第二章：重構滿版視差生長控制樣式
            ======================================================= */
         #chapter-2-rebuilt {
             position: relative !important;
             width: 100% !important;
-            min-height: auto !important;
-            /* Runway is the sum of the authored scene cards below. */
+            min-height: 850vh !important;
+            /* 物理總長跑道 */
             background-color: var(--bg-deep) !important;
         }
 
         .gantt-fixed-stage-rebuilt {
             position: fixed !important;
-            top: var(--chart-stage-top);
+            top: 0;
             left: 0;
             width: 100vw;
-            height: var(--chart-stage-height);
+            height: 100vh;
+            height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -887,13 +725,13 @@
         .gantt-backdrop-box-rebuilt {
             position: absolute !important;
             width: 100%;
-            height: 100%;
+            height: 100vh;
+            height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* 頂部多留 --site-header-h 再加 68px，讓置中的圖表整體再往下一些，
-               避免筆電等較矮視窗上最頂端的 96年度 Y 軸標籤太貼近固定導覽列 */
-            padding: calc(68px + var(--site-header-h)) 40px 40px 40px;
+            /* 頂部多留 --site-header-h，避免置中內容（圖表標題）被固定導覽列蓋住 */
+            padding: calc(40px + var(--site-header-h)) 40px 40px 40px;
             opacity: 0;
             visibility: hidden;
             transform: scale(0.98);
@@ -917,12 +755,30 @@
         }
 
         .gantt-card-rebuilt {
-            min-height: var(--scene-read-interval);
+            min-height: 100vh;
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 0 20px;
+        }
+
+        /* 甘特圖容器 */
+        .gantt-chart-container-rebuilt {
+            position: relative !important;
+            width: 100%;
+            max-width: 920px;
+            height: 78vh;
+            height: 78dvh;
+            display: flex;
+            flex-direction: column;
+            padding: 80px 30px 60px 80px;
+            /* 給左邊 Y 軸和下面 X 軸留呼吸空間 */
+            border-radius: 12px;
+            border: 1px solid transparent !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            transition: border 0.5s ease, background-color 0.5s ease, box-shadow 0.5s ease !important;
         }
 
         /* 🔓 階梯 2：浮現框線、底色與陰影（原為新聞剪貼風格牛皮紙 + 淡網點紋理，圖表全面改為深色底後
@@ -953,11 +809,9 @@
             transition: border 0.5s ease, background-color 0.5s ease, box-shadow 0.5s ease !important;
         }
 
-        .rebuilt-step-1 .gantt-chart-container-rebuilt,
         .rebuilt-step-2 .gantt-chart-container-rebuilt {
             /* 圖表全面改為深色底：面板改用 --bg-chart 深色調 + 淺色網點，邊框/陰影同步反轉。
-               邊框/陰影數值與第三章 .gantt-container-rebuilt 統一，確保兩張圖表視覺一致。
-               卡片 1 也套用此規則，讓灰色空框比軸線更早登場（座標軸仍只在卡片 2 才點亮） */
+               邊框/陰影數值與第三章 .gantt-container-rebuilt 統一，確保兩張圖表視覺一致 */
             border: 1px solid rgba(237, 230, 211, 0.1) !important;
             background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.3px) 0 0/6px 6px, var(--bg-chart) !important;
             box-shadow: inset 0 1px 0 rgba(237, 230, 211, 0.05), 0 15px 40px rgba(0, 0, 0, 0.35) !important;
@@ -991,10 +845,10 @@
         }
 
         .gantt-year-rebuilt {
-            font-size: var(--type-caption);
+            font-size: 0.8rem;
             /* 原為 var(--text-main) 深墨色，圖表面板改深色底後改用深底文字色 */
             color: var(--np-text-ondark);
-            font-weight: 500;
+            font-weight: bold;
             margin-right: 8px;
         }
 
@@ -1047,14 +901,26 @@
         }
 
         .gantt-grid-label-rebuilt {
-            font-size: var(--type-caption);
+            font-size: 0.8rem;
             /* 原為 var(--text-muted) 暖褐灰，圖表面板改深色底後改用深底次要文字色 */
             color: var(--np-muted-ondark);
-            font-weight: 500;
+            font-weight: bold;
         }
 
         /* 💡 內部背景網格線 */
-        .rebuilt-step-1 .gantt-grid-rebuilt,
+        .gantt-rows-container-rebuilt {
+            position: absolute;
+            left: 80px;
+            top: 40px;
+            right: 30px;
+            bottom: 80px;
+            /* 💡 修正：彩色 Bar 的容器底部對齊 80px，完美與年份一行行對齊 */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 3;
+        }
+
         .rebuilt-step-2 .gantt-grid-rebuilt {
             opacity: 1;
         }
@@ -1104,7 +970,6 @@
         .legend-item {
             display: flex;
             align-items: center;
-            font-size: var(--type-caption);
             font-weight: 500;
         }
 
@@ -1148,7 +1013,7 @@
             bottom: 0 !important;
             width: 0 !important;
             height: 100% !important;
-            border-left: 2px dashed var(--chart-cat-impact) !important;
+            border-left: 2px dashed var(--danger) !important;
         }
 
         /* =======================================================
@@ -1219,7 +1084,6 @@
             transition: width 1s cubic-bezier(0.16, 1, 0.3, 1) !important;
         }
 
-        #chapter-2-rebuilt.rebuilt-step-2 .gantt-bar-rebuilt,
         .rebuilt-step-3 #chapter-2-rebuilt .gantt-bar-rebuilt {
             width: var(--w) !important;
             /* 解鎖生長！ */
@@ -1239,7 +1103,7 @@
         }
 
         .gantt-bar-115-rebuilt {
-            background: var(--chart-cat-impact);
+            background: var(--danger);
             box-shadow: 0 0 10px rgba(231, 76, 60, 0.2);
         }
 
@@ -1265,7 +1129,7 @@
         .rebuilt-step-5 #g-row-105-r .gantt-bar-rebuilt,
         .rebuilt-step-5 #g-row-113-r .gantt-bar-rebuilt {
             box-shadow: 0 0 15px rgba(165, 39, 30, 0.4) !important;
-            outline: 1.5px solid var(--ui-accent) !important;
+            outline: 1.5px solid var(--primary) !important;
         }
 
         /* 🔓 階梯 6：高亮極端的96年度 */
@@ -1285,7 +1149,7 @@
         /* 幫 96 年的 Bar 加上高質感的警示紅外發光 */
         .rebuilt-step-6 #g-row-96-r .gantt-bar-rebuilt {
             box-shadow: 0 0 15px rgba(231, 76, 60, 0.5) !important;
-            outline: 1.5px solid var(--chart-cat-impact) !important;
+            outline: 1.5px solid var(--danger) !important;
         }
 
         /* 📸 照片外層容器：取消原本的 flex 左右分欄，改為相對定位 */
@@ -1331,8 +1195,8 @@
         }
 
         .img-caption {
-            font-size: var(--type-caption);
-            color: var(--ui-muted);
+            font-size: 0.85rem;
+            color: var(--text-muted);
             font-weight: 500;
         }
 
@@ -1418,7 +1282,7 @@
             bottom: 0 !important;
             width: 0 !important;
             height: 100% !important;
-            border-left: 2px dashed var(--chart-cat-impact) !important;
+            border-left: 2px dashed var(--danger) !important;
             z-index: 10 !important;
             /* 強制踩在 Bar (z-index: 3) 和背景格線 (z-index: 1) 的頭頂上！ */
         }
@@ -1426,27 +1290,15 @@
         /* =======================================================
            💻 電腦版專屬：第 2 至 8 張卡片中線精準對齊畫面 75% 處
            ======================================================= */
-        @media (min-width: 1025px) {
+        @media (min-width: 969px) {
 
             /* 針對除了第一張以外的卡片 */
             .gantt-scroll-content-rebuilt .gantt-card-rebuilt:not(:first-child) {
+                /* 例如往右推 100px，數值可依需求調整 */
                 margin-left: 40% !important;
-                width: 60%;
-                box-sizing: border-box;
-            }
-
-            /* 卡片 9 字卡進場：預設收起，等第三張歷史照片淡入完成
-               （JS armStep9CardReveal 補上 .history-image-settled）才淡入+回位，
-               避免照片與字卡同一瞬間一起冒出來 */
-            .gantt-card-rebuilt[data-rebuilt-step="9"] .story-card {
-                opacity: 0;
-                transform: translateY(16px) rotate(-0.4deg);
-                transition: opacity 0.4s ease, transform 0.4s ease;
-            }
-
-            .gantt-card-rebuilt[data-rebuilt-step="9"].history-image-settled .story-card {
-                opacity: 1;
-                transform: rotate(-0.4deg);
+                /* 若需調整卡片寬度以適應右移，可視情況加入例如
+    max-width: calc(100% - 100px) !important; 
+    */
             }
         }
 
@@ -1456,19 +1308,19 @@
         .scroll-story-rebuilt {
             position: relative !important;
             width: 100% !important;
-            /* Each story card contributes one reading interval; no unrelated
-               fixed section height is needed when scenes are added or removed. */
-            min-height: auto !important;
+            /* 💡 微調：將總高度稍微拉高到 700vh，給予第 5 張字卡滑出後充足的退場時空 */
+            min-height: 700vh !important;
             background-color: var(--bg-deep) !important;
         }
 
         .gantt-sticky-box-rebuilt {
             position: sticky !important;
             position: -webkit-sticky !important;
-            top: var(--chart-stage-top) !important;
+            top: 0 !important;
             left: 0;
             width: 100vw !important;
-            height: var(--chart-stage-height) !important;
+            height: 100vh !important;
+            height: 100dvh !important;
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
@@ -1502,7 +1354,7 @@
         }
 
         .story-timeline-rebuilt .gantt-card-rebuilt {
-            min-height: var(--scene-read-interval) !important;
+            min-height: 100vh !important;
             width: 100% !important;
             display: flex !important;
             align-items: center !important;
@@ -1555,13 +1407,6 @@
             box-shadow: 0 0 10px rgba(156, 166, 156, 0.2);
         }
 
-        /* 灰色總歲出底層是圖表的基準面，不是與其他色塊平行的類別色塊，
-           進場節奏刻意比其他 Bar 慢、且加上延遲的光暈強化，讓它先「站穩」，
-           其他色塊才接著長出來，而不是所有 Bar 用同一套節奏一起長出 */
-        #ch3-bar-total-grey {
-            transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease, visibility 0.5s, box-shadow 0.6s ease 0.4s !important;
-        }
-
         .ch3-color-red {
             background: linear-gradient(to right, #8E2017, var(--chart-cat-impact)) !important;
             box-shadow: 0 0 10px rgba(226, 86, 74, 0.2);
@@ -1586,87 +1431,6 @@
             opacity: 0.25 !important;
         }
 
-        /* Chapter 3 exposes a semantic step class; CSS owns bar geometry,
-           visibility, stacking, and the reversible stage displacement. */
-        #chapter-3-rebuilt {
-            --ch3-exit-offset: 0px;
-        }
-
-        #ch3-sticky-box-wrapper {
-            transform: translateY(calc(-1 * var(--ch3-exit-offset))) !important;
-        }
-
-        /* 第三章開場文字：等第二章退場動畫真正完成（history-exit-complete）才淡入，
-           而不是等整個第二章區塊捲出畫面這種更粗略、更晚的訊號。
-           無 JS／減少動態時預設就可見，不依賴這個捲動驅動的狀態 */
-        .js #chapter-3-rebuilt .chapter-intro {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .js #chapter-3-rebuilt .chapter-intro.chapter3-intro-revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #chapter-3-rebuilt.ch3-step-1 #ch3-bar-total-grey,
-        #chapter-3-rebuilt.ch3-step-2 #ch3-bar-total-grey,
-        #chapter-3-rebuilt.ch3-step-2 #ch3-bar-impact-red,
-        #chapter-3-rebuilt.ch3-step-3 #ch3-bar-impact-red,
-        #chapter-3-rebuilt.ch3-step-3 #ch3-bar-new-teal,
-        #chapter-3-rebuilt.ch3-step-4 #ch3-bar-impact-red,
-        #chapter-3-rebuilt.ch3-step-4 #ch3-bar-new-teal,
-        #chapter-3-rebuilt.ch3-step-4 #ch3-bar-extend-blue,
-        #chapter-3-rebuilt.ch3-step-5 #ch3-bar-new-teal,
-        #chapter-3-rebuilt.ch3-step-5 #ch3-bar-extend-blue,
-        #chapter-3-rebuilt.ch3-step-5 #ch3-bar-reserve-orange {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        #chapter-3-rebuilt.ch3-step-1 #ch3-bar-total-grey,
-        #chapter-3-rebuilt.ch3-step-2 #ch3-bar-total-grey,
-        #chapter-3-rebuilt.ch3-step-3 #ch3-bar-impact-red,
-        #chapter-3-rebuilt.ch3-step-4 #ch3-bar-impact-red,
-        #chapter-3-rebuilt.ch3-step-5 #ch3-bar-reserve-orange {
-            width: 100%;
-        }
-
-        #chapter-3-rebuilt.ch3-step-2 #ch3-bar-impact-red {
-            width: 9.8%;
-        }
-
-        #chapter-3-rebuilt.ch3-step-3 #ch3-bar-new-teal,
-        #chapter-3-rebuilt.ch3-step-4 #ch3-bar-new-teal,
-        #chapter-3-rebuilt.ch3-step-5 #ch3-bar-new-teal {
-            width: 34%;
-            z-index: 5;
-        }
-
-        #chapter-3-rebuilt.ch3-step-4 #ch3-bar-extend-blue,
-        #chapter-3-rebuilt.ch3-step-5 #ch3-bar-extend-blue {
-            width: 94.3%;
-            z-index: 4;
-        }
-
-        #chapter-3-rebuilt.ch3-step-5 #ch3-bar-reserve-orange {
-            z-index: 3;
-        }
-
-        #chapter-3-rebuilt.ch3-step-2 #ch3-bar-total-grey,
-        #chapter-3-rebuilt.ch3-step-3 #ch3-bar-impact-red,
-        #chapter-3-rebuilt.ch3-step-4 #ch3-bar-impact-red {
-            opacity: 0.25;
-        }
-
-        #chapter-3-rebuilt.ch3-step-3 #ch3-main-legend,
-        #chapter-3-rebuilt.ch3-step-4 #ch3-main-legend,
-        #chapter-3-rebuilt.ch3-step-5 #ch3-main-legend {
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
-
         /* ❌ 圖例初始佔位隱形 */
         .ch3-legend-container {
             display: flex !important;
@@ -1686,7 +1450,7 @@
         }
 
         .ch3-legend-item {
-            font-size: var(--type-caption);
+            font-size: 0.88rem;
             /* 原為 #475569 SaaS 殘留灰藍色，圖表面板改深色底後改用深底次要文字色 */
             color: var(--np-muted-ondark);
             font-weight: bold;
@@ -1717,7 +1481,7 @@
 
         .ch3-conclusion-text {
             /* 與 .chapter-intro p 統一樣式（字級、行高、對齊、寬度節奏一致） */
-            font-size: var(--type-body);
+            font-size: 1.35rem;
             line-height: 2;
             color: var(--np-text-ondark);
             /* 原為 var(--text-main)，此段落所在容器直接使用 --bg-deep 深色底 */
@@ -1757,16 +1521,16 @@
 
         .ranking-header h3 {
             margin: 0 0 6px 0;
-            font-size: var(--type-panel-heading);
+            font-size: 1.25rem;
             /* 原為 #b8860b（校準給白底），面板改深色底後改用高亮朱印紅，與圖表標題一致 */
-            color: var(--ui-accent);
+            color: var(--np-seal-red-bright);
         }
 
         .ranking-subtitle {
             margin: 0 0 20px 0;
-            font-size: var(--type-caption);
+            font-size: 0.85rem;
             /* 原為 var(--text-muted) 深底色變數，面板改深色底後改用深底次要文字色 */
-            color: var(--ui-muted);
+            color: var(--np-muted-ondark);
         }
 
         /* 📊 排行榜表格主體 */
@@ -1834,7 +1598,7 @@
             justify-content: center;
             border-radius: 50%;
             font-weight: bold;
-            font-size: var(--type-caption);
+            font-size: 0.85rem;
             /* 原為 #e2e8f0 淺灰圓圈（SaaS 殘留色），面板改深色底後改用淺色半透明圓圈 + 淺底文字色 */
             background: rgba(237, 230, 211, 0.12);
             color: var(--np-text-ondark);
@@ -1864,7 +1628,7 @@
         }
 
         .project-name {
-            font-size: var(--type-body);
+            font-size: 0.9rem;
             font-weight: 500;
             line-height: 1.4;
             white-space: normal !important;
@@ -1875,7 +1639,7 @@
 
         .dept-tag {
             /* 原為 0.75rem，與 .cat-item 統一為 0.8rem（同為欄位標籤角色） */
-            font-size: var(--type-caption);
+            font-size: 0.8rem;
             /* 原為 var(--text-muted) 淺底色變數，面板改深色底後改用深底次要文字色 */
             color: var(--np-muted-ondark);
             margin-top: 2px;
@@ -1888,7 +1652,7 @@
         }
 
         .amount-value {
-            font-size: var(--type-body);
+            font-size: 1rem;
             font-weight: bold;
             /* 原為 #00838f 深藍綠色（SaaS 殘留色），面板改深色底後改用高亮銅印黃，
                與圖表數值標籤（--np-gold-bright）一致 */
@@ -1944,17 +1708,17 @@
 
         .dash-header h3 {
             margin: 0;
-            font-size: var(--type-panel-heading);
+            font-size: 1.25rem;
             /* 原為 var(--primary) 暗朱印紅，此區塊直接位於深色底上，改用高亮朱印紅維持對比 */
-            color: var(--ui-accent);
+            color: var(--np-seal-red-bright);
             font-weight: 900;
         }
 
         .dash-header p {
             margin: 5px 0 0;
             /* 原為 0.9rem，與 .ranking-subtitle 統一為 0.85rem（同為圖表副標角色） */
-            font-size: var(--type-caption);
-            color: var(--ui-muted);
+            font-size: 0.85rem;
+            color: var(--np-muted-ondark);
             /* 原為 var(--text-muted)，此區塊直接位於深色底上 */
         }
 
@@ -2009,8 +1773,8 @@
             grid-template-columns: 1fr 120px 1fr;
             gap: 15px;
             text-align: center;
-            font-size: var(--type-caption);
-            font-weight: 500;
+            font-size: 0.75rem;
+            font-weight: bold;
             color: var(--np-muted-ondark);
             /* 原為 var(--text-muted)，此區塊直接位於深色底上 */
             margin-bottom: 15px;
@@ -2034,8 +1798,8 @@
 
         /* 中間文字標籤樣式 */
         .pyramid-align-row .cat-item {
-            font-size: var(--type-caption);
-            font-weight: 500;
+            font-size: 0.8rem;
+            font-weight: bold;
             line-height: 1.3;
             text-align: center;
             color: var(--np-text-ondark);
@@ -2076,7 +1840,7 @@
         }
 
         .pyramid-align-row .rect-danger {
-            background: linear-gradient(to left, #8E2017, var(--chart-cat-impact));
+            background: linear-gradient(to left, var(--danger), #ff1744);
             box-shadow: 0 0 10px rgba(231, 76, 60, 0.15);
             /* 減淡發光 */
         }
@@ -2090,7 +1854,7 @@
 
         .pyramid-align-row .val-num {
             /* 原為 0.85rem，與 .amount-value 統一為 1rem（同為金額數值角色） */
-            font-size: var(--type-body);
+            font-size: 1rem;
             font-weight: bold;
             font-family: 'Courier New', monospace;
             white-space: nowrap;
@@ -2098,47 +1862,15 @@
         }
 
         .pyramid-align-row .left-bar-box .val-num {
-            color: var(--chart-cat-impact);
+            color: var(--np-seal-red-bright);
             /* 原為深警示紅（校準給白底），此區塊直接位於深色底上，改用高亮朱印紅維持對比 */
             padding-right: 6px;
         }
 
         .pyramid-align-row .right-bar-box .val-num {
-            color: var(--chart-cat-extend);
+            color: var(--np-gold-bright);
             /* 原為深海藍綠色（校準給白底），此區塊直接位於深色底上，改用高亮銅印黃維持對比，並呼應 rect-primary 長條圖的漸層終點色 */
             padding-left: 6px;
-        }
-
-        /* 手機版第四章對比圖：窄螢幕時數值標籤（.val-num）接在 100% 寬長條之後，
-           會被擠出格線右緣、頂寬整頁造成橫向溢位（時間軸「左右亂滑」的真因）。
-           改為將數值絕對定位貼在長條外緣，不再佔用橫向排版空間 → 不論數字多長都不會溢出
-           （資料綁試算表、長度會變，故不用縮字級這種治標作法）；加深色陰影確保數值疊在
-           長條末端時仍清晰可讀。桌機版維持原樣。 */
-        @media (max-width: 1024px) {
-            .pyramid-align-row {
-                grid-template-columns: 1fr 72px 1fr;
-                gap: 6px;
-            }
-
-            .pyramid-align-row .val-num {
-                font-size: var(--type-caption);
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                padding: 0;
-                text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.7);
-                z-index: 3;
-            }
-
-            .pyramid-align-row .right-bar-box .val-num {
-                right: 2px;
-                left: auto;
-            }
-
-            .pyramid-align-row .left-bar-box .val-num {
-                left: 2px;
-                right: auto;
-            }
         }
 
         /* 底部線性比例尺刻度 */
@@ -2163,8 +1895,7 @@
 
         .axis-wrapper span {
             position: absolute;
-            font-size: var(--type-caption);
-            font-weight: 500;
+            font-size: 0.75rem;
             color: var(--np-muted-ondark);
             /* 原為 var(--text-muted)，此區塊直接位於深色底上 */
             font-family: 'Courier New', monospace;
@@ -2201,8 +1932,7 @@
             display: flex;
             justify-content: space-between;
             width: 100%;
-            font-size: var(--type-caption);
-            font-weight: 500;
+            font-size: 0.75rem;
             color: var(--np-muted-ondark);
             /* 原為 var(--text-muted)，此區塊直接位於深色底上 */
             font-family: 'Courier New', monospace;
@@ -2239,30 +1969,7 @@
             text-align: center;
             color: rgba(0, 0, 0, 0.1);
             /* 改為淺深色文字 */
-            font-size: var(--type-caption);
-            font-weight: 500;
-        }
-
-        /* 手機版第四章數字軸：格線改為與上方長條同樣的 1fr 72px 1fr（原 120px 中欄
-           在窄螢幕下每側只剩約 140px，5 個三位數字擠在一起會互相重疊），並只保留
-           頭尾與中間 3 個刻度（0/200/400），避免任何字級都塞不下 5 個數字的問題。
-           桌機版維持原本 5 刻度與 120px 中欄格線不變。 */
-        @media (max-width: 968px) {
-            .p-scale-axis-linear {
-                grid-template-columns: 1fr 72px 1fr;
-                gap: 6px;
-            }
-
-            .axis-wrapper span {
-                font-size: var(--type-caption);
-            }
-
-            .linear-ticks-left span:nth-child(2),
-            .linear-ticks-left span:nth-child(4),
-            .linear-ticks-right span:nth-child(2),
-            .linear-ticks-right span:nth-child(4) {
-                display: none;
-            }
+            font-size: 0.6rem;
         }
 
         /* 🛠️ 修正六：優化底部 CTA 結語大容器，高質感大間距阻絕貼底 */
@@ -2275,36 +1982,35 @@
             align-items: center;
             text-align: center;
             padding: 80px 20px 120px 20px;
-            /* 原本朱印紅漸層太淡（0.05），跟上方第四章、下方 footer 幾乎同色，凸顯不出來；
-               改用高對比亮紅、拉高透明度，並將終點色改為暖褐色 #664b49，讓 CTA 按鈕所在的
-               底部區域有明顯暖色調 */
-            background: linear-gradient(6deg, rgba(226, 86, 74, 0.16) 0%, #664b49 100%);
+            /* 背景改為由極淡的朱印紅朝純白底色向上漸層 */
+            background: linear-gradient(0deg, rgba(165, 39, 30, 0.05) 0%, var(--bg-deep) 100%);
         }
 
-        /* 進入資料庫按鈕：原用 --ui-accent（暗朱印紅 #A5271E）跟頁尾深色背景太接近，
-           不夠凸顯，改用高對比亮紅 --np-seal-red-bright，讓按鈕在深色底上跳出來 */
+        /* 進入資料庫按鈕，套用主色朱印紅配色 */
         .cta-btn {
             display: inline-flex;
             align-items: center;
             gap: 12px;
-            background-color: var(--np-seal-red-bright) !important;
-            color: var(--ui-ink-inverse) !important;
+            background-color: var(--primary) !important;
+            /* 原為金黃色，改為主色朱印紅 */
+            color: #FFFFFF !important;
             /* 改為純白文字以利高對比閱讀 */
             padding: 15px 45px;
             margin-top: 45px;
             border-radius: 50px;
-            font-size: var(--type-panel-heading);
+            font-size: 1.2rem;
             font-weight: 900;
             text-decoration: none;
-            box-shadow: 0 10px 30px rgba(226, 86, 74, 0.35);
+            box-shadow: 0 10px 30px rgba(165, 39, 30, 0.2);
+            /* 調整為淺朱印紅外陰影 */
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .cta-btn:hover {
-            background-color: var(--np-seal-red-bright) !important;
-            filter: brightness(0.9);
+            background-color: var(--np-seal-red-dark) !important;
+            /* 懸停時加深為深朱印紅 */
             transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(226, 86, 74, 0.5);
+            box-shadow: 0 15px 35px rgba(165, 39, 30, 0.35);
         }
 
         /* 手機版適配 */
@@ -2329,10 +2035,7 @@
 
             .story-card {
                 max-width: 100%;
-                /* ⚠️ 此處原有 background-color: var(--ui-paper)（#d5cdcd）。
-                   它與基底規則同特異性但排序更後，會蓋掉基底新設的 #f5efdb，
-                   導致 ≤968px 的手機仍呈現舊的偏灰色。底色統一由基底規則掌管
-                   （手機桌機共用），這裡移除宣告，不再是第三個維護點。 */
+                background-color: var(--np-paper-panel);
                 background-image: url('paper-texture.png');
                 background-repeat: repeat;
                 background-blend-mode: multiply;
@@ -2352,7 +2055,7 @@
                 left: 50%;
                 width: 2px;
                 /* 行動版軸線漸層，改由主藍綠色與點綴藍綠色延伸至警示紅 */
-                background: linear-gradient(to bottom, var(--ui-muted) 0%, var(--ui-accent) 100%);
+                background: linear-gradient(to bottom, var(--primary) 0%, var(--accent) 70%, var(--danger) 100%);
                 transform: translateX(-50%);
                 z-index: 0;
             }
@@ -2369,16 +2072,16 @@
             }
 
             #chapter-1 .mobile-node-item {
-                background: var(--ui-paper);
+                background: #f0fdfa;
                 /* 原為暗藍，改為極淺的藍綠色底（Mint tint） */
-                border: 2px solid var(--ui-accent);
+                border: 2px solid var(--primary);
                 padding: 8px 20px;
                 border-radius: 50px;
-                font-size: var(--type-caption);
-                font-weight: 500;
+                font-size: 0.85rem;
+                font-weight: bold;
                 text-align: center;
                 max-width: 280px;
-                color: var(--ui-ink);
+                color: var(--text-main);
             }
 
             #chapter-1 .step-scene {
@@ -2427,7 +2130,6 @@
                 width: 100% !important;
             }
         }
-
         /* =======================================================
            側邊導覽列
            ======================================================= */
@@ -2442,16 +2144,6 @@
             flex-direction: column;
             align-items: flex-start;
             gap: 12px;
-        }
-
-        /* RWD：側邊章節導覽固定在 left:40px，會與置中的 960px 甘特圖在
-           視窗寬度不足時重疊（平板／iPad、窄桌機最明顯）。故只在「置中圖表左側
-           仍留得下側欄」的寬螢幕（≥1300px）顯示側欄；更窄時隱藏，導覽改由頂部
-           導覽列負責，避免側欄壓在圖表年份與長條上。 */
-        @media (max-width: 1340px) {
-            .side-nav {
-                display: none;
-            }
         }
 
         .side-nav-line {
@@ -2474,7 +2166,7 @@
             width: 14px;
             height: 2px;
             border-radius: 1px;
-            background: var(--ui-muted);
+            background: var(--np-muted-ondark);
             flex-shrink: 0;
             transition: all 0.3s ease;
             filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.7));
@@ -2483,9 +2175,9 @@
         .side-nav-label {
             position: static;
             transform: none;
-            font-size: var(--type-caption);
+            font-size: 0.75rem;
             font-weight: 700;
-            color: var(--ui-muted);
+            color: var(--np-muted-ondark);
             letter-spacing: 0.04em;
             white-space: nowrap;
             background: none;
@@ -2502,13 +2194,13 @@
         .side-nav-item:hover .side-nav-dot,
         .side-nav-item.active .side-nav-dot {
             width: 20px;
-            background: var(--ui-accent);
+            background: var(--np-seal-red-bright);
             box-shadow: 0 0 8px rgba(226, 86, 74, 0.4);
         }
 
         .side-nav-item:hover .side-nav-label,
         .side-nav-item.active .side-nav-label {
-            color: var(--ui-ink-inverse);
+            color: var(--np-text-ondark);
         }
 
         /* 略過導覽連結：預設視覺隱藏，鍵盤 Tab 聚焦時才顯示 */
@@ -2517,8 +2209,8 @@
             top: -100px;
             left: 16px;
             z-index: 1000;
-            background: var(--ui-paper);
-            color: var(--ui-ink);
+            background: var(--np-paper);
+            color: var(--np-ink);
             padding: 10px 18px;
             border-radius: 8px;
             font-weight: 700;
@@ -2544,13 +2236,13 @@
             justify-content: space-between;
             align-items: center;
             /* 原為白底半透明，全站改深色底後改用暖灰半透明，維持毛玻璃感但不再與深色頁面衝突 */
-            background-color: var(--ui-canvas);
+            background-color: rgba(58, 54, 48, 0.88);
             /* 疊加淺色網點，呼應全站印刷網點紋理 */
             background-image: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.2px);
             background-size: 4px 4px;
             background-repeat: repeat;
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--ui-muted);
+            border-bottom: 1px solid rgba(237, 230, 211, 0.12);
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
         }
@@ -2558,10 +2250,10 @@
         /* 與 database.html 的 header 樣式統一：h1 品牌標題 + nav-btn 導覽藥丸按鈕 */
         .site-header h1 {
             margin: 0;
-            font-size: var(--type-panel-heading);
+            font-size: 1.4rem;
             line-height: 1.2;
             font-weight: 900;
-            color: var(--ui-accent);
+            color: var(--np-seal-red-bright);
         }
 
         .site-header nav {
@@ -2575,19 +2267,19 @@
             width: 24px;
             padding: 4px;
             box-sizing: content-box;
-            background: var(--ui-paper);
+            background: var(--np-paper-panel);
             border-radius: 50%;
             margin-right: 4px;
         }
 
         .nav-btn {
             background: transparent;
-            border: 1px solid var(--ui-muted);
-            color: var(--ui-muted);
+            border: 1px solid rgba(165, 39, 30, 0.35);
+            color: var(--np-muted-ondark);
             padding: 13px 14px;
             cursor: pointer;
             border-radius: 20px;
-            font-size: var(--type-caption);
+            font-size: 0.85rem;
             transition: 0.2s;
             font-weight: 700;
             text-decoration: none;
@@ -2595,29 +2287,29 @@
         }
 
         .nav-btn:hover {
-            color: var(--ui-accent);
-            border-color: var(--ui-accent);
-            background: var(--ui-paper);
+            color: var(--np-seal-red-bright);
+            border-color: var(--np-seal-red-bright);
+            background: rgba(226, 86, 74, 0.1);
         }
 
         .nav-btn:focus-visible {
-            outline: 2px solid var(--ui-accent);
+            outline: 2px solid var(--np-seal-red-bright);
             outline-offset: 2px;
         }
 
         .nav-active {
-            background: var(--ui-accent) !important;
-            border-color: var(--ui-accent) !important;
-            color: var(--ui-ink-inverse) !important;
+            background: var(--np-seal-red) !important;
+            border-color: var(--np-seal-red) !important;
+            color: #fff !important;
         }
 
         .nav-active:hover {
-            filter: brightness(0.85);
+            background: var(--np-seal-red-dark) !important;
         }
 
         /* 讓 hero 有空間不被 header 遮住 */
         body {
-            padding-top: var(--site-header-h);
+            padding-top: 57px;
         }
 
         /* 漢堡選單按鈕：僅手機版顯示，桌機版維持原本橫向導覽列 */
@@ -2628,22 +2320,22 @@
             width: 44px;
             height: 44px;
             background: transparent;
-            border: 1px solid var(--ui-muted);
+            border: 1px solid rgba(165, 39, 30, 0.35);
             border-radius: 8px;
-            color: var(--ui-muted);
-            font-size: var(--type-panel-heading);
+            color: var(--np-muted-ondark);
+            font-size: 1.3rem;
             line-height: 1;
             cursor: pointer;
             padding: 0;
         }
 
         .nav-toggle:hover {
-            color: var(--ui-accent);
-            border-color: var(--ui-accent);
+            color: var(--np-seal-red-bright);
+            border-color: var(--np-seal-red-bright);
         }
 
         .nav-toggle:focus-visible {
-            outline: 2px solid var(--ui-accent);
+            outline: 2px solid var(--np-seal-red-bright);
             outline-offset: 2px;
         }
 
@@ -2651,25 +2343,20 @@
         @media (max-width: 968px) {
             :root {
                 /* 手機版導覽列較矮（字級與 padding 都縮小），釘住舞台的頂部間距同步縮小 */
-                --site-header-h: 65px;
+                --site-header-h: 44px;
             }
-
             .side-nav {
                 display: none;
             }
-
             .site-header {
                 padding: 10px 16px;
             }
-
             .site-header h1 {
-                font-size: var(--type-panel-heading);
+                font-size: 0.95rem;
             }
-
             .nav-toggle {
                 display: flex;
             }
-
             .site-header nav {
                 display: none;
                 position: absolute;
@@ -2684,64 +2371,47 @@
                 border-bottom: 1px solid rgba(237, 230, 211, 0.12);
                 box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
             }
-
             .site-header nav.nav-open {
                 display: flex;
             }
-
             .nav-btn {
-                font-size: var(--type-caption);
+                font-size: 0.75rem;
                 padding: 14px 12px;
             }
         }
 
         /* =======================================================
-           📱 手機版捲動敘事重構（第二、三章）—— C2：頂部固定圖表區 + 卡片於下方滾動
-           圖表固定在螢幕上方約 58dvh 的帶狀區；文字卡改回正常文件流（與桌機版相同
-           的 min-height:100vh 捲動格），只是用 padding-top 把卡片內容推到帶狀區「以下」
-           的閱讀區（約下方 42dvh）。卡片不再需要 JS 或 opacity/transform 切換顯示——
-           純粹跟著捲動位置自然由下往上滑入、往上滑出，與桌機版的捲動手感一致，
-           也不會有整格瞬間淡入/淡出造成的「憑空冒出」或卡片間大片留黑的問題。
-           圖表本身仍以「重排」而非 transform: scale() 縮小（第二章额外再乘上 0.95），
-           確保清晰可讀。控制圖表內容切換（長條長出、標示年份等）的既有捲動階段
-           JS（rebuilt-step-N class）維持不變，只移除它原本用來切換「卡片」顯示/隱藏
-           的樣式。 */
-        @media (max-width: 1024px) {
+           📱 手機版捲動敘事重構（第二、三章）
+           圖表釘在上方帶狀區、文字卡在下方，兩者不重疊、可同時閱讀。
+           作法：帶狀區為不透明白底且 z-index 高於卡片，因此卡片捲到
+           上方時會被帶狀區「蓋住」，只在下方閱讀區顯示 → 保證不重疊。
+           圖表以「重排」而非 transform: scale() 縮小，確保清晰可讀。
+           ======================================================= */
+        @media (max-width: 968px) {
 
-            /* ---------- 第二章：甘特圖釘在視窗垂直 50% 處 ----------
-               手機／平板改用與第三章 .gantt-sticky-box-rebuilt 相同的 position:sticky
-               機制（桌機版維持 position:fixed 的全螢幕背景疊層設計，此處不動）。
-               ⚠️ 已改回 position:fixed（與桌機版一致）：改用 position:sticky 會讓瀏覽器
-               在章節捲動到底時「原生自動」把帶狀區跟著文件流一起滑走，這個原生滑走
-               動作跟 updateHistoryExit() 原本針對 fixed 元素設計、只靠 opacity 淡出的
-               收尾動畫同時發生、疊加在一起，導致第二章結尾感覺「收得太快」。第三章的
-               sticky 版本另外用 --ch3-exit-offset 這個 transform 專門馴服原生滑走時機，
-               第二章沒有這套機制，所以改回 fixed（原生完全沒有自動滑走行為）能讓收尾
-               動畫完全交回 updateHistoryExit() 掌控，與桌機版行為一致。
-               top:50%+translateY(-50%) 讓帶狀區的垂直中心卡在視窗中央，而非貼齊頂部。 */
+            /* ---------- 第二章：甘特圖釘在螢幕正中央（滿版高度） ----------
+               卡片已疊在圖表之上（見下方 .gantt-card-rebuilt），故圖表帶狀區
+               不再需要侷限於上方 60dvh，改回滿版 100dvh、垂直置中，與桌機版
+               置中手法一致 */
             .gantt-fixed-stage-rebuilt {
-                position: fixed !important;
-                top: 50% !important;
-                /* -50% keeps it centered; --ch2-exit-offset (px, published by
-                   updateHistoryExit()) additionally slides it upward in sync with
-                   the naturally-scrolling final story card, so the photo band and
-                   the text exit the screen together instead of the band just
-                   fading in place while the text scrolls past it. */
-                transform: translateY(calc(-50% - var(--ch2-exit-offset, 0px))) !important;
-                height: 58dvh;
+                height: 100vh;
+                height: 100dvh;
                 align-items: center;
                 background: var(--bg-deep);
-                border-bottom: 1px solid rgba(237, 230, 211, 0.14);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+                /* 白底在白頁上，引言階段等同隱形；圖表出現後才顯示分隔線 */
                 z-index: 5;
             }
 
+            #chapter-2-rebuilt.rebuilt-step-2 .gantt-fixed-stage-rebuilt {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+            }
+
             .gantt-backdrop-box-rebuilt {
-                /* 填滿帶狀區（其父層 .gantt-fixed-stage-rebuilt 已縮到 58dvh），
-                   不再需要自己再宣告一次 100dvh 滿版高度 */
-                height: 100%;
-                /* 頂部多留 --site-header-h 再加 20px，讓圖表整體下移、頂端不被固定導覽列擋到 */
-                padding: calc(20px + var(--site-header-h)) 6px 6px 6px;
+                height: 100vh;
+                height: 100dvh;
+                /* 頂部多留 --site-header-h，避免圖表標題被固定導覽列蓋住 */
+                padding: calc(6px + var(--site-header-h)) 6px 6px 6px;
             }
 
             .history-images-container {
@@ -2764,10 +2434,6 @@
                 /* 外距讓白底面板與深色帶狀區邊緣脫開，形成「卡片浮在深色底上」的框裱感，
                    而不只是同一塊白底貼齊整個帶狀區 */
                 margin: 10px 8px !important;
-                /* 依美編需求手機版圖表等比縮小約 5%；以頂端中央為錨點，
-                   縮放後保留上方（padding 提供的）避讓空間，頂端不被 header 擋到 */
-                transform: scale(0.95);
-                transform-origin: center top;
             }
 
             /* 統一縮小的繪圖框：留白加大，使繪圖本體（軸線/長條）縮小、四周留更多呼吸空間。
@@ -2796,14 +2462,14 @@
             }
 
             #chapter-2-rebuilt .gantt-year-rebuilt {
-                font-size: var(--type-caption);
+                font-size: 0.65rem;
                 margin-right: 4px;
                 white-space: nowrap;
                 display: block;
             }
 
             #chapter-2-rebuilt .gantt-grid-label-rebuilt {
-                font-size: var(--type-caption);
+                font-size: 0.62rem;
             }
 
             #chapter-2-rebuilt .gantt-row-rebuilt {
@@ -2812,12 +2478,11 @@
 
             /* 標題與圖例文字同步縮小，與縮小後的繪圖框比例一致 */
             #chapter-2-rebuilt .gantt-title-area-rebuilt h3 {
-                font-size: var(--type-panel-heading) !important;
+                font-size: 0.95rem !important;
             }
 
             #chapter-2-rebuilt .legend-item {
-                font-size: var(--type-caption);
-                font-weight: 500;
+                font-size: 0.7rem;
             }
 
             #chapter-2-rebuilt .legend-color {
@@ -2825,69 +2490,71 @@
                 height: 8px;
             }
 
-            /* 文字卡：改回正常文件流（不再用 opacity/visibility/transform 依步驟切換）。
-               保留 min-height:100vh（來自桌機版基底規則）維持捲動節奏與 JS 步驟門檻換算
-               不受影響；用 padding-top 把卡片實際內容推到帶狀區（58dvh）之下的閱讀區，
-               讓卡片跟著捲動位置本身自然由該格下緣滑入、往上緣滑出——不需要任何 class
-               切換或 JS 介入，也因此不會有整格瞬間淡入/淡出、或卡片間出現大片留黑的
-               問題。z-index 維持拉高到超過 .gantt-fixed-stage-rebuilt（手機版 z-index:5），
-               僅作為捲動瞬間邊界值的保險，正常情況下卡片本來就落在帶狀區之下、不會重疊。 */
+            /* 文字卡：改為疊在圖表帶狀區「之上」，而非壓到下方閱讀區。
+               保留 100dvh 高度維持捲動節奏與步驟對應；align-items:center 讓卡片
+               置中於視窗（與釘住的圖表帶狀區同一垂直範圍），z-index 拉高到超過
+               .gantt-fixed-stage-rebuilt（手機版 z-index:5），使卡片疊層在圖表之上。 */
             #chapter-2-rebuilt .gantt-card-rebuilt {
                 align-items: center;
                 justify-content: center;
                 padding: 0 16px;
-                /* Band is now centered at 50vh (roughly 21dvh–79dvh), not top-anchored
-                   (roughly 0–58dvh), so clearance below it moved from ~60dvh to ~82dvh. */
-                padding-top: calc(var(--site-header-h) + 82dvh);
-                box-sizing: border-box;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s, visibility 0.3s;
             }
 
+            /* .gantt-scroll-content-rebuilt 本身有 z-index:2 的堆疊上下文（見基底規則），
+               單靠子層卡片的 z-index 無法突破父層上限，故在此將父層堆疊層級拉高到
+               超過 .gantt-fixed-stage-rebuilt（手機版 z-index:5），卡片才能真正疊在圖表之上 */
             #chapter-2-rebuilt .gantt-scroll-content-rebuilt {
                 z-index: 7 !important;
             }
 
+            /* 第二章第二步驟起顯示卡片 */
+            /* 只顯示當前步驟的卡片，隱藏其他 */
+            #chapter-2-rebuilt.rebuilt-step-2 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-2 [data-rebuilt-step="2"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-3 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-3 [data-rebuilt-step="3"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-4 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-4 [data-rebuilt-step="4"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-5 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-5 [data-rebuilt-step="5"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-6 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-6 [data-rebuilt-step="6"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-7 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-7 [data-rebuilt-step="7"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-8 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-8 [data-rebuilt-step="8"] { opacity: 1; visibility: visible; }
+
+            #chapter-2-rebuilt.rebuilt-step-9 .gantt-card-rebuilt { opacity: 0; visibility: hidden; }
+            #chapter-2-rebuilt.rebuilt-step-9 [data-rebuilt-step="9"] { opacity: 1; visibility: visible; }
+
             /* 三張歷史照片（budget96001/96002/003.jpg）手機版統一放大至接近滿版寬度，
-               原僅第三張（大結局照片）放大，現三張尺寸一致。帶狀區已縮為 58dvh，
-               照片寬度改用較保守的 78vw（原 92vw 是滿版高度時的尺寸），避免直式照片
-               在較矮的帶狀區內被上下裁切 */
+               原僅第三張（大結局照片）放大，現三張尺寸一致 */
             #chapter-2-rebuilt .history-img-frame {
-                width: 78vw !important;
-                max-width: 78vw !important;
+                width: 92vw !important;
+                max-width: 92vw !important;
             }
 
-            /* ---------- 第三章：堆疊長條圖釘在垂直置中的帶狀區 ----------
-               ⚠️ 原本寫 top:50% + translateY(-50%)（照抄第二章 fixed 版的置中寫法），
-               但 sticky 與 fixed 的百分比解析基準根本不同：
-                 · fixed  → 百分比對「視窗」解析，50% 就是半個視窗高（第二章寫法正確）
-                 · sticky → 百分比對「containing block」解析，此處是 #chapter-3-rebuilt
-                            （開場白 + 5×100svh 卡片 + 結語，總高 300svh 以上），
-                            50% 因而變成 150svh 級別的失控數值。
-               而且 sticky 的 top 一值兩用 —— 同時是「貼住後的停駐位置」與「開始貼住的
-               觸發時機」，一個失控的 top 會同時破壞這兩件事，這正是圖表壓在
-               .chapter-intro 上的病根。
-               改用視窗單位直接寫死停駐位置：(100dvh − 58dvh) / 2 = 21dvh，帶狀區佔
-               21dvh~79dvh 垂直置中，因此也不再需要 translateY(-50%)。少了那個 -50%，
-               圖表在「尚未貼住」的階段就完全畫在自己的文件流位置上（不會往上偷跑半個
-               帶狀區高度去蓋住上方元素），開場白與圖表在結構上不可能再重疊。 */
-            #chapter-3-rebuilt .chapter-intro {
-                /* 純閱讀節奏用的留白：開場白讀完後留一段深色空白，圖表才由下方升起，
-                   讓「開場白獨佔」與「圖表釘住＋卡片輪替」兩段有清楚的段落感。
-                   重疊問題已由上方 top/transform 的修正在結構上根除，這裡不負責防撞。 */
-                margin-bottom: 18dvh;
-            }
-
+            /* ---------- 第三章：堆疊長條圖釘在螢幕正中央（滿版高度） ----------
+               卡片已疊在圖表之上（見 .story-timeline-rebuilt），故改回滿版
+               100dvh、垂直置中，與第二章、桌機版置中手法一致 */
             .gantt-sticky-box-rebuilt {
-                top: 21dvh !important;
-                height: 58dvh !important;
+                height: 100vh !important;
+                height: 100dvh !important;
                 align-items: center !important;
                 background: var(--bg-deep) !important;
-                border-bottom: 1px solid rgba(237, 230, 211, 0.14);
-                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
                 z-index: 5 !important;
             }
-
-            /* 垂直置中已改由 top:21dvh 負責，transform 交還給基底規則（見上方
-               #ch3-sticky-box-wrapper），單純表達退場位移 --ch3-exit-offset。 */
 
             .gantt-container-rebuilt {
                 /* 扣除外距寬度，避免與 margin 疊加溢出（同第二章甘特圖容器寫法） */
@@ -2899,18 +2566,12 @@
                 margin: 10px 8px !important;
             }
 
-            /* 取消桌機版把卡片往右上拉的偏移，改置中。基底規則（.story-timeline-rebuilt
-               .gantt-card-rebuilt）本來就是 opacity:1;visibility:visible（桌機也是一路
-               可見、跟著捲動），這裡唯一需要新增的是 padding-top，把卡片內容推到
-               58dvh 帶狀區之下的閱讀區，與第二章的作法一致 */
+            /* 取消桌機版把卡片往右上拉的偏移，改置中；z-index 拉高到超過
+               .gantt-sticky-box-rebuilt（手機版 z-index:5），使卡片疊在圖表之上，
+               與第二章卡片疊圖手法一致 */
             .story-timeline-rebuilt {
                 margin-top: 0 !important;
                 align-items: center !important;
-                /* 文字卡疊在帶狀區「之上」往上飄（7 > 帶狀區的 5），與桌機版一致的
-                   剪貼疊圖語彙（桌機基底 z-index:2 > 帶狀區 1）。曾一度改為 1 讓卡片
-                   滑進帶狀區底下，但那會讓卡片被圖表吃掉、失去紙卡壓在圖表上的層次感，
-                   已依美編指示改回。真正該解的「圖文對不上」是量測基準問題（見
-                   updateChapter3Bars 的 measureTop），與這裡的疊放順序無關。 */
                 z-index: 7 !important;
             }
 
@@ -2919,29 +2580,16 @@
                 align-items: center !important;
                 padding-right: 0 !important;
                 padding: 0 16px !important;
-                /* Band is now centered at 50vh (roughly 21dvh–79dvh), not top-anchored
-                   (roughly 0–58dvh), so clearance below it moved from ~60dvh to ~82dvh. */
-                padding-top: calc(var(--site-header-h) + 82dvh) !important;
-                box-sizing: border-box;
             }
 
             /* ---------- 共用：手機版文字卡改為完全不透明（新聞剪貼風格牛皮紙色） ---------- */
             .story-card {
-                /* 底色已上移到基底規則（手機桌機共用 #ebe1de），此處不再宣告，
-                   避免兩個 breakpoint 各自維護同一個顏色而走鐘。 */
+                background-color: var(--np-paper-panel);
                 background-image: url('paper-texture.png');
                 background-repeat: repeat;
                 background-blend-mode: multiply;
                 backdrop-filter: none;
                 max-width: 100%;
-                /* 桌機版 40px 內距在窄螢幕上吃掉太多可讀寬度，縮小為 24px/18px */
-                padding: 24px 18px;
-            }
-
-            /* 卡片本身已是滿版寬（width/max-width:100%），無法再放大，故「放大」
-               落在內文字級：由 --type-body（約 16px）提升到約 18–20px。 */
-            .story-card p {
-                font-size: clamp(1.125rem, calc(1.05rem + 0.32vw), 1.25rem);
             }
         }
 
@@ -2949,7 +2597,7 @@
            與 .chapter-intro 手機版（1.1rem / 40px 側距）保持一致的閱讀節奏 */
         @media (max-width: 640px) {
             .ch3-conclusion-text {
-                font-size: var(--type-body) !important;
+                font-size: 1.1rem !important;
                 line-height: 1.8 !important;
             }
 
@@ -2958,16 +2606,16 @@
                 padding-right: 40px !important;
             }
 
-            #chapter-4>div>div>p,
-            #chapter-3-rebuilt>p {
-                font-size: var(--type-body) !important;
+            #chapter-4 > div > div > p,
+            #chapter-3-rebuilt > p {
+                font-size: 1.1rem !important;
                 line-height: 1.8 !important;
                 padding-left: 20px;
                 padding-right: 20px;
             }
 
             .footer-cta p {
-                font-size: var(--type-body) !important;
+                font-size: 1.1rem !important;
                 line-height: 1.8 !important;
             }
         }
@@ -2977,23 +2625,23 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            color: var(--ui-muted);
+            color: var(--np-muted-ondark);
             /* 原為 var(--text-muted)，此按鈕直接位於 #chapter-4 深色底上 */
             text-decoration: none;
-            font-size: var(--type-body);
+            font-size: 0.95rem;
             font-weight: 600;
             padding: 10px 24px;
             border-radius: 50px;
-            border: 1px solid var(--ui-muted);
+            border: 1px solid rgba(165, 39, 30, 0.25);
             margin-top: 20px;
             transition: all 0.3s ease;
         }
 
         .cna-link-btn:hover {
             /* 原為 var(--primary) 暗朱印紅，此按鈕直接位於 #chapter-4 深色底上，改用高亮朱印紅維持對比 */
-            color: var(--ui-accent);
-            border-color: var(--ui-accent);
-            background: var(--ui-paper);
+            color: var(--np-seal-red-bright);
+            border-color: var(--np-seal-red-bright);
+            background: rgba(226, 86, 74, 0.08);
         }
 
         /* --- 尊重使用者的「減少動態」系統偏好 --- */
@@ -3008,35 +2656,6 @@
                 transition-duration: 0.01ms !important;
                 scroll-behavior: auto !important;
             }
-
-            .center-main-line-fill {
-                height: 100% !important;
-            }
-
-            .js .center-timeline-container .timeline-row.item-card .story-card {
-                opacity: 1 !important;
-                pointer-events: auto !important;
-                transform: rotate(-0.4deg) !important;
-            }
-
-            .js .center-timeline-container .timeline-row.item-node .timeline-block-node {
-                opacity: 1 !important;
-                transform: none !important;
-            }
-
-            .scroll-indicator {
-                animation: none !important;
-            }
-
-            .gantt-backdrop-box-rebuilt,
-            #ch3-sticky-box-wrapper {
-                transform: none !important;
-            }
-
-            .js #chapter-3-rebuilt .chapter-intro {
-                opacity: 1 !important;
-                transform: none !important;
-            }
         }
 
         .back-to-hero-btn {
@@ -3044,527 +2663,29 @@
             bottom: 92px;
             right: 32px;
             z-index: 50;
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
             width: 48px;
             height: 48px;
             border: none;
             border-radius: 50%;
-            background: var(--ui-paper);
+            background: #DFD394;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
             cursor: pointer;
-            font-size: var(--type-panel-heading);
+            font-size: 1.3rem;
             line-height: 1;
-            color: var(--ui-accent);
-            /* 箭頭加粗。「↑」(U+2191) 是符號字元，多數字型不提供粗體字重，
-               單靠 font-weight 往往毫無變化（瀏覽器也未必會做合成粗體），
-               因此改以 text-stroke 沿字形輪廓加粗 —— 不依賴字型是否有粗體版本，
-               任何字型都能穩定變粗。font-weight 一併留著，字型若真有粗體則加乘。 */
-            font-weight: 900;
-            -webkit-text-stroke: 1.2px currentColor;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transform: translateY(8px);
-            transition: background-color 0.3s ease, transform 0.3s ease, opacity 0.2s ease, visibility 0.2s;
+            color: #272B34;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
-        .back-to-hero-btn.is-available {
-            display: flex;
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transform: translateY(0);
+        .back-to-hero-btn:hover {
+            background: #E1D287;
         }
 
         .back-to-hero-btn:focus-visible {
-            outline: 2px solid var(--ui-accent);
+            outline: 2px solid var(--np-seal-red-bright);
             outline-offset: 2px;
-        }
-
-        /* =======================================================
-           Responsive editorial layout and shared chart clearance
-           ======================================================= */
-        .site-header .site-brand {
-            margin: 0;
-            font-family: var(--font-display);
-            font-size: var(--type-panel-heading);
-            line-height: 1.2;
-            font-weight: 900;
-            color: var(--ui-accent);
-        }
-
-        .report-display {
-            font-size: var(--type-report-display);
-            font-weight: 900;
-            line-height: 1.3;
-        }
-
-        .editorial-body {
-            font-size: var(--type-body);
-            line-height: 1.8;
-            font-weight: 500;
-            color: var(--ui-ink);
-            line-break: strict;
-        }
-
-        .editorial-caption,
-        .editorial-label {
-            font-size: var(--type-caption);
-            line-height: 1.5;
-            font-weight: 500;
-        }
-
-        .ch3-bar-label {
-            margin-bottom: 8px;
-            color: var(--ui-ink-inverse);
-        }
-
-        .hero-dek {
-            margin: 0;
-            text-align: left;
-        }
-
-        .chapter-heading {
-            margin: 0 0 30px;
-            color: var(--ui-accent);
-            font-size: var(--type-chapter-heading);
-            line-height: 1.35;
-            text-wrap: balance;
-        }
-
-        .heading-phrase {
-            white-space: nowrap;
-        }
-
-        .chapter-intro-copy {
-            max-width: 750px;
-            margin: 0 auto;
-            color: var(--ui-ink-inverse);
-        }
-
-        .chapter-intro-copy>span {
-            display: block;
-            text-align: left;
-        }
-
-        .editorial-body.on-dark {
-            max-width: 750px;
-            margin: 0 auto;
-            color: var(--ui-ink-inverse);
-            text-align: left;
-        }
-
-        .chart-heading {
-            margin: 0 0 25px;
-            padding-left: 12px;
-            border-left: 5px solid var(--ui-accent);
-            color: var(--ui-accent);
-            font-size: var(--type-panel-heading);
-            font-weight: 700;
-            line-height: 1.5;
-        }
-
-        .cta-arrow {
-            font-size: 1.2em;
-            line-height: 1;
-        }
-
-        .page-footer {
-            padding: 24px 20px;
-            background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.2px) 0 0/4px 4px, #1E1410;
-            /* 原背景 var(--ui-canvas) 與上方 .footer-cta 漸層終點 --bg-deep 是同一個色值，
-               單靠底色分不出頁尾邊界；改用暖色深炭色 #1E1410 讓底色本身也有區隔，
-               保留既有細線分隔線做雙重標示 */
-            border-top: 1px solid rgba(237, 230, 211, 0.1);
-            color: var(--ui-muted);
-            font-size: var(--type-caption);
-            text-align: center;
-        }
-
-        #chapter-4 {
-            background-color: var(--ui-canvas);
-            padding-bottom: 100px;
-        }
-
-        .back-to-hero-btn,
-        .back-to-hero-btn:hover {
-            background: var(--ui-paper);
-            color: var(--ui-accent);
-        }
-
-        #gantt-stage-rebuilt {
-            --history-exit-opacity: 1;
-        }
-
-        #gantt-stage-rebuilt #backdrop-images-rebuilt {
-            opacity: var(--history-exit-opacity) !important;
-            transition: none !important;
-        }
-
-        #gantt-stage-rebuilt.history-exit-active #backdrop-images-rebuilt {
-            visibility: visible !important;
-            pointer-events: auto !important;
-        }
-
-        #gantt-stage-rebuilt.history-exit-complete #backdrop-images-rebuilt {
-            visibility: hidden !important;
-            pointer-events: none !important;
-        }
-
-        .gantt-backdrop-box-rebuilt {
-            box-sizing: border-box;
-            padding: calc(var(--chart-stage-content-clearance) + 24px) 40px var(--chart-stage-gap) !important;
-        }
-
-        .gantt-chart-container-rebuilt {
-            height: min(85svh, calc(var(--chart-stage-height) - var(--chart-stage-content-clearance) - 48px)) !important;
-        }
-
-        .gantt-sticky-box-rebuilt {
-            box-sizing: border-box;
-            align-items: flex-start !important;
-            padding: calc(var(--chart-stage-content-clearance) + 16px) 0 var(--chart-stage-gap);
-        }
-
-        /* 桌機版把圖表內容改回置中（覆蓋上面 flex-start），視覺上不再貼著淨空區頂端。
-           top/height 與淨空 padding 完全不動，clearance 由 padding 保證、與 align-items
-           無關，所以置中只會在 padding 留出的空間內重新分配，不會讓內容更貼近固定導覽列 */
-        @media (min-width: 1025px) {
-            .gantt-sticky-box-rebuilt {
-                align-items: center !important;
-            }
-        }
-
-        .gantt-container-rebuilt {
-            max-height: calc(var(--chart-stage-height) - var(--chart-stage-content-clearance) - 40px);
-            padding: 24px 40px 40px !important;
-        }
-
-        .dynamic-chart-box {
-            box-sizing: border-box;
-            height: calc(100dvh - var(--chart-stage-clearance) - var(--chart-stage-gap)) !important;
-            padding: var(--chart-stage-clearance) 40px var(--chart-stage-gap) !important;
-        }
-
-        /* Chapter 4 charts are normal-flow report figures, not viewport-pinned stages. */
-        #chapter-4 .dynamic-chart-box {
-            height: auto !important;
-            padding: 0 !important;
-        }
-
-        @media (min-width: 1025px) and (max-height: 900px) {
-            :root {
-                --chart-stage-short-extra: 16px;
-            }
-        }
-
-        @media (max-width: 1024px) {
-            :root {
-                --type-report-display: clamp(1.75rem, calc(1.55rem + 0.7vw), 2rem);
-                --type-chapter-heading: clamp(1.75rem, calc(1.55rem + 0.7vw), 2rem);
-                --type-panel-heading: clamp(1rem, calc(0.96rem + 0.14vw), 1.05rem);
-                --story-visual-stage-height: min(58svh, var(--chart-stage-height));
-            }
-
-            .site-header .site-brand {
-                font-size: var(--type-panel-heading);
-            }
-
-            .hero-section {
-                height: auto;
-                min-height: calc(100svh - var(--site-header-h));
-                overflow: visible;
-                /* Headline panel and scroll indicator are positioned independently
-                   (see .hero-headline-panel / .scroll-indicator below) rather than
-                   flowed as a group, so the panel's own center lands exactly on the
-                   viewport's vertical midpoint regardless of the image/indicator. */
-                /* Header clearance is provided once by body padding above.
-                   Keep only the hero's internal safe-area/content breathing room here. */
-                padding: calc(env(safe-area-inset-top) + 18px) 20px 28px;
-                background-image:
-                    radial-gradient(circle, rgba(237, 230, 211, 0.06) 1px, transparent 1.2px),
-                    url('hero-collage-mobile-clean.webp');
-                background-size: 6px 6px, cover;
-                background-repeat: repeat, no-repeat;
-                background-position: 0 0, center top;
-                clip-path: none;
-            }
-
-            .hero-sr-only {
-                position: relative;
-                width: min(100%, 680px);
-                height: auto;
-                margin: 0;
-                overflow: visible;
-                clip: auto;
-                white-space: normal;
-                border: 0;
-            }
-
-            /* 標題移入合併紙卡（.hero-headline-panel）後不再需要浮在圖片上的獨立底色框，
-               改為卡片內的一般區塊 */
-            .hero-title {
-                position: static;
-                width: 100%;
-                /* 68px 保留給疊在卡片上緣的印章留出淨空，不論標題斷成幾行都不會被壓到。
-                   推導（皆相對紙卡 border box，紙卡 padding-top 為 30px）：
-                     印章 top:-30px、直徑 104px  → 章體下緣 = -30 + 104 = 74px
-                     箭頭 bottom:-14px、高 16px  → 尖角最深 = 74 + 16 = 90px
-                     壓進卡片內容區深度        = 90 - 30 = 60px
-                     留 8px 餘裕               → margin-top = 68px
-                   ⚠️ 印章尺寸／top／箭頭高度任一改動，此值都必須依上式重算，不能各自維護 */
-                margin: 68px 0 0;
-                padding: 0;
-                background: none;
-                box-shadow: none;
-                color: var(--ui-ink);
-                font-size: var(--type-report-display);
-                line-height: 1.22;
-                text-wrap: balance;
-                text-align: center;
-            }
-
-            .hero-title-phrase,
-            .hero-title-subtitle {
-                display: block;
-                margin: 0;
-                font-weight: inherit;
-            }
-
-            .hero-title-phrase {
-                color: var(--ui-ink);
-            }
-
-            .hero-title .hero-title-subtitle {
-                margin-top: 8px;
-                color: var(--ui-accent);
-                font-family: var(--font-body);
-                font-size: var(--type-caption);
-                font-weight: 700;
-                line-height: 1.6;
-                /* 原為 right（副標靠右對齊），與主標／印章／前言全都置中的紙卡軸線不一致，
-                   改為 center 讓整張紙卡共用同一條中軸 */
-                text-align: center;
-            }
-
-            /* 印章疊釘在合併紙卡上緣、水平置中（原本貼右上角，改為置中），
-               一部分在卡片外、一部分壓進卡片內，紅底＋米色（--ui-paper）文字與粗箭頭
-               呼應騎縫章視覺語彙。水平置中不影響碰撞判斷（只看垂直淨空）。
-               依美編需求再放大：改以 width/height 直接指定 104px（原 84px×scale(0.9)
-               ＝視覺 75.6px），並移除 scale —— 邊框與箭頭不再被縮小、邊緣更銳利，
-               尺寸也回到單一真實來源，不必再心算「宣告值 × 縮放比」。
-               ⚠️ top 與 .hero-title 的 margin-top 已依新尺寸重算（見該處推導式）。 */
-            .hero-stamp-wrap {
-                position: absolute;
-                top: -30px;
-                bottom: auto;
-                left: 50%;
-                right: auto;
-                z-index: 5;
-                transform: translateX(-50%);
-            }
-
-            .hero-stamp {
-                width: 104px;
-                height: 104px;
-                background: var(--ui-accent);
-                border-color: var(--ui-paper);
-                color: var(--ui-paper);
-            }
-
-            .hero-stamp::before {
-                border-color: var(--ui-paper);
-                opacity: 0.7;
-            }
-
-            /* 手機版沿用與桌機完全相同的排法（297＋小字天／下排逾期），只有尺寸縮小；
-               顏色則維持與桌機對調（桌機：米底＋朱印紅字；手機：朱印紅底＋米色字，
-               見上方 .hero-stamp 的 background/border-color/color 覆寫）。 */
-            .hero-stamp .num {
-                font-size: var(--type-report-display);
-            }
-
-            .hero-stamp .unit,
-            .hero-stamp .label {
-                font-size: var(--type-caption);
-            }
-
-            /* 箭頭隨圓章放大等比加大（8/14 → 10/16）。高度 16px 已計入
-               .hero-title margin-top 的推導式，改動此值必須回頭重算該值。 */
-            .hero-stamp-wrap::after {
-                content: '';
-                position: absolute;
-                left: 50%;
-                bottom: -16px;
-                transform: translateX(-50%);
-                border-left: 10px solid transparent;
-                border-right: 10px solid transparent;
-                border-top: 16px solid var(--ui-paper);
-            }
-
-            /* 標題＋副標＋前言合併為同一張紙卡，取代原本各自獨立的浮動面板，留更舒適的內距 */
-            .hero-headline-panel {
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: min(92%, 680px);
-                margin: 0;
-                padding: 30px 28px 22px;
-                gap: 14px;
-                background-color: rgba(241, 234, 214, 0.94);
-                background-image: radial-gradient(circle, rgba(27, 23, 18, 0.05) 1px, transparent 1.2px);
-                background-size: 4px 4px;
-                background-repeat: repeat;
-                box-shadow: 0 10px 24px rgba(27, 23, 18, 0.2);
-            }
-
-            .hero-dek-panel {
-                position: static;
-                width: 100%;
-                max-width: none;
-                padding: 0;
-                background: none;
-                box-shadow: none;
-                transform: none;
-            }
-
-            .scroll-indicator {
-                position: absolute;
-                bottom: 40px;
-                left: 50%;
-                transform: translateX(-50%);
-                animation: bounce-mobile 2.4s infinite;
-                color: var(--ui-ink-inverse);
-                font-size: var(--type-caption);
-                gap: 4px;
-            }
-
-            /* 依美編需求改回與桌機基底相同的 40px 長線（原 20px）。
-               手機縮短這條線原本是為了閃避 .hero-section 底部的撕紙 clip-path，
-               但該 clip-path 在本區塊已設為 none（見上方 .hero-section），
-               縮短的理由不存在了。background 與基底完全相同，不再重複宣告。 */
-            .scroll-indicator::after {
-                height: 40px;
-            }
-
-            .gantt-backdrop-box-rebuilt {
-                padding: var(--chart-stage-content-clearance) 6px 6px !important;
-            }
-
-            .gantt-chart-container-rebuilt {
-                height: min(calc(var(--story-visual-stage-height) - var(--chart-stage-content-clearance) - 16px), calc(var(--chart-stage-height) - var(--chart-stage-content-clearance) - 48px)) !important;
-            }
-
-            .gantt-fixed-stage-rebuilt {
-                height: var(--story-visual-stage-height);
-            }
-
-            .gantt-sticky-box-rebuilt {
-                height: var(--story-visual-stage-height) !important;
-                padding: var(--chart-stage-content-clearance) 0 8px;
-            }
-
-            .gantt-container-rebuilt {
-                max-height: calc(var(--story-visual-stage-height) - var(--chart-stage-content-clearance) - 16px);
-                padding: 16px 14px !important;
-            }
-        }
-
-        @media (min-width: 641px) and (max-width: 1024px) {
-            :root {
-                --scene-read-interval: 82svh;
-            }
-
-            #chapter-2-rebuilt,
-            .scroll-story-rebuilt {
-                min-height: auto !important;
-            }
-
-            #chapter-2-rebuilt .gantt-card-rebuilt,
-            .story-timeline-rebuilt .gantt-card-rebuilt {
-                min-height: var(--scene-read-interval) !important;
-            }
-
-            /* 平板僅需把退場位移夾在 12svh 以內（避免圖表在較高的視窗上被推得太遠），
-               置中已由 ≤1024 區塊的 top:21dvh 負責，故此處同步移除已失效的 -50%。 */
-            #ch3-sticky-box-wrapper {
-                transform: translateY(calc(-1 * min(var(--ch3-exit-offset), 12svh))) !important;
-            }
-
-            /* 甘特圖共用框架：641-1024px 沿用手機窄框（46/14/16/44px）會讓長條圖在較寬的
-               平板畫面上顯得擁擠、軸線貼著圖表邊界。這裡按寬度等比放大框架四邊留白，
-               left/right/bottom 四個元件維持一致，確保長條、格線、軸線、紅線舞台仍精準疊合 */
-            #chapter-2-rebuilt .gantt-rows-container-rebuilt,
-            #chapter-2-rebuilt .gantt-grid-rebuilt,
-            #chapter-2-rebuilt .gantt-x-axis-rebuilt,
-            #chapter-2-rebuilt .gantt-red-deadline-stage {
-                left: clamp(56px, 10vw, 88px) !important;
-                right: clamp(20px, 4vw, 36px) !important;
-                bottom: clamp(56px, 9vw, 90px) !important;
-            }
-
-            #chapter-2-rebuilt .gantt-rows-container-rebuilt,
-            #chapter-2-rebuilt .gantt-grid-rebuilt,
-            #chapter-2-rebuilt .gantt-red-deadline-stage {
-                top: clamp(24px, 4vw, 32px) !important;
-            }
-
-            #chapter-2-rebuilt .gantt-x-axis-rebuilt {
-                height: clamp(28px, 4vw, 40px) !important;
-            }
-        }
-
-        @media (max-width: 640px) {
-            :root {
-                --type-report-display: clamp(1.75rem, calc(1.68rem + 0.3vw), 1.875rem);
-                --type-chapter-heading: clamp(1.75rem, calc(1.68rem + 0.3vw), 1.875rem);
-            }
-
-            /* Both chapter 2 and chapter 3 keep the pinned-band / scroll-linked-reveal
-               mechanism that already works at tablet widths (see the shared
-               @media (max-width: 1024px) rules above, e.g. .gantt-card-rebuilt's
-               documented min-height:100vh requirement) — neither is flattened here. */
-            #chapter-2-rebuilt .gantt-scroll-content-rebuilt {
-                gap: 24px;
-                padding-block: 32px;
-            }
-
-            /* ⚠️ padding-top 原為 64px，把基底規則那條 80vh 的安全呼吸帶砍掉了，
-               結語文字因此在圖表還釘在畫面上時就捲了上來，被 z-index:5 的帶狀區蓋住
-               （結語自身只有 z-index:3）。
-               需要多少才夠，可以精確推導 —— 退場一旦開始，圖表與結語都以 1:1 的速率
-               隨捲動上移（--ch3-exit-offset = containerTop − card5Top，containerTop 在
-               sticky 狀態下固定，card5Top 隨捲動等速遞減），兩者相對距離是常數。
-               所以只需檢查「退場起點」那一瞬間的幾何：
-                 圖表下緣          = 21dvh + 58dvh          = 79dvh
-                 卡5 文字卡此刻在  = containerTop           ≈ 21dvh
-                 卡5 區塊下緣      ≈ 文字卡 + 卡高          ≈ 39dvh
-                 結語文字頂端      = 39dvh + padding-top
-               不重疊條件：39 + padding-top > 79  →  padding-top > 40dvh
-               取 56dvh（留 16dvh 餘裕，涵蓋卡高估算誤差）。 */
-            .ch3-conclusion-footer-rebuilt {
-                padding-top: 56dvh;
-                padding-bottom: 120px;
-            }
-
-            .hero-section {
-                min-height: calc(100svh - var(--site-header-h));
-                grid-template-rows: minmax(13rem, 31svh) auto auto;
-                padding-inline: 16px;
-            }
-
-            .hero-headline-panel {
-                padding: 24px 22px 18px;
-            }
-
-            .chapter-heading {
-                margin-bottom: 22px;
-            }
         }
     </style>
     <script type="application/ld+json">
@@ -3592,112 +2713,18 @@
 </head>
 
 <body>
-    <noscript>
-        <style>
-            #gantt-stage-rebuilt {
-                position: relative !important;
-                inset: auto !important;
-                display: flex !important;
-                flex-direction: column !important;
-                width: 100% !important;
-                height: auto !important;
-                overflow: visible !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-            }
-
-            #gantt-stage-rebuilt .gantt-backdrop-box-rebuilt {
-                position: relative !important;
-                inset: auto !important;
-                min-height: min(76svh, 720px) !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-                transform: none !important;
-            }
-
-            #gantt-stage-rebuilt .gantt-y-axis-rebuilt,
-            #gantt-stage-rebuilt .gantt-x-axis-rebuilt,
-            #gantt-stage-rebuilt .gantt-grid-rebuilt,
-            #gantt-stage-rebuilt .gantt-red-deadline-stage {
-                opacity: 1 !important;
-                visibility: visible !important;
-            }
-
-            #gantt-stage-rebuilt .gantt-bar-rebuilt {
-                width: var(--w) !important;
-            }
-
-            #gantt-stage-rebuilt .gantt-title-area-rebuilt,
-            #gantt-stage-rebuilt .gantt-legend-rebuilt {
-                display: flex !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-            }
-
-            #backdrop-images-rebuilt .history-images-container {
-                display: grid !important;
-                gap: 32px !important;
-                height: auto !important;
-                padding: 32px 16px !important;
-            }
-
-            #backdrop-images-rebuilt .history-img-frame {
-                position: relative !important;
-                inset: auto !important;
-                width: min(100%, 750px) !important;
-                margin-inline: auto !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-                transform: none !important;
-            }
-
-            #ch3-sticky-box-wrapper {
-                position: relative !important;
-                top: auto !important;
-                transform: none !important;
-            }
-
-            #ch3-bar-new-teal,
-            #ch3-bar-extend-blue,
-            #ch3-bar-reserve-orange {
-                opacity: 1 !important;
-                visibility: visible !important;
-            }
-
-            #ch3-bar-new-teal {
-                width: 34% !important;
-                z-index: 5 !important;
-            }
-
-            #ch3-bar-extend-blue {
-                width: 94.3% !important;
-                z-index: 4 !important;
-            }
-
-            #ch3-bar-reserve-orange {
-                width: 100% !important;
-                z-index: 3 !important;
-            }
-
-            #ch3-main-legend {
-                visibility: visible !important;
-                opacity: 1 !important;
-            }
-        </style>
-    </noscript>
 
     <a href="#main" class="skip-link">略過導覽，直接跳至主要內容</a>
 
     <!-- 固定 Header -->
     <header class="site-header">
-        <div class="site-brand">中央政府總預算觀測站</div>
-        <button class="nav-toggle" id="nav-toggle" type="button" aria-label="開啟導覽選單" aria-expanded="false"
-            aria-controls="site-nav">☰</button>
+        <h1>中央政府總預算觀測站</h1>
+        <button class="nav-toggle" id="nav-toggle" type="button" aria-label="開啟導覽選單" aria-expanded="false" aria-controls="site-nav">☰</button>
         <nav id="site-nav">
-            <img src="cna-favicon-light.svg" alt="中央社" class="nav-logo" decoding="async">
-            <a href="index-v2.html" class="nav-btn nav-active" aria-current="page">年度深度報導</a>
-            <a href="database-v2.html" class="nav-btn">完整資料庫</a>
+            <img src="cna-favicon-light.svg" alt="中央社" class="nav-logo">
+            <a href="index-legacy.html" class="nav-btn nav-active" aria-current="page">年度深度報導</a>
             <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="nav-btn">總預算案專頁 ↗</a>
+            <a href="database-legacy.html" class="nav-btn">完整資料庫</a>
         </nav>
     </header>
 
@@ -3725,22 +2752,20 @@
     </nav>
 
     <section class="hero-section" id="main">
-        <div class="hero-headline-panel">
-            <div class="hero-stamp-wrap">
-                <div class="hero-stamp">
-                    <span class="num-row"><span class="num" id="hero-stamp-num"
-                            data-start="2025-09-30">294</span><span class="unit">天</span></span>
-                    <span class="label">逾期</span>
-                </div>
-            </div>
-            <h1 class="hero-title hero-sr-only report-display">
-                <span class="hero-title-phrase">115年總預算審議回顧</span>
-                <span class="hero-title-subtitle">卡關逾200天才付委、718億先行動支有何隱憂</span>
-            </h1>
-            <div class="hero-dek-panel">
-                <p class="editorial-body hero-dek">
-                    115年度總預算審查在115年4月21日付委。距離114年9月30日行政院函請立法院審議已過203天。這是近年總預算預算審查最晚進行的一次，也對政府施政產生影響，2992億新興計畫無法動支，TPASS、生育給付等補助無法順利發放。
-                </p>
+        <h1 class="hero-title hero-sr-only">
+            115年總預算審議回顧
+            <span>卡關逾200天才付委、718億先行動支有何隱憂</span>
+        </h1>
+        <div class="hero-dek-panel">
+            <p
+                style="font-size: 1.1rem; margin: 0; color: var(--np-ink); text-align: justify; line-height: 1.8;">
+                115年度總預算審查在115年4月21日付委。距離114年9月30日行政院函請立法院審議已過203天。這是近年總預算預算審查最晚進行的一次，也對政府施政產生影響，2992億新興計畫無法動支，TPASS、生育給付等補助無法順利發放。
+            </p>
+        </div>
+        <div class="hero-stamp-wrap">
+            <div class="hero-stamp">
+                <span class="num" id="hero-stamp-num" data-start="2025-09-30">203</span>
+                <span class="label">天　逾　期</span>
             </div>
         </div>
         <div class="scroll-indicator">向下捲動探索</div>
@@ -3783,11 +2808,12 @@
     <section class="chapter-section" id="chapter-1">
         <div class="chapter-intro"
             style="max-width: 800px; margin: 0 auto; padding: 100px 20px 60px 20px; text-align: center; position: relative; z-index: 3;">
-            <h2 class="chapter-heading">
+            <h2 style="font-size: 2.5rem; color: var(--np-seal-red-bright); margin-bottom: 30px;">
                 為什麼今年這麼晚才審
             </h2>
-            <p class="chapter-intro-copy editorial-body">
-                <span>
+            <p
+                style="font-size: 1.35rem; line-height: 2; font-weight: 500; color: var(--np-text-ondark); max-width: 750px; margin: 0 auto;">
+                <span style="display: block; text-align: justify; width: 100%;">
                     中央政府總預算是政府施政用錢的依據，在「預算法」中有規定審議時程，原則上須在預算執行年度開始前一個月完成審議。如果來不及在時限內完成，依預算法第54條，政府可依上年度標準繼續執行既有業務，不過新增計畫與部分預備金，原則上須待預算通過才能動用。
                 </span>
             </p>
@@ -3797,7 +2823,6 @@
             <div class="center-main-line">
                 <div class="center-main-line-fill" id="center-main-line-fill"></div>
             </div>
-            <div class="timeline-terminus-mark" id="timeline-terminus-mark" aria-hidden="true"></div>
 
             <div class="timeline-row item-node">
                 <div class="timeline-block-node">
@@ -3903,7 +2928,7 @@
                 <div class="gantt-chart-container-rebuilt">
 
                     <div class="gantt-title-area-rebuilt">
-                        <h3 class="chart-heading">中央政府總預算審議時程
+                        <h3 style="color: var(--np-seal-red-bright); font-weight:900; margin: 0; font-size: 1.25rem;">中央政府總預算審議時程
                         </h3>
                     </div>
 
@@ -4122,21 +3147,16 @@
             <div class="gantt-backdrop-box-rebuilt" id="backdrop-images-rebuilt">
                 <div class="history-images-container">
                     <div class="history-img-frame">
-                        <img src="budget96001.jpg" alt="陳水扁時期預算案審議" loading="lazy" decoding="async"
-                            width="2100" height="1395">
-                        <div class="img-caption editorial-caption">民國96年5月11日，民進黨立委為通過總預算案，聚眾佔據議場主席台，將立法院長王金平團團包圍。</div>
+                        <img src="budget96001.jpg" alt="陳水扁時期預算案審議" loading="lazy">
+                        <div class="img-caption">民國96年5月11日，民進黨立委為通過總預算案，聚眾佔據議場主席台，將立法院長王金平團團包圍。</div>
                     </div>
                     <div class="history-img-frame">
-                        <img src="budget96002.jpg" alt="朝小野大政治攻防" loading="lazy" decoding="async"
-                            width="2100" height="1395">
-                        <div class="img-caption editorial-caption">民國96年5月11日，立法院處理「中央選舉委員會組織法早案」及總預算案，藍、綠立委舉標語互相指控。
-                        </div>
+                        <img src="budget96002.jpg" alt="朝小野大政治攻防" loading="lazy">
+                        <div class="img-caption">民國96年5月11日，立法院處理「中央選舉委員會組織法早案」及總預算案，藍、綠立委舉標語互相指控。</div>
                     </div>
                     <div class="history-img-frame">
-                        <img src="budget003.jpg" alt="大結局照片：內閣改組與預算退回" loading="lazy" decoding="async"
-                            width="1080" height="720">
-                        <div class="img-caption editorial-caption">
-                            過去三次總預算退回重編都是因為行政院長請辭，分別發生在民國89年唐飛請辭、99年劉兆玄請辭及107年林全請辭。</div>
+                        <img src="budget003.jpg" alt="大結局照片：內閣改組與預算退回" loading="lazy">
+                        <div class="img-caption">過去三次總預算退回重編都是因為行政院長請辭，分別發生在民國89年唐飛請辭、99年劉兆玄請辭及107年林全請辭。</div>
                     </div>
                 </div>
             </div>
@@ -4145,8 +3165,8 @@
         <div class="gantt-scroll-content-rebuilt">
             <div class="chapter-intro"
                 style="max-width: 800px; margin: 0 auto; padding: 100px 20px 40px 20px; text-align: center; position: relative; z-index: 3;">
-                <h2 class="chapter-heading">
-                    <span class="heading-phrase">不是只有今年晚，</span><wbr><span class="heading-phrase">但今年最極端</span>
+                <h2 style="font-size: 2.5rem; color: var(--np-seal-red-bright); margin-bottom: 30px;">
+                    不是只有今年晚，但今年最極端
                 </h2>
             </div>
 
@@ -4162,17 +3182,17 @@
             </div>
             <div class="gantt-card-rebuilt" data-rebuilt-step="3">
                 <div class="story-card">
-                    <p>圖上的方塊代表該年度預算審議歷時多久，方塊的顏色則代表執政黨。</p>
+                    <p>圖上的方塊代表該年度預算審議立時多久，方塊的顏色則代表執政黨。</p>
                 </div>
             </div>
             <div class="gantt-card-rebuilt" data-rebuilt-step="4">
                 <div class="story-card">
-                    <p>紅色的虛線是法律規定預算審理完成時間，淺灰色的區塊則代表預算應該開始執行的時間</p>
+                    <p>紅色的虛線是法律規定預算審理完成時間，深灰色的區塊則代表預算應該開始執行的時間</p>
                 </div>
             </div>
             <div class="gantt-card-rebuilt" data-rebuilt-step="5">
                 <div class="story-card">
-                    <p>蔡英文執政8年間只有1次（113年度）在時限內完成審議，更早的馬英九執政時期也僅有2次（101年度及105年度），大部分都是到隔年2月前才完成審議。</p>
+                    <p>蔡英文執政8年間只有1次（113年度），更早的馬英九執政時期也僅有2次（101年度及105年度），大部分都是到隔年2月前才完成審議。</p>
                 </div>
             </div>
             <div class="gantt-card-rebuilt" data-rebuilt-step="6">
@@ -4200,25 +3220,28 @@
     <section id="chapter-3-rebuilt" class="scroll-story-rebuilt">
         <div class="chapter-intro"
             style="max-width: 800px; margin: 0 auto; padding: 100px 20px 40px 20px; text-align: center; position: relative; z-index: 3;">
-            <h2 class="chapter-heading">
-                <span class="heading-phrase">晚審影響</span><wbr><span class="heading-phrase">新興預算無法動支</span>
+            <h2 style="font-size: 2.5rem; color: var(--np-seal-red-bright); margin-bottom: 30px;">
+                晚審影響新興預算無法動支
             </h2>
-            <p class="chapter-intro-copy editorial-body">
-                <span>
-                    前述提到，受預算法規定，在總預算未審議前，新興資本支出及新增計畫原則上不能動用。
+            <p
+                style="font-size: 1.35rem; line-height: 2; font-weight: 500; color: var(--np-text-ondark); max-width: 750px; margin: 0 auto;">
+                <span style="display: block; text-align: justify; width: 100%;">
+                    前述提到，受預算法規定，在總預算未審議前，新興計畫及設備原則上不能動用。
                 </span>
             </p>
         </div>
 
         <div class="gantt-sticky-box-rebuilt" id="ch3-sticky-box-wrapper">
             <div class="gantt-container-rebuilt">
-                <h3 class="chart-heading">
+                <h3
+                    style="font-size: 1.15rem; color: var(--np-seal-red-bright); margin-bottom: 25px; font-weight: bold; border-left: 5px solid var(--chart-cat-extend); padding-left: 12px;">
                     115年度總預算歲出與未審議影響規模
                 </h3>
 
                 <div class="ch3-bar-stage">
                     <div class="ch3-bar-row">
-                        <div class="ch3-bar-label editorial-label" id="ch3-label-final">115年總歲出
+                        <div class="ch3-bar-label" id="ch3-label-final"
+                            style="font-size: 0.95rem; font-weight: bold; color: var(--np-text-ondark); margin-bottom: 8px;">115年總歲出
                         </div>
                         <div class="ch3-multi-track-wrapper">
                             <div class="ch3-single-bar-layer ch3-color-grey" id="ch3-bar-total-grey"><span></span></div>
@@ -4233,13 +3256,10 @@
                 </div>
 
                 <div class="ch3-legend-container" id="ch3-main-legend">
-                    <div class="ch3-legend-item"><span class="dot"
-                            style="background-color: var(--chart-cat-new);"></span> 新興計畫</div>
-                    <div class="ch3-legend-item"><span class="dot"
-                            style="background-color: var(--chart-cat-extend);"></span> 延續計畫增額
+                    <div class="ch3-legend-item"><span class="dot" style="background-color: var(--chart-cat-new);"></span> 新興計畫</div>
+                    <div class="ch3-legend-item"><span class="dot" style="background-color: var(--chart-cat-extend);"></span> 延續計畫增額
                     </div>
-                    <div class="ch3-legend-item"><span class="dot"
-                            style="background-color: var(--chart-cat-reserve);"></span> 預備金/災害準備金
+                    <div class="ch3-legend-item"><span class="dot" style="background-color: var(--chart-cat-reserve);"></span> 預備金/災害準備金
                     </div>
                 </div>
             </div>
@@ -4275,15 +3295,15 @@
 
         <div class="ch3-conclusion-footer-rebuilt">
             <p class="ch3-conclusion-text">
-                這些項目因為預算遲未審查而無法使用，雖然補助等經費可以在總預算三讀後回溯發放，但凡涉及工程等費用，可能因為執行期不足而導致經費無法發揮使用，最終剩餘沒有執行的錢仍須回歸國庫，不能留到明年繼續沿用。
+                這些項目因為預算遲未審查而無法使用，流程補助款可以在三讀後追加發放，但凡涉及工程等費用，可能因為執行期不足而導致經費無法發揮使用，最終剩餘沒有執行的錢仍須回歸國庫，不能留到明年繼續沿用。
             </p>
         </div>
     </section>
 
-    <section class="chapter-section" id="chapter-4">
+    <section class="chapter-section" id="chapter-4" style="background-color: var(--bg-deep); padding-bottom: 100px;">
         <div class="chapter-intro"
             style="max-width: 800px; margin: 0 auto; padding: 100px 20px 40px 20px; text-align: center;">
-            <h2 class="chapter-heading">
+            <h2 style="font-size: 2.5rem; color: var(--np-seal-red-bright); margin-bottom: 30px;">
                 在野提718億新興計畫方案
             </h2>
         </div>
@@ -4292,11 +3312,12 @@
             style="max-width: 700px; margin: 0 auto; padding: 0 20px; display: flex; flex-direction: column; gap: 60px;">
 
             <div style="display: flex; flex-direction: column; gap: 30px;">
-                <p class="editorial-body on-dark">
+                <p
+                    style="font-size: 1.35rem; color: var(--np-text-ondark); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
                     國民黨立法院黨團1月16日提出718億新興計畫先行動支案並逕付二讀，共涵蓋38項計畫。國民黨立委羅智強指出，動支案主要是針對地方民生急迫的一些新增計畫，或者是新興計畫裡面的一些支出專案。該案於3月6日通過。
                 </p>
-                <div class="dynamic-chart-box" id="ch4-pyramid"
-                    style="position: relative; height: auto; width: 100%; padding: 0; pointer-events: auto;">
+                <div class="dynamic-chart-box"
+                    style="position: relative; opacity: 1; visibility: visible !important; transform: none !important; height: auto; width: 100%; padding: 0; pointer-events: auto;">
                     <div class="dash-container-box" style="max-width: 100%;">
                         <div class="dash-header">
                             <h3>718億先行動支方案納入與排除項目金額對比</h3>
@@ -4327,60 +3348,60 @@
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 0ms;" data-target-width="0%"></div><span
+                                <div class="bar-rect rect-danger" style="width: 0%;"></div><span
                                     class="val-num">0</span>
                             </div>
                             <div class="cat-item">地方財政與<br>大眾通勤補貼</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 0ms;" data-target-width="100%"></div><span
+                                <div class="bar-rect rect-primary" style="width: 100%;"></div><span
                                     class="val-num">399.35</span>
                             </div>
                         </div>
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 50ms;" data-target-width="16.17%"></div><span
+                                <div class="bar-rect rect-danger" style="width: 16.17%;"></div><span
                                     class="val-num">64.58</span>
                             </div>
                             <div class="cat-item">氣候調適、治水<br>與環保基建</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 50ms;" data-target-width="38.03%"></div><span
+                                <div class="bar-rect rect-primary" style="width: 38.03%;"></div><span
                                     class="val-num">151.88</span>
                             </div>
                         </div>
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 100ms;" data-target-width="10.15%"></div><span
+                                <div class="bar-rect rect-danger" style="width: 10.15%;"></div><span
                                     class="val-num">40.53</span>
                             </div>
                             <div class="cat-item">醫療與少子化對策</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 100ms;" data-target-width="29.84%"></div><span
+                                <div class="bar-rect rect-primary" style="width: 29.84%;"></div><span
                                     class="val-num">119.18</span>
                             </div>
                         </div>
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 150ms;" data-target-width="33.14%"></div><span
+                                <div class="bar-rect rect-danger" style="width: 33.14%;"></div><span
                                     class="val-num">132.34</span>
                             </div>
                             <div class="cat-item">戰略科技研發與國防升級</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 150ms;" data-target-width="4.94%"></div><span
+                                <div class="bar-rect rect-primary" style="width: 4.94%;"></div><span
                                     class="val-num">19.74</span>
                             </div>
                         </div>
 
                         <div class="pyramid-align-row">
                             <div class="bar-group left-bar-box">
-                                <div class="bar-rect rect-danger" style="width: 0%; transition-delay: 200ms;" data-target-width="15.48%"></div><span
+                                <div class="bar-rect rect-danger" style="width: 15.48%;"></div><span
                                     class="val-num">61.83</span>
                             </div>
                             <div class="cat-item">其他<br>（建物整修、公務車汰換）</div>
                             <div class="bar-group right-bar-box">
-                                <div class="bar-rect rect-primary" style="width: 0%; transition-delay: 200ms;" data-target-width="6.89%"></div><span
+                                <div class="bar-rect rect-primary" style="width: 6.89%;"></div><span
                                     class="val-num">27.50</span>
                             </div>
                         </div>
@@ -4399,7 +3420,8 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 30px;">
-                <p class="editorial-body on-dark">
+                <p
+                    style="font-size: 1.35rem; color: var(--np-text-ondark); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
                     根據提案內容，718億先行動支方案多聚焦在對民眾的補助項目，或民生所需之項目。
                 </p>
                 <div class="dynamic-chart-box"
@@ -4526,7 +3548,8 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 30px;">
-                <p class="editorial-body on-dark">
+                <p
+                    style="font-size: 1.35rem; color: var(--np-text-ondark); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
                     而被排除在先行動支方案的項目，則多是AI建設、無人機等工作計畫。
                 </p>
                 <div class="dynamic-chart-box"
@@ -4653,15 +3676,17 @@
             </div>
             <div class="chapter-intro"
                 style="max-width: 800px; margin: 0 auto; padding: 100px 20px 40px 20px; text-align: center;">
-                <h2 class="chapter-heading">
+                <h2 style="font-size: 2.5rem; color: var(--np-seal-red-bright); margin-bottom: 30px;">
                     718億預算能否先動支仍有疑慮
                 </h2>
             </div>
-            <p class="editorial-body on-dark">
+            <p
+                style="font-size: 1.35rem; color: var(--np-text-ondark); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
                 除了排擠掉部分施政項目外，立院通過先行動支方案後預算能不能使用也是爭執焦點。審計部審計長陳瑞敏說明，預算法裡規定，如果有還沒完成審議、但經立法院先行同意動支的，是可以執行的。依據預算法第54條規定，總預算如未按時完成審議，新興資本支出及新增計畫可以依預算法第88條，或經立法院同意後辦理。
             </p>
 
-            <p class="editorial-body on-dark">
+            <p
+                style="font-size: 1.35rem; color: var(--np-text-ondark); line-height: 1.9; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
                 但是行政院回應，立法院此公決案史無前例，且「暫時同意動支」不符合憲法與預算法的規定。立法院未來審議整本中央政府總預算案時，依然可以刪除或凍結任何一筆新興計畫預算，造成預算執行的不確定性，立院應儘速審議整體總預算案。
             </p>
 
@@ -4670,28 +3695,30 @@
 
     <section class="footer-cta">
         <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 30px; margin-bottom: 40px;">
-                <p class="editorial-body on-dark">
-                    隨著總預算付委，行政院也函請機關新興計畫預算執行作業，TPASS 2.0、生育給付等補助項目目前都已開始進行。
-                </p>
-
-                <p class="editorial-body on-dark">
-                    115年度總預算正在審議，在朝野協商及之後院會表決程序中又會出現哪些新議題，也請持續鎖定中央社網站相關報導。
-                </p>
-            </div>
-
-            <a href="database-v2.html" class="cta-btn">
-                進入完整計畫預算資料庫 <span class="cta-arrow">→</span>
+            <a href="database-legacy.html" class="cta-btn">
+                進入完整計畫預算資料庫 <span style="font-size: 1.5rem;">→</span>
             </a>
 
             <br>
             <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="cna-link-btn">
                 前往中央社 115年度總預算案專頁 ↗
             </a>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 30px; margin-top: 40px;">
+                <p
+                    style="font-size: 1rem; color: var(--np-text-ondark); line-height: 1.8; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
+                    隨著總預算付委，行政院也函請機關新興計畫預算執行作業，TPASS 2.0、生育給付等補助項目目前都已開始進行。
+                </p>
+
+                <p
+                    style="font-size: 1rem; color: var(--np-text-ondark); line-height: 1.8; text-align: justify; max-width: 750px; margin: 0 auto; font-weight: 500;">
+                    115年度總預算正在審議，在朝野協商及之後院會表決程序中又會出現哪些新議題，也請持續鎖定中央社網站相關報導。
+                </p>
+            </div>
         </div>
     </section>
 
-    <footer class="page-footer">
+    <footer style="background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.2px) 0 0/4px 4px, var(--bg-deep); color: var(--np-muted-ondark); text-align: center; padding: 24px 20px; font-size: 0.85rem;">
         copyright © 2026 中央通訊社版權所有
     </footer>
 
@@ -4712,6 +3739,23 @@
                         document.querySelectorAll('.chapter-section, .chapter-section-rebuilt, .scroll-story-rebuilt').forEach(c => c.classList.remove('is-active-chapter'));
                         chapter.classList.add('is-active-chapter');
 
+                        // 1. 第一章時間軸邏輯
+                        if (chapter.id === 'chapter-1') {
+                            const progressVal = entry.target.getAttribute('data-progress');
+                            const nodesAttr = entry.target.getAttribute('data-nodes');
+                            if (progressVal && nodesAttr) {
+                                const activeNodes = nodesAttr.split(',').map(Number);
+                                document.getElementById('timeline-progress-bar').style.height = progressVal + '%';
+                                document.querySelectorAll('#chapter-1 .time-node').forEach(node => node.classList.remove('node-active', 'node-highlight'));
+                                activeNodes.forEach(num => {
+                                    const node = document.getElementById(`t-node-${num}`);
+                                    if (node) {
+                                        if (num >= 8) node.classList.add('node-highlight');
+                                        else node.classList.add('node-active');
+                                    }
+                                });
+                            }
+                        }
                         // 3. 第三章比例圖與圓餅圖切換邏輯
                         if (chapter.id === 'chapter-3') {
                             const visualType = entry.target.getAttribute('data-visual');
@@ -4758,167 +3802,20 @@
                     }
                 }
             });
-            // 底部感應帶由 -20% 收窄為 -8%：原本卡片要捲過視窗底部近 1/5 才會標記 is-active，
-            // 導致圖表比卡片文字慢半拍才連動；收窄後卡片一進入閱讀區、圖表即同步更新，
-            // 同時保留上方 -10% 的安全帶，避免卡片才剛探頭就觸發。
-        }, { rootMargin: '-10% 0px -8% 0px', threshold: 0.05 });
+            // 🎯 請將網頁最底下 observer 註冊的這一行，精準修改為這段寬容版本：
+        }, { rootMargin: '-10% 0px -20% 0px', threshold: 0.05 }); // 🔥 大幅拓寬上下安全感應帶，字卡再也不會在半路閃退！
 
         scenes.forEach(scene => observer.observe(scene));
-
-        // 718億先行動支方案金字塔圖：每一列（.pyramid-align-row）各自捲入視窗時觸發一次
-        // 進場動畫，之後不再重複觸發。改為逐列觀察（而非觀察整個高盒子）是因為手機版
-        // 直式堆疊 5 列後整個 #ch4-pyramid 相當高，若用單一 threshold 觀察整個盒子，
-        // 盒子頂端一露出一小截就達到門檻觸發，此時長條本體其實還在螢幕下方看不到，
-        // 使用者捲到看得見長條時寬度早已是最終值，長出動畫等於白跑
-        const ch4Pyramid = document.getElementById('ch4-pyramid');
-        if (ch4Pyramid) {
-            const ch4PyramidRows = ch4Pyramid.querySelectorAll('.pyramid-align-row');
-            const ch4PyramidObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        ch4Pyramid.classList.add('visible-box');
-                        entry.target.querySelectorAll('.bar-rect').forEach(bar => {
-                            bar.style.width = bar.getAttribute('data-target-width');
-                        });
-                        ch4PyramidObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.3 });
-            ch4PyramidRows.forEach(row => ch4PyramidObserver.observe(row));
-        }
-
         // =======================================================
         // 全新重構：第二章獨立物理滾動監聽器 (終極百分比放行版)
         // =======================================================
-        // 卡片 9 進場排序：桌機版讓第三張歷史照片的淡入（transitionend）先完成，
-        // 字卡才開始進場，避免兩者同一瞬間一起冒出來。用 setTimeout 保底，
-        // 萬一 transitionend 沒觸發（例如轉場被中斷），字卡仍會如期解鎖，不會卡死。
-        function armStep9CardReveal(finalCard) {
-            if (!finalCard || finalCard.dataset.cardRevealArmed === '1') return;
-            finalCard.dataset.cardRevealArmed = '1';
-
-            const reducedMotion = typeof window.matchMedia === 'function'
-                && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (reducedMotion) {
-                finalCard.classList.add('history-image-settled');
-                return;
-            }
-
-            let settled = false;
-            const settle = () => {
-                if (settled) return;
-                settled = true;
-                finalCard.classList.add('history-image-settled');
-            };
-
-            const finalImage = document.querySelector('#backdrop-images-rebuilt .history-img-frame:nth-child(3)');
-            if (finalImage) {
-                finalImage.addEventListener('transitionend', function onFinalImageDone(e) {
-                    if (e.propertyName !== 'opacity') return;
-                    finalImage.removeEventListener('transitionend', onFinalImageDone);
-                    settle();
-                });
-            }
-            setTimeout(settle, 600);
-        }
-
-        // Cached once: MediaQueryList objects stay live (their `.matches` reflects the
-        // current viewport), so re-calling window.matchMedia() on every scroll frame was
-        // pure overhead. Guarded so a missing matchMedia degrades to "not matched".
-        const MQ_REDUCED = (typeof window.matchMedia === 'function')
-            ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
-        const MQ_MOBILE = (typeof window.matchMedia === 'function')
-            ? window.matchMedia('(max-width: 1024px)') : { matches: false };
-
         function updateChapter2Stage() {
             const chapter2 = document.getElementById('chapter-2-rebuilt');
             const stage = document.getElementById('gantt-stage-rebuilt');
             const ganttBox = document.getElementById('backdrop-gantt-rebuilt');
             const imagesBox = document.getElementById('backdrop-images-rebuilt');
-            const chapter3 = document.getElementById('chapter-3-rebuilt');
-            const chapter3Intro = chapter3 ? chapter3.querySelector('.chapter-intro') : null;
 
             if (!chapter2 || !stage || !ganttBox || !imagesBox) return;
-
-            // The last Chapter 2 card owns the image-stage exit. Geometry is recalculated
-            // on every rAF frame so forward jumps and reverse scrolling cannot leave stale layers.
-            const finalStoryCard = chapter2.querySelector('[data-rebuilt-step="9"] .story-card');
-            const updateHistoryExit = () => {
-                if (!finalStoryCard) return;
-
-                const viewportHeight = window.innerHeight;
-                const finalCardTop = finalStoryCard.getBoundingClientRect().top;
-                const chapter3Top = chapter3 ? chapter3.getBoundingClientRect().top : Infinity;
-                const reducedMotion = MQ_REDUCED.matches;
-                const isMobileExit = MQ_MOBILE.matches;
-                // 桌機：原本 0.55/0.35 讓文字在讀者還沒讀完就開始淡出；延後到 0.40/0.20，
-                // 給讀者多一段捲動距離維持全不透明，淡出區間寬度不變（都是 0.2）。
-                // 手機：讀者反應結尾（最後一張字卡＋最後一張歷史照片對齊呈現）收得太快——
-                // 應該等兩者對齊、讀者看完，字卡本身自然捲到視窗頂端準備離開時，才開始
-                // 淡出。故手機版把起點延後到卡片頂端逼近視窗頂端（10%）才開始，終點延到
-                // 卡片頂端已捲出視窗上緣一小段（-15%）才算全淡出，且不再用「第三章頂部
-                // 一露出畫面底部」當強制淡出的門檻（那時第二章可能還佔滿大半螢幕），改成
-                // 「第三章頂端已經抵達視窗最頂端」（第二章已完全捲出）才強制收尾完成。
-                const start = viewportHeight * (isMobileExit ? 0.10 : 0.40);
-                const end = viewportHeight * (isMobileExit ? -0.15 : 0.20);
-                let progress = reducedMotion
-                    ? (finalCardTop <= viewportHeight * 0.30 ? 1 : 0)
-                    : Math.min(1, Math.max(0, (start - finalCardTop) / (start - end)));
-
-                // Scroll positions resolve to whole CSS pixels, so retain the intended
-                // threshold when a 35vh boundary lands between two device pixels.
-                if (!reducedMotion && finalCardTop <= end + 1) progress = 1;
-
-                // Chapter 3 entering from below is the hard exit boundary for large scroll jumps.
-                // Mobile waits until chapter 3's top has reached the very top of the viewport
-                // (chapter 2 has fully scrolled past) rather than the moment it merely peeks
-                // in from the bottom, so the card/photo pairing isn't cut short.
-                if (isMobileExit ? chapter3Top <= 0 : chapter3Top <= viewportHeight) progress = 1;
-
-                stage.classList.toggle('history-exit-active', finalCardTop <= viewportHeight * 0.6);
-                stage.classList.toggle('history-exit-complete', progress >= 1);
-
-                // Chapter 3's intro reveals from the exact same completion state that
-                // already governs Chapter 2's exit, not a coarser stage-lifecycle signal.
-                if (chapter3Intro) {
-                    chapter3Intro.classList.toggle('chapter3-intro-revealed', stage.classList.contains('history-exit-complete'));
-                }
-
-                if (isMobileExit) {
-                    // Reader asked for the photo band and the final text card to scroll
-                    // up and off the screen TOGETHER, not have the (fixed, otherwise
-                    // static) photo band merely dissolve in place while the text — which
-                    // already scrolls naturally — slides past it. So instead of fading
-                    // opacity, publish a translateY offset (--ch2-exit-offset, combined
-                    // with the -50% centering in CSS) that grows from 0 to however far the
-                    // band's own rest-position bottom edge sits from the viewport top
-                    // (vh/2 + height/2, since it's vertically centered) as `progress`
-                    // advances — that's the exact distance needed to fully clear the top
-                    // of the viewport, not just the band's own height.
-                    const stageHeight = stage.getBoundingClientRect().height;
-                    const restBottom = (viewportHeight / 2) + (stageHeight / 2);
-                    stage.style.setProperty('--ch2-exit-offset', (progress * restBottom) + 'px');
-                    stage.style.setProperty('--history-exit-opacity', '1');
-                    finalStoryCard.style.removeProperty('opacity');
-                    finalStoryCard.style.removeProperty('pointer-events');
-                } else {
-                    stage.style.setProperty('--ch2-exit-offset', '0px');
-                    stage.style.setProperty('--history-exit-opacity', String(1 - progress));
-
-                    // Same exit guard, second target: the step-9 text story-card itself, not
-                    // just the fixed image backdrop above. Only touch its inline opacity once
-                    // actually exiting (progress > 0) so this never fights the card's own
-                    // entrance reveal (armStep9CardReveal's `.history-image-settled` class)
-                    // while still inside step 9.
-                    if (progress > 0) {
-                        finalStoryCard.style.opacity = String(1 - progress);
-                        finalStoryCard.style.pointerEvents = progress >= 1 ? 'none' : 'auto';
-                    } else {
-                        finalStoryCard.style.removeProperty('opacity');
-                        finalStoryCard.style.removeProperty('pointer-events');
-                    }
-                }
-            };
 
             // 1. 取得第二章在整個網頁跑道中的物理邊界位置
             const rect = chapter2.getBoundingClientRect();
@@ -4927,114 +3824,75 @@
             if (rect.top <= 0 && rect.bottom >= 0) {
                 stage.classList.add('stage-active-rebuilt-now'); // 點亮 Fixed 舞台
 
-                const isMobile = MQ_MOBILE.matches;
+                // 3. 💡 百分比分流：計算讀者目前「肉眼瀏覽這一章」的精準進度百分比 (0% ~ 100%)
+                const totalScrollableHeight = rect.height - window.innerHeight;
+                const scrolledDistance = -rect.top;
+                const scrollPercent = (scrolledDistance / totalScrollableHeight) * 100;
 
-                // 3. 判斷「目前第幾步」。
-                //    桌機：沿用原本的整章捲動百分比分段——桌機卡片固定 100vh、與圖表左右並排，
-                //    百分比制運作良好，維持不變。
-                //    手機（C2 重構：圖表固定頂部帶狀區、卡片改回正常文件流）：改採卡片實際捲動
-                //    位置判斷，與第三章 updateChapter3Bars 手法一致。百分比制假設每張卡片佔用
-                //    等長捲動距離，但卡片高度會因文字長短、手機版 padding-top 產生落差，百分比制
-                //    無法自動對齊，會讓步驟切換點跟卡片實際捲入畫面的時間點不同步——尤其文字較長
-                //    的卡片（如卡 6、卡 9），圖表／照片帶狀區在手機版是持續可見的（C2 重構前是整格
-                //    淡入淡出、看不出這個落差），會在卡片文字都還沒捲完時就先切換，讓下一步的照片
-                //    在卡片文字底下若隱若現。改用位置判斷可自動適應任何卡片高度、徹底解決。
-                let currentStep;
-                if (isMobile) {
-                    const cards = chapter2.querySelectorAll('.gantt-card-rebuilt');
-                    currentStep = 1;
-                    cards.forEach((card) => {
-                        const step = parseInt(card.getAttribute('data-rebuilt-step'), 10);
-                        // 卡片內文字用 padding-top:60dvh 推到帶狀區之下；卡片頂端一旦捲到視窗頂端
-                        // （top<=0），文字就已進入下方閱讀區，此時該卡即算目前使用中的卡片。
-                        if (card.getBoundingClientRect().top <= 0) { currentStep = step; }
-                    });
-                } else {
-                    const totalScrollableHeight = rect.height - window.innerHeight;
-                    const scrolledDistance = -rect.top;
-                    const scrollPercent = (scrolledDistance / totalScrollableHeight) * 100;
-                    // 卡片 2 原本 12% 就出現，讀者反應「太早出現」（引言階段還沒讀完），
-                    // 將引言窗口從 12% 延後到 20%，卡片 2-6 依序順延，卡片 9 的窗口同步微增
-                    if (scrollPercent < 20) currentStep = 1;
-                    else if (scrollPercent < 30) currentStep = 2;
-                    else if (scrollPercent < 40) currentStep = 3;
-                    else if (scrollPercent < 50) currentStep = 4;
-                    else if (scrollPercent < 60) currentStep = 5;
-                    else if (scrollPercent < 70) currentStep = 6;
-                    // 卡片 7、8 皆無文字內容（僅為照片），縮短區間，把時間讓給卡片 9 的長文字
-                    else if (scrollPercent < 77) currentStep = 7;
-                    else if (scrollPercent < 84) currentStep = 8;
-                    else currentStep = 9;
-                }
-
-                // 4. 重置所有階梯劇本 Class（包含卡片 1 引言與後續卡片編號）
-                chapter2.classList.remove('rebuilt-step-1', 'rebuilt-step-2', 'rebuilt-step-3', 'rebuilt-step-4', 'rebuilt-step-5', 'rebuilt-step-6', 'rebuilt-step-7', 'rebuilt-step-8', 'rebuilt-step-9');
+                // 4. 重置所有階梯劇本 Class（包含新加入的卡片編號）
+                chapter2.classList.remove('rebuilt-step-2', 'rebuilt-step-3', 'rebuilt-step-4', 'rebuilt-step-5', 'rebuilt-step-6', 'rebuilt-step-7', 'rebuilt-step-8', 'rebuilt-step-9');
                 ganttBox.classList.remove('box-visible-rebuilt-now');
                 imagesBox.classList.remove('box-visible-rebuilt-now');
 
-                // 座標軸（卡片2）與紅線／灰底區塊（卡片4）改用各自對應卡片本身的位置判斷，
-                // 而不是等整章百分比制的 currentStep 追上——只要該卡片的 story-card 頂部已經
-                // 捲到視窗高度 50% 就先點亮，讓圖表元素跟著卡片文字同步出現，不會慢半拍。
-                // 限制在 currentStep<=6（圖表仍相關的範圍）內才生效，避免捲到卡片7~9歷史照片
-                // 段時，這兩張卡片的殘留位置（已遠遠捲出畫面上方）誤判成「還沒到」而被錯誤點亮。
-                const vh = window.innerHeight;
-                const card2Story = chapter2.querySelector('[data-rebuilt-step="2"] .story-card');
-                const card4Story = chapter2.querySelector('[data-rebuilt-step="4"] .story-card');
-                const axisEarly = currentStep <= 6 && card2Story && card2Story.getBoundingClientRect().top <= vh * 0.5;
-                const deadlineEarly = currentStep <= 6 && card4Story && card4Story.getBoundingClientRect().top <= vh * 0.5;
+                // 方塊長出時機：改以「卡片是否已實際進入視窗」（.is-active，來自下方 IntersectionObserver）
+                // 為準，而非只看區塊捲動百分比——避免百分比門檻到了，但讀者實際還沒捲到卡片 3，
+                // 方塊就提早長出的時間差問題。scrollPercent >= 40 僅作保底（避免 IntersectionObserver
+                // 尚未觸發時方塊卡在 0 寬）。
+                const allBars = document.querySelectorAll('#chapter-2-rebuilt .gantt-bar-rebuilt');
+                const activeCard = document.querySelector('#chapter-2-rebuilt .gantt-card-rebuilt.is-active');
+                const activeStepNum = activeCard ? parseInt(activeCard.getAttribute('data-rebuilt-step'), 10) : 0;
+                const barsShouldGrow = activeStepNum >= 3 || scrollPercent >= 40;
+                allBars.forEach(bar => { bar.style.setProperty('width', barsShouldGrow ? 'var(--w)' : '0', 'important'); });
 
-                // 方塊長出時機：第二張卡片「…這張圖表橫向展現了歷年各政黨執政時的預算審議時程」
-                // 一出現，圖表網格同步顯示，方塊就應該一起長出，讓「卡片提到圖表」與「圖表有內容」
-                // 同步，不再慢半拍。故只要進入圖表區間（卡片 2～6）方塊即長出；引言（卡片1）與
-                // 歷史照片段（卡片7～9，圖表退場）則收起。
-                // 5. 🎬 依目前步驟套用對應 class / 帶狀區顯示
-                if (currentStep === 1) {
-                    // 卡片 1 (引言)：手機版卡片以 rebuilt-step-N class 控制顯示，
-                    // 少了這行 step-1 從不會被點亮 → 第一張卡片「回顧歷年審查歷程…」永遠不顯示
-                    // （桌機版卡片在文件流中預設可見，故只有手機版看得出這個 bug）。
-                    // 圖表面板灰色空框在此就先長出（無座標軸強調），座標軸留給卡片 2 才亮起，
-                    // 讓兩張卡讀起來是漸進的兩個狀態，而不是同一瞬間全部冒出來。
-                    ganttBox.classList.add('box-visible-rebuilt-now');
-                    chapter2.classList.add('rebuilt-step-1');
+                // 5. 🎬 精密九段式跑道分流 (0% - 100%)
+                // 卡片 2 原本 12% 就出現，讀者反應「太早出現」（引言階段還沒讀完），
+                // 將引言窗口從 12% 延後到 20%，卡片 2-6 依序順延，卡片 9 的窗口同步微增
+                if (scrollPercent < 20) {
+                    // 卡片 1 (引言)
                 }
-                else if (currentStep === 2) {
+                else if (scrollPercent >= 20 && scrollPercent < 30) {
                     // 卡片 2 (網格)
                     ganttBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-2');
                 }
-                else if (currentStep === 3) {
+                else if (scrollPercent >= 30 && scrollPercent < 40) {
                     // 卡片 3 (Bar 長出——文字明確提到「方塊的顏色代表執政黨」，此時應已看到方塊；
-                    // 長出時機交由上方 barsShouldGrow 依目前步驟控制)
+                    // 長出時機交由上方 barsShouldGrow 依卡片實際可視狀態控制)
                     ganttBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-2', 'rebuilt-step-3');
                 }
-                else if (currentStep === 4) {
+                else if (scrollPercent >= 40 && scrollPercent < 50) {
                     // 卡片 4 (紅線與深灰區)
                     ganttBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-2', 'rebuilt-step-3', 'rebuilt-step-4');
                 }
-                else if (currentStep === 5) {
+                else if (scrollPercent >= 50 && scrollPercent < 60) {
                     // 卡片 5 (蔡馬高亮)
                     ganttBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-2', 'rebuilt-step-3', 'rebuilt-step-4', 'rebuilt-step-5');
                 }
-                else if (currentStep === 6) {
+                else if (scrollPercent >= 60 && scrollPercent < 70) {
                     // 卡片 6 (96年高亮)
                     ganttBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-2', 'rebuilt-step-3', 'rebuilt-step-4', 'rebuilt-step-6');
                 }
-                else if (currentStep === 7) {
-                    // 📸 進入卡片 7：甘特圖退場，第一張歷史檔案照片在中央浮現
+                else if (scrollPercent >= 70 && scrollPercent < 77) {
+                    // 📸 進入卡片 7 跑道：甘特圖退場，第一張歷史檔案照片在中央浮現
+                    // （卡片 7 無文字內容，僅為照片，故縮短區間，把時間讓給卡片 9 的長文字）
                     imagesBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-7');
                 }
-                else if (currentStep === 8) {
-                    // 卡片 8：中央展示兩張相框輪播
+                else if (scrollPercent >= 77 && scrollPercent < 84) {
+                    // 卡片 8 階段：中央展示兩張相框輪播
+                    // （同上，卡片 8 也無文字內容，縮短區間）
                     imagesBox.classList.add('box-visible-rebuilt-now');
                     chapter2.classList.add('rebuilt-step-8');
                 }
-                else if (currentStep === 9) {
+                else if (scrollPercent >= 84 && scrollPercent <= 100) {
                     // 卡片 9 (結局大結局文字)
+                    // 原本只有 92-100（8 個百分點，九個步驟中最短），但這段文字是全章最長的一段，
+                    // 導致「消失太快」。改為 84-100（16 個百分點），從卡片 7、8（皆無文字）各借 3 點。
+                    ganttBox.classList.remove('box-visible-rebuilt-now');
                     imagesBox.classList.add('box-visible-rebuilt-now'); // 點亮歷史照片大盒子 (不讓它閃退消失！)
                     chapter2.classList.add('rebuilt-step-9'); // 點亮靠左的結局大照片
 
@@ -5042,20 +3900,22 @@
                     const finalCard = document.querySelector('.gantt-card-rebuilt[data-rebuilt-step="9"]');
                     if (finalCard) {
                         finalCard.classList.add('is-active');
-                        armStep9CardReveal(finalCard);
                     }
                 }
-
-                // 卡片本身已經捲到 50% 視窗高度，就強制補上對應 class，讓座標軸／紅線區塊
-                // 提早跟卡片文字同步出現，不等整章百分比制的門檻追上。
-                if (axisEarly) chapter2.classList.add('rebuilt-step-2');
-                if (deadlineEarly) chapter2.classList.add('rebuilt-step-4');
+                else {
+                    // 完全滑開這一章，關燈，交還父容器控制。
+                    // 💡 修正：scrollPercent > 100 時（卡片 9 讀完，但 rect.bottom 要再多滾一整個
+                    // 視窗高度才會 < 0）必須連舞台本身（stage-active-rebuilt-now）一起關閉，
+                    // 否則手機版舞台自帶的不透明深色底會在這段空窗期一路蓋住剛捲入畫面的第三章標題。
+                    stage.classList.remove('stage-active-rebuilt-now');
+                    ganttBox.classList.remove('box-visible-rebuilt-now');
+                    imagesBox.classList.remove('box-visible-rebuilt-now');
+                    chapter2.classList.remove('rebuilt-step-2', 'rebuilt-step-3', 'rebuilt-step-4', 'rebuilt-step-5', 'rebuilt-step-6', 'rebuilt-step-7', 'rebuilt-step-8', 'rebuilt-step-9');
+                }
             } else {
                 // 滾出第二章範圍，徹底關燈，不遮擋上下章節
                 stage.classList.remove('stage-active-rebuilt-now');
             }
-
-            updateHistoryExit();
         }
         // =======================================================
         // 🕹️ 第三章：鋼性座標攔截大腦（物理間距完美對齊）
@@ -5074,81 +3934,84 @@
                 const containerTop = ch3Container.getBoundingClientRect().top;
                 const cards = ch3Section.querySelectorAll('.gantt-card-rebuilt');
 
-                // 桌機：卡片頂端越過圖表頂端下方 100px 即算數（外框與可見文字幾乎重合）。
-                // 手機：⚠️ 外框 .gantt-card-rebuilt 帶有 padding-top: header + 82dvh，
-                //       用來把可見文字推到帶狀區下方的閱讀區；也就是說「外框頂端」比
-                //       「讀者真正看得見的文字」整整高出 82dvh。原本仍拿外框量測，
-                //       導致每一步都提早約 82dvh 觸發 —— 實測畫面：卡1 的文字還飄在
-                //       帶狀區上方時，圖表就已經跳到 step2（紅條＋2992億），圖文完全對不上。
-                //       故手機改量測真正看得見的 .story-card。
-                const isMobile = MQ_MOBILE.matches;
-                const measureTop = (card) => {
-                    if (!isMobile) return card.getBoundingClientRect().top;
-                    return (card.querySelector('.story-card') || card).getBoundingClientRect().top;
-                };
-                // 門檻 88dvh 的推導：帶狀區下緣在 79dvh（top:21dvh + height:58dvh），
-                // 再往下留 9dvh 呼吸 —— 即「這張卡剛從畫面底部進入閱讀區」的那一刻換步驟，
-                // 此後到下一張卡進場前它都是當前步驟，一卡一步完全對齊。
-                const triggerLine = isMobile ? window.innerHeight * 0.88 : containerTop + 100;
+                // 桌機：卡片頂端越過圖表頂端下方 100px 即算數。
+                // 手機：圖表釘在上方帶狀區，卡片要「進入下方閱讀區」才算數，
+                //       否則步驟會在卡片還被帶狀區蓋住時就先觸發（動畫早於文字）。
+                const isMobile = typeof window.matchMedia === 'function'
+                    && window.matchMedia('(max-width: 968px)').matches;
+                const triggerOffset = isMobile ? window.innerHeight * 0.6 : 100;
 
                 let currentStep = 1;
                 cards.forEach((card, idx) => {
-                    if (measureTop(card) <= triggerLine) { currentStep = idx + 1; }
+                    const cardTop = card.getBoundingClientRect().top;
+                    if (cardTop <= containerTop + triggerOffset) { currentStep = idx + 1; }
                 });
 
+                const barTotal = document.getElementById('ch3-bar-total-grey');
+                const barImpact = document.getElementById('ch3-bar-impact-red');
+                const barNew = document.getElementById('ch3-bar-new-teal');
+                const barExtend = document.getElementById('ch3-bar-extend-blue');
+                const barReserve = document.getElementById('ch3-bar-reserve-orange');
                 const finalLabel = document.getElementById('ch3-label-final');
+                const legendBox = document.getElementById('ch3-main-legend');
 
-                ch3Section.classList.remove('ch3-step-1', 'ch3-step-2', 'ch3-step-3', 'ch3-step-4', 'ch3-step-5');
-                ch3Section.classList.add('ch3-step-' + Math.min(currentStep, 5));
+                function hideAllBars() {
+                    [barTotal, barImpact, barNew, barExtend, barReserve].forEach(bar => {
+                        if (bar) {
+                            bar.style.width = "0%"; bar.style.opacity = "0"; bar.style.visibility = "hidden";
+                            bar.classList.remove('dimmed-background');
+                        }
+                    });
+                }
 
-                // 🔥 【量測攔截點】同樣改用可見文字卡：拿外框量測會讓退場位移在卡5 的
-                //    文字都還沒進畫面（外框頂端已過圖表頂端，文字卻還在 103dvh 之下）
-                //    時就開始把圖表往上推，圖表等於在讀者看到最後一段文字前先跑掉。
-                const cardFiveTop = measureTop(cardFive);
+                // 🔥 【量測攔截點】
+                const cardFiveTop = cardFive.getBoundingClientRect().top;
 
-                // CSS resolves the transform. JavaScript publishes only a bounded
-                // progress length so layout ownership stays in the stylesheet.
-                //
-                // ⚠️ 退場基準點不可以用 containerTop（面板的 getBoundingClientRect）——
-                // 面板是被 --ch3-exit-offset 的 translateY 推動的元素，其 rect 已經含入
-                // 該位移，於是形成回饋迴圈：
-                //     offset_n = (靜止位置 − offset_{n−1}) − cardTop
-                // 這個遞迴不收斂，會在 offset 與 (B − offset) 兩值之間來回跳；再經過
-                // .gantt-sticky-box-rebuilt 那條 transition: transform 0.1s 的低通濾波
-                // 阻尼後，實際穩定在正確值的「一半」。結果就是圖表退場只跑一半速度，
-                // 卡5 讀完、結語都捲上來了，帶狀區（不透明深色底、z-index:5）還蓋在上面。
-                //
-                // 手機版改用帶狀區的 CSS top 計算值當基準：getComputedStyle().top 回傳的是
-                // 指定的 inset（21dvh 換算成 px），完全不受 transform 影響，沒有回饋。
-                // 帶狀區處於 sticky 貼住狀態時，該值就等於它在視窗中的實際頂端位置。
-                // 桌機維持原本以面板頂端為基準的行為，不受本次修正影響。
-                const exitAnchor = isMobile
-                    ? (parseFloat(getComputedStyle(stickyWrapper).top) || 0)
-                    : containerTop;
-                const exitOffset = Math.min(
-                    stickyWrapper.getBoundingClientRect().height,
-                    Math.max(0, exitAnchor - cardFiveTop)
-                );
-                ch3Section.style.setProperty('--ch3-exit-offset', exitOffset + 'px');
+                if (cardFiveTop <= containerTop) {
+                    // 💡 當第 5 張卡片超出圖表上緣時，圖表開始以 1:1 速度向上離場退場
+                    const offset = containerTop - cardFiveTop;
+                    stickyWrapper.style.transform = `translateY(${-offset}px)`;
+                } else {
+                    stickyWrapper.style.transform = "translateY(0px)";
+                }
 
                 // 🎬 精密色塊分流控制
                 if (currentStep === 1) {
+                    hideAllBars();
                     finalLabel.innerText = "115年總歲出：3兆349億7437萬1千元";
+                    barTotal.style.opacity = "1"; barTotal.style.visibility = "visible"; barTotal.style.width = "100%";
+                    if (legendBox) legendBox.classList.remove('show-legend');
                 }
                 else if (currentStep === 2) {
+                    hideAllBars();
                     finalLabel.innerText = "未審議影響金額：約2992億";
+                    barTotal.style.opacity = "1"; barTotal.style.visibility = "visible"; barTotal.style.width = "100%";
+                    barTotal.classList.add('dimmed-background');
+                    barImpact.style.opacity = "1"; barImpact.style.visibility = "visible"; barImpact.style.width = "9.8%";
+                    if (legendBox) legendBox.classList.remove('show-legend');
                 }
                 else if (currentStep === 3) {
                     finalLabel.innerText = "新興計畫金額約1017億";
+                    barImpact.style.opacity = "1"; barImpact.style.visibility = "visible"; barImpact.style.width = "100%";
+                    barImpact.classList.add('dimmed-background');
+                    barNew.style.zIndex = "5"; barNew.style.opacity = "1"; barNew.style.visibility = "visible"; barNew.style.width = "34%";
+                    if (legendBox) legendBox.classList.add('show-legend');
                 }
                 else if (currentStep === 4) {
                     finalLabel.innerText = "延續計畫增額約1805億";
+                    barImpact.style.opacity = "1"; barImpact.style.visibility = "visible"; barImpact.style.width = "100%";
+                    barImpact.classList.add('dimmed-background');
+                    barNew.style.zIndex = "5"; barNew.style.opacity = "1"; barNew.style.visibility = "visible"; barNew.style.width = "34%";
+                    barExtend.style.zIndex = "4"; barExtend.style.opacity = "1"; barExtend.style.visibility = "visible"; barExtend.style.width = "94.3%";
+                    if (legendBox) legendBox.classList.add('show-legend');
                 }
                 else if (currentStep >= 5) {
                     finalLabel.innerText = "預備金、災害準備金約170億";
+                    barNew.style.zIndex = "5"; barNew.style.opacity = "1"; barNew.style.visibility = "visible"; barNew.style.width = "34%";
+                    barExtend.style.zIndex = "4"; barExtend.style.opacity = "1"; barExtend.style.visibility = "visible"; barExtend.style.width = "94.3%";
+                    barReserve.style.zIndex = "3"; barReserve.style.opacity = "1"; barReserve.style.visibility = "visible"; barReserve.style.width = "100%";
+                    if (legendBox) legendBox.classList.add('show-legend');
                 }
-            } else {
-                ch3Section.style.setProperty('--ch3-exit-offset', '0px');
             }
         }
 
@@ -5162,39 +4025,7 @@
             const total = rect.height - window.innerHeight * 0.5;
             const scrolled = window.innerHeight * 0.5 - rect.top;
             const percent = total > 0 ? Math.min(100, Math.max(0, (scrolled / total) * 100)) : 0;
-            fill.style.setProperty('--timeline-progress', percent + '%');
-
-            // 依需求改為終點標記永遠是脈動的「?」，不再於捲滿時切換成「↓」箭頭——
-            // 完成與否已經由紅線本身畫滿與否傳達，標記本身不需要再變換內容。
-
-            // Every row — date node and story card alike, at every width including
-            // mobile — follows the physical line. Each row is revealed when the
-            // fill reaches its own leading edge, and the class is removed again
-            // when the reader scrolls backward, so both directions stay symmetric.
-            // The cheap fill/terminus update above runs every frame (so the end-state
-            // is always correct, even right after a fast scroll jump); the expensive
-            // per-row querySelectorAll + getBoundingClientRect loop below is gated to
-            // when Chapter 1 is actually on screen — it's pure waste otherwise, which is
-            // most of the page (all of Chapters 2/3/4).
-            const timelineOnScreen = rect.bottom > 0 && rect.top < window.innerHeight;
-            if (timelineOnScreen) {
-                // 紅線視覺頂端在畫面上的實際 Y 座標。不可直接拿 percent（用 total =
-                // rect.height - innerHeight*0.5 當分母的捲動進度）去對應每一行的容器內
-                // 座標來比較 —— 那個分母跟畫出填色高度用的 rect.height 不是同一個比例尺，
-                // 兩者換算會有落差，且落差隨行距容器頂端越遠越放大，導致線明明已經視覺上
-                // 劃過整張卡片、甚至到卡片中段才觸發淡入。改成直接用「紅線視覺頂端的螢幕
-                // 座標」跟「這一行視覺頂端的螢幕座標」比較，才是使用者實際在畫面上看到的
-                // 位置關係，不會受那個比例尺落差影響。
-                const fillTipViewportY = rect.top + (percent / 100) * rect.height;
-                container.querySelectorAll('.timeline-row.item-card, .timeline-row.item-node').forEach(row => {
-                    const rowRect = row.getBoundingClientRect();
-                    // 40px 領先量：紅線視覺頂端要先劃過「這一行視覺頂部再往下 40px」，
-                    // 該行（節點或卡片）才觸發淡入，讓紅線視覺上先抵達、內容隨後跟上。
-                    // 節點與卡片共用同一套比較方式與領先量，讓整條時間軸讀起來是同一種節奏。
-                    const revealedClass = row.classList.contains('item-card') ? 'timeline-card-revealed' : 'timeline-node-revealed';
-                    row.classList.toggle(revealedClass, fillTipViewportY >= rowRect.top + 40);
-                });
-            }
+            fill.style.height = percent + '%';
         }
 
         // =======================================================
@@ -5213,13 +4044,6 @@
                 requestAnimationFrame(onScrollFrame);
             }
         }, { passive: true });
-        window.addEventListener('resize', () => {
-            if (!scrollRafPending) {
-                scrollRafPending = true;
-                requestAnimationFrame(onScrollFrame);
-            }
-        }, { passive: true });
-        onScrollFrame();
 
         // =======================================================
         // 側邊導覽列：滾動高亮
@@ -5261,49 +4085,11 @@
         })();
     </script>
 
-    <button class="back-to-hero-btn" id="back-to-hero-btn" type="button" aria-label="回到最上方"
-        aria-hidden="true" tabindex="-1">↑</button>
+    <button class="back-to-hero-btn" id="back-to-hero-btn" type="button" aria-label="回到最上方">↑</button>
 
     <script>
         (function () {
             var backToHeroBtn = document.getElementById('back-to-hero-btn');
-            var hero = document.getElementById('main');
-
-            if (!backToHeroBtn || !hero) return;
-
-            function setBackToHeroAvailability(isAvailable) {
-                backToHeroBtn.classList.toggle('is-available', isAvailable);
-                backToHeroBtn.setAttribute('aria-hidden', isAvailable ? 'false' : 'true');
-                backToHeroBtn.tabIndex = isAvailable ? 0 : -1;
-            }
-
-            setBackToHeroAvailability(false);
-
-            if ('IntersectionObserver' in window) {
-                var heroObserver;
-                var observeHero = function () {
-                    if (heroObserver) heroObserver.disconnect();
-                    var header = document.querySelector('.site-header');
-                    var headerHeight = header ? Math.ceil(header.getBoundingClientRect().height) : 0;
-                    heroObserver = new IntersectionObserver(function (entries) {
-                        setBackToHeroAvailability(!entries[0].isIntersecting);
-                    }, {
-                        threshold: 0,
-                        rootMargin: '-' + headerHeight + 'px 0px 0px 0px'
-                    });
-                    heroObserver.observe(hero);
-                };
-                observeHero();
-                window.addEventListener('resize', observeHero, { passive: true });
-            } else {
-                var updateBackToHeroAvailability = function () {
-                    var header = document.querySelector('.site-header');
-                    var headerBottom = header ? header.getBoundingClientRect().bottom : 0;
-                    setBackToHeroAvailability(hero.getBoundingClientRect().bottom <= headerBottom);
-                };
-                window.addEventListener('scroll', updateBackToHeroAvailability, { passive: true });
-                updateBackToHeroAvailability();
-            }
 
             backToHeroBtn.addEventListener('click', function () {
                 // 頁面內含大量捲動連動的動畫／釘選區塊，smooth 捲動會逐格觸發整段內容的計算而明顯卡頓，改用瞬間跳轉

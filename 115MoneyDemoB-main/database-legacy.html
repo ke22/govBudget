@@ -366,6 +366,12 @@
             color: var(--np-ink);
         }
 
+        .summary-amount {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--danger-color);
+        }
+
         /* Project Cards */
         .project-block {
             background-color: var(--np-paper-panel);
@@ -415,37 +421,6 @@
             font-size: var(--type-caption);
             font-weight: bold;
             width: fit-content;
-        }
-
-        /* 卡片關鍵字標籤：沿用 .pill-btn 的藥丸外型與邊框語彙，較小、較淡；
-           點擊後會以該關鍵字搜尋並列出相關計畫，資料來自試算表「關鍵字」欄。 */
-        .pb-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 3px;
-        }
-
-        .pb-tag {
-            background: var(--np-paper);
-            border: 1px solid var(--np-hairline);
-            color: var(--np-muted);
-            padding: 3px 10px;
-            border-radius: 50px;
-            font-size: var(--type-caption);
-            font-weight: 600;
-            font-family: inherit;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: background .15s, color .15s, border-color .15s;
-        }
-
-        .pb-tag:hover,
-        .pb-tag:focus-visible {
-            background: var(--np-seal-red);
-            border-color: var(--np-seal-red);
-            color: #fff;
-            outline: none;
         }
 
         .pb-amount {
@@ -722,9 +697,9 @@
         <button class="nav-toggle" id="nav-toggle" type="button" aria-label="開啟導覽選單" aria-expanded="false" aria-controls="site-nav">☰</button>
         <nav id="site-nav">
             <img src="cna-favicon-light.svg" alt="中央社" class="nav-logo">
-            <a href="index-v2.html" class="nav-btn">年度深度報導</a>
-            <a href="database-v2.html" class="nav-btn nav-active" aria-current="page">完整資料庫</a>
+            <a href="index-legacy.html" class="nav-btn">年度深度報導</a>
             <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="nav-btn">總預算案專頁 ↗</a>
+            <a href="database-legacy.html" class="nav-btn nav-active" aria-current="page">完整資料庫</a>
         </nav>
     </header>
 
@@ -737,19 +712,21 @@
         <div class="filter-panel">
 
             <div style="margin-bottom: 25px;">
-                <span class="filter-label" style="color: var(--secondary-color);">🔍 輸入關鍵字 (自動連動下方選項)</span>
+                <span class="filter-label" style="color: var(--secondary-color);">🔍 第一步：輸入關鍵字 (自動連動下方選項)</span>
                 <input type="text" id="search-input" class="search-box" placeholder="請輸入特定關鍵字 (如: 無人機、TPASS)..."
                     oninput="handleSearch(this.value)">
             </div>
 
             <div class="filter-group">
-                <span class="filter-label">🏷️ 按主題篩選</span>
+                <span class="filter-label">🏷️ 第二步：按主題篩選 <span
+                        style="font-size:var(--type-caption); color:var(--np-muted); font-weight:normal;">(僅顯示符合的主題)</span></span>
                 <div class="pill-row" id="theme-pills">
                 </div>
             </div>
 
             <div class="filter-group" style="margin-bottom: 0;">
-                <span class="filter-label">🏛️ 按相關部會篩選</span>
+                <span class="filter-label">🏛️ 第三步：按相關部會篩選 <span
+                        style="font-size:var(--type-caption); color:var(--np-muted); font-weight:normal;">(僅顯示有符合計畫的部會)</span></span>
                 <div class="pill-row" id="ministry-pills">
                 </div>
             </div>
@@ -758,6 +735,7 @@
 
         <div id="summary-bar" class="summary-bar" style="display: none;">
             <div class="summary-text" id="summary-text">篩選結果共 0 筆</div>
+            <div class="summary-amount" id="summary-amount">0元</div>
         </div>
 
         <div id="results-container"></div>
@@ -929,21 +907,6 @@
             applyFilters();
         }
 
-        // 點擊卡片上的關鍵字標籤：以該關鍵字搜尋並列出相關計畫。
-        // 同步更新搜尋框、重設主題/部會篩選，再捲動到結果列表頂端。
-        function filterByKeyword(keyword) {
-            const kw = String(keyword).trim();
-            if (!kw) return;
-            state.keyword = kw;
-            state.theme = '全部';
-            state.ministry = '全部';
-            const input = document.getElementById('search-input');
-            if (input) input.value = kw;
-            applyFilters();
-            const summaryBar = document.getElementById('summary-bar');
-            if (summaryBar) summaryBar.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
         function selectMinistry(ministryName) {
             state.ministry = ministryName;
             applyFilters();
@@ -1072,7 +1035,9 @@
             }
 
             if (currentResults.length > 0) {
+                const totalAmt = currentResults.reduce((sum, p) => sum + parseMoney(p['預算金額']), 0);
                 document.getElementById('summary-text').innerText = `符合條件共 ${currentResults.length} 筆計畫`;
+                document.getElementById('summary-amount').innerText = formatCurrency(totalAmt);
                 summaryBar.style.display = 'flex';
             } else {
                 summaryBar.style.display = 'none';
@@ -1093,13 +1058,8 @@
             let html = '';
             currentResults.slice(start, start + ITEMS_PER_PAGE).forEach(row => {
                 const displayTitle = highlightContent(row['計畫名稱'], state.keyword);
-                // 關鍵字標籤：直接取試算表「關鍵字」欄，以「、」切分後逐一渲染為 chip；欄位為空則不渲染任何標籤
-                const keywordTags = (row['關鍵字'] || '').split('、').map(k => k.trim()).filter(k => k.length > 0);
-                const tagsHtml = keywordTags.length
-                    ? `<div class="pb-tags">${keywordTags.map(k => `<button type="button" class="pb-tag" onclick="event.stopPropagation(); filterByKeyword('${k.replace(/'/g, "\\'")}')" title="搜尋「${k}」相關計畫">${k}</button>`).join('')}</div>`
-                    : '';
                 html += `<div class="project-block" onclick="openUnifiedDetail('${row['計畫編號']}')">
-                    <div class="pb-info"><h3 class="pb-title">${displayTitle}</h3><span class="pb-dept">${row['主管機關']}</span>${tagsHtml}</div>
+                    <div class="pb-info"><h3 class="pb-title">${displayTitle}</h3><span class="pb-dept">${row['主管機關']}</span></div>
                     <div class="pb-amount">${formatCurrency(parseMoney(row['預算金額']))}</div>
                 </div>`;
             });
@@ -1209,57 +1169,8 @@
                 if (!pillRowScrollBound.has(row)) {
                     pillRowScrollBound.add(row);
                     row.addEventListener('scroll', updatePillRowFades, { passive: true });
-                    bindPillRowDrag(row);
                 }
             });
-        }
-
-        // 桌機滑鼠拖曳捲動：捲軸已隱藏、滑鼠使用者無法橫向捲到被裁切的藥丸，
-        // 這裡讓 .pill-row 支援按住拖曳橫向捲動。觸控裝置維持瀏覽器原生滑動（不介入），
-        // 移動超過門檻才視為拖曳（否則單純點擊仍會正常選取藥丸），
-        // 拖曳放開後吞掉緊接著的一次 click，避免拖曳結束時誤選到藥丸。
-        function bindPillRowDrag(row) {
-            let pointerDown = false, dragging = false, startX = 0, startScroll = 0;
-            const DRAG_THRESHOLD = 5;
-            function suppressOnce(ev) {
-                ev.stopPropagation();
-                ev.preventDefault();
-                row.removeEventListener('click', suppressOnce, true);
-            }
-            row.addEventListener('pointerdown', (e) => {
-                if (e.pointerType === 'touch') return;      // 觸控交給原生滑動
-                if (e.button !== 0) return;                 // 僅左鍵
-                pointerDown = true; dragging = false;
-                startX = e.clientX; startScroll = row.scrollLeft;
-            });
-            row.addEventListener('pointermove', (e) => {
-                if (!pointerDown) return;
-                const dx = e.clientX - startX;
-                if (!dragging && Math.abs(dx) > DRAG_THRESHOLD) {
-                    dragging = true;
-                    if (row.setPointerCapture) { try { row.setPointerCapture(e.pointerId); } catch (_) { } }
-                    row.style.cursor = 'grabbing';
-                    row.style.userSelect = 'none';
-                }
-                if (dragging) {
-                    row.scrollLeft = startScroll - dx;
-                    e.preventDefault();
-                }
-            });
-            function endDrag() {
-                if (!pointerDown) return;
-                pointerDown = false;
-                row.style.cursor = '';
-                row.style.userSelect = '';
-                if (dragging) {
-                    row.addEventListener('click', suppressOnce, true);
-                    setTimeout(() => row.removeEventListener('click', suppressOnce, true), 350);
-                }
-                dragging = false;
-            }
-            row.addEventListener('pointerup', endDrag);
-            row.addEventListener('pointerleave', endDrag);
-            row.addEventListener('pointercancel', endDrag);
         }
         let pillRowResizeTimer = null;
         window.addEventListener('resize', () => {

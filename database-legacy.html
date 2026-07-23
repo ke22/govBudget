@@ -49,13 +49,6 @@
 
             --font-display: 'Noto Serif TC', 'Songti TC', 'PMingLiU', serif;
             --font-body: 'Noto Sans TC', sans-serif;
-
-            /* 字級系統 —— 與 index-v2.html 共用同一套流體 clamp() 字級 token */
-            --type-report-display: clamp(2.125rem, calc(1.4rem + 1.1vw), 2.5rem);
-            --type-chapter-heading: clamp(2rem, calc(1.25rem + 1.2vw), 2.5rem);
-            --type-panel-heading: clamp(1.05rem, calc(0.98rem + 0.18vw), 1.15rem);
-            --type-body: clamp(1rem, calc(0.96rem + 0.14vw), 1.1rem);
-            --type-caption: clamp(0.75rem, calc(0.71rem + 0.12vw), 0.85rem);
         }
 
         * {
@@ -120,7 +113,7 @@
 
         header h1 {
             margin: 0;
-            font-size: var(--type-panel-heading);
+            font-size: 1.4rem;
             font-weight: 900;
             color: var(--np-seal-red-bright);
         }
@@ -148,7 +141,7 @@
             padding: 13px 14px;
             cursor: pointer;
             border-radius: 20px;
-            font-size: var(--type-caption);
+            font-size: 0.85rem;
             transition: 0.2s;
             font-weight: 700;
             text-decoration: none;
@@ -216,14 +209,14 @@
         }
 
         .db-intro h1 {
-            font-size: var(--type-report-display);
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
             color: var(--np-seal-red-bright);
             margin-bottom: 14px;
             line-height: 1.4;
         }
 
         .db-intro p {
-            font-size: var(--type-body);
+            font-size: 1.05rem;
             color: var(--np-text-ondark);
             line-height: 1.8;
             max-width: 720px;
@@ -258,7 +251,7 @@
             color: var(--np-ink);
             margin-bottom: 10px;
             display: block;
-            font-size: var(--type-panel-heading);
+            font-size: 1.05rem;
         }
 
         /* 橫向滑動按鈕列 */
@@ -295,10 +288,10 @@
             background: var(--np-paper);
             border: 1px solid var(--np-hairline);
             color: var(--np-muted);
-            padding: 10px 16px;
+            padding: 12px 18px;
             border-radius: 50px;
-            font-size: var(--type-caption);
-            font-weight: 500;
+            font-size: 0.95rem;
+            font-weight: bold;
             cursor: pointer;
             transition: 0.2s;
             white-space: nowrap;
@@ -326,7 +319,7 @@
         .search-box {
             width: 100%;
             padding: 15px 20px;
-            font-size: var(--type-body);
+            font-size: 1.1rem;
             font-family: var(--font-body);
             border: 2px solid var(--np-seal-red);
             border-radius: 50px;
@@ -361,9 +354,15 @@
         }
 
         .summary-text {
-            font-size: var(--type-body);
+            font-size: 1.1rem;
             font-weight: bold;
             color: var(--np-ink);
+        }
+
+        .summary-amount {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--danger-color);
         }
 
         /* Project Cards */
@@ -401,7 +400,7 @@
         }
 
         .pb-title {
-            font-size: var(--type-panel-heading);
+            font-size: 1.15rem;
             font-weight: bold;
             margin: 0;
             color: var(--np-ink);
@@ -412,40 +411,9 @@
             color: var(--np-seal-red);
             padding: 3px 10px;
             border-radius: 20px;
-            font-size: var(--type-caption);
+            font-size: 0.8rem;
             font-weight: bold;
             width: fit-content;
-        }
-
-        /* 卡片關鍵字標籤：沿用 .pill-btn 的藥丸外型與邊框語彙，較小、較淡；
-           點擊後會以該關鍵字搜尋並列出相關計畫，資料來自試算表「關鍵字」欄。 */
-        .pb-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 3px;
-        }
-
-        .pb-tag {
-            background: var(--np-paper);
-            border: 1px solid var(--np-hairline);
-            color: var(--np-muted);
-            padding: 3px 10px;
-            border-radius: 50px;
-            font-size: var(--type-caption);
-            font-weight: 600;
-            font-family: inherit;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: background .15s, color .15s, border-color .15s;
-        }
-
-        .pb-tag:hover,
-        .pb-tag:focus-visible {
-            background: var(--np-seal-red);
-            border-color: var(--np-seal-red);
-            color: #fff;
-            outline: none;
         }
 
         .pb-amount {
@@ -563,7 +531,7 @@
         }
 
         .stat-label {
-            font-size: var(--type-caption);
+            font-size: 0.85rem;
             color: var(--np-muted);
             font-weight: bold;
             margin-bottom: 5px;
@@ -629,7 +597,7 @@
 
         @media (max-width: 600px) {
             header h1 {
-                font-size: var(--type-panel-heading);
+                font-size: 1.15rem;
             }
 
             .nav-toggle {
@@ -722,9 +690,9 @@
         <button class="nav-toggle" id="nav-toggle" type="button" aria-label="開啟導覽選單" aria-expanded="false" aria-controls="site-nav">☰</button>
         <nav id="site-nav">
             <img src="cna-favicon-light.svg" alt="中央社" class="nav-logo">
-            <a href="index.html" class="nav-btn">年度深度報導</a>
-            <a href="database.html" class="nav-btn nav-active" aria-current="page">完整資料庫</a>
+            <a href="index-legacy.html" class="nav-btn">年度深度報導</a>
             <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="nav-btn">總預算案專頁 ↗</a>
+            <a href="database-legacy.html" class="nav-btn nav-active" aria-current="page">完整資料庫</a>
         </nav>
     </header>
 
@@ -737,19 +705,21 @@
         <div class="filter-panel">
 
             <div style="margin-bottom: 25px;">
-                <span class="filter-label" style="color: var(--secondary-color);">🔍 輸入關鍵字 (自動連動下方選項)</span>
+                <span class="filter-label" style="color: var(--secondary-color);">🔍 第一步：輸入關鍵字 (自動連動下方選項)</span>
                 <input type="text" id="search-input" class="search-box" placeholder="請輸入特定關鍵字 (如: 無人機、TPASS)..."
                     oninput="handleSearch(this.value)">
             </div>
 
             <div class="filter-group">
-                <span class="filter-label">🏷️ 按主題篩選</span>
+                <span class="filter-label">🏷️ 第二步：按主題篩選 <span
+                        style="font-size:0.85rem; color:var(--np-muted); font-weight:normal;">(僅顯示符合的主題)</span></span>
                 <div class="pill-row" id="theme-pills">
                 </div>
             </div>
 
             <div class="filter-group" style="margin-bottom: 0;">
-                <span class="filter-label">🏛️ 按相關部會篩選</span>
+                <span class="filter-label">🏛️ 第三步：按相關部會篩選 <span
+                        style="font-size:0.85rem; color:var(--np-muted); font-weight:normal;">(僅顯示有符合計畫的部會)</span></span>
                 <div class="pill-row" id="ministry-pills">
                 </div>
             </div>
@@ -758,6 +728,7 @@
 
         <div id="summary-bar" class="summary-bar" style="display: none;">
             <div class="summary-text" id="summary-text">篩選結果共 0 筆</div>
+            <div class="summary-amount" id="summary-amount">0元</div>
         </div>
 
         <div id="results-container"></div>
@@ -789,7 +760,7 @@
 
                 <div
                     style="background:var(--np-paper); padding:20px; border-radius:12px; margin-bottom:25px; border:1px solid var(--border-color);">
-                    <strong style="color:var(--secondary-color); font-size:var(--type-body);">工作內容：</strong>
+                    <strong style="color:var(--secondary-color); font-size:1.1rem;">工作內容：</strong>
                     <div style="margin-top:10px; line-height: 1.7;"><span id="u-desc" style="color:var(--np-ink);"></span></div>
                 </div>
 
@@ -802,7 +773,7 @@
         </div>
     </div>
 
-    <footer style="background: var(--bg-color); color: var(--np-muted-ondark); text-align: center; padding: 24px 20px; font-size: var(--type-caption);">
+    <footer style="background: var(--bg-color); color: var(--np-muted-ondark); text-align: center; padding: 24px 20px; font-size: 0.85rem;">
         copyright © 2026 中央通訊社版權所有
     </footer>
 
@@ -927,21 +898,6 @@
         function handleSearch(val) {
             state.keyword = val.trim();
             applyFilters();
-        }
-
-        // 點擊卡片上的關鍵字標籤：以該關鍵字搜尋並列出相關計畫。
-        // 同步更新搜尋框、重設主題/部會篩選，再捲動到結果列表頂端。
-        function filterByKeyword(keyword) {
-            const kw = String(keyword).trim();
-            if (!kw) return;
-            state.keyword = kw;
-            state.theme = '全部';
-            state.ministry = '全部';
-            const input = document.getElementById('search-input');
-            if (input) input.value = kw;
-            applyFilters();
-            const summaryBar = document.getElementById('summary-bar');
-            if (summaryBar) summaryBar.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function selectMinistry(ministryName) {
@@ -1072,7 +1028,9 @@
             }
 
             if (currentResults.length > 0) {
+                const totalAmt = currentResults.reduce((sum, p) => sum + parseMoney(p['預算金額']), 0);
                 document.getElementById('summary-text').innerText = `符合條件共 ${currentResults.length} 筆計畫`;
+                document.getElementById('summary-amount').innerText = formatCurrency(totalAmt);
                 summaryBar.style.display = 'flex';
             } else {
                 summaryBar.style.display = 'none';
@@ -1093,13 +1051,8 @@
             let html = '';
             currentResults.slice(start, start + ITEMS_PER_PAGE).forEach(row => {
                 const displayTitle = highlightContent(row['計畫名稱'], state.keyword);
-                // 關鍵字標籤：直接取試算表「關鍵字」欄，以「、」切分後逐一渲染為 chip；欄位為空則不渲染任何標籤
-                const keywordTags = (row['關鍵字'] || '').split('、').map(k => k.trim()).filter(k => k.length > 0);
-                const tagsHtml = keywordTags.length
-                    ? `<div class="pb-tags">${keywordTags.map(k => `<button type="button" class="pb-tag" onclick="event.stopPropagation(); filterByKeyword('${k.replace(/'/g, "\\'")}')" title="搜尋「${k}」相關計畫">${k}</button>`).join('')}</div>`
-                    : '';
                 html += `<div class="project-block" onclick="openUnifiedDetail('${row['計畫編號']}')">
-                    <div class="pb-info"><h3 class="pb-title">${displayTitle}</h3><span class="pb-dept">${row['主管機關']}</span>${tagsHtml}</div>
+                    <div class="pb-info"><h3 class="pb-title">${displayTitle}</h3><span class="pb-dept">${row['主管機關']}</span></div>
                     <div class="pb-amount">${formatCurrency(parseMoney(row['預算金額']))}</div>
                 </div>`;
             });
@@ -1184,7 +1137,7 @@
             if (pieData.length > 0) {
                 pieContainer.style.display = 'block';
                 chartPieA = new Chart(document.getElementById('chartDetailPie').getContext('2d'), {
-                    type: 'pie', data: { labels: pieLabels, datasets: [{ data: pieData, backgroundColor: ['#A5271E', '#D4A857', '#4A5A54', '#C57B57', '#7E1D16', '#6B6156'], borderColor: '#FFFFFF', borderWidth: 2 }] },
+                    type: 'pie', data: { labels: pieLabels, datasets: [{ data: pieData, backgroundColor: ['#E74C3C', '#F0C808', '#086788', '#2ECC71', '#9B59B6', '#3498DB'] }] },
                     options: { maintainAspectRatio: false, plugins: { legend: { position: 'bottom' }, tooltip: tooltipCurrencyCallback } }
                 });
             } else {
@@ -1209,57 +1162,8 @@
                 if (!pillRowScrollBound.has(row)) {
                     pillRowScrollBound.add(row);
                     row.addEventListener('scroll', updatePillRowFades, { passive: true });
-                    bindPillRowDrag(row);
                 }
             });
-        }
-
-        // 桌機滑鼠拖曳捲動：捲軸已隱藏、滑鼠使用者無法橫向捲到被裁切的藥丸，
-        // 這裡讓 .pill-row 支援按住拖曳橫向捲動。觸控裝置維持瀏覽器原生滑動（不介入），
-        // 移動超過門檻才視為拖曳（否則單純點擊仍會正常選取藥丸），
-        // 拖曳放開後吞掉緊接著的一次 click，避免拖曳結束時誤選到藥丸。
-        function bindPillRowDrag(row) {
-            let pointerDown = false, dragging = false, startX = 0, startScroll = 0;
-            const DRAG_THRESHOLD = 5;
-            function suppressOnce(ev) {
-                ev.stopPropagation();
-                ev.preventDefault();
-                row.removeEventListener('click', suppressOnce, true);
-            }
-            row.addEventListener('pointerdown', (e) => {
-                if (e.pointerType === 'touch') return;      // 觸控交給原生滑動
-                if (e.button !== 0) return;                 // 僅左鍵
-                pointerDown = true; dragging = false;
-                startX = e.clientX; startScroll = row.scrollLeft;
-            });
-            row.addEventListener('pointermove', (e) => {
-                if (!pointerDown) return;
-                const dx = e.clientX - startX;
-                if (!dragging && Math.abs(dx) > DRAG_THRESHOLD) {
-                    dragging = true;
-                    if (row.setPointerCapture) { try { row.setPointerCapture(e.pointerId); } catch (_) { } }
-                    row.style.cursor = 'grabbing';
-                    row.style.userSelect = 'none';
-                }
-                if (dragging) {
-                    row.scrollLeft = startScroll - dx;
-                    e.preventDefault();
-                }
-            });
-            function endDrag() {
-                if (!pointerDown) return;
-                pointerDown = false;
-                row.style.cursor = '';
-                row.style.userSelect = '';
-                if (dragging) {
-                    row.addEventListener('click', suppressOnce, true);
-                    setTimeout(() => row.removeEventListener('click', suppressOnce, true), 350);
-                }
-                dragging = false;
-            }
-            row.addEventListener('pointerup', endDrag);
-            row.addEventListener('pointerleave', endDrag);
-            row.addEventListener('pointercancel', endDrag);
         }
         let pillRowResizeTimer = null;
         window.addEventListener('resize', () => {
