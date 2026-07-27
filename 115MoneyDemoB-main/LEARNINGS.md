@@ -65,3 +65,9 @@ stages jump when the mobile browser address bar collapses/expands.
 **問題**：把 feature branch（optimize-index-frontend-perf）的頁面內容同步回 main（正式站）時，第一次同步完後才發現有一個剛做完但還沒 commit 的顏色修正（#006064 → var(--np-seal-red-dark)）沒有一起帶過去，導致正式站短暫又跟 feature branch 不一致，得再跑第二次同步。
 **原因**：搬移時用 `git show <branch>:<path> > <file>` 直接讀取該分支「已提交」的 blob 內容，這個指令不會反映當下 working tree 裡尚未 commit 的變更；當時那個顏色修正還停留在 working tree（`git status` 顯示 M），尚未 commit，所以完全沒出現在同步結果裡。
 **解法**：用 `git show` 或任何讀「已提交內容」的方式跨分支搬移檔案之前，先確認來源分支工作目錄是乾淨的（`git status --short` 無輸出）；有未提交的修改就先 commit（或先跟使用者確認要不要一併帶入），再同步，並在同步後逐行核對 diff 內容是否等於預期變更，而不是只看行數。
+
+## 10. `mask-image: url(...)` on an external SVG silently fails over `file://` — inline the SVG instead
+
+**問題**：把 header 裡的 CNA 圖示從 `<img src="...svg">` 改成 `background-color` + `mask-image: url('cna-logo.svg')` 想讓圖示顏色跟著標題文字變，結果使用者直接用瀏覽器開啟本機檔案（`file://` 而非 `http://`）時，圖示整個消失——不是顯示成破圖，是完全不可見，比原本的 `<img>` 還更難察覺是壞掉。
+**原因**：多數瀏覽器對 `mask-image`/`-webkit-mask-image` 參照外部 SVG 資源時，在 `file://` 協定下會拒絕載入（視為需要 CORS 驗證的外部資源，即使是同目錄下的檔案），而且失敗後沒有任何 fallback：mask 定義了元素的可見範圍，遮罩圖載入失敗＝可見範圍是空的＝整個元素完全不渲染，不像 `<img>` 壞圖至少有裂圖示或 alt 文字可以看出異常。
+**解法**：需要用 CSS 變數控制顏色、又要在 `file://` 下也能穩定顯示的裝飾性圖示，改成把 SVG 的 path 資料直接內嵌進 HTML（`<svg fill="currentColor">...</svg>`），用 `color` 屬性控制顏色，不再對外發任何請求。同一份 path 資料如果要跨頁重複使用，就是複製貼上到每個檔案裡，沒有更輕的做法能同時滿足「CSS 控色」+「`file://` 穩定」兩個條件。驗證方式：本機起 `python3 -m http.server` 測試不算數（那是 `http://`），要嘛實際用瀏覽器開啟本機檔案路徑測試，要嘛就假設任何用到 `mask-image`/`background-image` 參照外部檔案的裝飾元素在 `file://` 下都不可信。

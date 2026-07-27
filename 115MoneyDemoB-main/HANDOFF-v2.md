@@ -297,3 +297,105 @@ table with exact line citations for every item above, and
 `HANDOFF-REVIEW-OPTIMIZE.md` for the full record of the 2026-07-22 review +
 optimize pass (findings, what shipped, what was deferred by choice, verified
 non-issues).
+
+## 2026-07-27 branding (all 4 pages) + Chapter 1 timeline preface/red-line rework, Chapter 2/3 content edits (`index-v2.html`, plus `database-v2.html`/`index.html`/`database.html` for the branding piece)
+
+**Correction to the "Gotchas" section above: browser automation reached
+`localhost` fine this session**, via the `claude-in-chrome` MCP extension
+(`python3 -m http.server` + `navigate`/`javascript_tool`/`computer` screenshot
+calls), across dozens of live verifications below. Whatever blocked it in the
+2026-07-22/23 sessions is not reproducing now — don't assume it's still
+broken; try it before falling back to source-only review.
+
+**Header branding, shipped to all four pages (`index.html`, `database.html`,
+`index-v2.html`, `database-v2.html`):**
+- The CNA mark moved out of `<nav>` (where it sat to the right, next to the
+  nav buttons) into a new `.brand` wrapper directly before the site title, so
+  it now reads as a logo+title lockup on the left, opposite the nav on the
+  right.
+- Recolored to match the title exactly (`var(--np-seal-red-bright)` on
+  index/database, `var(--ui-accent)` on the -v2 pages, i.e. whatever each
+  page's own title color token already is) — first attempt used
+  `mask-image: url('cna-logo.svg')` + `background-color`, **which silently
+  fails over `file://`** (see new `LEARNINGS.md` entry #10) and was replaced
+  with the icon's path data inlined directly as `fill="currentColor"` SVG
+  markup in each page, colored via a plain CSS `color` property. No external
+  fetch, so it's identical under `file://`, a dev server, or GitHub Pages.
+  Enlarged from 22px to 32px on the two `-v2` pages per follow-up request
+  (`index.html`/`database.html` left at 22px, not asked to change).
+- Restored `cna-favicon-adaptive.svg` (existed in git history, had been
+  deleted) using the new mark's path data, `prefers-color-scheme`-aware
+  (`#4a4a4a` light / `#EDE6D3` dark, matching the pre-existing color choice).
+  `cna-favicon-light.svg` is now unreferenced anywhere (nothing loads it) —
+  left deleted.
+
+**Chapter 1 timeline (`index-v2.html` only), several rounds of direct user
+iteration — final state:**
+- A new lead-in sentence — "行政院依審議時程函請，為什麼立委不願配合安排審議，
+  要從軍警待遇修法說起。" — sits above the dated timeline as
+  `.timeline-block-node.node-preface`: no background fill, no border, text
+  color inverted to `var(--ui-ink-inverse)` (confirmed via an
+  AskUserQuestion wireframe preview — borderless was the explicit pick over a
+  thin-bordered variant). It sits **outside** the scroll-reveal system
+  entirely (forced `opacity:1 !important`) rather than being wired into it,
+  because of the next point.
+- **The line/terminus/dated-rows got split into a new `.timeline-spine`
+  wrapper**, separate from the preface row, so the red progress line's
+  `top:0` starts at the *spine's* top (right below the preface) instead of
+  the whole container's top (which used to run the line up through/behind
+  the preface text — not wanted). `updateTimelineMainLineFill()`'s `rect`
+  source moved from `#center-timeline-container` to `#timeline-spine`
+  accordingly; the per-row `querySelectorAll` inside it is now implicitly
+  scoped to real rows only (preface is a sibling outside the spine, so it's
+  never selected — consistent with forcing it always-visible above).
+- Then reversed part of that on request: the outer container's `gap`
+  (previously 40px/25px, and since the container now has exactly 2 flex
+  children — preface + spine — this gap was scoped only to that one seam)
+  was shrunk to 8px, and a new empty `.timeline-lead-in` (60px) spacer was
+  added as the spine's first flex child, so the animated fill — not a static
+  dim guide-line — visibly draws continuously from right under the preface
+  circle, through ~100px of runway, into the first dated card. (User was
+  offered both a "static dim connector" and "the real animated fill extends"
+  option via CLI wireframe; picked the latter.)
+- Reveal trigger simplified: `fillTipViewportY >= rowRect.top + 40` → `>=
+  rowRect.top` (no lead) per direct request — each node/card now fades in
+  the instant the line's tip reaches its own top edge, not 40px early.
+- Added a hand-drawn "doodle circle" around the preface sentence: inline
+  `<svg class="node-preface-doodle">`, an intentionally-open oval path (ends
+  don't meet, picked over a fully-closed "highlighter" variant via wireframe),
+  stroke-only in `var(--np-seal-red-bright)`, sized via `calc(100% + Npx)` off
+  the parent box (not fixed px) so it reflows correctly at any text-wrap
+  height/width without a mobile media query. Then animated: `stroke-dasharray:
+  700` / `stroke-dashoffset: 700→0` over 1.1s via a `.doodle-drawn` class
+  added by a one-shot `IntersectionObserver` (40% threshold, disconnects
+  after firing) — plays once when scrolled into view, not on page load
+  (would already be finished by the time the reader actually scrolls there).
+- Terminus mark ("?" circle at the timeline's end) was sitting flush against
+  the last card — `.timeline-spine` had no `padding-bottom`, so the mark's
+  `bottom:0` anchor was exactly at the last row's bottom edge. Fixed with
+  `padding-bottom: 50px` on `.timeline-spine`.
+- Moved the "立法院分別在114年1月7日...軍人薪資及加給" story-card from after
+  both the 01/07 and 06/10 nodes to between them (chronological placement
+  fix), and corrected a caption typo (佔據→占據) in the chapter-2 history
+  photo caption.
+
+**Chapter 2 Gantt chart (`index-v2.html` only):** removed the 115年 row (both
+its `.gantt-bar-115-rebuilt` bar and its `year-115-label` y-axis tick) —
+applies to mobile and desktop since it's one shared, CSS-reflowed DOM, no
+separate mobile markup. Cleaned up the now-dead `.gantt-bar-115-rebuilt` CSS
+rule.
+
+**Chapter 3 bar chart (`index-v2.html` only):** 新興計畫/延續計畫增額 bar +
+legend colors moved off green/blue (`#6FAE85`/`#7CA2D6`) onto new dedicated
+`--chart-cat-ch3-new` (terracotta `#C9763A`) / `--chart-cat-ch3-extend` (plum
+`#9C5B86`) tokens — **not** by changing the existing `--chart-cat-new`/
+`--chart-cat-extend` vars, because those are also reused by Chapter 2's
+`.party-dpp`/`.party-kmt` Gantt bars for real-world DPP-green/KMT-blue party
+coding, which needed to stay untouched. Verified via `getComputedStyle` that
+the party bars are still exactly `rgb(111,174,133)`/`rgb(124,162,214)` after
+the change.
+
+**Branch note:** this session worked on `adjust-hero-images` (branched off
+`optimize-index-frontend-perf`), not `optimize-index-frontend-perf` directly
+— the branch line at the top of this doc predates this session and may need
+reconciling once this branch merges.
