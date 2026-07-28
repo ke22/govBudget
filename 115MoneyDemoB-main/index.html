@@ -1012,10 +1012,14 @@
         }
 
         /* 卡片 9 之後的捲動跑道：純空白，讓第三張大結局照片在字卡捲走後、
-           第二章退場前有一段單獨佔畫面的捲動距離（見 #ch2-final-runway 的 HTML 註解） */
+           第二章退場前有一段單獨佔畫面的捲動距離（見 #ch2-final-runway 的 HTML 註解）。
+           高度刻意與一張故事卡（--scene-read-interval，100svh）同量級，讓「圖片3
+           獨佔」成為與其他敘事節拍等重的一拍。
+           ⚠️ 這個高度只決定「圖片3單獨停留多久」；「舞台什麼時候相對第三章退場」是由
+              updateHistoryExit 的 start/end 決定，兩者互相獨立，調其中一個不會動到另一個。 */
         .ch2-final-runway {
             width: 100%;
-            height: 70svh;
+            height: 105svh;
             pointer-events: none;
         }
 
@@ -4960,18 +4964,23 @@
                 const chapter3Top = chapter3 ? chapter3.getBoundingClientRect().top : Infinity;
                 const reducedMotion = MQ_REDUCED.matches;
                 const isMobileExit = MQ_MOBILE.matches;
-                // ⚠️ 這兩個門檻現在是相對「跑道底緣」量的，而跑道底緣就等於第三章頂端
+                // ⚠️ 這兩個門檻是相對「跑道底緣」量的，而跑道底緣就等於第三章頂端
                 //    （跑道是第二章最後一個元素，實測 runwayBottom === chapter3Top）。
-                //    因此終點必須留在 0 以上，否則永遠碰不到——下方 chapter3Top <= 0 的
-                //    保險門檻會先把 progress 直接壓成 1，淡出就變成瞬間跳掉。
-                // 桌機 0.40 → 0.20：跑道跑完、第三章從畫面下方逼近時才開始淡出。
-                // 手機原為 0.10 → -0.15（當時錨點是字卡本身，字卡頂端還在第三章頂端上方
-                //    數百 px，所以負值構得到）；改錨到跑道底緣後負值失效，等比例平移到
-                //    0.35 → 0.10，維持「跑道跑完才開始收、收完才交棒給第三章」的節奏。
-                const start = viewportHeight * (isMobileExit ? 0.35 : 0.40);
-                const end = viewportHeight * (isMobileExit ? 0.10 : 0.20);
+                //    所以這裡等於直接在說「第三章頂端捲到畫面哪個位置時，舞台要退場」。
+                // 0.95 → 0.70：整段淡出都發生在第三章還沒真正進入閱讀區之前。
+                //    這不只是為了好看——第三章開場文字是靠 history-exit-complete 才淡入的
+                //    （見 .chapter3-intro-revealed，0.5s fade），退場收得太晚，開場文字就會
+                //    在它自己都快捲出畫面上緣時才開始淡入，讀者只看到一塊空白飄過、
+                //    然後直接撞上第三章圖表。收在 0.70 可讓開場文字還有約 0.7 個畫面高的
+                //    捲動距離可以從容淡入，與加跑道之前的體感一致。
+                // 圖片3單獨停留多久 → 由跑道高度（.ch2-final-runway）決定，不是這裡。
+                // 手機與桌機共用同一組數值：錨點已統一成跑道底緣，原本因錨點不同而分開
+                //    調校的理由不再成立（手機仍走 translateY 位移、桌機走 opacity，
+                //    差異在下方分支，不在觸發時機）。
+                const start = viewportHeight * 0.95;
+                const end = viewportHeight * 0.70;
                 let progress = reducedMotion
-                    ? (finalCardTop <= viewportHeight * 0.30 ? 1 : 0)
+                    ? (finalCardTop <= end ? 1 : 0)
                     : Math.min(1, Math.max(0, (start - finalCardTop) / (start - end)));
 
                 // Scroll positions resolve to whole CSS pixels, so retain the intended
