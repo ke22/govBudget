@@ -1011,6 +1011,14 @@
             padding: 0 20px;
         }
 
+        /* 卡片 9 之後的捲動跑道：純空白，讓第三張大結局照片在字卡捲走後、
+           第二章退場前有一段單獨佔畫面的捲動距離（見 #ch2-final-runway 的 HTML 註解） */
+        .ch2-final-runway {
+            width: 100%;
+            height: 70svh;
+            pointer-events: none;
+        }
+
         /* 🔓 階梯 2：浮現框線、底色與陰影（原為新聞剪貼風格牛皮紙 + 淡網點紋理，圖表全面改為深色底後
            邊框/網點改用淺色，陰影改用向下的黑色深度陰影） */
         .rebuilt-step-2 {
@@ -4305,6 +4313,13 @@
                     </p>
                 </div>
             </div>
+
+            <!-- 「圖卡結束後，圖片3出現」的捲動跑道：卡片 9 是最後一張字卡，原本它一捲出視野，
+                 第二章的退場淡出就同時開始（退場動畫本來就錨定在這張字卡上），第三張大結局
+                 照片根本沒有單獨露臉的空檔。這段空白提供那段跑道——字卡捲走後、第二章退場前，
+                 讓圖片3單獨佔畫面。刻意不是 .gantt-card-rebuilt，避免被步驟判斷與 IntersectionObserver
+                 當成第 10 張卡片。 -->
+            <div class="ch2-final-runway" id="ch2-final-runway" aria-hidden="true"></div>
         </div>
     </section>
 
@@ -4925,27 +4940,36 @@
 
             if (!chapter2 || !stage || !ganttBox || !imagesBox) return;
 
-            // The last Chapter 2 card owns the image-stage exit. Geometry is recalculated
-            // on every rAF frame so forward jumps and reverse scrolling cannot leave stale layers.
+            // The blank runway after the last card owns the image-stage exit — NOT the card
+            // itself. Anchoring the exit on the card meant the stage started fading the moment
+            // the closing text scrolled up, so the third photo (which is only unlocked once
+            // that text is gone) never had a frame where it was both unlocked and still visible.
+            // Anchoring on the runway's bottom edge instead buys the photo the runway's full
+            // height of solo screen time before the exit fade begins.
+            // Geometry is recalculated on every rAF frame so forward jumps and reverse
+            // scrolling cannot leave stale layers.
             const finalStoryCard = chapter2.querySelector('[data-rebuilt-step="9"] .story-card');
+            const finalRunway = document.getElementById('ch2-final-runway');
             const updateHistoryExit = () => {
                 if (!finalStoryCard) return;
 
                 const viewportHeight = window.innerHeight;
-                const finalCardTop = finalStoryCard.getBoundingClientRect().top;
+                const finalCardTop = finalRunway
+                    ? finalRunway.getBoundingClientRect().bottom
+                    : finalStoryCard.getBoundingClientRect().top;
                 const chapter3Top = chapter3 ? chapter3.getBoundingClientRect().top : Infinity;
                 const reducedMotion = MQ_REDUCED.matches;
                 const isMobileExit = MQ_MOBILE.matches;
-                // 桌機：原本 0.55/0.35 讓文字在讀者還沒讀完就開始淡出；延後到 0.40/0.20，
-                // 給讀者多一段捲動距離維持全不透明，淡出區間寬度不變（都是 0.2）。
-                // 手機：讀者反應結尾（最後一張字卡＋最後一張歷史照片對齊呈現）收得太快——
-                // 應該等兩者對齊、讀者看完，字卡本身自然捲到視窗頂端準備離開時，才開始
-                // 淡出。故手機版把起點延後到卡片頂端逼近視窗頂端（10%）才開始，終點延到
-                // 卡片頂端已捲出視窗上緣一小段（-15%）才算全淡出，且不再用「第三章頂部
-                // 一露出畫面底部」當強制淡出的門檻（那時第二章可能還佔滿大半螢幕），改成
-                // 「第三章頂端已經抵達視窗最頂端」（第二章已完全捲出）才強制收尾完成。
-                const start = viewportHeight * (isMobileExit ? 0.10 : 0.40);
-                const end = viewportHeight * (isMobileExit ? -0.15 : 0.20);
+                // ⚠️ 這兩個門檻現在是相對「跑道底緣」量的，而跑道底緣就等於第三章頂端
+                //    （跑道是第二章最後一個元素，實測 runwayBottom === chapter3Top）。
+                //    因此終點必須留在 0 以上，否則永遠碰不到——下方 chapter3Top <= 0 的
+                //    保險門檻會先把 progress 直接壓成 1，淡出就變成瞬間跳掉。
+                // 桌機 0.40 → 0.20：跑道跑完、第三章從畫面下方逼近時才開始淡出。
+                // 手機原為 0.10 → -0.15（當時錨點是字卡本身，字卡頂端還在第三章頂端上方
+                //    數百 px，所以負值構得到）；改錨到跑道底緣後負值失效，等比例平移到
+                //    0.35 → 0.10，維持「跑道跑完才開始收、收完才交棒給第三章」的節奏。
+                const start = viewportHeight * (isMobileExit ? 0.35 : 0.40);
+                const end = viewportHeight * (isMobileExit ? 0.10 : 0.20);
                 let progress = reducedMotion
                     ? (finalCardTop <= viewportHeight * 0.30 ? 1 : 0)
                     : Math.min(1, Math.max(0, (start - finalCardTop) / (start - end)));
@@ -4955,10 +4979,14 @@
                 if (!reducedMotion && finalCardTop <= end + 1) progress = 1;
 
                 // Chapter 3 entering from below is the hard exit boundary for large scroll jumps.
-                // Mobile waits until chapter 3's top has reached the very top of the viewport
-                // (chapter 2 has fully scrolled past) rather than the moment it merely peeks
-                // in from the bottom, so the card/photo pairing isn't cut short.
-                if (isMobileExit ? chapter3Top <= 0 : chapter3Top <= viewportHeight) progress = 1;
+                // Both breakpoints now wait until chapter 3's top has reached the very top of
+                // the viewport (chapter 2 has fully scrolled past) rather than the moment it
+                // merely peeks in from the bottom. Desktop used to fire on the peek, which sat
+                // EARLIER than the fade window above — chapter 3's top is the runway's bottom
+                // edge, i.e. the same anchor `finalCardTop` reads — so it snapped the stage
+                // hidden before the runway could give the third photo its solo screen time.
+                // Keeping it at 0 leaves this purely as a safety net for large scroll jumps.
+                if (chapter3Top <= 0) progress = 1;
 
                 stage.classList.toggle('history-exit-active', finalCardTop <= viewportHeight * 0.6);
                 stage.classList.toggle('history-exit-complete', progress >= 1);
@@ -5034,7 +5062,11 @@
                         if (card.getBoundingClientRect().top <= 0) { currentStep = step; }
                     });
                 } else {
-                    const totalScrollableHeight = rect.height - window.innerHeight;
+                    // 扣掉尾端捲動跑道的高度，讓下列百分比門檻仍然對應「9 張卡片」這段區間，
+                    // 不會因為新增跑道而整批往前偏移。跑道區間內 scrollPercent 會超過 100，
+                    // 由最後的 else 收成 currentStep = 9（維持結局狀態）。
+                    const runwayHeight = finalRunway ? finalRunway.getBoundingClientRect().height : 0;
+                    const totalScrollableHeight = rect.height - runwayHeight - window.innerHeight;
                     const scrolledDistance = -rect.top;
                     const scrollPercent = (scrolledDistance / totalScrollableHeight) * 100;
                     // 卡片 2 原本 12% 就出現，讀者反應「太早出現」（引言階段還沒讀完），
