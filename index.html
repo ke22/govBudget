@@ -1486,7 +1486,9 @@
             visibility: hidden !important;
         }
 
-        .rebuilt-step-9 .history-img-frame:nth-child(3) {
+        /* 文字先出、圖片後出：第三張大結局照片要等文字卡先落定
+           （JS 補上 .history-text-settled）才淡入，避免兩者同一瞬間一起冒出來 */
+        #chapter-2-rebuilt.rebuilt-step-9.history-text-settled .history-img-frame:nth-child(3) {
             opacity: 1 !important;
             visibility: visible !important;
         }
@@ -1516,16 +1518,15 @@
                 box-sizing: border-box;
             }
 
-            /* 卡片 9 字卡進場：預設收起，等第三張歷史照片淡入完成
-               （JS armStep9CardReveal 補上 .history-image-settled）才淡入+回位，
-               避免照片與字卡同一瞬間一起冒出來 */
+            /* 卡片 9 字卡進場：文字先出、圖片後出，故字卡不再延遲，
+               進入卡片即直接淡入+回位（動畫節奏見 armStep9ImageReveal） */
             .gantt-card-rebuilt[data-rebuilt-step="9"] .story-card {
                 opacity: 0;
                 transform: translateY(16px) rotate(-0.4deg);
                 transition: opacity 0.4s ease, transform 0.4s ease;
             }
 
-            .gantt-card-rebuilt[data-rebuilt-step="9"].history-image-settled .story-card {
+            .gantt-card-rebuilt[data-rebuilt-step="9"].is-active .story-card {
                 opacity: 1;
                 transform: rotate(-0.4deg);
             }
@@ -4899,17 +4900,17 @@
         // =======================================================
         // 全新重構：第二章獨立物理滾動監聽器 (終極百分比放行版)
         // =======================================================
-        // 卡片 9 進場排序：桌機版讓第三張歷史照片的淡入（transitionend）先完成，
-        // 字卡才開始進場，避免兩者同一瞬間一起冒出來。用 setTimeout 保底，
-        // 萬一 transitionend 沒觸發（例如轉場被中斷），字卡仍會如期解鎖，不會卡死。
-        function armStep9CardReveal(finalCard) {
-            if (!finalCard || finalCard.dataset.cardRevealArmed === '1') return;
-            finalCard.dataset.cardRevealArmed = '1';
+        // 卡片 9 進場排序：字卡先淡入，等字卡本身的淡入轉場（transitionend）完成，
+        // 第三張歷史照片才開始淡入，避免兩者同一瞬間一起冒出來。用 setTimeout 保底，
+        // 萬一 transitionend 沒觸發（例如轉場被中斷），照片仍會如期解鎖，不會卡死。
+        function armStep9ImageReveal(finalCard, chapter2) {
+            if (!finalCard || finalCard.dataset.imageRevealArmed === '1') return;
+            finalCard.dataset.imageRevealArmed = '1';
 
             const reducedMotion = typeof window.matchMedia === 'function'
                 && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             if (reducedMotion) {
-                finalCard.classList.add('history-image-settled');
+                chapter2.classList.add('history-text-settled');
                 return;
             }
 
@@ -4917,14 +4918,14 @@
             const settle = () => {
                 if (settled) return;
                 settled = true;
-                finalCard.classList.add('history-image-settled');
+                chapter2.classList.add('history-text-settled');
             };
 
-            const finalImage = document.querySelector('#backdrop-images-rebuilt .history-img-frame:nth-child(3)');
-            if (finalImage) {
-                finalImage.addEventListener('transitionend', function onFinalImageDone(e) {
+            const storyCard = finalCard.querySelector('.story-card');
+            if (storyCard) {
+                storyCard.addEventListener('transitionend', function onStoryCardDone(e) {
                     if (e.propertyName !== 'opacity') return;
-                    finalImage.removeEventListener('transitionend', onFinalImageDone);
+                    storyCard.removeEventListener('transitionend', onStoryCardDone);
                     settle();
                 });
             }
@@ -5017,8 +5018,7 @@
                     // Same exit guard, second target: the step-9 text story-card itself, not
                     // just the fixed image backdrop above. Only touch its inline opacity once
                     // actually exiting (progress > 0) so this never fights the card's own
-                    // entrance reveal (armStep9CardReveal's `.history-image-settled` class)
-                    // while still inside step 9.
+                    // entrance reveal (its `.is-active` fade-in) while still inside step 9.
                     if (progress > 0) {
                         finalStoryCard.style.opacity = String(1 - progress);
                         finalStoryCard.style.pointerEvents = progress >= 1 ? 'none' : 'auto';
@@ -5151,7 +5151,7 @@
                     const finalCard = document.querySelector('.gantt-card-rebuilt[data-rebuilt-step="9"]');
                     if (finalCard) {
                         finalCard.classList.add('is-active');
-                        armStep9CardReveal(finalCard);
+                        armStep9ImageReveal(finalCard, chapter2);
                     }
                 }
 
