@@ -77,3 +77,37 @@ stages jump when the mobile browser address bar collapses/expands.
 **問題**：`index-v2.html` 桌機版的 hero 標題（`.hero-title`）其實是 `.hero-sr-only`（畫面上看不到，只給螢幕閱讀器），視覺上看到的標題文字是直接畫在 `hero-collage-v2.jpg` 裡的。疊在圖片上方的 `.hero-dek-panel` 用固定 `bottom: 160px` 定位，結果在不同視窗「高度」下，面板跟圖片裡標題的視覺間距會跑位——改視窗寬度沒事，改高度就跑位。
 **原因**：`.hero-section` 的背景圖用 `background-size: 100% auto`（寬度撐滿、高度依圖片原始比例自動算），再用 `background-position: center center` + `overflow: hidden` 垂直置中裁切。圖片在畫面上實際落點只跟「容器寬度」有關；而 `.hero-dek-panel` 的 `bottom: 160px` 只跟「容器高度」有關（是從容器底部往上量固定像素）。兩個疊在一起的視覺元素分別鎖定寬度、高度兩個不同的軸，容器長寬比一變，兩者的相對關係就不再固定。
 **解法（部分解，非物理精確解）**：沒有把圖片改成固定長寬比容器（`aspect-ratio` + 類 `object-fit` 排版，改動較大，這次使用者選擇不做）的情況下，把面板的 `bottom` 從固定 px 改成該容器自身高度的百分比（例如 `bottom: 35.5%`，用某個參考視窗高度反推出來的值），至少讓留白「隨視窗高度等比縮放」，而不是視窗一變高留白就顯得過大／過小。這只是讓跑位幅度變小，不是让面板真正物理貼齊圖片裡的標題座標——要做到後者，一定要先讓圖片本身的顯示尺寸變得可預測（鎖定比例的容器），沒有其他更輕的做法。
+
+## 12. 第二章退場的錨點同時決定第三章開場文字何時淡入（跨章節隱性耦合）
+
+**問題**：把第二章的退場動畫錨點從「卡片 9 的字卡」改到「章節尾端的捲動跑道」之後，第三章的開場標題（`晚審影響／新興預算無法動支`）與導言變成**整段空白飄過、完全沒淡入**，讀者直接撞上第三章圖表。這次改動一行都沒動到第三章的程式碼。
+**原因**：第三章開場文字的淡入不是自己判斷捲動位置，而是掛在第二章的退場完成訊號上——`chapter3Intro.classList.toggle('chapter3-intro-revealed', stage.classList.contains('history-exit-complete'))`（`index.html` 的 `updateHistoryExit` 內），CSS 是 `.js #chapter-3-rebuilt .chapter-intro` 的 `opacity:0 → 1`、`transition: 0.5s`。而**跑道底緣就等於第三章頂端**（跑道是第二章最後一個元素，實測 `runwayBottom === chapter3Top`），所以退場門檻改成相對跑道底緣量之後，等於同時把「第三章開場文字何時開始淡入」往後推。改動前桌機是靠 `chapter3Top <= viewportHeight` 這條硬門檻先觸發，開場文字在第三章還從畫面下方進場時就解鎖，有將近一個畫面高的捲動距離可以慢慢淡入；改動後退場完成延到 `chapter3Top ≈ 171px`，開場文字只剩 191px 就要捲出畫面上緣，0.5s 的淡入根本跑不完。
+**解法**：把「保護圖片3的停留時間」與「相對第三章何時退場」拆成兩個各自獨立的旋鈕，不要共用一個門檻——
+- 跑道高度（`.ch2-final-runway`）只決定圖片3單獨佔畫面多久；
+- `updateHistoryExit` 的 `start`/`end`（現為 `0.95` / `0.70` 視窗高）只決定舞台相對第三章何時收，讓整段淡出都發生在第三章還沒進入閱讀區之前，開場文字就拿回約 0.7 個畫面高的淡入餘裕。
+
+改這一段時務必連帶檢查第三章開場文字（量 `introTop` 在解鎖那一刻離視窗頂端還有多遠，至少要留 0.5 個畫面高），否則會做出「第二章看起來對了、第三章開頭卻消失」這種很難聯想到成因的迴歸。
+
+## 13. 固定舞台的「最後一個視覺元素」需要自己的捲動跑道，否則永遠來不及被看到
+
+**問題**：想做「字卡捲走後，第三張大結局照片才單獨出現」，於是把照片的顯示條件綁在「字卡已捲出視野」。結果照片**完全沒出現過**。
+**原因**：第二章的退場淡出本來就錨定在同一張字卡上，且在 `top <= 0.20vh` 就已經 `visibility:hidden` 收完；而「字卡捲出視野」（`bottom <= 0.35vh`）比它更晚才成立。照片解鎖的那一刻，舞台早就關燈了。字卡是章節最後一個元素，它捲走的同時章節就結束——**「字卡走完」和「章節退場」之間沒有任何捲動距離**。
+**解法**：在最後一張卡片後面補一段純空白的捲動跑道（`#ch2-final-runway`，`105svh`，刻意與一張故事卡 `--scene-read-interval` 同量級，讓這一拍與其他敘事節拍等重），並把退場錨點改到跑道底緣。三個容易漏掉的細節：
+1. 跑道**不要**用 `.gantt-card-rebuilt` class，否則會被手機版的步驟判斷（`cards.forEach`）當成第 10 張卡片、也會被 `scenes` 的 `IntersectionObserver` 抓進去 `is-active` 輪替。用獨立 class 並加 `aria-hidden="true"`。
+2. 桌機版步驟是**整章捲動百分比**制（`20/30/…/84%`），章節一變高，所有門檻的實際落點就整批位移。要把跑道高度從除數裡扣掉（`rect.height - runwayHeight - innerHeight`），讓原有門檻維持原本語意；跑道區間內 `scrollPercent` 會超過 100，由最後的 `else` 收成 step 9。
+3. 檢查有沒有「第三章一露頭就強制退場」這類硬門檻（本例是 `chapter3Top <= viewportHeight`）。跑道底緣等於第三章頂端，這種門檻會比淡出區間**更早**成立，直接把舞台瞬間關掉、跑道等於白做。本例改成 `chapter3Top <= 0`，讓它退回單純的大跳躍保險。
+
+## 14. 本機 `localhost` 瀏覽器自動化可用，但被節流的分頁量到的數字會是假的
+
+先修正舊紀錄：`file://` 確實被擋（"Can't interact with browser-internal or unparseable URLs"），但 `python3 -m http.server` + `http://localhost:PORT` **可以正常導航與操作**，這條路是通的。
+
+真正的陷阱是分頁沒有真正在前景繪製時，量測結果會**安靜地錯**：
+- **`requestAnimationFrame` 不會觸發** → 所有 rAF 節流的捲動處理器（本頁的 `onScrollFrame`）在 `scrollTo()` 之後根本沒跑，class 完全沒更新。要嘛直接呼叫 `onScrollFrame()`，要嘛別相信結果。`await new Promise(r=>requestAnimationFrame(r))` 會直接掛住到 CDP 45s timeout。
+- **CSS transition 不會前進，而 `getComputedStyle` 會回傳過期值** —— 不是回傳「轉場起點」這麼單純。實測出現過三個相框的 `opacity` 與 cascade **完全相反**（規則明明只有 base `0 !important` 和 `.rebuilt-step-8 … nth-child(2) {1 !important}`，量到的卻是 2 號 `0`、3 號 `1`，剛好是上一個狀態的殘影）。也就是說：**枚舉 CSSOM 規則確認「誰該勝出」是可信的，`getComputedStyle` 的實際值不可信。**
+- **`resize_window` 改不動 layout viewport** → `outerWidth` 變了但 `innerWidth` 仍是 1920、`matchMedia('(max-width:1024px)')` 仍是 `false`，**手機版在這個環境量不到**，只能靠推理，要在 handoff 明講未驗證。
+
+可信的兩種訊號：
+1. **DOM class / JS 寫進去的 inline 值**（如 `stage.style.getPropertyValue('--history-exit-opacity')`）——這些是 JS 直接寫的，不經過樣式重算，掃描一整段捲動範圍拿門檻很準；
+2. **截圖**——截圖會強制真正繪製一次，是唯一能確認「肉眼看到什麼」的方法。
+
+實務作法：用 `scrollTo()` + 直接呼叫捲動處理器 + 讀 class/inline 值，掃出各個門檻的精確捲動位置；再對關鍵的兩三個位置各截一張圖確認視覺。別用 `getComputedStyle` 的 opacity 下結論。
