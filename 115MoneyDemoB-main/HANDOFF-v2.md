@@ -1,6 +1,6 @@
 # Handoff — `index-v2.html` / `database-v2.html` (the "-v2" workstream)
 
-_Last updated: 2026-07-28 · Branch: `adjust-hero-images`_
+_Last updated: 2026-07-28 · Branch: `chapter-2-refine`_
 
 ## What this is
 
@@ -617,3 +617,126 @@ additive (shadow only), PC's is the color swap.
   computed values only. Worth a real visual pass against the actual hero
   photo before merging, specifically checking the indicator over the
   photo's lighter regions.
+
+## 2026-07-28 第二章結尾節拍重排：文字先、圖片3後（`index.html` + 根目錄 `index.html`）
+
+分支 `chapter-2-refine`（從 `main` 開出），4 個 commit：`7660d0c` → `eff1b47`
+→ `1ad847e` → `90a9a98`。改的是**正式版** `115MoneyDemoB-main/index.html`，並同步
+到根目錄 `index.html`（GitHub Pages 實際發布的檔案，兩份保持 byte-identical）。
+
+### 需求
+
+使用者提供第二章分鏡逐格對照，唯一與現況不符的是最後一格：
+「第二章最尾端，出完兩張 96 年照片後**先出文字方塊，再出現圖片**」。
+其餘內容（步驟 1–9、101/105/113 年度與 96 年度的 bar highlight、紅色虛線、
+淺灰執行區、兩張 96 年照片、89 年唐飛/張俊雄結語文字＋第三張照片）都已存在。
+
+### 原本行為（錯的）
+
+第三張照片（`budget003.jpg`，唐飛/劉兆玄/林全 3 個大頭照）先淡入，字卡靠
+`armStep9CardReveal()` 等照片的 `transitionend` 才進場——順序剛好相反。
+
+### 最終行為（`90a9a98`）
+
+```
+step 7  圖片1（圍主席台）
+step 8  圖片1 淡出 → 圖片2（舉牌）
+step 9  圖片2 淡出 → 字卡「至於預算全數退回重編…」單獨淡入（左側留空）
+        ↓ 字卡實際捲出視野（bottom <= 0.35vh）
+        圖片3（3個大頭照）淡入，單獨佔畫面 ≈0.77 個畫面高
+        ↓ 跑道跑完（runwayBottom / chapter3Top 降到 0.95vh）
+        舞台淡出 → history-exit-complete
+        ↓
+        第三章開場文字淡入（晚審影響／新興預算無法動支）→ 第三章圖表
+```
+
+### 三次修正的過程（重要：前兩次都不夠，別只讀第一個 commit）
+
+1. `7660d0c` 單純把兩者的 gating 對調（字卡改由 `.is-active` 直接淡入，圖片3
+   改等新的 `.history-text-settled`，由字卡的 `transitionend` 補上）。
+   **不夠**：`transitionend` 只等 0.4s，字卡與圖片3實際上仍幾乎同時停在畫面上，
+   不是使用者要的「字卡先捲走」。
+2. `eff1b47` 把 `.history-text-settled` 改成**每幀依字卡實際捲動位置**判斷
+   （`bottom <= 0.35vh`），捲上捲下都會正確切換。
+   **仍然壞掉，而且更嚴重——圖片3完全不出現**：第二章的退場淡出本來就錨定在
+   同一張字卡上，`top <= 0.20vh` 就已 `visibility:hidden` 收完，比「字卡捲出視野」
+   更早成立。字卡是章節最後一個元素，它捲走的同時章節就結束，中間**沒有任何
+   捲動距離**留給圖片3。
+3. `1ad847e` 補上捲動跑道 `#ch2-final-runway` 並把退場錨點改到跑道底緣。
+4. `90a9a98` 修跨章節迴歸：第三章開場文字整段空白飄過。詳見下節。
+
+### `90a9a98` 修的跨章節迴歸（最容易再犯的一個）
+
+`1ad847e` 之後桌機看起來對了，但使用者回報「img3 之後緊接第三章圖表，中間留空
+才捲出 intro」。成因是**第三章開場文字的淡入掛在第二章的退場完成訊號上**
+（`chapter3Intro.classList.toggle('chapter3-intro-revealed', stage.classList.contains('history-exit-complete'))`），
+而**跑道底緣就等於第三章頂端**（實測 `runwayBottom === chapter3Top`）。退場門檻
+一改，等於同時把第三章開場文字往後推到 `chapter3Top ≈ 171px` 才解鎖，此時它只剩
+191px 就要捲出畫面上緣，0.5s 淡入跑不完 → 讀者只看到空白。
+
+解法是把兩件事拆成互相獨立的旋鈕：
+
+| 旋鈕 | 位置 | 只負責 |
+|---|---|---|
+| `.ch2-final-runway` 的 `height`（`105svh`） | CSS | 圖片3單獨停留多久 |
+| `updateHistoryExit` 的 `start`/`end`（`0.95`/`0.70` 視窗高） | JS | 舞台相對第三章何時退場 |
+
+調其中一個不會動到另一個。實測數字：圖片3單獨 675px（0.77 畫面高）；第三章開場
+文字解鎖時 `introTop=624`（0.71 畫面高的淡入餘裕），修正前只有 191px（0.22）。
+
+### 實作細節與踩過的坑
+
+- 跑道**刻意不是** `.gantt-card-rebuilt`：否則會被手機版步驟判斷
+  （`cards.forEach`）當成第 10 張卡片，也會被 `scenes` 的 `IntersectionObserver`
+  抓去輪替 `is-active`。用獨立 class + `aria-hidden="true"`。
+- 桌機步驟是**整章捲動百分比**制（`20/30/…/84%`），章節一變高門檻就整批位移。
+  已把跑道高度從除數扣掉（`rect.height - runwayHeight - innerHeight`），讓原門檻
+  維持原語意；跑道區間內 `scrollPercent` 會超過 100，由最後的 `else` 收成 step 9。
+- 桌機原本的硬退場門檻 `chapter3Top <= viewportHeight` 必須改成 `chapter3Top <= 0`
+  （與手機一致）。因為跑道底緣等於第三章頂端，這條門檻會比淡出區間**更早**成立，
+  一露頭就把舞台瞬間關掉、跑道等於白做。現在它只是大跳躍時的保險。
+- 手機／桌機的 `start`/`end` 拆分已取消（原 `0.10`/`-0.15` vs `0.40`/`0.20`）。
+  錨點統一成跑道底緣後，當初分開調校的理由（錨點不同）不再成立；且錨點等於
+  `chapter3Top` 時**負數終點永遠構不到**（`chapter3Top <= 0` 的保險會先把
+  `progress` 壓成 1，淡出變成瞬間跳掉）。手機與桌機的實際差異（translateY 位移
+  vs opacity 淡出）在下方的 `if (isMobileExit)` 分支，不在觸發時機。
+- `armStep9CardReveal()` / `armStep9ImageReveal()` 這類「亮起後定時解鎖」的
+  一次性機制已全部移除，改為每幀依位置判斷，倒捲時狀態才會正確還原。
+
+### ⚠️ 未驗證：手機版
+
+桌機（1478×879 / 1920×958）已用捲動掃描＋截圖驗證。**手機版完全沒量到**——
+這個環境的 `resize_window` 改不動 layout viewport（`outerWidth` 變了但
+`innerWidth` 仍是 1920、`matchMedia('(max-width:1024px)')` 仍 `false`）。
+手機的改動（共用 `start`/`end`、跑道、gate 門檻）都是從「`runwayBottom ===
+chapter3Top`」這個已量測到的幾何推導出來的，但**合併前值得在真機上看一次**，
+重點看三件事：
+1. 圖片3有沒有在字卡捲走後單獨出現（手機是頂部固定帶狀區，字卡是往帶狀區後方捲走）；
+2. 帶狀區的 translateY 退場有沒有變得太突然；
+3. 第三章開場文字有沒有正常淡入。
+
+### 順帶修正舊紀錄：`localhost` 瀏覽器自動化其實可用
+
+前一則（`.scroll-indicator`）寫的「standing `localhost` browser-automation
+limitation」需要修正：`file://` 確實被擋，但 `python3 -m http.server 8777` +
+`http://localhost:8777/index.html` **可以正常導航、執行 JS、截圖**，本次就是這樣
+驗證的。真正的陷阱是**分頁被節流時量到的數字會安靜地錯**——`rAF` 不觸發（捲動
+處理器根本沒跑，得直接呼叫 `onScrollFrame()`）、CSS transition 不前進、
+`getComputedStyle` 回傳過期值（實測出現過三個相框的 opacity 與 cascade
+**完全相反**的殘影）。可信的只有「DOM class / JS 寫的 inline 值」與「截圖」。
+詳見 `LEARNINGS.md` 第 14 條。
+
+### 如何驗證（桌機）
+
+```js
+// 在 http://localhost:8777/index.html 的 console
+const ch2 = document.getElementById('chapter-2-rebuilt');
+const ch2Doc = ch2.getBoundingClientRect().top + scrollY;
+for (let rel = 6500; rel <= 9800; rel += 25) {
+  scrollTo(0, ch2Doc + rel);
+  onScrollFrame();                      // rAF 節流的分頁不會自己跑，必須手動呼叫
+  // 讀 ch2.classList / stage.style.getPropertyValue('--history-exit-opacity')
+}
+```
+關鍵門檻（1478×879）：圖片3解鎖 `rel=7575`、退場開始 `8250`、退場完成＋第三章
+開場文字解鎖 `8475`。
