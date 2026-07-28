@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>document.documentElement.classList.add('js');</script>
     <title>總預算卡關 203 天 — 115年度中央政府總預算審議回顧</title>
-    <link rel="preload" as="image" href="hero-collage.jpg" fetchpriority="high" media="(min-width: 1025px)">
+    <link rel="preload" as="image" href="hero-collage-v2.jpg" fetchpriority="high" media="(min-width: 1025px)">
     <link rel="preload" as="image" href="hero-collage-mobile-clean.webp" type="image/webp" fetchpriority="high"
         media="(max-width: 1024px)">
     <!-- Published at https://ke22.github.io/govBudget/ (GitHub Pages) -->
@@ -82,6 +82,10 @@
             --chart-cat-new: #6FAE85;
             --chart-cat-extend: #7CA2D6;
             --chart-cat-reserve: #D4A857;
+            /* 第三章「新興預算規模」長條圖專用分類色 —— 與 --chart-cat-new/extend（沿用給第二章
+               甘特圖民進黨/國民黨政黨色的綠／藍）區隔開，避免改色時牽動政黨色編碼 */
+            --chart-cat-ch3-new: #C9763A;
+            --chart-cat-ch3-extend: #9C5B86;
 
             /* 固定頂部導覽列高度，供釘住的甘特圖舞台預留頂部間距，避免圖表標題被 nav 蓋住 */
             --site-header-h: 83px;
@@ -183,7 +187,7 @@
             /* 疊加一層淺色網點呼應全站的印刷網點紋理，再蓋拼貼圖 */
             background-image:
                 radial-gradient(circle, rgba(237, 230, 211, 0.06) 1px, transparent 1.2px),
-                url('hero-collage.jpg');
+                url('hero-collage-v2.jpg');
             background-size: 4px 4px, 100% auto;
             background-repeat: repeat, no-repeat;
             background-position: 0 0, center center;
@@ -206,7 +210,12 @@
         .hero-dek-panel {
             position: absolute;
             left: 50%;
-            bottom: 160px;
+            /* 原為固定 160px，圖片用 background-size: 100% auto 隨寬度縮放、
+               垂直置中裁切，跟隨視窗「高度」變化時，圖片內烘焙的標題位置會跟
+               這裡的固定像素值脫鉤而跑位。改用區塊自身高度的百分比，至少讓
+               留白隨視窗高度等比縮放（以 900px 視窗高、扣掉 83px header 換算：
+               290px / 817px ≈ 35.5%，290px 是美編在 devtools 試過確認好看的值） */
+            bottom: 35.5%;
             transform: translateX(-50%);
             z-index: 2;
             width: 90%;
@@ -346,7 +355,8 @@
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            color: #a5271e;
+            color: var(--ui-ink-inverse);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
             font-size: var(--type-caption);
             font-weight: 500;
             animation: bounce 2s infinite;
@@ -356,7 +366,8 @@
             content: '';
             width: 2px;
             height: 40px;
-            background: linear-gradient(to bottom, #a5271e, transparent);
+            background: linear-gradient(to bottom, var(--ui-ink-inverse), transparent);
+            filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
         }
 
         /* 【已移除】此處原有一塊 @media (max-width: 640px) 的 .scroll-indicator 覆寫
@@ -586,8 +597,29 @@
             padding: 20px 0;
             display: flex;
             flex-direction: column;
+            gap: 8px;
+            /* 只剩「前言」節點與 .timeline-spine 兩個 flex 子層，這裡改為極小間距，
+               讓紅色進度線緊接在前言底部開始畫，中間不留一段沒有紅線的死間距
+               （跑道長度改由 .timeline-lead-in 負責，見 .timeline-spine 內部） */
+        }
+
+        /* 包住主線＋所有時間軸節點／卡片的容器：讓紅線只從這裡開始往下畫，
+           不再從最外層（含開場「前言」節點）的頂端就開始，紅線起點因此落在
+           前言文字底部（與前一個 row 的 8px 間距之後） */
+        .timeline-spine {
+            position: relative;
+            display: flex;
+            flex-direction: column;
             gap: 40px;
-            /* 控置上下元件之間的間距 */
+            /* 終點問號圓章以 bottom:0 貼齊本層底邊，沒有這段留白的話會直接
+               貼在最後一張卡片下緣，加上緩衝讓兩者不再擠在一起 */
+            padding-bottom: 50px;
+        }
+
+        /* 前言到第一個節點之間的「跑道」：讓紅色進度線從前言底部開始，
+           有一段可視的空間往下畫，再抵達第一張節點卡片，而不是緊貼著就撞上卡片 */
+        .timeline-lead-in {
+            height: 60px;
         }
 
         /* 置中貫穿垂直主線 */
@@ -718,6 +750,50 @@
             line-height: 1.4;
         }
 
+        /* 開場「前言」節點：緊接在時間軸紅線起點，不使用實體填色卡片，文字改為反白淺色，且無邊框 */
+        .timeline-block-node.node-preface {
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .timeline-block-node.node-preface p {
+            color: var(--ui-ink-inverse);
+        }
+
+        /* 手繪圈選標註：疊在前言句子上方，模擬紅筆隨手圈起來的效果 */
+        .node-preface-doodle {
+            position: absolute;
+            inset: -16px -22px;
+            width: calc(100% + 44px);
+            height: calc(100% + 32px);
+            overflow: visible;
+            pointer-events: none;
+            transform: rotate(-2deg);
+        }
+
+        .node-preface-doodle path {
+            fill: none;
+            stroke: var(--np-seal-red-bright);
+            stroke-width: 3;
+            stroke-linecap: round;
+            opacity: 0.85;
+            /* 手寫圈選動畫：路徑總長約 700，先用等長的虛線把整條線「藏」起來
+               （dashoffset 等於 dasharray，等於一段長度為 0 的可見線），
+               捲動進到畫面內時再讓 dashoffset 歸零，模擬紅筆隨手畫出圈的過程 */
+            stroke-dasharray: 700;
+            stroke-dashoffset: 700;
+        }
+
+        .node-preface-doodle.doodle-drawn path {
+            animation: node-preface-doodle-draw 1.1s ease-out forwards;
+        }
+
+        @keyframes node-preface-doodle-draw {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
         /* node-danger / node-warning / node-success 卡片本身不再與基本款有任何樣式差異
            （邊框、底色、日期文字色皆沿用 .timeline-block-node 預設），狀態改由上方新增的
            右上角印章（::after）標示，見基本規則區塊 */
@@ -779,6 +855,12 @@
             transform: translateY(0) !important;
         }
 
+        /* 前言節點在 .timeline-spine 之外，不受紅線捲動觸發的淡入系統控制，恆常顯示 */
+        .js .center-timeline-container .timeline-row.item-node .timeline-block-node.node-preface {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+
         .timeline-row.item-card:hover .story-card {
             box-shadow: 0 15px 35px rgba(27, 23, 18, 0.12);
             /* 原為藍綠色調陰影，改為新聞剪貼風格暖褐色調 */
@@ -791,8 +873,12 @@
             .center-timeline-container {
                 padding: 20px 3%;
                 /* 縮減兩側內襯，給卡片更多伸展空間 */
+                gap: 8px;
+                /* 前言與 .timeline-spine 之間只留極小間距，理由同桌機版 */
+            }
+
+            .timeline-spine {
                 gap: 25px;
-                /* 微調手機版上下間距 */
             }
 
             /* 修正：主線在手機版強制維持在正中間 */
@@ -1238,11 +1324,6 @@
             box-shadow: 0 0 10px rgba(124, 162, 214, 0.2);
         }
 
-        .gantt-bar-115-rebuilt {
-            background: var(--chart-cat-impact);
-            box-shadow: 0 0 10px rgba(231, 76, 60, 0.2);
-        }
-
         /* 🔓 階梯 5：高亮蔡、馬任內順利過關的三個年份 */
         .rebuilt-step-5 .gantt-row-rebuilt {
             opacity: 0.15 !important;
@@ -1568,13 +1649,13 @@
         }
 
         .ch3-color-teal {
-            background: linear-gradient(to right, #386448, var(--chart-cat-new)) !important;
-            box-shadow: 0 0 10px rgba(111, 174, 133, 0.2);
+            background: linear-gradient(to right, #6B3A1E, var(--chart-cat-ch3-new)) !important;
+            box-shadow: 0 0 10px rgba(201, 118, 58, 0.2);
         }
 
         .ch3-color-blue {
-            background: linear-gradient(to right, #3B5A80, var(--chart-cat-extend)) !important;
-            box-shadow: 0 0 10px rgba(124, 162, 214, 0.2);
+            background: linear-gradient(to right, #4F2D44, var(--chart-cat-ch3-extend)) !important;
+            box-shadow: 0 0 10px rgba(156, 91, 134, 0.2);
         }
 
         .ch3-color-orange {
@@ -2570,14 +2651,18 @@
             align-items: center;
         }
 
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .nav-logo {
-            height: 24px;
-            width: 24px;
-            padding: 4px;
-            box-sizing: content-box;
-            background: var(--ui-paper);
-            border-radius: 50%;
-            margin-right: 4px;
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            color: var(--ui-accent);
         }
 
         .nav-btn {
@@ -2942,6 +3027,12 @@
                落在內文字級：由 --type-body（約 16px）提升到約 18–20px。 */
             .story-card p {
                 font-size: clamp(1.125rem, calc(1.05rem + 0.32vw), 1.25rem);
+            }
+
+            /* 時間軸故事卡文字需與 .timeline-block-node p 對齊字級，
+               故排除上方通用的手機放大規則，維持與節點一致的 --type-body */
+            .timeline-row.item-card .story-card p {
+                font-size: var(--type-body);
             }
         }
 
@@ -3440,6 +3531,7 @@
                 transform: translateX(-50%);
                 animation: bounce-mobile 2.4s infinite;
                 color: var(--ui-ink-inverse);
+                text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
                 font-size: var(--type-caption);
                 gap: 4px;
             }
@@ -3450,6 +3542,7 @@
                縮短的理由不存在了。background 與基底完全相同，不再重複宣告。 */
             .scroll-indicator::after {
                 height: 40px;
+                filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
             }
 
             .gantt-backdrop-box-rebuilt {
@@ -3690,11 +3783,19 @@
 
     <!-- 固定 Header -->
     <header class="site-header">
-        <div class="site-brand">中央政府總預算觀測站</div>
+        <div class="brand">
+            <svg class="nav-logo" viewBox="0 0 478 235" xmlns="http://www.w3.org/2000/svg" fill="currentColor" role="img" aria-label="中央社">
+                <path d="M116.176 0.0332031L115.535 0.0592377C51.8306 0.501815 0 53.0839 0 117.271C0 181.906 52.2059 234.488 116.383 234.488H137.976V185.668C133.213 186.69 128.341 187.211 123.488 187.211C85.1873 187.211 54.0242 155.833 54.0242 117.271C54.0242 78.6948 85.1873 47.3043 123.488 47.3043C128.289 47.3043 133.155 47.825 137.976 48.8534V0.0332031H116.176Z"/>
+                <path d="M148.433 234.488H201.92V100.641L285.567 218.158V117.634L202.528 0H148.433V52.3217C174.963 63.0282 192.078 88.4568 192.078 117.27C192.078 146.063 174.963 171.499 148.433 182.212V234.488Z"/>
+                <path d="M359.966 234.488H477.999V183.09L350.118 0H296.016V234.488H349.523V100.615L407.08 182.4H359.966V234.488Z"/>
+                <path d="M123.849 177.303C91.1333 177.303 64.5127 150.488 64.5127 117.529C64.5127 84.5705 91.1398 57.7686 123.849 57.7686C156.572 57.7686 183.18 84.577 183.18 117.529C183.186 150.488 156.572 177.303 123.849 177.303ZM123.849 67.1928C96.2905 67.1928 73.8759 89.7903 73.8759 117.536C73.8759 145.282 96.2905 167.86 123.849 167.86C151.402 167.86 173.829 145.282 173.829 117.536C173.836 89.7903 151.402 67.1928 123.849 67.1928Z"/>
+                <path d="M154.411 74.7837L153.841 75.2198C152.631 76.0789 142.705 75.8316 137.037 81.0188C135.251 82.6525 132.514 88.445 130.592 89.6426C128.67 91.0159 126.574 92.3761 124.128 92.7341C122.387 92.9033 120.989 92.2199 119.773 91.0159C118.893 89.9875 118.188 88.4515 116.984 87.5794C115.923 86.883 115.412 88.1001 115.069 88.9527C114.02 92.2264 114.525 96.1836 112.28 99.2751C111.219 100.655 109.472 101.852 108.074 102.887C107.032 103.675 105.848 104.274 104.851 105.133C103.926 105.927 103.344 106.936 103.616 108.192C103.861 109.487 103.92 110.854 104.463 112.077C104.884 112.989 105.363 113.945 105.207 114.98C104.936 116.731 103.383 117.981 103.823 119.887C105.013 125.283 109.789 128.928 114.946 130.399C116.557 130.854 117.683 131.473 117.955 133.699C118.194 135.768 114.668 136.393 113.257 136.452C106.916 136.712 101.629 133.666 97.2548 129.364C95.2554 127.398 93.1329 125.556 91.1853 123.539C90.3182 122.693 89.4964 121.677 89.2376 120.467C88.9593 119.119 89.5482 117.896 89.9235 116.653C90.3635 115.11 90.6546 113.438 90.3246 111.843C90.1888 111.127 89.9364 110.45 89.7035 109.773C89.4835 109.149 89.2505 108.511 88.8299 107.99C88.4158 107.541 87.8399 107.274 87.2122 107.359C87.141 107.359 87.0828 107.365 87.0116 107.385C86.2804 107.541 85.7045 108.042 85.0639 108.361C84.5527 108.621 83.9898 108.797 83.4268 108.934C82.055 109.259 80.625 109.337 79.2209 109.285C77.8167 109.259 76.4126 108.934 75.0343 108.758C74.3484 108.673 73.8437 108.387 73.6884 107.717C73.5719 107.202 73.4554 106.669 73.3195 106.181L72.8342 104.951C71.7924 109.122 71.2295 113.47 71.2295 117.948C71.2295 147.184 94.8412 170.973 123.869 170.973C152.91 170.973 176.521 147.184 176.521 117.948C176.502 100.167 167.766 84.4163 154.411 74.7837ZM147.927 159.361C145.928 161.815 142.602 165.421 139.282 163.286C137.775 162.473 136.61 161.164 135.128 160.344C133.452 159.205 131.472 158.541 129.466 158.372C124.975 158.047 120.155 159.205 115.994 157.227C112.662 155.762 109.847 152.15 110.332 148.388C110.843 145.121 114.493 143.318 117.146 142.003C120.64 140.207 124.309 138.248 128.133 137.584C128.133 137.584 132.326 136.556 133.446 136.946C134.876 137.415 136.61 137.259 137.936 138.079C139.101 138.743 139.774 139.882 140.609 140.864C141.599 142.342 142.757 143.656 144.103 144.802C145.753 146.117 147.584 147.256 149.079 148.883C150.25 150.198 150.923 151.831 150.748 153.641C150.418 155.769 149.085 157.728 147.927 159.361Z"/>
+            </svg>
+            <div class="site-brand">中央政府總預算觀測站</div>
+        </div>
         <button class="nav-toggle" id="nav-toggle" type="button" aria-label="開啟導覽選單" aria-expanded="false"
             aria-controls="site-nav">☰</button>
         <nav id="site-nav">
-            <img src="cna-favicon-light.svg" alt="中央社" class="nav-logo" decoding="async">
             <a href="index.html" class="nav-btn nav-active" aria-current="page">年度深度報導</a>
             <a href="database.html" class="nav-btn">完整資料庫</a>
             <a href="https://www.cna.com.tw/topic/newstopic/3958.aspx" target="_blank" class="nav-btn">總預算案專頁 ↗</a>
@@ -3791,9 +3892,25 @@
                     中央政府總預算是政府施政用錢的依據，在「預算法」中有規定審議時程，原則上須在預算執行年度開始前一個月完成審議。如果來不及在時限內完成，依預算法第54條，政府可依上年度標準繼續執行既有業務，不過新增計畫與部分預備金，原則上須待預算通過才能動用。
                 </span>
             </p>
+            <p class="chapter-intro-copy editorial-body">
+                <span>
+                    行政院依審議時程函請，為什麼立委不願配合安排審議，要從軍警待遇修法說起。
+                </span>
+            </p>
         </div>
 
         <div class="center-timeline-container" id="center-timeline-container">
+            <div class="timeline-row item-node">
+                <div class="timeline-block-node node-preface">
+                    <svg class="node-preface-doodle" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true">
+                        <path d="M18,52 C14,18 65,4 150,5 C240,6 288,20 285,54 C282,86 218,97 145,96 C68,95 16,86 24,60" />
+                    </svg>
+                    <p>行政院依審議時程函請，為什麼立委不願配合安排審議，要從軍警待遇修法說起。</p>
+                </div>
+            </div>
+
+            <div class="timeline-spine" id="timeline-spine">
+            <div class="timeline-lead-in" aria-hidden="true"></div>
             <div class="center-main-line">
                 <div class="center-main-line-fill" id="center-main-line-fill"></div>
             </div>
@@ -3806,16 +3923,16 @@
                 </div>
             </div>
 
+            <div class="timeline-row item-card left-side">
+                <div class="story-card">
+                    <p>立法院分別在114年1月7日三讀「警察人員人事條例」增加警校退休金，又在同年6月10日三讀「軍人待遇條例」增加軍人薪資及加給。</p>
+                </div>
+            </div>
+
             <div class="timeline-row item-node">
                 <div class="timeline-block-node">
                     <span class="node-date">2025/06/10</span>
                     <p>立法院三讀「軍人待遇條例」</p>
-                </div>
-            </div>
-
-            <div class="timeline-row item-card left-side">
-                <div class="story-card">
-                    <p>立法院分別在114年1月7日三讀「警察人員人事條例」增加警校退休金，又在同年6月10日三讀「軍人待遇條例」增加軍人薪資及加給。</p>
                 </div>
             </div>
 
@@ -3891,6 +4008,7 @@
                     <span class="node-date">2026/04/21</span>
                     <p>付委審查</p>
                 </div>
+            </div>
             </div>
 
         </div>
@@ -4000,9 +4118,6 @@
                         <div class="y-tick"><span class="gantt-year-rebuilt">114年</span>
                             <div class="tick-line-y"></div>
                         </div>
-                        <div class="y-tick"><span class="gantt-year-rebuilt year-115-label">115年</span>
-                            <div class="tick-line-y"></div>
-                        </div>
                     </div>
 
                     <div class="gantt-grid-rebuilt">
@@ -4109,12 +4224,6 @@
                                 <div class="gantt-bar-rebuilt party-dpp" style="left: 22.6%; --w: 24.4%;"></div>
                             </div>
                         </div>
-                        <div class="gantt-row-rebuilt">
-                            <div class="gantt-track-rebuilt">
-                                <div class="gantt-bar-rebuilt party-dpp gantt-bar-115-rebuilt"
-                                    style="left: 77%; --w: 15%;"></div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -4124,7 +4233,7 @@
                     <div class="history-img-frame">
                         <img src="budget96001.jpg" alt="陳水扁時期預算案審議" loading="lazy" decoding="async"
                             width="2100" height="1395">
-                        <div class="img-caption editorial-caption">民國96年5月11日，民進黨立委為通過總預算案，聚眾佔據議場主席台，將立法院長王金平團團包圍。</div>
+                        <div class="img-caption editorial-caption">民國96年5月11日，民進黨立委為通過總預算案，聚眾占據議場主席台，將立法院長王金平團團包圍。</div>
                     </div>
                     <div class="history-img-frame">
                         <img src="budget96002.jpg" alt="朝小野大政治攻防" loading="lazy" decoding="async"
@@ -4234,9 +4343,9 @@
 
                 <div class="ch3-legend-container" id="ch3-main-legend">
                     <div class="ch3-legend-item"><span class="dot"
-                            style="background-color: var(--chart-cat-new);"></span> 新興計畫</div>
+                            style="background-color: var(--chart-cat-ch3-new);"></span> 新興計畫</div>
                     <div class="ch3-legend-item"><span class="dot"
-                            style="background-color: var(--chart-cat-extend);"></span> 延續計畫增額
+                            style="background-color: var(--chart-cat-ch3-extend);"></span> 延續計畫增額
                     </div>
                     <div class="ch3-legend-item"><span class="dot"
                             style="background-color: var(--chart-cat-reserve);"></span> 預備金/災害準備金
@@ -5155,7 +5264,7 @@
         // 第一章時間軸主線：隨捲動進度由上往下畫出，0% 對應主線頂端進入視窗，
         // 100% 對應主線底端捲出視窗頂部（讀者讀完整段時間軸）
         function updateTimelineMainLineFill() {
-            const container = document.getElementById('center-timeline-container');
+            const container = document.getElementById('timeline-spine');
             const fill = document.getElementById('center-main-line-fill');
             if (!container || !fill) return;
             const rect = container.getBoundingClientRect();
@@ -5188,13 +5297,27 @@
                 const fillTipViewportY = rect.top + (percent / 100) * rect.height;
                 container.querySelectorAll('.timeline-row.item-card, .timeline-row.item-node').forEach(row => {
                     const rowRect = row.getBoundingClientRect();
-                    // 40px 領先量：紅線視覺頂端要先劃過「這一行視覺頂部再往下 40px」，
-                    // 該行（節點或卡片）才觸發淡入，讓紅線視覺上先抵達、內容隨後跟上。
-                    // 節點與卡片共用同一套比較方式與領先量，讓整條時間軸讀起來是同一種節奏。
+                    // 紅線視覺頂端一觸及「這一行視覺頂部」即觸發淡入，不再領先 40px，
+                    // 節點與卡片共用同一套比較方式，讓整條時間軸讀起來是同一種節奏。
                     const revealedClass = row.classList.contains('item-card') ? 'timeline-card-revealed' : 'timeline-node-revealed';
-                    row.classList.toggle(revealedClass, fillTipViewportY >= rowRect.top + 40);
+                    row.classList.toggle(revealedClass, fillTipViewportY >= rowRect.top);
                 });
             }
+        }
+
+        // 前言手繪圈選：捲到畫面內時才播放一次「畫圈」動畫，而不是一進頁面就在
+        // 看不到的地方播完；只需觸發一次，播放完就中斷觀察者
+        const nodePrefaceDoodle = document.querySelector('.node-preface-doodle');
+        if (nodePrefaceDoodle && 'IntersectionObserver' in window) {
+            const doodleObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        nodePrefaceDoodle.classList.add('doodle-drawn');
+                        doodleObserver.disconnect();
+                    }
+                });
+            }, { threshold: 0.4 });
+            doodleObserver.observe(nodePrefaceDoodle);
         }
 
         // =======================================================
