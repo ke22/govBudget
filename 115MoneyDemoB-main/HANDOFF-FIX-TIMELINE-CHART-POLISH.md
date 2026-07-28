@@ -375,3 +375,23 @@ spectra instructions apply --change "fix-timeline-chart-polish" --json
 - Changing timeline layout or card positioning
 - Modifying any file other than `115MoneyDemoB-main/index.html`
 - Changing `.cta-btn` background color
+
+## Outcome (2026-07-22/23)
+
+All 10 tasks applied via `/spectra-apply` and archived under
+`openspec/changes/archive/2026-07-22-fix-timeline-chart-polish/`. One
+implementation detail from Task 5.1 (pyramid chart animation) shipped with a
+real bug, found the next day from a live "the chart disappeared" report: the
+new `#ch4-pyramid`/`#ch4-pyramid.visible-box` rules only declared
+`opacity`/`transform`, never `visibility` — so `.dynamic-chart-box`'s base
+`visibility: hidden !important` won regardless of the `.visible-box` class,
+leaving the chart's layout space intact but rendering nothing. Fixed by also
+declaring `visibility` in both selectors (`hidden !important` / `visible
+!important`), same pattern the pre-existing `.dynamic-chart-box`/
+`.is-active-chapter .dynamic-chart-box.visible-box` pair already uses. Same
+bug, same fix, was ported into `index-v2.html` at the same time since that
+file has its own independent copy of this exact pattern. Full detail and
+downstream `index-v2.html`-only polish (Chapter 2 axis/red-line timing, card 9
+fade delay, terminus mark simplification, CTA/footer/scroll-indicator color,
+hero image swap) is in `HANDOFF-v2.md`'s "2026-07-23" section — this file's
+own scope ends at the 10 tasks above.
