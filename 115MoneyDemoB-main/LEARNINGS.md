@@ -71,3 +71,9 @@ stages jump when the mobile browser address bar collapses/expands.
 **問題**：把 header 裡的 CNA 圖示從 `<img src="...svg">` 改成 `background-color` + `mask-image: url('cna-logo.svg')` 想讓圖示顏色跟著標題文字變，結果使用者直接用瀏覽器開啟本機檔案（`file://` 而非 `http://`）時，圖示整個消失——不是顯示成破圖，是完全不可見，比原本的 `<img>` 還更難察覺是壞掉。
 **原因**：多數瀏覽器對 `mask-image`/`-webkit-mask-image` 參照外部 SVG 資源時，在 `file://` 協定下會拒絕載入（視為需要 CORS 驗證的外部資源，即使是同目錄下的檔案），而且失敗後沒有任何 fallback：mask 定義了元素的可見範圍，遮罩圖載入失敗＝可見範圍是空的＝整個元素完全不渲染，不像 `<img>` 壞圖至少有裂圖示或 alt 文字可以看出異常。
 **解法**：需要用 CSS 變數控制顏色、又要在 `file://` 下也能穩定顯示的裝飾性圖示，改成把 SVG 的 path 資料直接內嵌進 HTML（`<svg fill="currentColor">...</svg>`），用 `color` 屬性控制顏色，不再對外發任何請求。同一份 path 資料如果要跨頁重複使用，就是複製貼上到每個檔案裡，沒有更輕的做法能同時滿足「CSS 控色」+「`file://` 穩定」兩個條件。驗證方式：本機起 `python3 -m http.server` 測試不算數（那是 `http://`），要嘛實際用瀏覽器開啟本機檔案路徑測試，要嘛就假設任何用到 `mask-image`/`background-image` 參照外部檔案的裝飾元素在 `file://` 下都不可信。
+
+## 11. Hero 標題烘焙在圖片裡時，`background-size: 100% auto` 只跟著寬度縮放，跟疊在上面的絕對定位面板沒有共同基準
+
+**問題**：`index-v2.html` 桌機版的 hero 標題（`.hero-title`）其實是 `.hero-sr-only`（畫面上看不到，只給螢幕閱讀器），視覺上看到的標題文字是直接畫在 `hero-collage-v2.jpg` 裡的。疊在圖片上方的 `.hero-dek-panel` 用固定 `bottom: 160px` 定位，結果在不同視窗「高度」下，面板跟圖片裡標題的視覺間距會跑位——改視窗寬度沒事，改高度就跑位。
+**原因**：`.hero-section` 的背景圖用 `background-size: 100% auto`（寬度撐滿、高度依圖片原始比例自動算），再用 `background-position: center center` + `overflow: hidden` 垂直置中裁切。圖片在畫面上實際落點只跟「容器寬度」有關；而 `.hero-dek-panel` 的 `bottom: 160px` 只跟「容器高度」有關（是從容器底部往上量固定像素）。兩個疊在一起的視覺元素分別鎖定寬度、高度兩個不同的軸，容器長寬比一變，兩者的相對關係就不再固定。
+**解法（部分解，非物理精確解）**：沒有把圖片改成固定長寬比容器（`aspect-ratio` + 類 `object-fit` 排版，改動較大，這次使用者選擇不做）的情況下，把面板的 `bottom` 從固定 px 改成該容器自身高度的百分比（例如 `bottom: 35.5%`，用某個參考視窗高度反推出來的值），至少讓留白「隨視窗高度等比縮放」，而不是視窗一變高留白就顯得過大／過小。這只是讓跑位幅度變小，不是让面板真正物理貼齊圖片裡的標題座標——要做到後者，一定要先讓圖片本身的顯示尺寸變得可預測（鎖定比例的容器），沒有其他更輕的做法。

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>document.documentElement.classList.add('js');</script>
     <title>總預算卡關 203 天 — 115年度中央政府總預算審議回顧</title>
-    <link rel="preload" as="image" href="hero-collage.jpg" fetchpriority="high" media="(min-width: 1025px)">
+    <link rel="preload" as="image" href="hero-collage-v2.jpg" fetchpriority="high" media="(min-width: 1025px)">
     <link rel="preload" as="image" href="hero-collage-mobile-clean.webp" type="image/webp" fetchpriority="high"
         media="(max-width: 1024px)">
     <!-- Published at https://ke22.github.io/govBudget/ (GitHub Pages) -->
@@ -187,7 +187,7 @@
             /* 疊加一層淺色網點呼應全站的印刷網點紋理，再蓋拼貼圖 */
             background-image:
                 radial-gradient(circle, rgba(237, 230, 211, 0.06) 1px, transparent 1.2px),
-                url('hero-collage.jpg');
+                url('hero-collage-v2.jpg');
             background-size: 4px 4px, 100% auto;
             background-repeat: repeat, no-repeat;
             background-position: 0 0, center center;
@@ -210,7 +210,12 @@
         .hero-dek-panel {
             position: absolute;
             left: 50%;
-            bottom: 160px;
+            /* 原為固定 160px，圖片用 background-size: 100% auto 隨寬度縮放、
+               垂直置中裁切，跟隨視窗「高度」變化時，圖片內烘焙的標題位置會跟
+               這裡的固定像素值脫鉤而跑位。改用區塊自身高度的百分比，至少讓
+               留白隨視窗高度等比縮放（以 900px 視窗高、扣掉 83px header 換算：
+               290px / 817px ≈ 35.5%，290px 是美編在 devtools 試過確認好看的值） */
+            bottom: 35.5%;
             transform: translateX(-50%);
             z-index: 2;
             width: 90%;
@@ -350,7 +355,8 @@
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            color: #a5271e;
+            color: var(--ui-ink-inverse);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
             font-size: var(--type-caption);
             font-weight: 500;
             animation: bounce 2s infinite;
@@ -360,7 +366,8 @@
             content: '';
             width: 2px;
             height: 40px;
-            background: linear-gradient(to bottom, #a5271e, transparent);
+            background: linear-gradient(to bottom, var(--ui-ink-inverse), transparent);
+            filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
         }
 
         /* 【已移除】此處原有一塊 @media (max-width: 640px) 的 .scroll-indicator 覆寫
@@ -3021,6 +3028,12 @@
             .story-card p {
                 font-size: clamp(1.125rem, calc(1.05rem + 0.32vw), 1.25rem);
             }
+
+            /* 時間軸故事卡文字需與 .timeline-block-node p 對齊字級，
+               故排除上方通用的手機放大規則，維持與節點一致的 --type-body */
+            .timeline-row.item-card .story-card p {
+                font-size: var(--type-body);
+            }
         }
 
         /* 手機版：第三章結語、第四章內文及結尾 CTA 段落字級縮小、側距加大，
@@ -3518,6 +3531,7 @@
                 transform: translateX(-50%);
                 animation: bounce-mobile 2.4s infinite;
                 color: var(--ui-ink-inverse);
+                text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
                 font-size: var(--type-caption);
                 gap: 4px;
             }
@@ -3528,6 +3542,7 @@
                縮短的理由不存在了。background 與基底完全相同，不再重複宣告。 */
             .scroll-indicator::after {
                 height: 40px;
+                filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
             }
 
             .gantt-backdrop-box-rebuilt {

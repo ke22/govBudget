@@ -1,6 +1,6 @@
 # Handoff — `index-v2.html` / `database-v2.html` (the "-v2" workstream)
 
-_Last updated: 2026-07-22 · Branch: `optimize-index-frontend-perf`_
+_Last updated: 2026-07-28 · Branch: `adjust-hero-images`_
 
 ## What this is
 
@@ -12,33 +12,31 @@ production pages. This is a **separate file** from `115MoneyDemoB-main/index.htm
 newsprint-identity history. Nothing in this document affects the live
 `index.html`/`database.html`.
 
-## ⚠️ OPEN ACTIONS: two unverified scroll-behavior changes stacked on this file
+## ⚠️ OPEN ACTIONS as of 2026-07-23
 
-Neither has been scroll-tested (browser automation can't reach `localhost`
-here — see Gotchas). Both need a manual forward+reverse scroll-through,
-desktop and mobile widths, before being trusted:
-
-1. **2026-07-22 optimize pass's scroll-hot-path trims** (commit `2168b29`,
-   committed). Logic-equivalent by inspection. Confirm the Chapter-1 timeline
-   reveal, the Chapter-2 Gantt sequence, and the Chapter-3 bar growth all
-   behave exactly as before. Suspects if anything regresses: the cached
-   `MQ_REDUCED`/`MQ_MOBILE` MediaQueryLists and the `timelineOnScreen` gate in
-   `updateTimelineMainLineFill()`.
-2. **2026-07-22 Chapter 1 node+card fade unification** (details below,
-   **UNCOMMITTED**). Bigger surface than #1: item-nodes now fade in (new), the
-   fade runs on mobile too for both nodes and cards (new), and the reveal
-   trigger itself was rewritten from a scroll-progress-percentage comparison to
-   a direct on-screen-pixel comparison (`fillTipViewportY` vs each row's own
-   `getBoundingClientRect().top + 40`) after the percentage-based version
-   turned out to have a real bug (see the "three iterations" writeup below —
-   the visual reveal was firing near each row's center, not near its top, and
-   the gap grew with how deep a row sat in the container). Confirm: (a) the red
-   line's visible tip reaching ~40px above a row is what makes that row fade
-   in, not some point deep inside it, (b) this holds for rows near the top of
-   the timeline AND rows near the bottom equally, (c) each date node fades in
-   with the same rhythm as its story card, (d) mobile now shows the fade
-   instead of always-visible content, (e) reverse-scroll un-reveals nodes
-   symmetrically, same as cards already do.
+1. **Another Claude Code session is concurrently editing this same file** (and
+   `database.html`/`database-v2.html`) **on the same branch, in the same local
+   checkout.** Confirmed twice this session: the Edit tool warned the file had
+   changed on disk between reads, and a full commit (`295ed63 style(database):
+   adopt index-v2's fluid type-scale tokens, sync pie chart palette`) appeared
+   on `optimize-index-frontend-perf` that this session never authored. As of
+   this writing their in-progress (uncommitted) work touches `.hero-headline-panel`
+   and `.scroll-indicator` mobile positioning (grid-based → `position:absolute`
+   centered) and removes a chunk of Chapter 2/3 "flatten on compact mobile"
+   CSS (`#chapter-2-rebuilt`, `.gantt-fixed-stage-rebuilt`, `.gantt-card-rebuilt`
+   `min-height:auto` overrides) in favor of keeping the pinned/scroll-linked
+   mechanism at every width. **Do not blindly `git add` the whole file** — diff
+   first and stage only your own hunks (see Gotchas below for the exact
+   technique used this session).
+2. **2026-07-22 optimize pass's scroll-hot-path trims** (commit `2168b29`,
+   committed, live for a while now with no regressions reported) and the
+   **Chapter 1 node+card fade unification** (item below, now committed via
+   `8f48a99` and deployed to both `index.html` and `index-v2.html`) are both
+   still nominally "verified via source-level review, not a live scroll-test"
+   per this environment's standing limitation (see Gotchas). No issues have
+   surfaced from real usage since, but a real scroll-through is still the
+   better bar if this environment's browser automation ever starts reaching
+   `localhost`.
 
 ## 2026-07-22 review + optimize pass (shipped)
 
@@ -175,6 +173,136 @@ scroll-through before being trusted.
   look like a tunable "how far into the row" question. No amount of ratio
   adjustment could have fixed it, because the ratio wasn't where the error
   lived.
+
+## 2026-07-23 `fix-timeline-chart-polish` ported to `index.html`, then a follow-up polish pass on `index-v2.html`
+
+A separate Spectra change, `fix-timeline-chart-polish`, was created (by another
+AI tool, "antigravity") and applied via `/spectra-apply` in this session to
+port `index-v2.html`'s already-working features into the **live**
+`115MoneyDemoB-main/index.html` (10 tasks, all shipped, archived under
+`openspec/changes/archive/2026-07-22-fix-timeline-chart-polish/`). See
+`HANDOFF-FIX-TIMELINE-CHART-POLISH.md` for that change's own detail. Two
+things from that work matter here because they also apply to (or were then
+extended into) this file:
+
+**A real bug shipped and then fixed in both files: the pyramid chart
+(718億先行動支方案) went permanently invisible after its entrance-animation
+was added.** `.dynamic-chart-box`'s base rule forces `visibility: hidden
+!important`. The new `#ch4-pyramid` / `#ch4-pyramid.visible-box` override
+(added to give the chart its own scroll-triggered fade-in, independent of the
+already-broken `is-active-chapter`/`dashBox`/`rank1Box`/`rank2Box` wiring —
+see below) only touched `opacity`/`transform`, never declared `visibility` at
+all — so the base class's `!important` won regardless of the `.visible-box`
+class or opacity reaching 1. The chart kept its layout space (not
+`display:none`) but rendered nothing, which is exactly why it read as "the
+chart disappeared" rather than "the layout broke." Fix: both selectors now
+also set `visibility: hidden !important` / `visibility: visible !important`
+respectively, mirroring the pattern the base `.dynamic-chart-box` /
+`.is-active-chapter .dynamic-chart-box.visible-box` pair already uses.
+**Lesson: when a new override rule is meant to defeat a base rule's
+`!important`, audit the base rule property-by-property — it's not enough to
+override the properties you're consciously changing (opacity, transform);
+you must also override every property the base rule marks `!important`, even
+ones you don't think you're touching.**
+
+**Pre-existing, separate dead code found and deliberately left alone (in
+both files):** the Chapter 4 IntersectionObserver branch that's supposed to
+toggle `.visible-box` on `#ch4-pyramid`/`#ch4-ranking-1`/`#ch4-ranking-2` via
+`document.getElementById(...)` can never run — those three ids don't exist
+anywhere in either file's HTML, and `#chapter-4` has zero `.step-scene` /
+`.gantt-card-rebuilt` / `.gantt-trigger-scene` / `[data-bg]` elements for the
+shared `IntersectionObserver` to ever observe in the first place. This is not
+something lost during porting; it never worked in either file. The new
+pyramid-chart entrance animation is a **self-contained** `IntersectionObserver`
+scoped only to `#ch4-pyramid`, added specifically so it doesn't need to repair
+(or risk breaking) that separate, unrelated, already-broken mechanism.
+
+**Follow-up polish requested directly against `index-v2.html`** after the
+port (none of this touched `index.html` except where noted):
+- Chapter 2's Gantt-chart axis and the red-line/gray deadline-zone block used
+  to wait for the whole-chapter scroll-percentage thresholds (20%/40%) before
+  appearing — often visibly late relative to when the corresponding card's
+  text had already scrolled into the readable zone. Fixed by adding an
+  early-trigger check: as soon as card 2's (or card 4's) own `.story-card`
+  crosses 50% of viewport height, force-add `rebuilt-step-2` (or `-4`) even
+  if `currentStep` hasn't caught up yet — guarded to only fire while
+  `currentStep <= 6` so it can never re-trigger once the reader has moved
+  into the cards 7-9 photo section, which is also what keeps this from
+  bleeding into Chapter 3.
+- The final history card's (card 9, the 唐飛/劉兆玄/林全 photo) text was
+  fading out too early relative to how long it takes to actually read it.
+  `updateHistoryExit()`'s thresholds moved from `viewportHeight * 0.55` (fade
+  start) / `0.35` (fully transparent) to `0.40` / `0.20` — same 0.2 fade
+  width, just delayed. The reduced-motion binary threshold moved proportionally
+  (0.45 → 0.30).
+- Terminus mark (the circular badge at the end of the Chapter 1 red line)
+  **no longer switches to a "↓" arrow at 100% completion** — it was
+  originally designed (in an earlier session) to pulse "?" while incomplete
+  and swap to a static "↓" once the line finished. Several rounds of
+  "why does it show the arrow immediately" bug reports turned out not to be a
+  bug at all — the calculation was correct (verified: the arrow only ever
+  appeared where `percent` genuinely reached 100, confirmed against the file's
+  own last row in the DOM) — the user simply never wanted the arrow-swap
+  feature in the first place. Removed the `classList.toggle('timeline-complete', ...)`
+  call and the now-dead `.timeline-complete` CSS rules entirely; the mark just
+  pulses "?" forever now. **Lesson: a "bug report" that survives every
+  diagnostic you throw at it (console snippets, incognito tests, screenshot
+  requests) can be a disguised design-change request in disguise, not an
+  actual defect** — worth explicitly asking "do you want this to ever look
+  different, or should it just never do the thing you're describing" earlier
+  in the loop, rather than continuing to hunt for a bug that isn't there.
+- CTA button (`.cta-btn`) and `.footer-cta`'s background both moved off the
+  low-contrast `--ui-accent`/dark-red-on-faint-gradient combination onto the
+  brighter `--np-seal-red-bright` (#E2564A), then the `.footer-cta` gradient
+  was further hand-tuned per exact user-supplied values (`linear-gradient(6deg,
+  rgba(226, 86, 74, 0.16) 0%, #664b49 100%)`).
+- `.scroll-indicator` (text + its `::after` gradient line), at every
+  breakpoint (base/pc, ≤640px, ≤1024px), was explicitly changed **to**
+  `#a5271e` — the same dark, lower-contrast red that earlier work
+  (`primary-red-contrast-fix`) had deliberately moved *away* from elsewhere on
+  this exact page for contrast reasons. Flagged the conflict once; user
+  confirmed they wanted the literal value anyway. Applied as given — it's a
+  small decorative indicator, not body text, and an explicit, informed
+  user choice overrides a general contrast guideline for a non-critical
+  decorative element.
+- Hero image (`hero-collage.jpg`, desktop-only — mobile crop
+  `hero-collage-mobile-clean.webp` deliberately left untouched, confirmed via
+  AskUserQuestion) replaced with new artwork, twice: first exported from the
+  user-supplied `.jpg`, then re-exported directly from the source `.psd` at
+  the same target size (1400px wide, ~70% JPEG quality) once the `.psd` was
+  made available, to avoid compounding a second lossy JPEG pass on top of
+  whatever compression the `.jpg` already had. Same filename both times, so
+  no HTML changes were needed — `index.html` and `index-v2.html` share this
+  one file.
+
+**Deployment mechanics learned this session:** GitHub Pages (`ke22.github.io/govBudget/`)
+builds from `main`'s **own separate root-level** `index.html`/`database.html`
+via a Jekyll Actions workflow (`.github/workflows/jekyll-gh-pages.yml`,
+triggers only on push to `main`, `source: ./`). `115MoneyDemoB-main/index.html`
+and `index-v2.html` are **not** that file and were not reachable at any URL
+until this session merged the whole `optimize-index-frontend-perf` branch
+into `main` — at which point Jekyll's plain static passthrough made them
+browsable at `.../115MoneyDemoB-main/index.html` and
+`.../115MoneyDemoB-main/index-v2.html`, alongside (not replacing) the
+pre-existing root `index.html`. Every fix this session went out the same
+way: commit on the feature branch → push branch → merge into `main` inside a
+throwaway `git worktree` (keeps the merge from touching this session's dirty
+working directory) → push `main` → `gh run list --workflow=jekyll-gh-pages.yml`
+polled until `status=completed conclusion=success`.
+
+**Working alongside a concurrent editor of the same file, this session:**
+more than once, `git add <file>` would have swept up large, unrelated,
+uncommitted hunks from the other session (mobile hero centering, Chapter 2/3
+mobile CSS removal — see Open Actions #1). The recipe used to commit *only*
+this session's own changes: `git diff -- <file> | grep '^@@'` to enumerate
+hunks, identify which ones are mine by content (e.g. grep for a string unique
+to my edit), slice exactly those hunks (plus the 4-line diff header) out of
+the full diff with `sed -n`, then `git apply --cached <the-sliced-patch>` —
+this stages precisely those hunks while leaving everything else in the
+working tree (and the other session's un-committed work) completely
+untouched. Confirmed correct each time by checking `git diff --cached --stat`
+(should show only your own line counts) and `git diff --stat` (the remainder,
+still sitting there unstaged).
 
 ## Current state: everything triaged so far is shipped
 
@@ -399,3 +527,93 @@ the change.
 `optimize-index-frontend-perf`), not `optimize-index-frontend-perf` directly
 — the branch line at the top of this doc predates this session and may need
 reconciling once this branch merges.
+
+## 2026-07-28 `.hero-dek-panel` desktop gap: fixed px → percentage (`index-v2.html` only)
+
+New branch `chapter-2-v2` (branched off `adjust-hero-images` after PR #1). Small,
+single-property change, went through Plan Mode + an AskUserQuestion round
+(both answers logged below) before shipping.
+
+**The ask:** user pasted a devtools snapshot showing `.hero-dek-panel { bottom:
+290px }` and asked whether the gap to "the title" could stay stable on PC.
+**Investigated first, because the premise needed checking:** the on-disk value
+was `bottom: 160px`, not `290px` — confirmed via AskUserQuestion this was a
+devtools value the user had already tried and wanted adopted, not a stale
+paste from elsewhere. More importantly: **on desktop `> 1024px`, `.hero-title`
+is `.hero-sr-only` (screen-reader-only) — the title text visitors actually
+see is baked into `hero-collage-v2.jpg`'s pixels, not a real DOM element.**
+`background-size: 100% auto` scales that image by the section's **width**;
+`overflow:hidden` + `background-position: center center` then crops it
+against the section's **height**. `.hero-dek-panel`'s fixed `bottom: Npx` is
+anchored to the section's bottom edge — an axis unrelated to where the
+baked-in title actually lands on screen — so the visual gap drifts as
+viewport *height* changes, independent of width.
+
+**Two real options, both put to the user via AskUserQuestion with CLI-wireframe
+previews rather than assumed:**
+1. Lock the background image to a fixed-aspect container (`aspect-ratio` +
+   `object-fit`-style sizing) so the baked-in title's on-screen position
+   becomes computable and the panel could anchor to it precisely. Rejected —
+   too large a change for what's still a decorative hero image, would touch
+   existing crop/fill behavior.
+2. **Chosen:** convert `.hero-dek-panel`'s `bottom` from a fixed px value to a
+   **percentage of `.hero-section`'s own height** (`bottom: 35.5%`, calibrated
+   so it reproduces ≈290px at a 900px-tall viewport: `290 / (900 - 83px
+   header) ≈ 35.5%`). This is an **approximation, not a physically exact
+   lock to the image content** — explicitly accepted by the user as the
+   tradeoff for not doing option 1. The 900px reference height is this
+   session's own assumption (matches earlier 1440×900 test viewports used
+   in this session), flagged to the user as adjustable if their actual test
+   window differs.
+- Scope: **desktop rule only** (the base `.hero-dek-panel` rule, ~line 210).
+  The `≤1024px` block (~line 3510) already switches this element to
+  `position: static` inside `.hero-headline-panel`'s flex card — where the
+  title *is* a real, visible element and the gap is already a proper flex
+  `gap`, not a positioning hack — left untouched.
+- Verified via `getComputedStyle`: at the actual test tab's 1920×958 window,
+  computed `bottom` resolved to `310.6px`, matching `35.5% × (958 - 83)`
+  exactly — confirms the percentage scales as intended rather than silently
+  behaving like a fixed value.
+
+**Concurrent-editor note, same as before:** `HANDOFF-v2.md` and `index-v2.html`
+both had pre-existing uncommitted hunks from another session when this work
+started (a `hero-collage.jpg` → `hero-collage-v2.jpg` swap + a story-card
+mobile font-size rule in `index-v2.html`; the same 2026-07-22/23 "Open
+Actions"/`fix-timeline-chart-polish` hunks as before in this file). Edited
+around them without touching their hunks; this doc entry is staged the same
+sliced-hunk way described in Gotchas.
+
+## 2026-07-28 `.scroll-indicator` recolored red → beige + drop shadow, both breakpoints (`index-v2.html` only)
+
+Branch `adjust-hero-images` (current checkout). User request: change
+`.scroll-indicator` ("向下捲動探索") to beige on both PC and mobile, and add a
+shadow so it still reads clearly against the busy hero photo now that it's no
+longer a saturated color.
+
+**This reverses an explicit, previously-logged decision.** The 2026-07-23
+entry above (line ~259) records that `.scroll-indicator` was deliberately set
+to `#a5271e` at every breakpoint at the user's explicit confirmation, even
+after being flagged as lower-contrast than `primary-red-contrast-fix`'s
+guidance elsewhere on the page — because it's "a small decorative indicator,
+not body text." Today's ask supersedes that: color is now
+`var(--ui-ink-inverse)` (`#EDE6D3`, the same beige/cream token used for
+inverse-ink text elsewhere on the page) on **both** the base/PC rule (~line
+349) and the `≤1024px` mobile override (~line 3525) — mobile was already this
+color before today (only PC was still red), so mobile's change here is
+additive (shadow only), PC's is the color swap.
+
+- Added `text-shadow: 0 1px 3px rgba(0,0,0,.55), 0 2px 8px rgba(0,0,0,.35)` to
+  the `.scroll-indicator` text at both breakpoints, and
+  `filter: drop-shadow(0 1px 3px rgba(0,0,0,.5))` on the `::after` vertical
+  line at both breakpoints — same shadow values reused in all four spots so
+  the treatment reads as one consistent style, not four independent tweaks.
+- Rationale for needing a shadow at all: beige (`#EDE6D3`) sits close in
+  luminance to parts of `hero-collage-v2.jpg` (a photo collage, not a flat
+  background), so without a shadow the indicator can wash out against lighter
+  regions of the image depending on scroll/crop. The drop shadow anchors it
+  regardless of what's directly behind it at a given viewport.
+- Not yet live-screenshotted (this environment's standing `localhost`
+  browser-automation limitation, see Gotchas) — verified by reading the
+  computed values only. Worth a real visual pass against the actual hero
+  photo before merging, specifically checking the indicator over the
+  photo's lighter regions.
