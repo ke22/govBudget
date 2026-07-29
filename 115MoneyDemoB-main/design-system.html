@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>設計系統 — 中央社總預算專題</title>
+    <meta name="description" content="index.html / database.html 共用的設計 token、元件與動態規範，含跨頁 token 對映與已知陷阱。">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="cna-favicon-adaptive.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* =========================================================================
+           設計系統文件頁
+
+           這一頁「用」設計系統來「說明」設計系統：下面 :root 的 token 是從
+           index.html / database.html 抄過來的同一組值（單一事實來源仍是那兩頁，
+           這裡是文件）。改了那兩頁的 token，這頁要跟著改——見最下方「維護」一節。
+           ========================================================================= */
+        :root {
+            /* ---------- Editorial UI roles（index.html 的命名） ---------- */
+            --ui-canvas: #12191A;
+            --ui-paper: #d5cdcd;
+            --ui-ink: #1B1712;
+            --ui-ink-inverse: #EDE6D3;
+            --ui-accent: #A5271E;
+            --ui-muted: #A79C8C;
+
+            /* ---------- Newsprint 剪報語彙（兩頁共用同名） ---------- */
+            --np-ink: #1B1712;
+            --np-paper: #FFFFFF;
+            --np-paper-panel: #d5cdcd;
+            --np-seal-red: #A5271E;
+            --np-seal-red-dark: #7E1D16;
+            --np-seal-red-bright: #E2564A;
+            --np-gold-bright: #D4A857;
+            --np-muted: #6B6156;
+            --np-hairline: rgba(27, 23, 18, 0.16);
+            --np-text-ondark: #EDE6D3;
+            --np-muted-ondark: #A79C8C;
+
+            /* ---------- 圖表分類色（資料語意，勿挪作 UI 用） ---------- */
+            --chart-cat-neutral: #9CA69C;
+            --chart-cat-impact: #E2564A;
+            --chart-cat-new: #6FAE85;
+            --chart-cat-extend: #7CA2D6;
+            --chart-cat-reserve: #D4A857;
+            --chart-cat-ch3-new: #C9763A;
+            --chart-cat-ch3-extend: #9C5B86;
+
+            /* ---------- 字體 ---------- */
+            --font-display: 'Noto Serif TC', 'Songti TC', 'PMingLiU', serif;
+            --font-body: 'Noto Sans TC', sans-serif;
+
+            /* ---------- 流體字級（兩頁共用同一組 clamp） ---------- */
+            --type-report-display: clamp(2.125rem, calc(1.4rem + 1.1vw), 2.5rem);
+            --type-chapter-heading: clamp(2rem, calc(1.25rem + 1.2vw), 2.5rem);
+            --type-panel-heading: clamp(1.05rem, calc(0.98rem + 0.18vw), 1.15rem);
+            --type-body: clamp(1rem, calc(0.96rem + 0.14vw), 1.1rem);
+            --type-caption: clamp(0.75rem, calc(0.71rem + 0.12vw), 0.85rem);
+
+            /* ---------- 版型節奏（index.html 專用） ---------- */
+            --site-header-h: 83px;
+            --chart-stage-gap: 24px;
+            --scene-read-interval: 100svh;
+
+            /* ---------- 動態曲線 ---------- */
+            --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-quart-out: cubic-bezier(0.25, 1, 0.5, 1);
+            --ease-ch3-extend: cubic-bezier(0.22, 1, 0.36, 1);
+
+            /* ---------- 本文件頁自用 ---------- */
+            --doc-panel: #1A2122;
+            --doc-panel-2: #202829;
+            --doc-line: rgba(237, 230, 211, 0.12);
+            --doc-line-strong: rgba(237, 230, 211, 0.22);
+            --doc-code: #0E1414;
+
+            /* 文件頁自用的兩個補充字級。
+               專案本身只有 5 級（report-display / chapter-heading / panel-heading /
+               body / caption），但文件頁需要「章節副標」與「第三層小字」這兩個
+               專案沒有的角色。刻意只補這兩個、而不是每處各寫一個 rem 值——
+               否則小字區間會出現一堆 0.66/0.68/0.72/0.78rem 這種無法解釋的數字。 */
+            --doc-subhead: clamp(1.3rem, calc(1.05rem + 0.5vw), 1.5rem);
+            --doc-micro: clamp(0.68rem, calc(0.64rem + 0.12vw), 0.78rem);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--ui-canvas);
+            /* 全站的印刷網點紋理，與 index.html / database.html 一致 */
+            background-image: radial-gradient(circle, rgba(237, 230, 211, 0.08) 1px, transparent 1.2px);
+            background-size: 4px 4px;
+            color: var(--ui-ink-inverse);
+            line-height: 1.75;
+            letter-spacing: 0.03em;
+            font-size: var(--type-body);
+        }
+
+        @media (max-width: 640px) {
+            body {
+                background-image: radial-gradient(circle, rgba(237, 230, 211, 0.06) 1px, transparent 1.3px);
+                background-size: 6px 6px;
+            }
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        code,
+        kbd {
+            font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+            /* 刻意接近等身（不是 0.85em）：等寬字疊在 --type-caption 上會掉到 10px 出頭，
+               而表格裡的 token 名稱正是讀者最需要看清的內容。改用字體與顏色區分，
+               不靠縮小。 */
+            font-size: 0.94em;
+            letter-spacing: 0;
+        }
+
+        a {
+            color: var(--np-seal-red-bright);
+        }
+
+        /* ============================== 頁首 ============================== */
+        .doc-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(18, 25, 26, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--doc-line);
+        }
+
+        .doc-header-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .doc-title {
+            font-size: var(--type-panel-heading);
+            font-weight: 900;
+            color: var(--np-seal-red-bright);
+            white-space: nowrap;
+        }
+
+        .doc-title span {
+            display: block;
+            font-family: var(--font-body);
+            font-size: var(--type-caption);
+            font-weight: 400;
+            color: var(--ui-muted);
+            letter-spacing: 0.06em;
+        }
+
+        /* 視窗寬度讀數：流體字級是 vw 的函數，看文件時要能直接對照當下寬度算出來的值 */
+        .viewport-readout {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: var(--type-caption);
+            color: var(--ui-muted);
+            border: 1px solid var(--doc-line);
+            border-radius: 999px;
+            padding: 4px 14px;
+            white-space: nowrap;
+        }
+
+        .viewport-readout strong {
+            color: var(--np-gold-bright);
+            font-weight: 700;
+        }
+
+        .doc-nav {
+            border-top: 1px solid var(--doc-line);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .doc-nav ul {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            gap: 4px;
+            list-style: none;
+        }
+
+        .doc-nav a {
+            display: block;
+            padding: 10px 14px;
+            font-size: var(--type-caption);
+            color: var(--ui-muted);
+            text-decoration: none;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .doc-nav a:hover {
+            color: var(--ui-ink-inverse);
+        }
+
+        .doc-nav a.is-current {
+            color: var(--np-seal-red-bright);
+            border-bottom-color: var(--np-seal-red-bright);
+        }
+
+        /* ============================== 版面 ============================== */
+        main {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 48px 24px 120px;
+        }
+
+        .doc-section {
+            margin-bottom: 72px;
+            scroll-margin-top: 132px;
+        }
+
+        .doc-section>h2 {
+            font-size: var(--type-chapter-heading);
+            margin-bottom: 8px;
+        }
+
+        /* 章節標題下的朱印膠帶短條。index.html 是用全域 h2::after 做的，那條規則會漏到頁尾等小標題上（見「陷阱」第 2 條）；這裡改成只作用在
+           .doc-section 的直接子代 h2，示範收斂寫法。 */
+        .doc-section>h2::after {
+            content: '';
+            display: block;
+            width: 52px;
+            height: 6px;
+            background: var(--ui-accent);
+            opacity: 0.85;
+            margin: 16px 0 0;
+        }
+
+        /* 章節導言（緊接 h2）。max-width 用 ch 讓中文一行約 30–34 字，
+           長度超過就換行，不跟著 1120px 的容器一路拉長。 */
+        .section-lede {
+            color: var(--ui-muted);
+            max-width: 62ch;
+            margin: 24px 0 32px;
+        }
+
+        /* 小節導言（緊接 h3）。與 .section-lede 同外觀但屬於下一層，
+           上緣不再補間距——h3 的 margin-bottom 已經負責那段距離。
+           原本是共用 .section-lede 再逐處補 style="margin-top:0"，
+           那等於把版面規則寫進 HTML，改一次要改三個地方。 */
+        .sub-lede {
+            color: var(--ui-muted);
+            max-width: 62ch;
+            margin: 0 0 24px;
+        }
+
+        h3 {
+            font-size: var(--doc-subhead);
+            margin: 48px 0 16px;
+            color: var(--np-gold-bright);
+        }
+
+        h3:first-of-type {
+            margin-top: 0;
+        }
+
+        p+p {
+            margin-top: 12px;
+        }
+
+        .doc-note {
+            border-left: 3px solid var(--np-gold-bright);
+            background: var(--doc-panel);
+            padding: 14px 18px;
+            margin: 20px 0;
+            font-size: var(--type-caption);
+            color: var(--ui-muted);
+            line-height: 1.8;
+        }
+
+        .doc-note strong {
+            color: var(--ui-ink-inverse);
+        }
+
+        .doc-note.is-warning {
+            border-left-color: var(--np-seal-red-bright);
+        }
+
+        /* ============================== 色票 ============================== */
+        .swatch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+            gap: 14px;
+        }
+
+        .swatch {
+            background: var(--doc-panel);
+            border: 1px solid var(--doc-line);
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: left;
+            font: inherit;
+            color: inherit;
+            cursor: pointer;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .swatch:hover {
+            border-color: var(--doc-line-strong);
+            transform: translateY(-2px);
+        }
+
+        .swatch:focus-visible {
+            outline: 2px solid var(--np-gold-bright);
+            outline-offset: 2px;
+        }
+
+        .swatch-chip {
+            height: 76px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            padding: 8px;
+        }
+
+        /* 透明色（如 --np-hairline）要看得出透明度，底下墊棋盤格 */
+        .swatch-chip.is-alpha {
+            background-image:
+                linear-gradient(45deg, #4a4a4a 25%, transparent 25%),
+                linear-gradient(-45deg, #4a4a4a 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #4a4a4a 75%),
+                linear-gradient(-45deg, transparent 75%, #4a4a4a 75%);
+            background-size: 12px 12px;
+            background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
+        }
+
+        .swatch-chip-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .swatch-meta {
+            padding: 12px 14px 14px;
+        }
+
+        .swatch-token {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: var(--type-caption);
+            color: var(--ui-ink-inverse);
+            word-break: break-all;
+            display: block;
+        }
+
+        .swatch-value {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: var(--doc-micro);
+            color: var(--ui-muted);
+            display: block;
+            margin-top: 2px;
+        }
+
+        .swatch-desc {
+            font-size: var(--doc-micro);
+            color: var(--ui-muted);
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        /* 對比度徽章：由 JS 算出並填入，避免文件裡的數字跟實際色值不同步 */
+        .contrast-row {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .contrast-badge {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: var(--doc-micro);
+            padding: 2px 7px;
+            border-radius: 4px;
+            border: 1px solid var(--doc-line-strong);
+            color: var(--ui-muted);
+            white-space: nowrap;
+        }
+
+        .contrast-badge.is-pass {
+            border-color: rgba(111, 174, 133, 0.5);
+            color: var(--chart-cat-new);
+        }
+
+        .contrast-badge.is-fail {
+            border-color: rgba(226, 86, 74, 0.5);
+            color: var(--np-seal-red-bright);
+        }
+
+        /* ============================== 表格 ============================== */
+        .table-wrap.is-spaced {
+            margin-bottom: 32px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--doc-line);
+            border-radius: 10px;
+            background: var(--doc-panel);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: var(--type-caption);
+            min-width: 560px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 11px 16px;
+            border-bottom: 1px solid var(--doc-line);
+            vertical-align: top;
+            line-height: 1.7;
+        }
+
+        th {
+            font-weight: 700;
+            color: var(--np-gold-bright);
+            white-space: nowrap;
+            background: rgba(0, 0, 0, 0.18);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        td code {
+            color: var(--ui-ink-inverse);
+        }
+
+        /* ============================== 字級 ============================== */
+        .type-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 16px 24px;
+            align-items: baseline;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--doc-line);
+        }
+
+        .type-sample {
+            font-family: var(--font-display);
+            color: var(--ui-ink-inverse);
+            line-height: 1.3;
+            min-width: 0;
+        }
+
+        .type-sample.is-body {
+            font-family: var(--font-body);
+            line-height: 1.8;
+        }
+
+        .type-spec {
+            text-align: right;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: var(--doc-micro);
+            color: var(--ui-muted);
+            white-space: nowrap;
+        }
+
+        .type-spec b {
+            display: block;
+            color: var(--np-gold-bright);
+            font-size: var(--type-caption);
+        }
+
+        .type-spec .type-clamp {
+            display: block;
+            margin-top: 4px;
+            opacity: 0.75;
+        }
+
+        @media (max-width: 640px) {
+            .type-row {
+                grid-template-columns: 1fr;
+            }
+
+            .type-spec {
+                text-align: left;
+            }
+        }
+
+        /* ============================== 元件展示 ============================== */
+        .specimen {
+            border: 1px solid var(--doc-line);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .specimen-stage {
+            padding: 40px 24px;
+            background-color: var(--ui-canvas);
+            background-image: radial-gradient(circle, rgba(237, 230, 211, 0.08) 1px, transparent 1.2px);
+            background-size: 4px 4px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 頁尾示範要貼齊 specimen 邊緣，不要 stage 的內距 */
+        .specimen-stage.is-flush {
+            padding: 0;
+            display: block;
+        }
+
+        /* 說明列裡的按鈕與文字同列，靠 flex 給間距而不是 inline margin */
+        .specimen-caption {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--doc-code);
+            border-top: 1px solid var(--doc-line);
+            font-size: var(--doc-micro);
+            color: var(--ui-muted);
+            line-height: 1.7;
+        }
+
+        .specimen-caption code {
+            color: var(--np-gold-bright);
+        }
+
+        /* --- story-card（第 1／2 章的剪報卡） --- */
+        .story-card {
+            /* 底色反推自紙紋均值，見 index.html 的長註解：疊上 multiply 紙紋後才是 #ebe5d2 */
+            background-color: #f5efdb;
+            background-image: url('paper-texture.png');
+            background-repeat: repeat;
+            background-blend-mode: multiply;
+            padding: 40px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 10px 22px rgba(27, 23, 18, 0.18);
+            transform: rotate(-0.4deg);
+            transition: transform 0.4s, box-shadow 0.4s;
+            /* 底緣撕紙邊 */
+            clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 8px), 96% 100%, 90% calc(100% - 3px), 84% 100%, 78% calc(100% - 6px), 72% 100%, 66% calc(100% - 2px), 60% 100%, 54% calc(100% - 7px), 48% 100%, 42% calc(100% - 3px), 36% 100%, 30% calc(100% - 6px), 24% 100%, 18% calc(100% - 2px), 12% 100%, 7% calc(100% - 6px), 3% 100%, 0% calc(100% - 8px));
+        }
+
+        .story-card:hover {
+            transform: translateY(-5px) rotate(-0.4deg);
+            box-shadow: 0 25px 50px rgba(27, 23, 18, 0.14);
+        }
+
+        .story-card h3 {
+            font-family: var(--font-body);
+            font-size: var(--type-panel-heading);
+            font-weight: 700;
+            color: var(--ui-ink);
+            margin: 0 0 20px;
+        }
+
+        .story-card p {
+            font-size: var(--type-body);
+            color: var(--ui-ink);
+            line-height: 1.8;
+            line-break: strict;
+            margin: 0;
+        }
+
+        /* --- 按鈕 --- */
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background-color: var(--np-seal-red-bright);
+            color: var(--ui-ink-inverse);
+            padding: 15px 45px;
+            border-radius: 50px;
+            font-size: var(--type-panel-heading);
+            font-weight: 900;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(226, 86, 74, 0.35);
+            transition: all 0.3s var(--ease-expo-out);
+        }
+
+        .cta-btn:hover {
+            filter: brightness(0.9);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(226, 86, 74, 0.5);
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid rgba(165, 39, 30, 0.35);
+            color: var(--ui-ink-inverse);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: var(--type-caption);
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(165, 39, 30, 0.18);
+            border-color: var(--np-seal-red-bright);
+        }
+
+        .skip-link-demo {
+            background: var(--np-paper);
+            color: var(--np-ink);
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: inline-block;
+        }
+
+        /* --- 圖表長條（第 3 章疊加長條圖的視覺語彙） --- */
+        .bar-demo {
+            width: 100%;
+            max-width: 640px;
+        }
+
+        .bar-track {
+            position: relative;
+            height: 34px;
+            background: rgba(237, 230, 211, 0.06);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .bar-layer {
+            position: absolute;
+            inset: 0 auto 0 0;
+            height: 100%;
+            border-radius: 8px;
+            /* 長條一律動 width，不要改成 transform: scaleX —— 會扭曲圓角，見「陷阱」第 6 條 */
+            transition: width 1.2s var(--ease-ch3-extend);
+        }
+
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: var(--doc-micro);
+            color: var(--ui-muted);
+            margin-bottom: 6px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        }
+
+        /* --- 頁尾 credit（實際上線的頁尾） --- */
+        .footer-demo {
+            width: 100%;
+            padding: 32px 20px 24px;
+            background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.2px) 0 0/4px 4px, #1E1410;
+            border-top: 1px solid rgba(237, 230, 211, 0.1);
+            color: var(--ui-muted);
+            font-size: var(--type-caption);
+            text-align: center;
+        }
+
+        .footer-credits {
+            max-width: 420px;
+            margin: 0 auto 18px;
+        }
+
+        .footer-credits-title {
+            font-family: var(--font-body);
+            font-size: var(--type-caption);
+            font-weight: 700;
+            color: var(--ui-ink-inverse);
+            letter-spacing: 0.08em;
+            margin: 0 0 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(237, 230, 211, 0.12);
+        }
+
+        .footer-credit-list {
+            margin: 0;
+            display: grid;
+            grid-template-columns: max-content minmax(0, max-content);
+            justify-content: center;
+            column-gap: 16px;
+            row-gap: 6px;
+            text-align: left;
+        }
+
+        .footer-credit-list dt {
+            color: var(--ui-muted);
+            /* 兩字職稱撐開對齊四字：text-align-last 必須配 text-align 一起給 */
+            text-align: justify;
+            text-align-last: justify;
+        }
+
+        .footer-credit-list dd {
+            margin: 0;
+            color: var(--ui-ink-inverse);
+            min-height: 1.5em;
+        }
+
+        .footer-dates {
+            margin: 0 0 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: baseline;
+            gap: 0 8px;
+        }
+
+        .footer-dates .footer-date {
+            white-space: nowrap;
+        }
+
+        /* ============================== 動態 ============================== */
+        .motion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .motion-card {
+            background: var(--doc-panel);
+            border: 1px solid var(--doc-line);
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .motion-name {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: var(--type-caption);
+            color: var(--np-gold-bright);
+            margin-bottom: 4px;
+        }
+
+        .motion-curve {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: var(--doc-micro);
+            color: var(--ui-muted);
+            word-break: break-all;
+        }
+
+        .motion-track {
+            height: 8px;
+            background: rgba(237, 230, 211, 0.08);
+            border-radius: 4px;
+            margin: 18px 0 10px;
+            position: relative;
+        }
+
+        .motion-dot {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 16px;
+            height: 16px;
+            margin-top: -8px;
+            margin-left: -8px;
+            border-radius: 50%;
+            background: var(--np-seal-red-bright);
+            box-shadow: 0 0 12px rgba(226, 86, 74, 0.5);
+        }
+
+        .motion-use {
+            font-size: var(--doc-micro);
+            color: var(--ui-muted);
+            line-height: 1.7;
+        }
+
+        .motion-replay {
+            margin-bottom: 20px;
+        }
+
+        /* ============================== 複製提示 ============================== */
+        .copy-toast {
+            position: fixed;
+            left: 50%;
+            bottom: 32px;
+            transform: translate(-50%, 12px);
+            background: var(--np-paper);
+            color: var(--np-ink);
+            padding: 10px 22px;
+            border-radius: 999px;
+            font-size: var(--type-caption);
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s var(--ease-expo-out);
+            z-index: 200;
+        }
+
+        .copy-toast.is-visible {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        /* 尊重系統的減少動態偏好設定 */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="doc-header">
+        <div class="doc-header-inner">
+            <div class="doc-title">
+                設計系統
+                <span>中央社 · 總預算專題 · index.html / database.html</span>
+            </div>
+            <div class="viewport-readout" id="viewport-readout">視窗 <strong>—</strong></div>
+        </div>
+        <nav class="doc-nav" aria-label="章節導覽">
+            <ul>
+                <li><a href="#colors">色彩</a></li>
+                <li><a href="#typography">字體</a></li>
+                <li><a href="#layout">版型與節奏</a></li>
+                <li><a href="#motion">動態</a></li>
+                <li><a href="#components">元件</a></li>
+                <li><a href="#mapping">跨頁對映</a></li>
+                <li><a href="#pitfalls">陷阱</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- ============================== 色彩 ============================== -->
+        <section class="doc-section" id="colors">
+            <h2>色彩</h2>
+            <p class="section-lede">
+                視覺語彙是「深色拼貼桌面上散落的淺色剪報」：頁面底色深、卡片是牛皮紙色，強調色取自公文的朱印紅與銅印黃。點任一色票可複製 token 名稱。對比度由本頁 JS 即時計算，不是寫死的數字。
+            </p>
+
+            <h3>介面角色（UI roles）</h3>
+            <p class="sub-lede">
+                介面元素一律用這組角色 token，不要直接寫死色碼，也不要借用下方的圖表分類色。對比度徽章是拿該色<strong>當文字色</strong>去比底色算的——所以底色類的 token
+                （如 <code>--ui-canvas</code>）標成紅字是正常的，它本來就不是拿來寫字用的。
+            </p>
+            <div class="swatch-grid" id="grid-ui"></div>
+
+            <h3>剪報語彙色（newsprint）</h3>
+            <p class="sub-lede">
+                <code>--np-*</code> 是兩頁共用同名的一組。<code>*-ondark</code> 結尾的專供直接壓在深色底上的文字使用；淺色卡片內的文字仍用 <code>--np-ink</code>。
+            </p>
+            <div class="swatch-grid" id="grid-np"></div>
+
+            <h3>圖表分類色（資料語意專用）</h3>
+            <div class="doc-note is-warning">
+                <strong>這組色帶有資料語意，不可挪作 UI 裝飾用。</strong>
+                <code>--chart-cat-new</code> ／ <code>--chart-cat-extend</code> 的綠與藍是第 2 章甘特圖的<em>政黨色編碼</em>；第 3 章另外獨立出 <code>--chart-cat-ch3-*</code>，就是為了改第 3 章配色時不會牽動政黨色。改任何一個之前先確認它代表什麼。
+            </div>
+            <div class="swatch-grid" id="grid-chart"></div>
+        </section>
+
+        <!-- ============================== 字體 ============================== -->
+        <section class="doc-section" id="typography">
+            <h2>字體</h2>
+            <p class="section-lede">
+                標題用襯線體（Noto Serif TC）、內文用無襯線體（Noto Sans TC）。字級全部是 <code>clamp()</code> 流體字級，隨視窗寬度連續變化，不設中間斷點。右側的<b>實際值</b>是此刻你這個視窗算出來的結果——縮放視窗會即時變動。
+            </p>
+
+            <div class="table-wrap is-spaced">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>用途</th>
+                            <th>Token</th>
+                            <th>Stack</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>標題／章節大標</td>
+                            <td><code>--font-display</code></td>
+                            <td><code>'Noto Serif TC', 'Songti TC', 'PMingLiU', serif</code></td>
+                        </tr>
+                        <tr>
+                            <td>內文／介面</td>
+                            <td><code>--font-body</code></td>
+                            <td><code>'Noto Sans TC', sans-serif</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>字級</h3>
+            <div id="type-scale"></div>
+
+            <div class="doc-note">
+                中文排版另外套了兩條規則：內文用 <code>line-break: strict</code> 做<strong>中文斷行禁則</strong>（避免行首出現「」）、。」等收尾標點）；內文 <code>line-height</code> 為 1.8、全站 <code>letter-spacing</code> 為 0.03em。
+            </div>
+        </section>
+
+        <!-- ============================== 版型 ============================== -->
+        <section class="doc-section" id="layout">
+            <h2>版型與節奏</h2>
+            <p class="section-lede">
+                這個專題是捲動敘事（scrollytelling），所以「版型 token」有一半其實是<strong>時間</strong> token：它們決定每一拍佔多少捲動距離。這幾個值只存在於 <code>index.html</code>。
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Token</th>
+                            <th>值</th>
+                            <th>作用</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>--site-header-h</code></td>
+                            <td><code>83px</code></td>
+                            <td>固定頂部導覽列高度。釘住的圖表舞台靠它預留頂部間距，否則圖表標題會被 nav 蓋住。</td>
+                        </tr>
+                        <tr>
+                            <td><code>--chart-stage-gap</code></td>
+                            <td><code>24px</code></td>
+                            <td>舞台內容與 nav 之間的額外呼吸空間。</td>
+                        </tr>
+                        <tr>
+                            <td><code>--chart-stage-clearance</code></td>
+                            <td><code>calc(header + safe-area + gap + short-extra)</code></td>
+                            <td>合成值。含 <code>env(safe-area-inset-top)</code>，所以瀏海機／全螢幕手機不會被系統列裁到。</td>
+                        </tr>
+                        <tr>
+                            <td><code>--chart-stage-height</code></td>
+                            <td><code>calc(100svh - stage-top)</code></td>
+                            <td>用 <code>svh</code> 而非 <code>vh</code>：手機瀏覽器網址列收合時 <code>vh</code> 會跳動，釘住的舞台會抖。</td>
+                        </tr>
+                        <tr>
+                            <td><code>--scene-read-interval</code></td>
+                            <td><code>100svh</code></td>
+                            <td><strong>一拍的長度。</strong>一張故事卡佔一個視窗高的捲動距離。新增的敘事節拍（例如第 2 章結尾那段留給圖片 3 的空白跑道）要對齊這個量級，讀者感受到的節奏才一致。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="doc-note">
+                <strong>高度單位一律用 <code>svh</code>，不要用 <code>vh</code>。</strong>全站的釘住舞台、跑道、卡片高度都是 <code>svh</code>；混用會在手機上產生只有滾動時才看得到的位移。
+            </div>
+        </section>
+
+        <!-- ============================== 動態 ============================== -->
+        <section class="doc-section" id="motion">
+            <h2>動態</h2>
+            <p class="section-lede">
+                緩動曲線一律「快進慢出」（out 系列）——捲動觸發的動畫要立刻有反應，尾段再慢慢收。全站沒有用過 ease-in 或 linear。點按鈕可重播。
+            </p>
+
+            <button class="nav-btn motion-replay" id="replay-motion" type="button">▸ 重播全部曲線</button>
+
+            <div class="motion-grid" id="motion-grid"></div>
+
+            <h3>時長慣例</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>時長</th>
+                            <th>用在哪</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>0.2s – 0.3s</code></td>
+                            <td>hover／focus 等直接回應手部操作的互動</td>
+                        </tr>
+                        <tr>
+                            <td><code>0.4s</code></td>
+                            <td>卡片進場、文字淡入</td>
+                        </tr>
+                        <tr>
+                            <td><code>0.8s</code></td>
+                            <td>圖表面板整體切換、甘特圖階段轉場</td>
+                        </tr>
+                        <tr>
+                            <td><code>1s – 1.2s</code></td>
+                            <td>長條圖的 <code>width</code> 成長——刻意慢，讓數字的變化被看見</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="doc-note is-warning">
+                <strong>長條圖一律動 <code>width</code> ／ <code>height</code>，不要改成 <code>transform: scaleX/scaleY</code>。</strong>每根長條都有 <code>border-radius</code>，縮放會把圓角一起拉扁。而且長條只在<em>離散的步驟切換</em>時動，不是每幀重算，改成 transform 也省不到效能。
+            </div>
+        </section>
+
+        <!-- ============================== 元件 ============================== -->
+        <section class="doc-section" id="components">
+            <h2>元件</h2>
+            <p class="section-lede">
+                以下都是實際運作的元件，不是截圖。可以 hover、可以聚焦。
+            </p>
+
+            <h3>story-card — 剪報卡</h3>
+            <div class="specimen">
+                <div class="specimen-stage">
+                    <div class="story-card">
+                        <h3>紙紋、撕邊、微傾角</h3>
+                        <p>三個效果疊起來才成立： <code>paper-texture.png</code> 以 <code>background-blend-mode: multiply</code> 疊在底色上、 <code>clip-path</code> 在底緣切出撕紙邊、 <code>rotate(-0.4deg)</code> 讓卡片像隨手貼上的剪報。滑鼠移上來看看進場狀態。</p>
+                    </div>
+                </div>
+                <div class="specimen-caption">
+                    底色填 <code>#f5efdb</code> 而非目標色 <code>#ebe5d2</code>——紙紋以 multiply 疊上去會把每個通道壓暗約
+                    4%，所以填入值是<strong>反推放亮</strong>後的結果（ <code>255 × 目標 ÷ 紙紋均值</code>）。直接填目標色會比旁邊平塗的日期節點暗且偏灰。
+                </div>
+            </div>
+
+            <h3>按鈕</h3>
+            <div class="specimen">
+                <div class="specimen-stage">
+                    <button class="cta-btn" type="button">進入資料庫 →</button>
+                    <button class="nav-btn" type="button">次要操作</button>
+                    <a class="skip-link-demo" href="#components">跳至主要內容</a>
+                </div>
+                <div class="specimen-caption">
+                    主要按鈕用 <code>--np-seal-red-bright</code> 而非 <code>--ui-accent</code>：暗朱印紅壓在深色頁尾上對比不足，會糊在背景裡。最右邊的 skip-link 平常 <code>top: -100px</code> 藏在畫面外，只有鍵盤 Tab 聚焦時才滑進來。
+                </div>
+            </div>
+
+            <h3>圖表長條</h3>
+            <div class="specimen">
+                <div class="specimen-stage">
+                    <div class="bar-demo" id="bar-demo"></div>
+                </div>
+                <div class="specimen-caption">
+                    每根長條是「深色起點 → 分類色」的水平漸層加上同色系的微光暈（ <code>box-shadow: 0 0 10px</code>），讓長條在深色底上有實體感。
+                    <button class="nav-btn" id="replay-bars" type="button">重播</button>
+                </div>
+            </div>
+
+            <h3>頁尾</h3>
+            <div class="specimen">
+                <div class="specimen-stage is-flush">
+                    <div class="footer-demo">
+                        <div class="footer-credits">
+                            <div class="footer-credits-title">製作團隊</div>
+                            <dl class="footer-credit-list">
+                                <dt>監製</dt>
+                                <dd>葉純豪</dd>
+                                <dt>製作統籌</dt>
+                                <dd>王柔婷</dd>
+                                <dt>攝影</dt>
+                                <dd>裴禛</dd>
+                                <dt>網頁設計</dt>
+                                <dd>劉姿嘉</dd>
+                                <dt>網頁工程</dt>
+                                <dd>陳玟憲</dd>
+                            </dl>
+                        </div>
+                        <p class="footer-dates">
+                            <span class="footer-date">更新日期 <time datetime="2026-07-28">2026-07-28</time></span>
+                        </p>
+                        <p class="footer-copyright">copyright © 2026 中央通訊社版權所有</p>
+                    </div>
+                </div>
+                <div class="specimen-caption">
+                    底色是寫死的 <code>#1E1410</code> 而非 <code>--ui-canvas</code>：兩者原本同值，頁尾會跟內文糊成一片、看不出邊界。 <code>dt</code> ／ <code>dd</code> 直接當 grid 子項（合法 HTML5），不用 <code>display: contents</code> 包一層。兩字職稱靠 <code>text-align: justify</code> + <code>text-align-last: justify</code> 撐開對齊，<strong>文字內容維持乾淨的「監製」，沒有補全形空白</strong>。
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================== 對映 ============================== -->
+        <section class="doc-section" id="mapping">
+            <h2>跨頁 token 對映</h2>
+            <div class="doc-note is-warning">
+                <strong>兩頁的 token 命名不同，跨頁複製 CSS 會安靜地掉樣式。</strong>
+                CSS 自訂屬性找不到宣告時不會報錯、不會 fallback，整條宣告直接作廢，屬性回到繼承值——版面結構會對、只有顏色掉了，掃一眼很容易放過。搬 CSS 前先把區塊裡所有 <code>var(--…)</code> 抓出來逐一對映。
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><code>index.html</code></th>
+                            <th><code>database.html</code></th>
+                            <th>實際色值</th>
+                            <th>備註</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>--ui-muted</code></td>
+                            <td><code>--np-muted-ondark</code></td>
+                            <td><code>#A79C8C</code></td>
+                            <td>同值，不同名</td>
+                        </tr>
+                        <tr>
+                            <td><code>--ui-ink-inverse</code></td>
+                            <td><code>--np-text-ondark</code></td>
+                            <td><code>#EDE6D3</code></td>
+                            <td>同值，不同名</td>
+                        </tr>
+                        <tr>
+                            <td><code>--ui-canvas</code></td>
+                            <td><code>--bg-color</code></td>
+                            <td><code>#12191A</code></td>
+                            <td>同值，不同名</td>
+                        </tr>
+                        <tr>
+                            <td><code>--ui-paper</code></td>
+                            <td><code>--card-bg</code></td>
+                            <td><code>#d5cdcd</code></td>
+                            <td>同值，不同名</td>
+                        </tr>
+                        <tr>
+                            <td><code>--ui-accent</code></td>
+                            <td><code>--primary-color</code></td>
+                            <td><code>#A5271E</code></td>
+                            <td>同值，不同名</td>
+                        </tr>
+                        <tr>
+                            <td><code>--np-*</code> 全系列</td>
+                            <td><code>--np-*</code> 全系列</td>
+                            <td>—</td>
+                            <td><strong>同名同值，可直接搬</strong></td>
+                        </tr>
+                        <tr>
+                            <td><code>--font-*</code>／ <code>--type-*</code></td>
+                            <td><code>--font-*</code>／ <code>--type-*</code></td>
+                            <td>—</td>
+                            <td><strong>同名同值，可直接搬</strong></td>
+                        </tr>
+                        <tr>
+                            <td><code>--chart-cat-*</code></td>
+                            <td>（無）</td>
+                            <td>—</td>
+                            <td>只有 index 有；database 用自己的圖表色</td>
+                        </tr>
+                        <tr>
+                            <td><code>--site-header-h</code> 等舞台 token</td>
+                            <td>（無）</td>
+                            <td>—</td>
+                            <td>只有 index 有捲動舞台</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="doc-note">
+                寫死的字面值（頁尾底色 <code>#1E1410</code>、分隔線 <code>rgba(237,230,211,…)</code>）跨頁搬是安全的。所以「哪些該用 token、哪些該寫死」在這個多頁專案裡不只是風格問題。
+            </div>
+        </section>
+
+        <!-- ============================== 陷阱 ============================== -->
+        <section class="doc-section" id="pitfalls">
+            <h2>陷阱</h2>
+            <p class="section-lede">
+                每一條都是實際踩過、而且「壞掉的時候看起來不像壞掉」的。完整記錄在 <code>115MoneyDemoB-main/LEARNINGS.md</code>。
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>陷阱</th>
+                            <th>怎麼避開</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>跨頁複製 CSS 導致 <code>var()</code> 找不到宣告，顏色<strong>安靜地</strong>掉光</td>
+                            <td>先查上面的對映表，逐一對映而不是複製</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><code>index.html</code> 有一條全域 <code>h2::after</code> 朱印裝飾線，會漏到頁尾等小標題上，和分隔線疊成雙線</td>
+                            <td>新增 <code>h2</code> 時檢查有沒有吃到；需要時用 <code>::after { display: none }</code> 關掉。 <code>database.html</code> 沒有這條規則，<strong>刻意不要</strong>加覆蓋
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>第 3 章的 <code>.ch3-color-teal</code> ／ <code>.ch3-color-blue</code>
+                                <strong>實際 render 出來是赭紅與紫藕</strong>，名稱與顏色相反</td>
+                            <td>名稱是舊配色的殘留。別把 class 名當配色依據，也別「修」回綠藍——那正是需求明確排除的顏色</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><code>index.html</code> ／ <code>database.html</code> 在<strong>根目錄與 <code>115MoneyDemoB-main/</code> 各有一份</strong>，GitHub Pages 從根目錄 build</td>
+                            <td>每次改都是四個檔案。改完用 <code>cmp index.html 115MoneyDemoB-main/index.html</code> 驗證
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>只寫 <code>text-align-last: justify</code> 而沒有 <code>text-align: justify</code>，兩字職稱不會撐開
+                            </td>
+                            <td>兩條一起給。單行文字同時是第一行與最後一行，但仍要在 justify 情境下才生效</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>把長條改成 <code>transform: scaleX</code> 想省效能</td>
+                            <td>圓角會被拉扁，而且長條只在離散步驟切換時動，省不到</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td><code>mask-image: url(外部 SVG)</code> 在 <code>file://</code> 下<strong>整個元素不渲染</strong>（不是破圖，是完全消失）</td>
+                            <td>需要用 CSS 控色的圖示，把 SVG path 內嵌進 HTML 並用 <code>fill="currentColor"</code>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>改「更新日期」時只改畫面上的文字</td>
+                            <td>每頁要改<strong>三處</strong>： <code>&lt;time&gt;</code> 的 <code>datetime</code> 屬性、畫面文字、JSON-LD 的 <code>dateModified</code>。漏掉不會有任何錯誤訊息
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>維護這一頁</h3>
+            <div class="doc-note">
+                <strong>單一事實來源是 <code>index.html</code> / <code>database.html</code> 的 <code>:root</code>，不是這一頁。</strong>這頁的 <code>:root</code> 是抄過去的副本，所以動了那兩頁的 token 之後，這頁要跟著更新——
+                否則文件會比程式碼更有說服力地說錯話。色票的<strong>色值與對比度</strong>都是 JS 從實際 computed style 讀出來再算的，所以只要改對了這頁的 <code>:root</code>，展示區與數字會自己跟上。
+            </div>
+        </section>
+    </main>
+
+    <div class="copy-toast" id="copy-toast" role="status" aria-live="polite"></div>
+
+    <script>
+        (function () {
+            'use strict';
+
+            /* =====================================================================
+               色票資料只列 token 名稱與說明；實際色值一律從 computed style 讀，避免這份清單裡的色碼跟上面 :root 不同步（文件最常見的腐爛方式）。
+               ===================================================================== */
+            const UI_TOKENS = [
+                ['--ui-canvas', '頁面底色。深色拼貼桌面'],
+                ['--ui-paper', '卡片／面板的牛皮紙底'],
+                ['--ui-ink', '淺色卡片內的墨黑文字'],
+                ['--ui-ink-inverse', '深色底上的主要文字'],
+                ['--ui-accent', '朱印紅。章節裝飾線、邊框'],
+                ['--ui-muted', '深色底上的次要文字']
+            ];
+
+            const NP_TOKENS = [
+                ['--np-ink', '剪報內文墨色'],
+                ['--np-paper', '純白紙。skip-link 等'],
+                ['--np-paper-panel', '牛皮紙面板'],
+                ['--np-seal-red', '朱印紅'],
+                ['--np-seal-red-dark', '朱印紅暗部。漸層起點'],
+                ['--np-seal-red-bright', '高亮朱印紅。深色底上的按鈕與強調'],
+                ['--np-gold-bright', '銅印黃。深色底上的次強調'],
+                ['--np-muted', '淺色底上的次要文字'],
+                ['--np-hairline', '淺色底上的細分隔線'],
+                ['--np-text-ondark', '深色底上的主要文字'],
+                ['--np-muted-ondark', '深色底上的次要文字']
+            ];
+
+            const CHART_TOKENS = [
+                ['--chart-cat-neutral', '中性／未分類'],
+                ['--chart-cat-impact', '受影響金額'],
+                ['--chart-cat-new', '第 2 章甘特圖：民進黨（政黨色）'],
+                ['--chart-cat-extend', '第 2 章甘特圖：國民黨（政黨色）'],
+                ['--chart-cat-reserve', '保留／凍結'],
+                ['--chart-cat-ch3-new', '第 3 章：新興計畫。名稱雖為 teal，實為赭紅'],
+                ['--chart-cat-ch3-extend', '第 3 章：延續計畫增額。名稱雖為 blue，實為紫藕']
+            ];
+
+            const rootStyle = getComputedStyle(document.documentElement);
+            const tokenValue = (name) => rootStyle.getPropertyValue(name).trim();
+
+            /* ---------------------------------------------------------------------
+               對比度：WCAG 2.x relative luminance
+               只處理不透明色；rgba 帶透明度時無法在不知道背景的情況下算出真值，直接標示為不適用，不要給一個看起來精確但其實錯的數字。
+               --------------------------------------------------------------------- */
+            function parseColor(input) {
+                const value = input.trim();
+                let m = value.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+                if (m) {
+                    let hex = m[1];
+                    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+                    return {
+                        r: parseInt(hex.slice(0, 2), 16),
+                        g: parseInt(hex.slice(2, 4), 16),
+                        b: parseInt(hex.slice(4, 6), 16),
+                        a: 1
+                    };
+                }
+                m = value.match(/^rgba?\(([^)]+)\)$/i);
+                if (m) {
+                    const parts = m[1].split(/[,\s/]+/).filter(Boolean).map(Number);
+                    return { r: parts[0], g: parts[1], b: parts[2], a: parts.length > 3 ? parts[3] : 1 };
+                }
+                return null;
+            }
+
+            function relativeLuminance(c) {
+                const channel = (v) => {
+                    const s = v / 255;
+                    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+                };
+                return 0.2126 * channel(c.r) + 0.7152 * channel(c.g) + 0.0722 * channel(c.b);
+            }
+
+            function contrastRatio(fg, bg) {
+                const l1 = relativeLuminance(fg);
+                const l2 = relativeLuminance(bg);
+                const lighter = Math.max(l1, l2);
+                const darker = Math.min(l1, l2);
+                return (lighter + 0.05) / (darker + 0.05);
+            }
+
+            const CANVAS = parseColor(tokenValue('--ui-canvas'));
+            const PAPER = parseColor(tokenValue('--ui-paper'));
+
+            function badge(label, ratio) {
+                // 色票本身就是這個底色時，比對自己沒有意義。標成「fail」會讓人以為
+                // 這個底色有無障礙問題，其實只是拿它跟自己比。
+                if (ratio < 1.05) {
+                    return `<span class="contrast-badge">${label} ＝ 本身</span>`;
+                }
+                const rounded = Math.round(ratio * 10) / 10;
+                // 4.5:1 是 WCAG AA 對一般大小文字的門檻
+                const cls = ratio >= 4.5 ? 'is-pass' : (ratio >= 3 ? '' : 'is-fail');
+                return `<span class="contrast-badge ${cls}">${label} ${rounded.toFixed(1)}:1</span>`;
+            }
+
+            /* ---------------------------------------------------------------------
+               渲染色票
+               --------------------------------------------------------------------- */
+            function renderSwatches(containerId, tokens) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+
+                container.innerHTML = tokens.map(([name, desc]) => {
+                    const value = tokenValue(name);
+                    const parsed = parseColor(value);
+                    const isAlpha = !parsed || parsed.a < 1;
+
+                    let contrast = '';
+                    if (parsed && parsed.a === 1) {
+                        contrast =
+                            badge('vs 底色', contrastRatio(parsed, CANVAS)) +
+                            badge('vs 紙色', contrastRatio(parsed, PAPER));
+                    } else {
+                        contrast = '<span class="contrast-badge">半透明 · 對比度依底色而定</span>';
+                    }
+
+                    return `
+                        <button class="swatch" type="button" data-token="${name}" data-value="${value}">
+                            <span class="swatch-chip ${isAlpha ? 'is-alpha' : ''}">
+                                <span class="swatch-chip-inner" style="background:${value}"></span>
+                            </span>
+                            <span class="swatch-meta">
+                                <span class="swatch-token">${name}</span>
+                                <span class="swatch-value">${value}</span>
+                                <span class="contrast-row">${contrast}</span>
+                                <span class="swatch-desc">${desc}</span>
+                            </span>
+                        </button>`;
+                }).join('');
+            }
+
+            renderSwatches('grid-ui', UI_TOKENS);
+            renderSwatches('grid-np', NP_TOKENS);
+            renderSwatches('grid-chart', CHART_TOKENS);
+
+            /* ---------------------------------------------------------------------
+               點擊複製 token 名稱
+               --------------------------------------------------------------------- */
+            const toast = document.getElementById('copy-toast');
+            let toastTimer = null;
+
+            function showToast(message) {
+                toast.textContent = message;
+                toast.classList.add('is-visible');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 1600);
+            }
+
+            document.addEventListener('click', (event) => {
+                const swatch = event.target.closest('.swatch');
+                if (!swatch) return;
+                const token = swatch.dataset.token;
+                const text = `var(${token})`;
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text)
+                        .then(() => showToast(`已複製 ${text}`))
+                        .catch(() => showToast(text));
+                } else {
+                    showToast(text);
+                }
+            });
+
+            /* ---------------------------------------------------------------------
+               字級展示
+               clamp() 的實際值只有瀏覽器算得出來，所以插一個探針元素量 computed
+               font-size，而不是自己重算 clamp 公式（重算等於再實作一次瀏覽器）。
+               --------------------------------------------------------------------- */
+            const TYPE_TOKENS = [
+                ['--type-report-display', '報導主標', '總預算的三年', false],
+                ['--type-chapter-heading', '章節大標', '晚審的影響', false],
+                ['--type-panel-heading', '面板／卡片標題', '新興預算無法動支', false],
+                ['--type-body', '內文', '預算案送抵立法院後，審議時程一再延後。', true],
+                ['--type-caption', '註解／頁尾', '資料來源：行政院主計總處', true]
+            ];
+
+            const typeScale = document.getElementById('type-scale');
+            typeScale.innerHTML = TYPE_TOKENS.map(([name, use, sample, isBody]) => `
+                <div class="type-row">
+                    <div class="type-sample ${isBody ? 'is-body' : ''}" style="font-size: var(${name})"
+                         data-type-sample="${name}">${sample}</div>
+                    <div class="type-spec">
+                        <b data-type-readout="${name}">—</b>
+                        ${use}
+                        <span class="type-clamp">${name}</span>
+                    </div>
+                </div>`).join('');
+
+            function updateTypeReadouts() {
+                TYPE_TOKENS.forEach(([name]) => {
+                    const sample = typeScale.querySelector(`[data-type-sample="${name}"]`);
+                    const readout = typeScale.querySelector(`[data-type-readout="${name}"]`);
+                    if (!sample || !readout) return;
+                    const px = parseFloat(getComputedStyle(sample).fontSize);
+                    readout.textContent = `${Math.round(px * 100) / 100}px`;
+                });
+            }
+
+            /* ---------------------------------------------------------------------
+               視窗寬度讀數
+               --------------------------------------------------------------------- */
+            const viewportReadout = document.getElementById('viewport-readout');
+
+            function updateViewportReadout() {
+                const w = window.innerWidth;
+                // clamp() 的下界在 ~360px 觸底、上界在 ~1280px 觸頂（依各 token 略有差異）
+                const state = w <= 400 ? '接近下界' : (w >= 1280 ? '已達上界' : '流體區間');
+                viewportReadout.innerHTML = `視窗 <strong>${w}px</strong> · ${state}`;
+            }
+
+            /* rAF 節流：resize 會連續觸發，量測與寫 DOM 都排到同一幀做 */
+            let resizeScheduled = false;
+            function onResize() {
+                if (resizeScheduled) return;
+                resizeScheduled = true;
+                requestAnimationFrame(() => {
+                    resizeScheduled = false;
+                    updateViewportReadout();
+                    updateTypeReadouts();
+                });
+            }
+
+            window.addEventListener('resize', onResize, { passive: true });
+            updateViewportReadout();
+            updateTypeReadouts();
+
+            /* ---------------------------------------------------------------------
+               緩動曲線展示
+               --------------------------------------------------------------------- */
+            const CURVES = [
+                {
+                    token: '--ease-expo-out',
+                    curve: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                    use: '主力曲線。卡片進場、圖表面板切換、按鈕 hover、幾乎所有淡入。全站約八成的動畫用它。'
+                },
+                {
+                    token: '--ease-quart-out',
+                    curve: 'cubic-bezier(0.25, 1, 0.5, 1)',
+                    use: '第 3 章長條圖的 width 成長。比 expo-out 收得稍緩，長條停下來時比較不突兀。'
+                },
+                {
+                    token: '--ease-ch3-extend',
+                    curve: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                    use: '第 3 章「延續計畫增額」長條。刻意與上一根不同曲線，讓兩根疊加的長條在視覺上分得開。'
+                }
+            ];
+
+            const motionGrid = document.getElementById('motion-grid');
+            motionGrid.innerHTML = CURVES.map(({ token, curve, use }) => `
+                <div class="motion-card">
+                    <div class="motion-name">${token}</div>
+                    <div class="motion-curve">${curve}</div>
+                    <div class="motion-track">
+                        <div class="motion-dot" data-dot style="transition: left 1.2s ${curve}"></div>
+                    </div>
+                    <div class="motion-use">${use}</div>
+                </div>`).join('');
+
+            const dots = motionGrid.querySelectorAll('[data-dot]');
+
+            function playMotion() {
+                dots.forEach(dot => { dot.style.left = '0%'; });
+                // 讀一次 offsetWidth 強制 reflow，否則同一幀內的 0% → 100% 會被合併掉、看不到動畫
+                void motionGrid.offsetWidth;
+                dots.forEach(dot => { dot.style.left = '100%'; });
+            }
+
+            document.getElementById('replay-motion').addEventListener('click', playMotion);
+
+            /* ---------------------------------------------------------------------
+               長條圖展示
+               --------------------------------------------------------------------- */
+            const BARS = [
+                { label: '受影響金額', token: '--chart-cat-impact', dark: '#8E2017', width: 78 },
+                { label: '新興計畫（第 3 章）', token: '--chart-cat-ch3-new', dark: '#6B3A1E', width: 34 },
+                { label: '延續計畫增額（第 3 章）', token: '--chart-cat-ch3-extend', dark: '#4F2D44', width: 94 },
+                { label: '保留／凍結', token: '--chart-cat-reserve', dark: '#836122', width: 52 }
+            ];
+
+            const barDemo = document.getElementById('bar-demo');
+            barDemo.innerHTML = BARS.map(({ label, token, dark, width }) => {
+                const color = tokenValue(token);
+                const rgb = parseColor(color);
+                const glow = rgb ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.2)` : 'transparent';
+                return `
+                    <div class="bar-label"><span>${label}</span><span>${width}%</span></div>
+                    <div class="bar-track">
+                        <div class="bar-layer" data-bar data-width="${width}"
+                             style="width:0%; background: linear-gradient(to right, ${dark}, ${color});
+                                    box-shadow: 0 0 10px ${glow};"></div>
+                    </div>`;
+            }).join('');
+
+            const bars = barDemo.querySelectorAll('[data-bar]');
+
+            function playBars() {
+                bars.forEach(bar => { bar.style.width = '0%'; });
+                void barDemo.offsetWidth;
+                bars.forEach(bar => { bar.style.width = bar.dataset.width + '%'; });
+            }
+
+            document.getElementById('replay-bars').addEventListener('click', playBars);
+
+            /* 長條進入視野時才播一次，跟正片的捲動觸發行為一致 */
+            if ('IntersectionObserver' in window) {
+                const barObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            playBars();
+                            barObserver.disconnect();
+                        }
+                    });
+                }, { threshold: 0.4 });
+                barObserver.observe(barDemo);
+            } else {
+                playBars();
+            }
+
+            /* ---------------------------------------------------------------------
+               導覽 scroll spy
+               --------------------------------------------------------------------- */
+            const navLinks = Array.from(document.querySelectorAll('.doc-nav a'));
+            const sections = navLinks
+                .map(link => document.querySelector(link.getAttribute('href')))
+                .filter(Boolean);
+
+            if ('IntersectionObserver' in window && sections.length) {
+                /* 維護一個「目前有交集」的集合，而不是「最後一筆進來的 entry 就是答案」。一次 callback 可能同時送來多筆（跳躍式捲動、或分頁被節流後補送），用最後一筆會挑到錯的章節；改成每次都從集合裡取最靠上的那個。 */
+                const visible = new Set();
+
+                const syncCurrent = () => {
+                    let best = null;
+                    let bestTop = Infinity;
+                    visible.forEach(section => {
+                        const top = section.getBoundingClientRect().top;
+                        if (top < bestTop) {
+                            bestTop = top;
+                            best = section;
+                        }
+                    });
+                    if (!best) return;
+                    navLinks.forEach(link => {
+                        link.classList.toggle('is-current', link.getAttribute('href') === '#' + best.id);
+                    });
+                };
+
+                const spy = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) visible.add(entry.target);
+                        else visible.delete(entry.target);
+                    });
+                    syncCurrent();
+                }, { rootMargin: '-140px 0px -60% 0px' });
+
+                sections.forEach(section => spy.observe(section));
+            }
+
+            playMotion();
+        })();
+    </script>
+</body>
+
+</html>

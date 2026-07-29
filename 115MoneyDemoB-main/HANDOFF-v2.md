@@ -1,6 +1,6 @@
 # Handoff — `index-v2.html` / `database-v2.html` (the "-v2" workstream)
 
-_Last updated: 2026-07-28 · Branch: `chapter-2-refine`_
+_Last updated: 2026-07-29 · Branch: `main`（頁尾工作已合併，分支已刪）_
 
 ## What this is
 
@@ -740,3 +740,280 @@ for (let rel = 6500; rel <= 9800; rel += 25) {
 ```
 關鍵門檻（1478×879）：圖片3解鎖 `rel=7575`、退場開始 `8250`、退場完成＋第三章
 開場文字解鎖 `8475`。
+
+## 2026-07-29 頁尾製作資訊（`index.html` + `database.html`，含根目錄兩份）— 已合併進 `main`
+
+_合併：PR #4（`e673aad`）＋ PR #5（`07fb514`）。分支 `footer-dates-and-credits` 已刪除。_
+
+### 需求演進（**依時間序，後面推翻前面，別只讀第一條**）
+
+1. 「footer 壓製作日期跟更新日期，未來如果有更新，更新日期要再改／footer 預留空間放 credit 製作人員。」
+2. `database.html` 也要有一樣的頁尾。
+3. `.footer-dates` 在手機要**一行**。
+4. **最終**：「pc 跟 mobile 都不用製作日期」，並給出真名單。
+
+第 4 點同時把第 1 點的「製作日期」需求收回，也把暫定的職稱整組換掉
+（記者／資料整理／網頁設計／前端開發，4 列 → 監製／製作統籌／攝影／網頁設計／網頁工程，5 列）。
+**這不是把名字填進原本的欄位，是整份名單換掉。**
+
+### 最終長相（兩頁完全一致）
+
+```
+                  製作團隊
+        ─────────────────────────
+        監　　製   葉純豪
+        製作統籌   王柔婷
+        攝　　影   裴禛
+        網頁設計   劉姿嘉
+        網頁工程   陳玟憲
+
+           更新日期 2026-07-28
+
+     copyright © 2026 中央通訊社版權所有
+```
+
+### 未來要更新「更新日期」時，每頁要改**三處**
+
+以 `index.html` 為例（`database.html` 同理，行號見各檔案內註解）：
+
+| 位置 | 內容 |
+|---|---|
+| `<p class="footer-dates">` 裡的 `<time>` | `datetime` 屬性**與**畫面文字兩個都要改 |
+| JSON-LD 的 `"dateModified"` | 結構化資料，畫面上看不到 |
+| （不用動）JSON-LD 的 `"datePublished"` | 見下節 |
+
+三處漏一處不會有任何錯誤訊息，畫面也看起來正常——只有搜尋引擎拿到的日期會不一致。
+`index.html` 的 `<footer>` 上方已留了說明註解列出這三處。
+
+### `datePublished` 刻意保留（**別當成漏改**）
+
+使用者說的是「畫面上不要製作日期」。`datePublished` 是**不顯示的結構化資料**，
+而 Google 對 `NewsArticle` 這個 type 要求要有它，拿掉只會讓搜尋 metadata 變差、
+對「畫面不要顯示」這個需求沒有任何幫助。所以：畫面上的 `製作日期` span 整段刪掉，
+JSON-LD 的 `datePublished` 留著，並在該處寫了註解說明這是刻意的。
+`index.html` 是 `NewsArticle`、`database.html` 是 `WebPage`，兩者都有加
+`datePublished`/`dateModified`。
+
+已向使用者揭露此判斷、使用者未要求移除。若日後要拿掉，兩頁各一行。
+
+### 實作細節與踩過的坑
+
+- **`database.html` 不能直接貼 `index.html` 的 CSS。** 兩頁的設計 token 命名不同，
+  貼過去會**安靜地**變成沒有顏色的裸文字（`var()` 找不到就當沒宣告）。對應關係：
+
+  | `index.html` | `database.html` | 實際色值 |
+  |---|---|---|
+  | `--ui-muted` | `--np-muted-ondark` | `#A79C8C` |
+  | `--ui-ink-inverse` | `--np-text-ondark` | `#EDE6D3` |
+  | `--font-body` / `--type-caption` | 同名 | — |
+
+  底色 `#1E1410` 與分隔線的 `rgba(237,230,211,…)` 是**寫死的字面值**，兩頁共用沒問題。
+
+- **`.footer-credits-title::after { display: none }` 只有 `index.html` 需要。**
+  `index.html` 有一條全域 `h2::after`（52×6px、`var(--ui-accent)` 朱紅裝飾線）是給章節
+  大標用的，會漏到頁尾小標題上，和標題下方那條細分隔線疊成雙線。`database.html` 的
+  `h1,h2,h3` 規則只設 `font-family`，沒有這個問題，所以**刻意沒有**加這條覆蓋——
+  不是漏抄。
+
+- **`database.html` 的頁尾原本就有一個既有 bug，順手修掉了**：它的 `.page-footer`
+  背景用 `var(--bg-color)`，跟 body 底色（`#12191A`）是同一個值，等於頁尾跟內文之間
+  完全沒有視覺邊界。這正是 `index.html` 當初改用 `#1E1410` 要解決的問題。
+
+- **兩字職稱對齊四字**用 `text-align: justify` + `text-align-last: justify`，
+  不是手動補全形空白。五個職稱都解析成 56px 寬。**只加 `text-align-last` 不夠**，
+  單行文字要兩端對齊，`text-align: justify` 也要一起給。
+
+- **`dt`/`dd` 直接當 grid 子項**（`dl` 下直接放 `dt`/`dd` 是合法 HTML5），不用
+  `<div>` 包裝 + `display: contents`——少一層、也少一個無障礙樹的變數。
+
+- **`.footer-dates` 的 flex 換行看的是容器寬度、不是視窗寬度**，所以「手機一行」
+  不能靠改視窗大小測（這個環境也改不動 layout viewport，見 `LEARNINGS.md` 第 14 條）。
+  當時是用隱藏探針量文字實寬（12px 下需 260px、320px 視窗有 280px 可用），再把容器
+  寬度綁死來測換行行為。**現在只剩「更新日期」一段，這個限制已經不緊了**，但 flex
+  置中的結構刻意留著，日後要加回第二段日期不必重寫版型。
+
+### 四份檔案必須同步
+
+`index.html` / `database.html` 在**根目錄**和 `115MoneyDemoB-main/` 各有一份，
+GitHub Pages 是從 **repo 根目錄** build 的，所以根目錄那兩份才是真正上線的檔案。
+每次改頁尾都是動四個檔案。合併後已驗證兩組 byte-identical：
+
+```sh
+cmp index.html 115MoneyDemoB-main/index.html && cmp database.html 115MoneyDemoB-main/database.html
+```
+
+## 2026-07-29 第三章：查核storyboard，**未改任何程式碼**
+
+使用者開了 `chapter-3` 分支並給了第三章分鏡，明確限制「新興計畫的 bar **不要用綠色**」、
+「延續計畫增額的 bar **不要用藍色**」。逐項比對後，**現況已經全部符合分鏡**——文字、
+顏色、幾何、步驟觸發時機都對，所以這次**沒有做任何修改**，不要去翻 diff 找。
+
+### ⚠️ class 名稱會誤導人（唯一值得處理的事）
+
+| 識別字 | 名稱暗示 | 實際 render 出來的顏色 |
+|---|---|---|
+| `.ch3-color-teal` / `#ch3-bar-new-teal`（新興計畫） | 綠 | **赭紅 `#C9763A`**（`--chart-cat-ch3-new`） |
+| `.ch3-color-blue` / `#ch3-bar-extend-blue`（延續計畫） | 藍 | **紫藕 `#9C5B86`**（`--chart-cat-ch3-extend`） |
+
+名稱是舊配色留下來的，跟使用者「不要綠、不要藍」的要求**字面上完全相反**。
+風險是日後有人（或某個 agent）看到 `teal`/`blue` 以為是壞掉了而「修」回綠藍，
+直接違反明確需求。共 13 處，純機械改名（`index.html` 1665/1670 的 class 定義、
+1712–1743 與 1825–1826 與 3844–3856 的選擇器、4433–4434 的 markup）。
+
+**已向使用者提出、使用者尚未要求執行。** 若不改名，至少別把這兩個名字當成配色依據。
+
+### 步驟寬度（比對分鏡用）
+
+`ch3-step-1` → `100%`、`ch3-step-2` → `9.8%`、`ch3-step-3` → `34%`、
+`ch3-step-4` → `94.3%`、`ch3-step-5` → `100%`。第三章用的是**卡片位置**判斷
+（`updateChapter3Bars`），不是第二章桌機那套整章捲動百分比。
+
+## 2026-07-29 `design-system.html` — 設計系統文件頁（新檔案）
+
+把散落在 `index.html` / `database.html` 的設計 token、元件與動態規範整理成一頁可互動的
+文件：`design-system.html`（根目錄與 `115MoneyDemoB-main/` 各一份，同樣要保持同步）。
+含 `noindex, nofollow`，不進搜尋引擎。
+
+內容分七節：色彩（含 24 個 token 的即時對比度）、字體（clamp 實際值即時讀數）、
+版型與節奏、動態（三條緩動曲線可重播）、元件（story-card／按鈕／長條／頁尾，
+都是活的元件不是截圖）、跨頁 token 對映表、陷阱清單。
+
+### 一個刻意的設計：數字全部由 JS 從 computed style 算出
+
+色票的**色值與對比度**、字級的**實際 px**，都是頁面載入時從 `getComputedStyle` 讀出來
+再算的，不是寫死在 HTML 裡。理由是文件最常見的腐爛方式就是「程式改了、文件裡的數字沒改」，
+而寫死的色碼看起來跟活的一樣可信。現在只要改對這頁的 `:root`，展示區與所有數字會自己跟上。
+
+**但 `:root` 本身仍是手抄的副本。**單一事實來源是 `index.html` / `database.html` 的
+`:root`，改了那兩頁的 token，這頁要跟著改。已用腳本驗證過目前 24 個 token 與來源
+**完全一致（0 個不符、0 個找不到）**，日後可以用同樣方式重驗：
+
+```py
+# 從兩邊的第一個 :root 區塊抽出 --token: value，逐一比對
+import re
+def root_tokens(p):
+    body = re.search(r':root\s*\{(.*?)\n\s*\}', open(p, encoding='utf-8').read(), re.S).group(1)
+    return dict(re.findall(r'(--[\w-]+)\s*:\s*([^;]+);', re.sub(r'/\*.*?\*/', '', body, flags=re.S)))
+```
+
+### 踩到的兩件事
+
+- **對比度徽章不能無腦標紅**：底色類 token（`--ui-canvas`）拿去跟自己比會得到 1.0:1，
+  標成 fail 會讓人以為這個底色有無障礙問題。改成 `ratio < 1.05` 時顯示「本身即此底色」。
+  同時在該節說明徽章是「拿該色**當文字色**」算的，底色類標紅是正常的。
+- **scroll spy 不能用「最後一筆 entry 就是答案」**：一次 callback 可能同時送來多筆
+  （跳躍式捲動，或分頁被節流後補送），實測會highlight 到錯的章節。改成維護一個
+  「目前有交集」的 Set，每次都從裡面取**最靠上**的那個。
+
+### 驗證狀態
+
+桌機 1920×958 已逐節截圖確認：色票、字級讀數、三條曲線、長條動畫、story-card 紙紋與
+撕邊、頁尾 credit 對齊皆正常，console 無本頁錯誤（只有瀏覽器擴充套件的警告）。
+**手機版未驗證**——這個環境改不動 layout viewport（見 `LEARNINGS.md` 第 14、18 條）。
+版面全部用 auto-fit/auto-fill grid 與 `overflow-x: auto` 的表格，理論上會自然收攏，
+但值得在真機看一次。
+
+## 2026-07-29 `design-system.html` 設計品質檢視 + 修正
+
+以「高品質網頁設計」的標準回頭檢視前一節做出來的 `design-system.html`，用量測而不是目測。
+以下每一條都先量到數字才動手，修正已套用（根目錄與 `115MoneyDemoB-main/` 兩份同步）。
+
+### 1. 中文排版：39 處多餘的字間空隙（最嚴重，且諷刺）
+
+**問題**：原始碼裡為了不讓行太長而在句子中間換行，**漢字與漢字之間的換行會被瀏覽器
+渲染成一個可見空格**。實測整頁有 39 處，例如「頁面底色深、卡片是牛皮紙色，␣強調色取自…」、
+「甘特圖的␣政黨色編碼」。一個講排版的頁面自己排版有洞，說服力直接歸零。
+
+**修正**：把漢字之間的換行全部接起來（`([CJK])\n\s+([CJK])` → `\1\2`）。
+副作用是原始碼會出現長行（最長 355 字元），這是中文 HTML 的正常代價，不要為了
+「行不要太長」再把句子折回去。
+
+**⚠️ 這裡踩了一個坑，改的人務必注意**：第一輪只接漢字對漢字，還剩 8 處是換行落在
+**標籤邊界**上（`…的\n<em>政黨色編碼</em>`）。補上標籤邊界的規則之後，卻**矯枉過正**——
+把「漢字 + 拉丁字母／數字」之間**該有**的空隙也吃掉了，畫面上出現 `視窗713px`、
+`需要時用::after`。
+
+正確的中日文排版規則是兩條、方向相反：
+
+| 情境 | 規則 |
+|---|---|
+| 漢字 ↔ 漢字 | **不留**空隙 |
+| 漢字 ↔ 拉丁字母／數字 | **要留**一個空隙 |
+
+最後補了 50 處空格回去（`--code--`／`<strong>` 內容以拉丁字元開頭或結尾時）。
+現在整頁剩 1 處誤判，是 `.specimen-caption` 裡文字與按鈕之間的 flex 間隙，不影響畫面。
+
+**還有第三條規則，補完才算完整**：全形標點（。，、；：」』）自帶視覺留白，
+接在拉丁字／`</code>` 後面**不需要**再補空格，補了規則 2 的空格之後反而變成雙重間距
+（`index.html</code> 。`）。實測有 18 處。收斂成「`</tag>` 後面接全形標點就不留空格」，
+與規則 2 一起用才是完整的三條規則。
+
+### 2. 字級：13 級縮到 10 級，小字區間 7 級縮到 2 級
+
+**問題**：整頁量到 **13 個不同的 font-size**，其中 **7 個擠在 9.8px–12.5px 之間**
+（0.66 / 0.68 / 0.72 / 0.78 / 0.86rem 這種各處隨手寫的值）。
+一個「說明設計系統」的頁面自己不守自己的級數，是這次最傷的結構問題。
+
+**修正**：專案本身只有 5 級，但文件頁確實需要兩個專案沒有的角色，所以**只補兩個 token**、
+其餘一律收斂過去：
+
+```css
+--doc-subhead: clamp(1.3rem, calc(1.05rem + 0.5vw), 1.5rem);  /* 章節副標 h3 */
+--doc-micro:   clamp(0.68rem, calc(0.64rem + 0.12vw), 0.78rem); /* 第三層小字 */
+```
+
+11 處一次性 rem 值全部改成 `var(--type-caption)` 或 `var(--doc-micro)`。
+**現在整頁 0 個 `font-size: 0.__rem`**，剩下的 10 級中有 5 級是 `code { font-size: 0.94em }`
+與示範區塊衍生出來的，屬於相對值不是新級數。
+
+### 3. 階層倒掛：h3 幾乎沒有比內文大
+
+**問題**：實測 h2 = 32px、h3 = 17px、內文 = 16.4px。h2 → h3 跳了 1.9 倍，
+h3 → 內文只有 **1.04 倍**——h3 根本沒有在做階層，全靠金色在撐。
+
+**修正**：h3 改用 `--doc-subhead`，實測 20.8px，h3/內文比值 1.04 → **1.27**。
+現在是 32 / 20.8 / 16.4 / 12.2 / 11.1 的乾淨五級。
+
+### 4. `code` 太小：最重要的內容是全頁最小的字
+
+**問題**：`code { font-size: 0.85em }` 疊在 `--type-caption`（12.2px）上只剩 **10.4px**，
+而表格裡的 **token 名稱正是讀者最需要看清楚的東西**。用縮小來表示「這是程式碼」，
+在小字情境下是反效果。
+
+**修正**：`0.85em` → `0.94em`，表格內 token 名稱 10.4px → 11.5px。
+區分靠等寬字體與顏色，不靠縮小。
+
+### 5. 版面規則寫進 HTML：4 處 inline style
+
+**問題**：`style="margin-top:0"` × 2、`style="margin-bottom:32px"`、`style="margin-left:8px"`、
+`style="padding:0;display:block"`。成因是 `.section-lede` 被同時用在**兩個不同階層**
+（接在 h2 後、接在 h3 後），只好逐處補 inline 修正。
+
+**修正**：拆成 `.section-lede`（h2 後）與 `.sub-lede`（h3 後）兩個角色；
+`.table-wrap.is-spaced`、`.specimen-stage.is-flush`；說明列改用 flex `gap`。
+**現在 0 個 inline style。**
+
+### 6. 其他
+
+- h3 間距 `40px 0 14px` → `48px 0 16px`（14 不在任何 8 的倍數上）。
+- 對比度徽章 `本身即此底色` → `＝ 本身`，避免徽章寬度差太多。
+
+### 沒有改、但知道的
+
+- **量測環境**：這次視窗是 713px 與 980px，桌機寬版（1920px）與手機（≤414px）
+  **這一輪沒有重看**。版面用的是 auto-fit grid，理論上安全，但寬版下
+  `.section-lede` 限 62ch 而表格吃滿 1120px，**兩者行長差距很大**，值得再看一眼。
+- 導覽列 7 個項目在 375px 需要橫向捲動（已有 `overflow-x: auto`，是刻意的）。
+- 對比度全數通過（最低 4.8:1 是導覽列未選中狀態），點擊區最小 36px（略低於 44px 建議值）。
+
+### 可重跑的檢查
+
+```js
+// 貼進 console：不該有的漢字間隙 / 該有卻沒有的漢拉間隙 / 字級數量
+let a=0,b=0; document.querySelectorAll('main p, main td, main .doc-note').forEach(e=>{
+  a+=(e.textContent.match(/[一-鿿]\s+[一-鿿]/g)||[]).length;
+  b+=(e.textContent.match(/[一-鿿][A-Za-z0-9]|[A-Za-z0-9][一-鿿]/g)||[]).length; });
+const s=new Set(); document.querySelectorAll('main *').forEach(e=>{
+  if(e.textContent.trim()) s.add(parseFloat(getComputedStyle(e).fontSize).toFixed(1)); });
+({strayCJKgaps:a, missingCJKLatinSpace:b, distinctSizes:s.size});  // 目標：1 / 1 / 10
+```
