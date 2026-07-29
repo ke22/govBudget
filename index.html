@@ -3338,17 +3338,13 @@
         .footer-credit-list dd {
             margin: 0;
             color: var(--ui-ink-inverse);
-            /* 名字還沒填時仍撐住行高，版面不會塌掉（這就是「預留空間」的實作） */
+            /* 撐住行高，任何一欄暫時留空時版面也不會塌掉、各列間距維持一致 */
             min-height: 1.5em;
         }
 
-        /* 手機也維持單行。實測 12px（--type-caption 在 ≤480px 會收斂到 0.75rem 下限）下
-           「製作日期 2026-07-28 · 更新日期 2026-07-28」需 260px，而最窄常見機型 320px
-           扣掉頁尾左右各 20px 內距後仍有 280px，放得下（320px 時餘裕 20px，其餘機型更寬鬆）。
-           保留 flex-wrap: wrap 而非改成 nowrap：單行是靠實際量到的寬度成立的，
-           萬一日後日期格式變長或 Noto Sans TC 載入失敗改用較寬的備援字體，
-           wrap 會自然折成兩行，nowrap 則會撐出整頁水平捲動（手機上更糟）。
-           .footer-date 的 white-space: nowrap 已確保不會在「製作日期」與數字之間斷開。 */
+        /* 只剩「更新日期」一段（製作日期依需求不顯示），單行在任何寬度都綽綽有餘。
+           .footer-date 的 white-space: nowrap 確保不會在「更新日期」與數字之間斷開；
+           保留 flex 置中的結構，日後若要再加回第二段日期不必重寫版型。 */
         .footer-dates {
             margin: 0 0 10px;
             color: var(--ui-muted);
@@ -3361,10 +3357,6 @@
 
         .footer-dates .footer-date {
             white-space: nowrap;
-        }
-
-        .footer-dates .footer-date-sep {
-            opacity: 0.5;
         }
 
         .footer-copyright {
@@ -4907,27 +4899,28 @@
     </section>
 
     <!-- ⚠️ 這個頁面之後每次改版，「更新日期」共有兩個地方要一起改，缺一個就會不一致：
-           1. 下面 .footer-dates 裡「更新日期」那個 <time>：datetime 屬性與畫面文字都要改
+           1. 下面 .footer-dates 裡的 <time>：datetime 屬性與畫面文字都要改
            2. <head> 內 JSON-LD 的 "dateModified"
-         「製作日期」／"datePublished" 除非整篇重做，否則不要動。
-         製作團隊名單目前是「—」佔位，拿到名單後把對應的 <dd> 內容換掉即可，版型不用動。 -->
+         「製作日期」畫面上依需求不顯示，但 JSON-LD 仍保留 "datePublished"（不顯示的結構化
+         資料，NewsArticle 需要它），除非整篇重做否則不要動。
+         此頁尾與 database.html 為同一套版型，改一邊記得改另一邊。 -->
     <footer class="page-footer">
         <div class="footer-credits">
             <h2 class="footer-credits-title">製作團隊</h2>
             <dl class="footer-credit-list">
-                <dt>記者</dt>
-                <dd>—</dd>
-                <dt>資料整理</dt>
-                <dd>—</dd>
+                <dt>監製</dt>
+                <dd>葉純豪</dd>
+                <dt>製作統籌</dt>
+                <dd>王柔婷</dd>
+                <dt>攝影</dt>
+                <dd>裴禛</dd>
                 <dt>網頁設計</dt>
-                <dd>—</dd>
-                <dt>前端開發</dt>
-                <dd>—</dd>
+                <dd>劉姿嘉</dd>
+                <dt>網頁工程</dt>
+                <dd>陳玟憲</dd>
             </dl>
         </div>
         <p class="footer-dates">
-            <span class="footer-date">製作日期 <time datetime="2026-07-28">2026-07-28</time></span>
-            <span class="footer-date-sep" aria-hidden="true">·</span>
             <span class="footer-date">更新日期 <time datetime="2026-07-28">2026-07-28</time></span>
         </p>
         <p class="footer-copyright">copyright © 2026 中央通訊社版權所有</p>
