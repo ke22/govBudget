@@ -3277,7 +3277,7 @@
         }
 
         .page-footer {
-            padding: 24px 20px;
+            padding: 32px 20px 24px;
             background: radial-gradient(circle, rgba(237, 230, 211, 0.05) 1px, transparent 1.2px) 0 0/4px 4px, #1E1410;
             /* 原背景 var(--ui-canvas) 與上方 .footer-cta 漸層終點 --bg-deep 是同一個色值，
                單靠底色分不出頁尾邊界；改用暖色深炭色 #1E1410 讓底色本身也有區隔，
@@ -3286,6 +3286,97 @@
             color: var(--ui-muted);
             font-size: var(--type-caption);
             text-align: center;
+        }
+
+        /* ---------- 頁尾製作資訊：製作團隊 credit + 製作／更新日期 ---------- */
+        .footer-credits {
+            max-width: 420px;
+            margin: 0 auto 18px;
+        }
+
+        .footer-credits-title {
+            font-family: var(--font-body);
+            font-size: var(--type-caption);
+            font-weight: 700;
+            color: var(--ui-ink-inverse);
+            letter-spacing: 0.08em;
+            margin: 0 0 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(237, 230, 211, 0.12);
+        }
+
+        /* 全域有一條 h2::after {width:52px; height:6px; background:var(--ui-accent)}
+           的朱紅裝飾線，是給章節大標用的。頁尾這個小標題不需要，且會和上面那條
+           細分隔線疊成雙線，故關掉（保留 h2 是為了頁尾區塊在無障礙樹裡仍有標題） */
+        .footer-credits-title::after {
+            display: none;
+        }
+
+        /* dt/dd 直接當 grid 子項（dl 下直接放 dt/dd 是合法 HTML），
+           不用 <div> 包裝＋display:contents，少一層、也少一個無障礙樹的變數 */
+        .footer-credit-list {
+            margin: 0;
+            display: grid;
+            /* 兩欄都貼齊內容寬度、整組置中，職稱與名字才會是一個對齊的整體置於標題下方；
+               若右欄用 1fr，名字欄會被撐到容器右緣，整組看起來偏左。
+               minmax(0, max-content) 讓之後填入較長的名單時可以自然折行而不是溢出 */
+            grid-template-columns: max-content minmax(0, max-content);
+            justify-content: center;
+            column-gap: 16px;
+            row-gap: 6px;
+            text-align: left;
+        }
+
+        .footer-credit-list dt {
+            color: var(--ui-muted);
+            /* 欄寬取最長的「資料整理」，較短的「記者」用 text-align-last 均分撐開，
+               讓兩字與四字的職稱右緣對齊，不必手動補全形空白 */
+            text-align: justify;
+            text-align-last: justify;
+        }
+
+        .footer-credit-list dd {
+            margin: 0;
+            color: var(--ui-ink-inverse);
+            /* 名字還沒填時仍撐住行高，版面不會塌掉（這就是「預留空間」的實作） */
+            min-height: 1.5em;
+        }
+
+        /* flex + wrap：窄螢幕時兩段日期各自成行，而不是在「製作日期」與日期數字
+           之間被拆行。用 flex 換行而非 text-indent 之類的斷行技巧，是因為這個
+           breakpoint 在目前環境測不到（layout viewport 鎖在桌機寬），機制要一眼
+           看得出正確，不能靠試出來的 hack */
+        .footer-dates {
+            margin: 0 0 10px;
+            color: var(--ui-muted);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: baseline;
+            gap: 0 8px;
+        }
+
+        .footer-dates .footer-date {
+            white-space: nowrap;
+        }
+
+        .footer-dates .footer-date-sep {
+            opacity: 0.5;
+        }
+
+        .footer-copyright {
+            margin: 0;
+        }
+
+        @media (max-width: 480px) {
+            .footer-dates {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .footer-dates .footer-date-sep {
+                display: none;
+            }
         }
 
         #chapter-4 {
@@ -3682,6 +3773,8 @@
         "description": "115年度中央政府總預算審議創下憲政史上最長延宕紀錄，卡關203天。中央社深度回顧朝野協商過程、歷年預算延宕比較，以及對新興政策計畫的影響。",
         "image": ["https://ke22.github.io/govBudget/hero-collage-v2.jpg"],
         "url": "https://ke22.github.io/govBudget/index.html",
+        "datePublished": "2026-07-28",
+        "dateModified": "2026-07-28",
         "publisher": {
             "@type": "Organization",
             "name": "中央社",
@@ -4821,8 +4914,31 @@
         </div>
     </section>
 
+    <!-- ⚠️ 這個頁面之後每次改版，「更新日期」共有兩個地方要一起改，缺一個就會不一致：
+           1. 下面 .footer-dates 裡「更新日期」那個 <time>：datetime 屬性與畫面文字都要改
+           2. <head> 內 JSON-LD 的 "dateModified"
+         「製作日期」／"datePublished" 除非整篇重做，否則不要動。
+         製作團隊名單目前是「—」佔位，拿到名單後把對應的 <dd> 內容換掉即可，版型不用動。 -->
     <footer class="page-footer">
-        copyright © 2026 中央通訊社版權所有
+        <div class="footer-credits">
+            <h2 class="footer-credits-title">製作團隊</h2>
+            <dl class="footer-credit-list">
+                <dt>記者</dt>
+                <dd>—</dd>
+                <dt>資料整理</dt>
+                <dd>—</dd>
+                <dt>網頁設計</dt>
+                <dd>—</dd>
+                <dt>前端開發</dt>
+                <dd>—</dd>
+            </dl>
+        </div>
+        <p class="footer-dates">
+            <span class="footer-date">製作日期 <time datetime="2026-07-28">2026-07-28</time></span>
+            <span class="footer-date-sep" aria-hidden="true">·</span>
+            <span class="footer-date">更新日期 <time datetime="2026-07-28">2026-07-28</time></span>
+        </p>
+        <p class="footer-copyright">copyright © 2026 中央通訊社版權所有</p>
     </footer>
 
     <script>
