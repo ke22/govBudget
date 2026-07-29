@@ -3342,10 +3342,13 @@
             min-height: 1.5em;
         }
 
-        /* flex + wrap：窄螢幕時兩段日期各自成行，而不是在「製作日期」與日期數字
-           之間被拆行。用 flex 換行而非 text-indent 之類的斷行技巧，是因為這個
-           breakpoint 在目前環境測不到（layout viewport 鎖在桌機寬），機制要一眼
-           看得出正確，不能靠試出來的 hack */
+        /* 手機也維持單行。實測 12px（--type-caption 在 ≤480px 會收斂到 0.75rem 下限）下
+           「製作日期 2026-07-28 · 更新日期 2026-07-28」需 260px，而最窄常見機型 320px
+           扣掉頁尾左右各 20px 內距後仍有 280px，放得下（320px 時餘裕 20px，其餘機型更寬鬆）。
+           保留 flex-wrap: wrap 而非改成 nowrap：單行是靠實際量到的寬度成立的，
+           萬一日後日期格式變長或 Noto Sans TC 載入失敗改用較寬的備援字體，
+           wrap 會自然折成兩行，nowrap 則會撐出整頁水平捲動（手機上更糟）。
+           .footer-date 的 white-space: nowrap 已確保不會在「製作日期」與數字之間斷開。 */
         .footer-dates {
             margin: 0 0 10px;
             color: var(--ui-muted);
@@ -3366,17 +3369,6 @@
 
         .footer-copyright {
             margin: 0;
-        }
-
-        @media (max-width: 480px) {
-            .footer-dates {
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .footer-dates .footer-date-sep {
-                display: none;
-            }
         }
 
         #chapter-4 {

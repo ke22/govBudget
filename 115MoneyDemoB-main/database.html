@@ -747,6 +747,11 @@
             min-height: 1.5em;
         }
 
+        /* 手機也維持單行。實測 12px（--type-caption 在 ≤480px 會收斂到 0.75rem 下限）下
+           「製作日期 2026-07-28 · 更新日期 2026-07-28」需 260px，而最窄常見機型 320px
+           扣掉頁尾左右各 20px 內距後仍有 280px，放得下。
+           保留 flex-wrap: wrap 而非 nowrap：萬一日後日期格式變長或字體改用較寬的備援，
+           wrap 會折成兩行，nowrap 則會撐出整頁水平捲動。 */
         .footer-dates {
             margin: 0 0 10px;
             color: var(--np-muted-ondark);
@@ -767,17 +772,6 @@
 
         .footer-copyright {
             margin: 0;
-        }
-
-        @media (max-width: 480px) {
-            .footer-dates {
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .footer-dates .footer-date-sep {
-                display: none;
-            }
         }
     </style>
     <script type="application/ld+json">
