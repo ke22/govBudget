@@ -134,3 +134,12 @@ background-image: image-set(url('x.webp') type('image/webp'), url('x.jpg') type(
 不支援 `image-set()` 的瀏覽器會把第二條宣告**整條**視為無效值並丟棄，自動保留上一條合法的 `url()`——這是 CSS 對無效宣告的標準行為（invalid at computed-value time 的屬性不會讓整個 rule 失敗，只丟該條宣告），不需要 JS 特徵偵測、不需要維護兩份 class。唯一要注意的是同一個 `background-image` 屬性如果是多層背景（例如疊了 `radial-gradient` 網點紋理），兩條宣告都要把**所有圖層**完整列出，只換其中一層、其他層用同樣寫法照抄，不能只寫要換的那一層。
 
 **這個技巧不適用**社群媒體爬蟲會讀的 `<meta property="og:image">`／`twitter:image`／JSON-LD 的 `image`——那些是外部程式直接抓 URL，没有 CSS fallback 機制保護，WebP 支援度在各家爬蟲上不一致，這幾處刻意維持 JPEG 不動。
+
+## 23. 固定「兩排」排版要用 explicit `<br>`，不能靠 wrap 自然換行；還原前一個 style commit 優先用 `git revert`
+
+**問題**：footer 的「製作」credit 原本是 7 個人名逗號分隔的一整行，後來被改成每人一行（`display:block`），使用者要求先改回原樣、再改成固定兩排（4 名＋3 名）。
+
+**原因／作法**：
+- `.credit-name` 本身有 `white-space: nowrap`，但外層 `dd` 沒有，所以本來就會隨容器寬度自然換行——但换行點會跟著螢幕寬度浮動，不是「固定兩排」。要做「不管螢幕多寬都固定在同一個斷點」，唯一可靠的做法是在指定的兩個 `<span>` 之間插入一個 explicit `<br>`，不要依賴 `flex-wrap`／natural wrap 或猜測容器寬度。
+- 還原「stack one-per-line」那個 commit（`d431baa`）時用 `git revert <sha>` 而不是手動把 markup 改回逗號分隔——那個 commit 同時還夾帶了 `line-height`／`nowrap` 的調整（為了讓 `dt`/`dd` 第一行基線對齊），手動只改 markup 很容易漏掉這些一起 revert，`git revert` 保證整個 commit 的所有改動（CSS + markup）一起乾淨地退回去。
+- 這個 credit block 有 **4 份實體檔案**要同步改：`index.html`、`database.html`，以及 `115MoneyDemoB-main/` 底下的兩份鏡像。四份逐一手動改容易漏掉一份造成兩頁不一致，用小腳本（例如 python 對 4 個路徑跑同一個字串替換＋`assert count==1`）比逐檔手改可靠。
