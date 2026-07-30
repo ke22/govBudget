@@ -1,6 +1,38 @@
 # Handoff — `index.html` frontend perf + mobile scrollytelling + newsprint visual identity
 
-_Last updated: 2026-07-14 · Branch: `optimize-index-frontend-perf`_
+_Last updated: 2026-07-30 · Branch: `fe-polish-2026-07-16` (see 2026-07-30 update below for current state)_
+
+## Update — 2026-07-30
+
+Everything described below (perf, mobile scrollytelling, newsprint visual identity) is now
+**fully merged into `main`** — `optimize-index-frontend-perf` merged, plus several more
+branches on top of it since (`chapter-2-refine`, `footer-dates-and-credits` ×2,
+`v2-hero-and-timeline-updates`, `perf-a11y-refine`, `timeline-refine`, PRs #3–#8). The
+"Pending / next steps" list further down is **stale** — treat it as historical, not a live
+TODO list. Only PR #6 (`design-system-docs`) is currently open/unrelated to this workstream.
+
+This session's work, on branch `fe-polish-2026-07-16`:
+1. **Committed 5 previously-"done"-but-uncommitted openspec changes** that had been sitting
+   as untracked directories for weeks: `gov-budget-dashboard`, `align-pencil-design-system`,
+   `apply-newspaper-collage-style`, `upgrade-typography-and-charts`, `fe-polish-2026-07-16`
+   (one commit each, plus one commit for the shared Spectra tooling scaffold —
+   `AGENTS.md`/`CLAUDE.md`/`GEMINI.md`/`.spectra.yaml`/`.agents/`/`.github/`). Opened as
+   PR #9, merged.
+2. **Footer 製作 credit block, two follow-up style changes** (both on top of PR #9, opened as
+   PR #10, merged):
+   - Reverted commit `d431baa` ("stack 製作 names one per line") back to the original
+     comma-separated (`、`) single-line style, via `git revert` (not a manual re-edit — see
+     `LEARNINGS.md` #23 for why that matters).
+   - Then split the reverted line into two **fixed** rows (4 names / 3 names) via an
+     explicit `<br>` between 林廷軍 and 林湘芸, so the break doesn't depend on viewport width.
+   - Applied to all 4 copies: `index.html`, `database.html`, and their
+     `115MoneyDemoB-main/` mirrors.
+3. **Left a pile of untracked, unrelated files in the repo root uncommitted on purpose** —
+   zip archives, screenshots, `.psd`/`.jpg` scratch images, `demo.rtf`, duplicate
+   `115MoneyDemoB-main 2/`/`Demo_E-main/` folders, Chinese-named `.md`/`.doc` files. These
+   look like personal scratch files dropped into the repo directory (e.g. via Finder), not
+   project files — flagged to the user, not deleted. Still sitting as untracked in
+   `git status` as of this writing; nobody has decided to clean them up yet.
 
 ## What this work is
 
