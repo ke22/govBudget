@@ -3702,24 +3702,32 @@
 
             /* 甘特圖共用框架：641-1024px 沿用手機窄框（46/14/16/44px）會讓長條圖在較寬的
                平板畫面上顯得擁擠、軸線貼著圖表邊界。這裡按寬度等比放大框架四邊留白，
-               left/right/bottom 四個元件維持一致，確保長條、格線、軸線、紅線舞台仍精準疊合 */
+               left/right 四個元件維持一致（水平對齊需相同），確保長條、格線、軸線、
+               紅線舞台仍精準疊合。
+               ⚠️ bottom 不能放進這條共用規則：x軸需要比列容器更小的 bottom（貼在列容器
+               下緣「之下」），跟列容器共用同一個 bottom 值會讓兩者下緣疊在同一條線上，
+               x軸的 height 再往上長，結果整條月份刻度疊到最後幾列年份 bar 上——
+               這正是 641-1024px 這個斷點曾經跑版、月份標籤浮在列中間的成因。 */
             #chapter-2-rebuilt .gantt-rows-container-rebuilt,
             #chapter-2-rebuilt .gantt-grid-rebuilt,
             #chapter-2-rebuilt .gantt-x-axis-rebuilt,
             #chapter-2-rebuilt .gantt-red-deadline-stage {
                 left: clamp(56px, 10vw, 88px) !important;
                 right: clamp(20px, 4vw, 36px) !important;
-                bottom: clamp(56px, 9vw, 90px) !important;
             }
 
             #chapter-2-rebuilt .gantt-rows-container-rebuilt,
             #chapter-2-rebuilt .gantt-grid-rebuilt,
             #chapter-2-rebuilt .gantt-red-deadline-stage {
                 top: clamp(24px, 4vw, 32px) !important;
+                bottom: clamp(56px, 9vw, 90px) !important;
             }
 
+            /* x軸的 bottom 直接從列容器的 bottom 反推：永遠等於「列容器下緣 − x軸自身高度
+               − 8px 呼吸間隙」，兩者用同一組來源數值算出，不會再各自漂移到不一致 */
             #chapter-2-rebuilt .gantt-x-axis-rebuilt {
                 height: clamp(28px, 4vw, 40px) !important;
+                bottom: calc(clamp(56px, 9vw, 90px) - clamp(28px, 4vw, 40px) - 8px) !important;
             }
         }
 
