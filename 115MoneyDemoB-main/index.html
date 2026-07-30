@@ -3685,6 +3685,15 @@
                 min-height: var(--scene-read-interval) !important;
             }
 
+            /* .ch2-final-runway 的 105svh 是寫死的，原意是「與一張故事卡同量級」（桌機/
+               手機的 --scene-read-interval 都是 100svh，105svh 只多 5%）。這個斷點把
+               --scene-read-interval 覆寫成 82svh，但跑道沒有跟著變，105svh 對 82svh
+               的卡片變成多 28%，圖片3 在平板寬度會明顯停留過久。只在這個斷點內覆寫，
+               不動桌機／手機共用的 base 規則。 */
+            .ch2-final-runway {
+                height: calc(var(--scene-read-interval) * 1.05);
+            }
+
             /* 平板僅需把退場位移夾在 12svh 以內（避免圖表在較高的視窗上被推得太遠），
                置中已由 ≤1024 區塊的 top:21dvh 負責，故此處同步移除已失效的 -50%。 */
             #ch3-sticky-box-wrapper {
