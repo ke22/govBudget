@@ -5217,14 +5217,17 @@
 
                 // 座標軸（卡片2）與紅線／灰底區塊（卡片4）改用各自對應卡片本身的位置判斷，
                 // 而不是等整章百分比制的 currentStep 追上——只要該卡片的 story-card 頂部已經
-                // 捲到視窗高度 50% 就先點亮，讓圖表元素跟著卡片文字同步出現，不會慢半拍。
+                // 捲到視窗高度 50%／65% 就先點亮，讓圖表元素跟著卡片文字同步出現，不會慢半拍。
                 // 限制在 currentStep<=6（圖表仍相關的範圍）內才生效，避免捲到卡片7~9歷史照片
                 // 段時，這兩張卡片的殘留位置（已遠遠捲出畫面上方）誤判成「還沒到」而被錯誤點亮。
                 const vh = window.innerHeight;
                 const card2Story = chapter2.querySelector('[data-rebuilt-step="2"] .story-card');
                 const card4Story = chapter2.querySelector('[data-rebuilt-step="4"] .story-card');
                 const axisEarly = currentStep <= 6 && card2Story && card2Story.getBoundingClientRect().top <= vh * 0.5;
-                const deadlineEarly = currentStep <= 6 && card4Story && card4Story.getBoundingClientRect().top <= vh * 0.5;
+                // 卡片4（紅色虛線＝法定審理完成期限／淺灰區塊＝預算應開始執行時間）反映使用者
+                // 「觸發太晚」的回報，門檻由 0.5 調高到 0.65：卡片只要捲到還在畫面下半部
+                // （頂端在 65% 視窗高度）就先點亮，比座標軸（卡片2，仍維持 0.5）更早觸發。
+                const deadlineEarly = currentStep <= 6 && card4Story && card4Story.getBoundingClientRect().top <= vh * 0.65;
 
                 // 「圖卡結束後，圖片3出現」：卡片 9 的字卡要先實際捲出視野上緣（bottom 已捲到
                 // 視窗上方 35% 處，代表讀者已把文字讀完並往上捲走），第三張大結局照片才出現；
