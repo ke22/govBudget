@@ -5249,7 +5249,15 @@
                 // 卡片5（蔡英文／馬英九任期高亮）原本沒有位置搶跑機制，只靠整章百分比制的
                 // [50%,60%) 視窗切換，使用者反映一樣「觸發太晚」。比照卡片2/4的做法補上同一套
                 // 位置判斷，門檻沿用卡片4剛調過的 0.65。
-                const highlightEarly = currentStep <= 6 && card5Story && card5Story.getBoundingClientRect().top <= vh * 0.65;
+                // ⚠️ 守衛用 currentStep < 5，不是 <= 6：card5Story 捲出視野後 top 會變負值，
+                //    永遠 <= 0.65vh，若守衛沿用 <=6，捲到卡片6後這個條件會卡在恆真，每一幀都
+                //    把 rebuilt-step-5 補回來——卡6的 96 年高亮設計上要「取代」卡5的
+                //    101/105/113 高亮（兩者互斥，同時只顯示一組），而 card2/card4 的搶跑
+                //    目標（座標軸／紅線）在 2~6 每一步的疊加名單裡本來就一路保留，補早也
+                //    補不出錯；只有卡5→卡6這一段是「這一步要清掉上一步」，用 <=6 才會露餡。
+                //    改成只在「還沒真正走到卡5」時允許搶跑，一旦 currentStep 推進到 5 以後，
+                //    交還給下方逐步驟的 class 疊加自行決定要不要留著 rebuilt-step-5。
+                const highlightEarly = currentStep < 5 && card5Story && card5Story.getBoundingClientRect().top <= vh * 0.65;
 
                 // 「圖卡結束後，圖片3出現」：卡片 9 的字卡要先實際捲出視野上緣（bottom 已捲到
                 // 視窗上方 35% 處，代表讀者已把文字讀完並往上捲走），第三張大結局照片才出現；
