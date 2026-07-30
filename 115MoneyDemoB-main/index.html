@@ -117,6 +117,18 @@
                發生過：手機斷點只改了長條高度，忘了同步改標籤高度）。單一 token 是唯一能
                讓兩邊「不可能」再各自漂移的做法——每個斷點只改這一個值，兩邊自動跟著變。 */
             --gantt-row-h: 18px;
+            /* 甘特圖繪圖區的上下邊界。Y 軸年份標籤（.gantt-y-axis-rebuilt）與長條列
+               （.gantt-rows-container-rebuilt）是兩個各自獨立的 19 項 flex 清單，都用
+               justify-content:space-between 分佈；要逐列對齊，兩者的「容器上下界」與
+               「子項高度」都必須完全一致（子項高度見 --gantt-row-h）。
+               網格線（.gantt-grid-rebuilt）與紅線／灰區塊（.gantt-red-deadline-stage）
+               也共用這組邊界，因為紅線 35.3%／執行區 40% 是「框內百分比」，框一不同就對不上。
+               ⚠️ 各斷點只改這兩個 token，絕對不要在個別 selector 上單獨寫 top/bottom——
+                  641-1024px 曾經就是漏把 y 軸加進共用規則，變成長條框 top/bottom 是
+                  clamp(24-32px)/clamp(56-90px)、y 軸卻還是 16px/44px，兩份清單分佈在
+                  不同高度上，逐列累積位移，到 113/114 年標籤旁邊完全沒有長條。 */
+            --gantt-plot-top: 20px;
+            --gantt-plot-bottom: 100px;
         }
 
         * {
@@ -1083,9 +1095,10 @@
         .gantt-y-axis-rebuilt {
             position: absolute;
             left: 15px;
-            top: 20px;
-            bottom: 100px;
-            /* 💡 修正：底部拉高到 100px，年份間距被均勻拉開了！ */
+            /* top/bottom 必須與 .gantt-rows-container-rebuilt 完全相同，否則兩份 19 項
+               清單分佈在不同高度上、逐列累積位移；共用 token 保證不可能分歧 */
+            top: var(--gantt-plot-top);
+            bottom: var(--gantt-plot-bottom);
             width: 65px;
             display: flex;
             flex-direction: column;
@@ -1178,10 +1191,9 @@
         .gantt-grid-rebuilt {
             position: absolute;
             left: 80px;
-            top: 20px;
+            top: var(--gantt-plot-top);
             right: 30px;
-            bottom: 100px;
-            /* 💡 修正：網格底部對齊 100px */
+            bottom: var(--gantt-plot-bottom);
             z-index: 1;
             opacity: 0;
             transition: opacity 0.5s ease;
@@ -1237,9 +1249,9 @@
         .gantt-red-deadline-stage {
             position: absolute !important;
             left: 80px;
-            top: 20px;
+            top: var(--gantt-plot-top);
             right: 30px;
-            bottom: 100px;
+            bottom: var(--gantt-plot-bottom);
             pointer-events: none;
             z-index: 10;
             /* 特權最高層級，確保踩在所有人頭頂上 */
@@ -1298,10 +1310,9 @@
         .gantt-rows-container-rebuilt {
             position: absolute;
             left: 80px;
-            top: 20px;
+            top: var(--gantt-plot-top);
             right: 30px;
-            bottom: 100px;
-            /* 💡 修正：彩色 Bar 容器底部對齊 100px，高度拉開不貼月份 */
+            bottom: var(--gantt-plot-bottom);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -2889,21 +2900,24 @@
             }
 
             /* 統一縮小的繪圖框：留白加大，使繪圖本體（軸線/長條）縮小、四周留更多呼吸空間。
-               紅線(35.3%)、深灰執行區(40%)為框內百分比，只要各元件框一致即精準對齊。 */
+               紅線(35.3%)、深灰執行區(40%)為框內百分比，只要各元件框一致即精準對齊。
+               上下邊界只改 token（見 :root 的 --gantt-plot-top/bottom），四個元件會一起變，
+               不會再有某個元件被漏掉。這裡只需要處理左右（y 軸的標籤欄與繪圖區本來就不同寬）。 */
+            :root {
+                --gantt-plot-top: 16px;
+                --gantt-plot-bottom: 44px;
+            }
+
             #chapter-2-rebuilt .gantt-rows-container-rebuilt,
             #chapter-2-rebuilt .gantt-grid-rebuilt,
             #chapter-2-rebuilt .gantt-red-deadline-stage {
                 left: 46px !important;
                 right: 14px !important;
-                top: 16px !important;
-                bottom: 44px !important;
             }
 
             #chapter-2-rebuilt .gantt-y-axis-rebuilt {
                 left: 3px !important;
                 width: 40px !important;
-                top: 16px !important;
-                bottom: 44px !important;
             }
 
             #chapter-2-rebuilt .gantt-x-axis-rebuilt {
@@ -3729,18 +3743,22 @@
                 right: clamp(20px, 4vw, 36px) !important;
             }
 
-            #chapter-2-rebuilt .gantt-rows-container-rebuilt,
-            #chapter-2-rebuilt .gantt-grid-rebuilt,
-            #chapter-2-rebuilt .gantt-red-deadline-stage {
-                top: clamp(24px, 4vw, 32px) !important;
-                bottom: clamp(56px, 9vw, 90px) !important;
+            /* 上下邊界改成只覆寫 token，Y 軸標籤欄會自動一起變。
+               ⚠️ 這裡原本是直接寫在 rows-container/grid/red-deadline 三個 selector 上，
+                  **y 軸沒被列進去**，於是長條框是 clamp(24-32px)/clamp(56-90px)、
+                  y 軸卻仍是 ≤1024px 區塊的 16px/44px。兩份 19 項清單分佈在不同高度上，
+                  space-between 算出的列距不同，逐列累積位移——實測 946px 寬時已累積到
+                  接近一整列，96 年標籤旁沒有長條、113/114 年更是整組錯位。 */
+            :root {
+                --gantt-plot-top: clamp(24px, 4vw, 32px);
+                --gantt-plot-bottom: clamp(56px, 9vw, 90px);
             }
 
             /* x軸的 bottom 直接從列容器的 bottom 反推：永遠等於「列容器下緣 − x軸自身高度
-               − 8px 呼吸間隙」，兩者用同一組來源數值算出，不會再各自漂移到不一致 */
+               − 8px 呼吸間隙」，直接引用同一個 token，不會再各自漂移到不一致 */
             #chapter-2-rebuilt .gantt-x-axis-rebuilt {
                 height: clamp(28px, 4vw, 40px) !important;
-                bottom: calc(clamp(56px, 9vw, 90px) - clamp(28px, 4vw, 40px) - 8px) !important;
+                bottom: calc(var(--gantt-plot-bottom) - clamp(28px, 4vw, 40px) - 8px) !important;
             }
         }
 
