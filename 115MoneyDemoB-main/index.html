@@ -3365,11 +3365,6 @@
             column-gap: 16px;
             row-gap: 6px;
             text-align: left;
-            /* dt（職稱）與 dd 裡的人名共用同一個行高，兩者第一行的基線才會對齊。
-               寫在共用父層而不是各自寫一份：index.html 的 body 是 1.75、
-               database.html 是 1.6，靠繼承會讓兩頁的名單行距不同，也會讓職稱
-               與第一個人名錯開（實測 database.html 差 1.36px）。 */
-            line-height: 1.8;
         }
 
         .footer-credit-list dt {
@@ -3387,13 +3382,10 @@
             min-height: 1.5em;
         }
 
-        /* 一名一行：改用 display:block 讓每個人名自己佔一行，不再用「、」分隔。
-           保留 nowrap 當保險——中文預設可在任意字元之間斷行，萬一欄寬被壓到比一個
-           三字姓名還窄，沒有 nowrap 就會出現「林傑／立」這種把人名拆成兩行的錯誤署名。
-           line-height 明確指定而不繼承 body：index.html 是 1.75、database.html 是 1.6，
-           7 行累積下來兩頁的頁尾高度會差十幾 px，寫死才能讓兩頁的製作名單真正一致。 */
+        /* 人名不可被折行切斷：中文預設可在任意字元之間斷行，「製作」那列有 7 個人名、
+           在手機寬度一定會折行，不保護就會出現「林傑／立」這種把某個人的名字拆成兩行的
+           錯誤署名。逐一包 nowrap，讓斷行只能發生在「、」分隔處。 */
         .footer-credit-list .credit-name {
-            display: block;
             white-space: nowrap;
         }
 
@@ -4989,15 +4981,8 @@
             <h2 class="footer-credits-title">製作團隊</h2>
             <dl class="footer-credit-list">
                 <dt>製作</dt>
-                <dd>
-                    <span class="credit-name">林傑立</span>
-                    <span class="credit-name">卓冠齊</span>
-                    <span class="credit-name">翁堃耀</span>
-                    <span class="credit-name">林廷軍</span>
-                    <span class="credit-name">林湘芸</span>
-                    <span class="credit-name">黑立安</span>
-                    <span class="credit-name">楊子瑩</span>
-                </dd>
+                <dd><span class="credit-name">林傑立</span>、<span class="credit-name">卓冠齊</span>、<span class="credit-name">翁堃耀</span>、<span class="credit-name">林廷軍</span><br>
+                    <span class="credit-name">林湘芸</span>、<span class="credit-name">黑立安</span>、<span class="credit-name">楊子瑩</span></dd>
                 <dt>網頁設計</dt>
                 <dd><span class="credit-name">卓育麟</span></dd>
             </dl>
