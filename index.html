@@ -110,6 +110,13 @@
             --type-body: clamp(1rem, calc(0.96rem + 0.14vw), 1.1rem);
             --type-caption: clamp(0.75rem, calc(0.71rem + 0.12vw), 0.85rem);
             --scene-read-interval: 100svh;
+            /* 第二章甘特圖：長條列（.gantt-row-rebuilt）與年份標籤列（.y-tick）是兩個
+               各自獨立的 19 項 flex 清單，共用同一個容器高度、都用
+               justify-content:space-between 分佈。兩邊子項高度只要不一致，space-between
+               算出的列間距就不同，逐列累積位移，捲動到後面幾個年度就會對不上（曾經真的
+               發生過：手機斷點只改了長條高度，忘了同步改標籤高度）。單一 token 是唯一能
+               讓兩邊「不可能」再各自漂移的做法——每個斷點只改這一個值，兩邊自動跟著變。 */
+            --gantt-row-h: 18px;
         }
 
         * {
@@ -1096,7 +1103,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            height: 18px;
+            height: var(--gantt-row-h);
         }
 
         .gantt-year-rebuilt {
@@ -1303,7 +1310,7 @@
 
         .gantt-row-rebuilt {
             width: 100%;
-            height: 18px;
+            height: var(--gantt-row-h);
             display: flex;
             align-items: center;
             opacity: 1;
@@ -2917,19 +2924,14 @@
                 font-size: var(--type-caption);
             }
 
-            #chapter-2-rebuilt .gantt-row-rebuilt {
-                height: 10px;
-            }
-
-            /* ⚠️ 一定要跟上面 .gantt-row-rebuilt 同步改：兩個 19 列的 flex 容器
-               （.gantt-rows-container-rebuilt 裝長條、.gantt-y-axis-rebuilt 裝年份標籤）
-               top/bottom 完全相同，都用 justify-content:space-between 把 19 個子項
-               分佈在同一個總高度裡。子項高度不一樣（長條列 10px vs 標籤列仍是基底的
-               18px），space-between 算出來的列間距就不一樣，兩邊各自累積的位移量隨
-               列數往下疊加，到後面幾個年度（如 112–114 年）Y 軸標籤就會跟長條對不上。
-               這裡把 .y-tick 也同步縮到 10px，讓兩邊子項高度一致，才會逐列對齊。 */
-            #chapter-2-rebuilt .y-tick {
-                height: 10px;
+            /* 手機／平板縮小甘特圖列高：改這一個 token，.gantt-row-rebuilt（長條列）與
+               .y-tick（年份標籤列）會同時跟著變——兩者是各自獨立的 19 項 flex 清單、
+               共用同一個容器高度、都用 justify-content:space-between 分佈，子項高度
+               只要有一絲不同，算出來的列間距就不同，逐列累積位移到後面幾個年度就會對不上
+               （這裡曾經真的各自維護過兩條規則，忘了同步改，就是這樣壞的）。改成單一
+               token 之後，這個斷點不可能再讓兩邊漂移，因為已經沒有第二個數字可以漏改。 */
+            :root {
+                --gantt-row-h: 10px;
             }
 
             /* 標題與圖例文字同步縮小，與縮小後的繪圖框比例一致 */
