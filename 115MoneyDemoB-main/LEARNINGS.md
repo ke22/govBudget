@@ -111,3 +111,26 @@ stages jump when the mobile browser address bar collapses/expands.
 2. **截圖**——截圖會強制真正繪製一次，是唯一能確認「肉眼看到什麼」的方法。
 
 實務作法：用 `scrollTo()` + 直接呼叫捲動處理器 + 讀 class/inline 值，掃出各個門檻的精確捲動位置；再對關鍵的兩三個位置各截一張圖確認視覺。別用 `getComputedStyle` 的 opacity 下結論。
+
+## 21. 量測多行 HTML 標籤的屬性，單行 grep 會漏掉換行後的內容
+
+**問題**：做效能建議時，用 `grep -c 'width='` 掃 `<img` 那一行，回報「3 張圖全部沒有 width/height」。實際上這三個 `<img>` 標籤本來就有 `width`/`height`，只是屬性寫在**換行後的第二行**（`<img src="..." alt="..." loading="lazy"\n    width="2100" height="1395">`），單行 grep 天生看不到下一行的內容。這個錯誤的發現後來寫進了給使用者的優化建議報告，等到真的要動手修才發現量錯了。
+
+**原因**：`grep` 預設逐行比對，多行 HTML 標籤（尤其是屬性多到要換行的）在文字上被切成好幾行，任何「只看這一行」的規則都會系統性漏掉下一行的內容。這種漏測不會報錯，看起來就是「找不到就是沒有」，很難自己發現。
+
+**解法**：量測跨行的 HTML 結構時，要嘛 `grep -A2`/`-A3` 帶上下文一起看，要嘛乾脆用 `python3` 把整個檔案讀成字串，用能跨行比對的 regex（如 `re.DOTALL` 或直接抓 `<img[^>]*>` 但用 `re.S`）。凡是「用 grep 確認某個屬性不存在」的結論，多留一個心眼——先確認自己有沒有可能漏看了下一行。
+
+## 22. WebP 格式協商用兩條 `background-image` 宣告，比 JS 特徵偵測更簡單
+
+**問題**：想幫 CSS `background-image` 換成 WebP 省流量，但又不想在完全不支援 WebP 的瀏覽器上讓圖片直接消失（`url()` 找不到格式支援與否的判斷機制，不像 `<picture>` 有格式協商）。
+
+**解法**：寫兩條 `background-image` 宣告，後面那條用 `image-set()`：
+
+```css
+background-image: url('x.jpg');                                          /* 保底 */
+background-image: image-set(url('x.webp') type('image/webp'), url('x.jpg') type('image/jpeg'));  /* 實際採用 */
+```
+
+不支援 `image-set()` 的瀏覽器會把第二條宣告**整條**視為無效值並丟棄，自動保留上一條合法的 `url()`——這是 CSS 對無效宣告的標準行為（invalid at computed-value time 的屬性不會讓整個 rule 失敗，只丟該條宣告），不需要 JS 特徵偵測、不需要維護兩份 class。唯一要注意的是同一個 `background-image` 屬性如果是多層背景（例如疊了 `radial-gradient` 網點紋理），兩條宣告都要把**所有圖層**完整列出，只換其中一層、其他層用同樣寫法照抄，不能只寫要換的那一層。
+
+**這個技巧不適用**社群媒體爬蟲會讀的 `<meta property="og:image">`／`twitter:image`／JSON-LD 的 `image`——那些是外部程式直接抓 URL，没有 CSS fallback 機制保護，WebP 支援度在各家爬蟲上不一致，這幾處刻意維持 JPEG 不動。

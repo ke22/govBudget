@@ -740,3 +740,68 @@ for (let rel = 6500; rel <= 9800; rel += 25) {
 ```
 關鍵門檻（1478×879）：圖片3解鎖 `rel=7575`、退場開始 `8250`、退場完成＋第三章
 開場文字解鎖 `8475`。
+
+## 2026-07-30 效能／無障礙優化（`perf-a11y-refine` 分支）
+
+從一次「建議優化地方有哪些」的檢視延伸出的實作，範圍是使用者確認過的三類：
+
+### 1. 三張歷史照片 + texture 貼圖重新壓縮
+
+| 檔案 | 原本 | 現在 | 手法 |
+|---|---|---|---|
+| `budget96001.jpg` | 2100×1395, 1.3M | 1600×1063, 440K | 縮到符合 `.history-img-frame` 顯示上限（`max-width:750px`）的 2x 視網膜需求 |
+| `budget96002.jpg` | 同上 1.5M | 1600×1063, 472K | 同上 |
+| `budget003.jpg` | 1080×720, 544K | 尺寸不變, 192K | 只重新壓縮，原尺寸已夠用 |
+| `paper-texture.png` | 452K | 新增 `paper-texture.webp` 76K | **PNG 保留**當 fallback，見下方 |
+| `hero-collage-v2.jpg` | 1.1M | 新增 `hero-collage-v2.webp` 672K | 同上，JPEG 保留 |
+
+三張照片改完**用 `Read` 工具直接開檔目視比對**，文字/人臉細節都清楚，才覆蓋原檔。
+
+### 2. WebP 格式協商用 `image-set()`，不是直接替換
+
+`paper-texture.png`／`hero-collage-v2.jpg` 都還在，`background-image` 寫兩條宣告：
+
+```css
+background-image: url('hero-collage-v2.jpg');                                  /* fallback */
+background-image: image-set(url('hero-collage-v2.webp') type('image/webp'),
+                             url('hero-collage-v2.jpg') type('image/jpeg'));    /* 實際使用 */
+```
+
+不支援 `image-set()` 的瀏覽器會把第二條宣告視為整條無效並丟棄，自動保留第一條。
+**桌機版 hero 原本完全沒有 WebP**（手機版 `hero-collage-mobile-clean.webp` 早就有了，
+只是沒補到桌機），這次補齊，`<link rel="preload">` 也一起換成帶 `type="image/webp"` 的版本。
+
+`og:image`／`twitter:image`／JSON-LD 的 `image` **刻意維持 `.jpg`**：社群平台的爬蟲對
+WebP 支援不一致，這三個 meta 是給外部爬蟲抓的，不像頁面本身的 CSS 有 fallback 保護，
+換了風險比省下的流量高。
+
+### 3. `database.html`：debounce + 修重複 `<h1>`
+
+- 搜尋框 `oninput` 改成打字停頓 250ms 才真正跑 `applyFilters()`（原本每個按鍵都對整份
+  預算資料跑多輪 `.filter()`）。`checkUrlParams()` 那條直接設 `.value` 再呼叫
+  `applyFilters()` 的路徑不受影響，因為它本來就沒經過 `oninput`。
+- 品牌名稱「中央政府總預算觀測站」原本也是 `<h1>`，跟 `.db-intro` 裡頁面實際標題
+  「預算增加還減少？…」搶第一層語意標題。改成 `<span class="brand-name">`，
+  CSS selector 從 `header h1` 改名（含手機 media query 那條）。
+
+### ⚠️ 一個自我修正：最初的檢視報告寫錯了
+
+那次「建議優化地方」的報告說「3 張 `<img>` 全部沒有 `width`/`height`」——**這是錯的**。
+grep 用單行比對 `<img` 那一行找 `width=`，但這三個 `<img>` 標籤 `width`/`height`
+寫在**換行後的第二行**，單行 grep 掃不到。實際上這三張圖本來就有正確的
+`width`/`height`（對應舊尺寸）。這次唯一要做的是把 `budget96001.jpg`／`96002.jpg`
+的屬性**從舊尺寸 2100×1395 改成新尺寸 1600×1063**（等比例縮放，不影響 CLS 保護）；
+`budget003.jpg` 尺寸沒變，屬性不用動。
+
+**教訓**：量測多行 HTML 標籤的屬性時，grep 要嘛 `-A1`／`-A2` 帶上下文，要嘛用
+`python3`/`node` 把檔案讀成字串再 regex，不要只在單行上找。
+
+### 未驗證：這次瀏覽器自動化連不上 localhost
+
+三個 port（8791/8792/8777）、兩個全新分頁都連到 `chrome-error://chromewebdata/`，
+連分頁自己呼叫 `fetch('http://localhost:...')` 都拿不到回應——判斷是這次連線工作階段的
+瀏覽器擴充套件連線問題，不是伺服器或程式碼的問題（`curl` 對同一個 port 全部回 200）。
+**這次沒有拿到任何一張桌機/手機的實際渲染截圖**，`image-set()` 的 fallback 邏輯是否
+真的如預期運作、版面有沒有跑掉，都还沒有肉眼驗證過。使用者已知情並選擇先 commit，
+但合併前建議實際用瀏覽器開一次 `index.html`（尤其確認 hero 圖與三張歷史照片正常顯示、
+`database.html` 搜尋框輸入時不再逐字卡頓）。
