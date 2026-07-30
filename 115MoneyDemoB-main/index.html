@@ -110,6 +110,25 @@
             --type-body: clamp(1rem, calc(0.96rem + 0.14vw), 1.1rem);
             --type-caption: clamp(0.75rem, calc(0.71rem + 0.12vw), 0.85rem);
             --scene-read-interval: 100svh;
+            /* 第二章甘特圖：長條列（.gantt-row-rebuilt）與年份標籤列（.y-tick）是兩個
+               各自獨立的 19 項 flex 清單，共用同一個容器高度、都用
+               justify-content:space-between 分佈。兩邊子項高度只要不一致，space-between
+               算出的列間距就不同，逐列累積位移，捲動到後面幾個年度就會對不上（曾經真的
+               發生過：手機斷點只改了長條高度，忘了同步改標籤高度）。單一 token 是唯一能
+               讓兩邊「不可能」再各自漂移的做法——每個斷點只改這一個值，兩邊自動跟著變。 */
+            --gantt-row-h: 18px;
+            /* 甘特圖繪圖區的上下邊界。Y 軸年份標籤（.gantt-y-axis-rebuilt）與長條列
+               （.gantt-rows-container-rebuilt）是兩個各自獨立的 19 項 flex 清單，都用
+               justify-content:space-between 分佈；要逐列對齊，兩者的「容器上下界」與
+               「子項高度」都必須完全一致（子項高度見 --gantt-row-h）。
+               網格線（.gantt-grid-rebuilt）與紅線／灰區塊（.gantt-red-deadline-stage）
+               也共用這組邊界，因為紅線 35.3%／執行區 40% 是「框內百分比」，框一不同就對不上。
+               ⚠️ 各斷點只改這兩個 token，絕對不要在個別 selector 上單獨寫 top/bottom——
+                  641-1024px 曾經就是漏把 y 軸加進共用規則，變成長條框 top/bottom 是
+                  clamp(24-32px)/clamp(56-90px)、y 軸卻還是 16px/44px，兩份清單分佈在
+                  不同高度上，逐列累積位移，到 113/114 年標籤旁邊完全沒有長條。 */
+            --gantt-plot-top: 20px;
+            --gantt-plot-bottom: 100px;
         }
 
         * {
@@ -1076,9 +1095,10 @@
         .gantt-y-axis-rebuilt {
             position: absolute;
             left: 15px;
-            top: 20px;
-            bottom: 100px;
-            /* 💡 修正：底部拉高到 100px，年份間距被均勻拉開了！ */
+            /* top/bottom 必須與 .gantt-rows-container-rebuilt 完全相同，否則兩份 19 項
+               清單分佈在不同高度上、逐列累積位移；共用 token 保證不可能分歧 */
+            top: var(--gantt-plot-top);
+            bottom: var(--gantt-plot-bottom);
             width: 65px;
             display: flex;
             flex-direction: column;
@@ -1096,7 +1116,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            height: 18px;
+            height: var(--gantt-row-h);
         }
 
         .gantt-year-rebuilt {
@@ -1171,10 +1191,9 @@
         .gantt-grid-rebuilt {
             position: absolute;
             left: 80px;
-            top: 20px;
+            top: var(--gantt-plot-top);
             right: 30px;
-            bottom: 100px;
-            /* 💡 修正：網格底部對齊 100px */
+            bottom: var(--gantt-plot-bottom);
             z-index: 1;
             opacity: 0;
             transition: opacity 0.5s ease;
@@ -1230,9 +1249,9 @@
         .gantt-red-deadline-stage {
             position: absolute !important;
             left: 80px;
-            top: 20px;
+            top: var(--gantt-plot-top);
             right: 30px;
-            bottom: 100px;
+            bottom: var(--gantt-plot-bottom);
             pointer-events: none;
             z-index: 10;
             /* 特權最高層級，確保踩在所有人頭頂上 */
@@ -1291,10 +1310,9 @@
         .gantt-rows-container-rebuilt {
             position: absolute;
             left: 80px;
-            top: 20px;
+            top: var(--gantt-plot-top);
             right: 30px;
-            bottom: 100px;
-            /* 💡 修正：彩色 Bar 容器底部對齊 100px，高度拉開不貼月份 */
+            bottom: var(--gantt-plot-bottom);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -1303,7 +1321,7 @@
 
         .gantt-row-rebuilt {
             width: 100%;
-            height: 18px;
+            height: var(--gantt-row-h);
             display: flex;
             align-items: center;
             opacity: 1;
@@ -2882,21 +2900,24 @@
             }
 
             /* 統一縮小的繪圖框：留白加大，使繪圖本體（軸線/長條）縮小、四周留更多呼吸空間。
-               紅線(35.3%)、深灰執行區(40%)為框內百分比，只要各元件框一致即精準對齊。 */
+               紅線(35.3%)、深灰執行區(40%)為框內百分比，只要各元件框一致即精準對齊。
+               上下邊界只改 token（見 :root 的 --gantt-plot-top/bottom），四個元件會一起變，
+               不會再有某個元件被漏掉。這裡只需要處理左右（y 軸的標籤欄與繪圖區本來就不同寬）。 */
+            :root {
+                --gantt-plot-top: 16px;
+                --gantt-plot-bottom: 44px;
+            }
+
             #chapter-2-rebuilt .gantt-rows-container-rebuilt,
             #chapter-2-rebuilt .gantt-grid-rebuilt,
             #chapter-2-rebuilt .gantt-red-deadline-stage {
                 left: 46px !important;
                 right: 14px !important;
-                top: 16px !important;
-                bottom: 44px !important;
             }
 
             #chapter-2-rebuilt .gantt-y-axis-rebuilt {
                 left: 3px !important;
                 width: 40px !important;
-                top: 16px !important;
-                bottom: 44px !important;
             }
 
             #chapter-2-rebuilt .gantt-x-axis-rebuilt {
@@ -2917,8 +2938,14 @@
                 font-size: var(--type-caption);
             }
 
-            #chapter-2-rebuilt .gantt-row-rebuilt {
-                height: 10px;
+            /* 手機／平板縮小甘特圖列高：改這一個 token，.gantt-row-rebuilt（長條列）與
+               .y-tick（年份標籤列）會同時跟著變——兩者是各自獨立的 19 項 flex 清單、
+               共用同一個容器高度、都用 justify-content:space-between 分佈，子項高度
+               只要有一絲不同，算出來的列間距就不同，逐列累積位移到後面幾個年度就會對不上
+               （這裡曾經真的各自維護過兩條規則，忘了同步改，就是這樣壞的）。改成單一
+               token 之後，這個斷點不可能再讓兩邊漂移，因為已經沒有第二個數字可以漏改。 */
+            :root {
+                --gantt-row-h: 10px;
             }
 
             /* 標題與圖例文字同步縮小，與縮小後的繪圖框比例一致 */
@@ -3338,11 +3365,16 @@
             column-gap: 16px;
             row-gap: 6px;
             text-align: left;
+            /* dt（職稱）與 dd 裡的人名共用同一個行高，兩者第一行的基線才會對齊。
+               寫在共用父層而不是各自寫一份：index.html 的 body 是 1.75、
+               database.html 是 1.6，靠繼承會讓兩頁的名單行距不同，也會讓職稱
+               與第一個人名錯開（實測 database.html 差 1.36px）。 */
+            line-height: 1.8;
         }
 
         .footer-credit-list dt {
             color: var(--ui-muted);
-            /* 欄寬取最長的「製作統籌」，較短的「監製」用 text-align-last 均分撐開，
+            /* 欄寬取最長的「網頁設計」，較短的「製作」用 text-align-last 均分撐開，
                讓兩字與四字的職稱右緣對齊，不必手動補全形空白 */
             text-align: justify;
             text-align-last: justify;
@@ -3353,6 +3385,16 @@
             color: var(--ui-ink-inverse);
             /* 撐住行高，任何一欄暫時留空時版面也不會塌掉、各列間距維持一致 */
             min-height: 1.5em;
+        }
+
+        /* 一名一行：改用 display:block 讓每個人名自己佔一行，不再用「、」分隔。
+           保留 nowrap 當保險——中文預設可在任意字元之間斷行，萬一欄寬被壓到比一個
+           三字姓名還窄，沒有 nowrap 就會出現「林傑／立」這種把人名拆成兩行的錯誤署名。
+           line-height 明確指定而不繼承 body：index.html 是 1.75、database.html 是 1.6，
+           7 行累積下來兩頁的頁尾高度會差十幾 px，寫死才能讓兩頁的製作名單真正一致。 */
+        .footer-credit-list .credit-name {
+            display: block;
+            white-space: nowrap;
         }
 
         /* 只剩「更新日期」一段（製作日期依需求不顯示），單行在任何寬度都綽綽有餘。
@@ -3716,18 +3758,22 @@
                 right: clamp(20px, 4vw, 36px) !important;
             }
 
-            #chapter-2-rebuilt .gantt-rows-container-rebuilt,
-            #chapter-2-rebuilt .gantt-grid-rebuilt,
-            #chapter-2-rebuilt .gantt-red-deadline-stage {
-                top: clamp(24px, 4vw, 32px) !important;
-                bottom: clamp(56px, 9vw, 90px) !important;
+            /* 上下邊界改成只覆寫 token，Y 軸標籤欄會自動一起變。
+               ⚠️ 這裡原本是直接寫在 rows-container/grid/red-deadline 三個 selector 上，
+                  **y 軸沒被列進去**，於是長條框是 clamp(24-32px)/clamp(56-90px)、
+                  y 軸卻仍是 ≤1024px 區塊的 16px/44px。兩份 19 項清單分佈在不同高度上，
+                  space-between 算出的列距不同，逐列累積位移——實測 946px 寬時已累積到
+                  接近一整列，96 年標籤旁沒有長條、113/114 年更是整組錯位。 */
+            :root {
+                --gantt-plot-top: clamp(24px, 4vw, 32px);
+                --gantt-plot-bottom: clamp(56px, 9vw, 90px);
             }
 
             /* x軸的 bottom 直接從列容器的 bottom 反推：永遠等於「列容器下緣 − x軸自身高度
-               − 8px 呼吸間隙」，兩者用同一組來源數值算出，不會再各自漂移到不一致 */
+               − 8px 呼吸間隙」，直接引用同一個 token，不會再各自漂移到不一致 */
             #chapter-2-rebuilt .gantt-x-axis-rebuilt {
                 height: clamp(28px, 4vw, 40px) !important;
-                bottom: calc(clamp(56px, 9vw, 90px) - clamp(28px, 4vw, 40px) - 8px) !important;
+                bottom: calc(var(--gantt-plot-bottom) - clamp(28px, 4vw, 40px) - 8px) !important;
             }
         }
 
@@ -4942,16 +4988,18 @@
         <div class="footer-credits">
             <h2 class="footer-credits-title">製作團隊</h2>
             <dl class="footer-credit-list">
-                <dt>監製</dt>
-                <dd>葉純豪</dd>
-                <dt>製作統籌</dt>
-                <dd>王柔婷</dd>
-                <dt>攝影</dt>
-                <dd>裴禛</dd>
+                <dt>製作</dt>
+                <dd>
+                    <span class="credit-name">林傑立</span>
+                    <span class="credit-name">卓冠齊</span>
+                    <span class="credit-name">翁堃耀</span>
+                    <span class="credit-name">林廷軍</span>
+                    <span class="credit-name">林湘芸</span>
+                    <span class="credit-name">黑立安</span>
+                    <span class="credit-name">楊子瑩</span>
+                </dd>
                 <dt>網頁設計</dt>
-                <dd>劉姿嘉</dd>
-                <dt>網頁工程</dt>
-                <dd>陳玟憲</dd>
+                <dd><span class="credit-name">卓育麟</span></dd>
             </dl>
         </div>
         <p class="footer-dates">
@@ -5249,7 +5297,15 @@
                 // 卡片5（蔡英文／馬英九任期高亮）原本沒有位置搶跑機制，只靠整章百分比制的
                 // [50%,60%) 視窗切換，使用者反映一樣「觸發太晚」。比照卡片2/4的做法補上同一套
                 // 位置判斷，門檻沿用卡片4剛調過的 0.65。
-                const highlightEarly = currentStep <= 6 && card5Story && card5Story.getBoundingClientRect().top <= vh * 0.65;
+                // ⚠️ 守衛用 currentStep < 5，不是 <= 6：card5Story 捲出視野後 top 會變負值，
+                //    永遠 <= 0.65vh，若守衛沿用 <=6，捲到卡片6後這個條件會卡在恆真，每一幀都
+                //    把 rebuilt-step-5 補回來——卡6的 96 年高亮設計上要「取代」卡5的
+                //    101/105/113 高亮（兩者互斥，同時只顯示一組），而 card2/card4 的搶跑
+                //    目標（座標軸／紅線）在 2~6 每一步的疊加名單裡本來就一路保留，補早也
+                //    補不出錯；只有卡5→卡6這一段是「這一步要清掉上一步」，用 <=6 才會露餡。
+                //    改成只在「還沒真正走到卡5」時允許搶跑，一旦 currentStep 推進到 5 以後，
+                //    交還給下方逐步驟的 class 疊加自行決定要不要留著 rebuilt-step-5。
+                const highlightEarly = currentStep < 5 && card5Story && card5Story.getBoundingClientRect().top <= vh * 0.65;
 
                 // 「圖卡結束後，圖片3出現」：卡片 9 的字卡要先實際捲出視野上緣（bottom 已捲到
                 // 視窗上方 35% 處，代表讀者已把文字讀完並往上捲走），第三張大結局照片才出現；

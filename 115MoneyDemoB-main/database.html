@@ -9,13 +9,13 @@
     <meta name="description" content="中央政府總預算完整資料庫：依主題、部會篩選並檢索115年度中央政府總預算所有計畫，掌握預算金額、審議進度與內容細節。">
     <meta property="og:title" content="中央政府總預算觀測站 - 完整資料庫">
     <meta property="og:description" content="中央政府總預算完整資料庫：依主題、部會篩選並檢索115年度中央政府總預算所有計畫，掌握預算金額、審議進度與內容細節。">
-    <meta property="og:image" content="https://ke22.github.io/govBudget/hero-collage.jpg">
+    <meta property="og:image" content="https://ke22.github.io/govBudget/hero-collage-v2.jpg">
     <meta property="og:url" content="https://ke22.github.io/govBudget/database.html">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="中央政府總預算觀測站 - 完整資料庫">
     <meta name="twitter:description" content="中央政府總預算完整資料庫：依主題、部會篩選並檢索115年度中央政府總預算所有計畫，掌握預算金額、審議進度與內容細節。">
-    <meta name="twitter:image" content="https://ke22.github.io/govBudget/hero-collage.jpg">
+    <meta name="twitter:image" content="https://ke22.github.io/govBudget/hero-collage-v2.jpg">
     <link rel="canonical" href="https://ke22.github.io/govBudget/database.html">
     <link rel="icon" type="image/svg+xml" href="cna-favicon-adaptive.svg">
     <link
@@ -301,7 +301,9 @@
             background: var(--np-paper);
             border: 1px solid var(--np-hairline);
             color: var(--np-muted);
-            padding: 10px 16px;
+            /* 垂直 padding 10px→12px：10px + --type-caption(≈12.8px) × body 的 line-height(1.6)
+               算出來只有約 40.5px，低於 44px 觸控門檻；12px 補到約 44.5px */
+            padding: 12px 16px;
             border-radius: 50px;
             font-size: var(--type-caption);
             font-weight: 500;
@@ -733,11 +735,16 @@
             column-gap: 16px;
             row-gap: 6px;
             text-align: left;
+            /* dt（職稱）與 dd 裡的人名共用同一個行高，兩者第一行的基線才會對齊。
+               寫在共用父層而不是各自寫一份：index.html 的 body 是 1.75、
+               database.html 是 1.6，靠繼承會讓兩頁的名單行距不同，也會讓職稱
+               與第一個人名錯開（實測 database.html 差 1.36px）。 */
+            line-height: 1.8;
         }
 
         .footer-credit-list dt {
             color: var(--np-muted-ondark);
-            /* 欄寬取最長的「製作統籌」，較短的「監製」用 text-align-last 均分撐開 */
+            /* 欄寬取最長的「網頁設計」，較短的「製作」用 text-align-last 均分撐開 */
             text-align: justify;
             text-align-last: justify;
         }
@@ -747,6 +754,16 @@
             color: var(--np-text-ondark);
             /* 撐住行高，任何一欄暫時留空時版面也不會塌掉、各列間距維持一致 */
             min-height: 1.5em;
+        }
+
+        /* 一名一行：改用 display:block 讓每個人名自己佔一行，不再用「、」分隔。
+           保留 nowrap 當保險——中文預設可在任意字元之間斷行，萬一欄寬被壓到比一個
+           三字姓名還窄，沒有 nowrap 就會出現「林傑／立」這種把人名拆成兩行的錯誤署名。
+           line-height 明確指定而不繼承 body：index.html 是 1.75、database.html 是 1.6，
+           7 行累積下來兩頁的頁尾高度會差十幾 px，寫死才能讓兩頁的製作名單真正一致。 */
+        .footer-credit-list .credit-name {
+            display: block;
+            white-space: nowrap;
         }
 
         /* 只剩「更新日期」一段（製作日期依需求不顯示），單行在任何寬度都綽綽有餘。
@@ -907,16 +924,18 @@
         <div class="footer-credits">
             <h2 class="footer-credits-title">製作團隊</h2>
             <dl class="footer-credit-list">
-                <dt>監製</dt>
-                <dd>葉純豪</dd>
-                <dt>製作統籌</dt>
-                <dd>王柔婷</dd>
-                <dt>攝影</dt>
-                <dd>裴禛</dd>
+                <dt>製作</dt>
+                <dd>
+                    <span class="credit-name">林傑立</span>
+                    <span class="credit-name">卓冠齊</span>
+                    <span class="credit-name">翁堃耀</span>
+                    <span class="credit-name">林廷軍</span>
+                    <span class="credit-name">林湘芸</span>
+                    <span class="credit-name">黑立安</span>
+                    <span class="credit-name">楊子瑩</span>
+                </dd>
                 <dt>網頁設計</dt>
-                <dd>劉姿嘉</dd>
-                <dt>網頁工程</dt>
-                <dd>陳玟憲</dd>
+                <dd><span class="credit-name">卓育麟</span></dd>
             </dl>
         </div>
         <p class="footer-dates">
