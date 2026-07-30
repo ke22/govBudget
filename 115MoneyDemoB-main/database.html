@@ -9,13 +9,13 @@
     <meta name="description" content="中央政府總預算完整資料庫：依主題、部會篩選並檢索115年度中央政府總預算所有計畫，掌握預算金額、審議進度與內容細節。">
     <meta property="og:title" content="中央政府總預算觀測站 - 完整資料庫">
     <meta property="og:description" content="中央政府總預算完整資料庫：依主題、部會篩選並檢索115年度中央政府總預算所有計畫，掌握預算金額、審議進度與內容細節。">
-    <meta property="og:image" content="https://ke22.github.io/govBudget/hero-collage.jpg">
+    <meta property="og:image" content="https://ke22.github.io/govBudget/hero-collage-v2.jpg">
     <meta property="og:url" content="https://ke22.github.io/govBudget/database.html">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="中央政府總預算觀測站 - 完整資料庫">
     <meta name="twitter:description" content="中央政府總預算完整資料庫：依主題、部會篩選並檢索115年度中央政府總預算所有計畫，掌握預算金額、審議進度與內容細節。">
-    <meta name="twitter:image" content="https://ke22.github.io/govBudget/hero-collage.jpg">
+    <meta name="twitter:image" content="https://ke22.github.io/govBudget/hero-collage-v2.jpg">
     <link rel="canonical" href="https://ke22.github.io/govBudget/database.html">
     <link rel="icon" type="image/svg+xml" href="cna-favicon-adaptive.svg">
     <link
@@ -301,7 +301,9 @@
             background: var(--np-paper);
             border: 1px solid var(--np-hairline);
             color: var(--np-muted);
-            padding: 10px 16px;
+            /* 垂直 padding 10px→12px：10px + --type-caption(≈12.8px) × body 的 line-height(1.6)
+               算出來只有約 40.5px，低於 44px 觸控門檻；12px 補到約 44.5px */
+            padding: 12px 16px;
             border-radius: 50px;
             font-size: var(--type-caption);
             font-weight: 500;
