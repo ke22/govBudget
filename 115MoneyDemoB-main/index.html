@@ -2921,6 +2921,17 @@
                 height: 10px;
             }
 
+            /* ⚠️ 一定要跟上面 .gantt-row-rebuilt 同步改：兩個 19 列的 flex 容器
+               （.gantt-rows-container-rebuilt 裝長條、.gantt-y-axis-rebuilt 裝年份標籤）
+               top/bottom 完全相同，都用 justify-content:space-between 把 19 個子項
+               分佈在同一個總高度裡。子項高度不一樣（長條列 10px vs 標籤列仍是基底的
+               18px），space-between 算出來的列間距就不一樣，兩邊各自累積的位移量隨
+               列數往下疊加，到後面幾個年度（如 112–114 年）Y 軸標籤就會跟長條對不上。
+               這裡把 .y-tick 也同步縮到 10px，讓兩邊子項高度一致，才會逐列對齊。 */
+            #chapter-2-rebuilt .y-tick {
+                height: 10px;
+            }
+
             /* 標題與圖例文字同步縮小，與縮小後的繪圖框比例一致 */
             #chapter-2-rebuilt .gantt-title-area-rebuilt h3 {
                 font-size: var(--type-panel-heading) !important;
