@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>document.documentElement.classList.add('js');</script>
     <title>總預算卡關 203 天 — 115年度中央政府總預算審議回顧</title>
-    <link rel="preload" as="image" href="hero-collage-v2.jpg" fetchpriority="high" media="(min-width: 1025px)">
+    <link rel="preload" as="image" href="hero-collage-v2.webp" type="image/webp" fetchpriority="high"
+        media="(min-width: 1025px)">
     <link rel="preload" as="image" href="hero-collage-mobile-clean.webp" type="image/webp" fetchpriority="high"
         media="(max-width: 1024px)">
     <!-- Published at https://ke22.github.io/govBudget/ (GitHub Pages) -->
@@ -188,6 +189,12 @@
             background-image:
                 radial-gradient(circle, rgba(237, 230, 211, 0.06) 1px, transparent 1.2px),
                 url('hero-collage-v2.jpg');
+            /* WebP 版本小 40%（1.1M→672K），這是 LCP 關鍵圖。手機版早就用 webp
+               （hero-collage-mobile-clean.webp），這裡補齊桌機版。不支援
+               image-set() 的瀏覽器會整條宣告失效並丟棄，保留上一條 url() */
+            background-image:
+                radial-gradient(circle, rgba(237, 230, 211, 0.06) 1px, transparent 1.2px),
+                image-set(url('hero-collage-v2.webp') type('image/webp'), url('hero-collage-v2.jpg') type('image/jpeg'));
             background-size: 4px 4px, 100% auto;
             background-repeat: repeat, no-repeat;
             background-position: 0 0, center center;
@@ -503,6 +510,10 @@
             /* 原為 var(--bg-card) 藍綠半透明，改為新聞剪貼風格牛皮紙卡片。
                左側朱印紅邊框已移除 */
             background-image: url('paper-texture.png');
+            /* WebP 版本小 83%（452K→76K）。用兩條宣告做格式協商：
+               不支援 image-set() 的瀏覽器會整條宣告視為無效並丟棄，
+               保留上一條 url() 不受影響 */
+            background-image: image-set(url('paper-texture.webp') type('image/webp'), url('paper-texture.png') type('image/png'));
             background-repeat: repeat;
             background-blend-mode: multiply;
             padding: 40px;
@@ -2429,6 +2440,7 @@
                    導致 ≤968px 的手機仍呈現舊的偏灰色。底色統一由基底規則掌管
                    （手機桌機共用），這裡移除宣告，不再是第三個維護點。 */
                 background-image: url('paper-texture.png');
+                background-image: image-set(url('paper-texture.webp') type('image/webp'), url('paper-texture.png') type('image/png'));
                 background-repeat: repeat;
                 background-blend-mode: multiply;
                 backdrop-filter: none;
@@ -3029,6 +3041,7 @@
                 /* 底色已上移到基底規則（手機桌機共用 #ebe1de），此處不再宣告，
                    避免兩個 breakpoint 各自維護同一個顏色而走鐘。 */
                 background-image: url('paper-texture.png');
+                background-image: image-set(url('paper-texture.webp') type('image/webp'), url('paper-texture.png') type('image/png'));
                 background-repeat: repeat;
                 background-blend-mode: multiply;
                 backdrop-filter: none;
@@ -3329,7 +3342,7 @@
 
         .footer-credit-list dt {
             color: var(--ui-muted);
-            /* 欄寬取最長的「資料整理」，較短的「記者」用 text-align-last 均分撐開，
+            /* 欄寬取最長的「製作統籌」，較短的「監製」用 text-align-last 均分撐開，
                讓兩字與四字的職稱右緣對齊，不必手動補全形空白 */
             text-align: justify;
             text-align-last: justify;
@@ -4323,12 +4336,12 @@
                 <div class="history-images-container">
                     <div class="history-img-frame">
                         <img src="budget96001.jpg" alt="陳水扁時期預算案審議" loading="lazy" decoding="async"
-                            width="2100" height="1395">
+                            width="1600" height="1063">
                         <div class="img-caption editorial-caption">民國96年5月11日，民進黨立委為通過總預算案，聚眾占據議場主席台，將立法院長王金平團團包圍。</div>
                     </div>
                     <div class="history-img-frame">
                         <img src="budget96002.jpg" alt="朝小野大政治攻防" loading="lazy" decoding="async"
-                            width="2100" height="1395">
+                            width="1600" height="1063">
                         <div class="img-caption editorial-caption">民國96年5月11日，立法院處理「中央選舉委員會組織法早案」及總預算案，藍、綠立委舉標語互相指控。
                         </div>
                     </div>
