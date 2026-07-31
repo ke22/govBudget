@@ -931,9 +931,10 @@
 
     <script>
         // 1. 基礎設定
-        const FILE_ID = '11OXVLqRUfySckHFAWJLEciSxqA-XmTqAUS62j59Syzs';
-        const sourcePageA = `https://docs.google.com/spreadsheets/d/${FILE_ID}/gviz/tq?tqx=out:json&tq&gid=612819456&_=${new Date().getTime()}`;
-        const sourceThemes = `https://docs.google.com/spreadsheets/d/${FILE_ID}/gviz/tq?tqx=out:json&tq&gid=2136127994&_=${new Date().getTime()}`;
+        // 資料由 scripts/compile_data.py 定期（每 30 分鐘）從 Google 試算表編譯成靜態檔案，
+        // 不再每次載入頁面都即時打試算表（原本的即時抓取見 git 歷史 auto-sync-budget-data 之前）。
+        const sourcePageA = 'data/budget.json';
+        const sourceThemes = 'data/themes.json';
 
         let allDataPageA = [];
 
@@ -987,37 +988,21 @@
         const tooltipCurrencyCallback = { callbacks: { label: function (c) { return (c.dataset.label ? c.dataset.label + ': ' : '') + formatCurrency(c.raw); } } };
 
         // 2. 初始化載入
+        // 主題與主資料都是本地靜態檔案，平行抓取（不再像即時試算表版本那樣先等主題抓完才抓主資料）。
         async function initPage() {
             try {
-                // 先載入主題定義
+                const [themeRes, res] = await Promise.all([
+                    fetch(sourceThemes),
+                    fetch(sourcePageA)
+                ]);
+
                 try {
-                    const themeRes = await fetch(sourceThemes);
-                    const themeText = await themeRes.text();
-                    const themeJson = JSON.parse(themeText.substring(47, themeText.length - 2));
-                    themeKeywords = {}; // 清空預設
-                    themeJson.table.rows.forEach(row => {
-                        if (!row.c || !row.c[0] || !row.c[1]) return;
-                        const label = row.c[0].v;
-                        const kwStr = row.c[1].v || '';
-                        if (label && label !== '主題標籤') {
-                            themeKeywords[label] = kwStr.split(',').map(k => k.trim()).filter(k => k);
-                        }
-                    });
+                    themeKeywords = await themeRes.json();
                 } catch (themeErr) {
                     console.warn('主題資料載入失敗，使用預設值', themeErr);
                 }
 
-                // 再載入主資料
-                const res = await fetch(sourcePageA);
-                const text = await res.text();
-                const jsonData = JSON.parse(text.substring(47, text.length - 2));
-                const cols = jsonData.table.cols.map(c => c.label).filter(l => l !== '');
-
-                allDataPageA = jsonData.table.rows.map(row => {
-                    let obj = {};
-                    row.c.forEach((cell, i) => { if (cols[i]) obj[cols[i]] = cell ? (cell.v !== null ? String(cell.v) : '') : ''; });
-                    return obj;
-                });
+                allDataPageA = await res.json();
 
                 document.getElementById('loader').style.display = 'none';
                 checkUrlParams();
