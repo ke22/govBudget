@@ -1,0 +1,44 @@
+name: Sync budget data from Google Sheet
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-budget-data
+  cancel-in-progress: false
+
+jobs:
+  compile-and-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pandas openpyxl
+
+      - name: Compile data from the live Google Sheet
+        run: python scripts/compile_data.py
+
+      - name: Commit and push if data changed
+        run: |
+          if git diff --quiet -- data/budget.json data/themes.json; then
+            echo "No change in compiled data — skipping commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/budget.json data/themes.json
+          git commit -m "chore(data): sync budget/theme data from Google Sheet"
+          git push
